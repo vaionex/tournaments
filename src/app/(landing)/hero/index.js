@@ -1,5 +1,6 @@
-import Container from "@/components/container";
+import Container from "@/components/ui/container";
 import { Button } from "@/components/ui/button";
+import DurationTag from "@/components/ui/duration-tag";
 
 const tournaments = [
   {
@@ -33,18 +34,7 @@ export default function Example() {
       <div className="relative isolate overflow-hidden bg-gradient-to-b from-transparent to-black to-110%">
         <div className="mx-auto max-w-7xl px-6 pb-24 pt-20 sm:pb-32 lg:flex lg:px-8 lg:py-40">
           <div className="mx-auto max-w-2xl flex-shrink-0 lg:mx-0 lg:max-w-3xl lg:pt-8 mt-12">
-            <a
-              href="#"
-              className="inline-flex space-x-6 bg-black/50 border-r-2 border-primary py-2 px-4 text-sm"
-            >
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-white/50 flex items-center justify-center">
-                  <div className="w-1.5 h-1.5 rounded-full bg-white/80" />
-                </div>
-                Aug 12 – Aug 29
-              </div>
-              <div>2024</div>
-            </a>
+            <DurationTag startDate={new Date()} endDate={new Date()} />
 
             <h1 className="mt-10 text-4xl font-bold tracking-tight text-white sm:text-6xl">
               Fortnite 2024 – $30K Prize Pool Battle Royale!

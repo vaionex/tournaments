@@ -1,5 +1,5 @@
-import Container from "@/components/container";
-import Logo from "@/components/logo";
+import Container from "@/components/ui/container";
+import Logo from "@/components/ui/logo";
 import Link from "next/link";
 
 const links = [

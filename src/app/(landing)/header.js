@@ -12,7 +12,7 @@ import {
 } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import Logo from "@/components/logo";
+import Logo from "@/components/ui/logo";
 
 const links = [
   { name: "Home", href: "" },

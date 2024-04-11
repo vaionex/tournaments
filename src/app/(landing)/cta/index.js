@@ -1,6 +1,6 @@
-import Container from "@/components/container";
-import Logo from "@/components/logo";
-import LogoMark from "@/components/logo-mark";
+import Container from "@/components/ui/container";
+import Logo from "@/components/ui/logo";
+import LogoMark from "@/components/ui/logo-mark";
 import { Button } from "@/components/ui/button";
 
 export default function CTA() {
