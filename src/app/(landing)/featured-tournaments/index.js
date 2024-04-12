@@ -9,7 +9,7 @@ export default function FeaturedTournaments() {
       <Container>
         <div className="flex justify-between items-start mb-10 flex-wrap gap-6">
           <div>
-            <h2 className="text-5xl font-bold">Featured Tournaments</h2>
+            <h2 className="text-5xl font-bold mb-3">Featured Tournaments</h2>
             <div className="text-supporting text-xl">
               Join the fray in your favorite game and claim glory!
             </div>
