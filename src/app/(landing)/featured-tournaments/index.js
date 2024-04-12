@@ -7,7 +7,7 @@ export default function FeaturedTournaments() {
   return (
     <div>
       <Container>
-        <div className="flex justify-between items-start mb-10">
+        <div className="flex justify-between items-start mb-10 flex-wrap gap-6">
           <div>
             <h2 className="text-5xl font-bold">Featured Tournaments</h2>
             <div className="text-supporting text-xl">
@@ -19,7 +19,7 @@ export default function FeaturedTournaments() {
         <CornerBorder>
           <div
             style={{ backgroundImage: "url(/images/fortnite.webp)" }}
-            className="bg-cover"
+            className="bg-cover bg-center"
           >
             <div className="bg-gradient-to-t from-black to-30% px-8 py-12 flex flex-col justify-between h-[30rem]">
               <DurationTag startDate={new Date()} endDate={new Date()} />
