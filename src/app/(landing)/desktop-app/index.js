@@ -6,7 +6,7 @@ import { ArrowDownToLine } from "lucide-react";
 
 export default function DesktopApp() {
   return (
-    <Container className="!py-24">
+    <Container className="py-8 md:py-24">
       <div className="flex justify-between items-start mb-12 flex-wrap gap-6">
         <div className="max-w-3xl">
           <h2 className="text-5xl font-bold mb-3">Download Our Desktop App</h2>

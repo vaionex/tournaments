@@ -18,7 +18,7 @@ module.exports = {
     },
     extend: {
       colors: {
-        primary: "#004EEB",
+        primary: { DEFAULT: "#004EEB", 400: "#528BFF" },
         supporting: "#D0D5DD",
       },
       keyframes: {
