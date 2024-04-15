@@ -6,6 +6,7 @@ import cash from "./cash.webp";
 import experience from "./experience.webp";
 import reward from "./reward.webp";
 import { ChevronDoubleUpIcon } from "@heroicons/react/24/outline";
+import { Diamond01 } from "untitledui-js-base";
 
 const rewards = [
   {
@@ -23,7 +24,7 @@ const rewards = [
   {
     name: "Exclusive Rewards Awaits",
     description: "Convert your gaming prowess into real-world currency.",
-    icon: ChevronDoubleUpIcon,
+    icon: Diamond01,
     image: reward,
   },
 ];
