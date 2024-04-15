@@ -25,7 +25,7 @@ export default function Footer() {
             <div>© 2024 Tournaments.com | All rights reserved.</div>
             <div className="flex gap-8 flex-wrap">
               {links.map(({ name, href }) => (
-                <Link href={href}>{name}</Link>
+                <Link href={href} key={href}>{name}</Link>
               ))}
             </div>
           </div>
