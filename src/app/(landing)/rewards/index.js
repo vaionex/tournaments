@@ -1,22 +1,30 @@
 import Container from "@/components/ui/container";
 import CornerBorder from "@/components/ui/corner-border";
 import { DollarSign } from "lucide-react";
+import Image from "next/image";
+import cash from "./cash.webp";
+import experience from "./experience.webp";
+import reward from "./reward.webp";
+import { ChevronDoubleUpIcon } from "@heroicons/react/24/outline";
 
 const rewards = [
   {
     name: "Cold Hard Cash",
     description: "Convert your gaming prowess into real-world currency.",
     icon: DollarSign,
+    image: cash,
   },
   {
     name: "Experience Points (XP)",
     description: "Convert your gaming prowess into real-world currency.",
-    icon: DollarSign,
+    icon: ChevronDoubleUpIcon,
+    image: experience,
   },
   {
     name: "Exclusive Rewards Awaits",
     description: "Convert your gaming prowess into real-world currency.",
-    icon: DollarSign,
+    icon: ChevronDoubleUpIcon,
+    image: reward,
   },
 ];
 
@@ -39,17 +47,18 @@ export default function Rewards() {
           </div>
         </div>
         <div className="grid md:grid-cols-3 gap-8">
-          {rewards.map(({ name, description, icon: Icon }) => (
+          {rewards.map(({ name, description, icon: Icon, image }) => (
             <CornerBorder key={name}>
-              <div
-                style={{ backgroundImage: "url(/images/fortnite.webp)" }}
-                className="bg-cover bg-center"
-              >
-                <div className="h-[30rem] flex flex-col justify-between p-8 bg-gradient-to-t from-black to-50%">
+              <div className="bg-cover bg-center relative overflow-hidden">
+                <Image
+                  className="absolute inset-0 object-cover object-center"
+                  src={image}
+                />
+                <div className="h-[30rem] flex flex-col justify-between p-8 bg-gradient-to-t from-black to-50% relative z-10">
                   <div className="w-fit">
                     <CornerBorder>
                       <div className="w-12 h-12 bg-white/20 flex justify-center items-center">
-                        <Icon />
+                        <Icon className="w-6 h-6" />
                       </div>
                     </CornerBorder>
                   </div>
