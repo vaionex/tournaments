@@ -4,19 +4,19 @@ import DurationTag from "@/components/ui/duration-tag";
 
 const tournaments = [
   {
-    startDate: new Date(),
-    endDate: new Date(),
-    name: "Fortnite 2024 – $30K Prize Pool Battle Royale!",
+    startDate: "1st May 2024",
+    endDate: "2nd May 2024",
+    name: "Fortnite Zero Build – $10 Prize Pool!",
   },
   {
     startDate: new Date(),
     endDate: new Date(),
-    name: "Fortnite 2024 – $30K Prize Pool Battle Royale!",
+    name: "Fortnite Battle Royale – $10 Prize Pool!",
   },
   {
     startDate: new Date(),
     endDate: new Date(),
-    name: "Fortnite 2024 – $30K Prize Pool Battle Royale!",
+    name: "Fortnite Race – $5 Prize Pool!",
   },
 ];
 
@@ -75,7 +75,7 @@ export default function Example() {
                     />
                   </svg>
 
-                  <div>Aug 12 – Aug 29, 2024</div>
+                  <div>May 1 – May 2, 2024</div>
                 </div>
                 <div className="text-sm mt-2">{name}</div>
                 <svg

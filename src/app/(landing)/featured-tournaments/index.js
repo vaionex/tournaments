@@ -25,10 +25,10 @@ export default function FeaturedTournaments() {
               <DurationTag startDate={new Date()} endDate={new Date()} />
               <div>
                 <h2 className="text-3xl font-bold">
-                  Fortnite 2024 – $30K Prize Pool Battle Royale!
+                  Fortnite Zero Build – $10 Prize Pool!
                 </h2>
                 <div className="text-supporting">
-                  Outlast the Legends to Win $20K + Legendary Skins!
+                  Outlast the Legends to Win $10 + Points + XP!
                 </div>
               </div>
             </div>
