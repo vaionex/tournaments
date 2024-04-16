@@ -37,14 +37,14 @@ export default function Example() {
             <DurationTag startDate={new Date()} endDate={new Date()} />
 
             <h1 className="mt-10 text-4xl font-bold tracking-tight text-white sm:text-6xl">
-              Fortnite 2024 – $30K Prize Pool Battle Royale!
+              Earn Cash Rewards in eSports Tournaments
             </h1>
             <p className="mt-6 text-lg leading-8">
               Outlast the Legends to Win $30K + Legendary Skins!
             </p>
             <div className="mt-10 flex items-center gap-6 flex-wrap">
-              <Button>Create a Tournament</Button>
               <Button variant="white">Join the Game</Button>
+              <Button>Create a Tournament</Button>
             </div>
           </div>
         </div>
