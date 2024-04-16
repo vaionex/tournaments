@@ -6,7 +6,7 @@ const links = [
   { name: "Tournaments", href: "" },
   { name: "Subscriptions", href: "" },
   { name: "News", href: "" },
-  { name: "Discord", href: "" },
+  { name: "Discord", href: "https://discord.gg/Sm2UTKFeaM" },
 ];
 export default function Footer() {
   return (
