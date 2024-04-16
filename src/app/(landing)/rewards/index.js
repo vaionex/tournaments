@@ -17,13 +17,13 @@ const rewards = [
   },
   {
     name: "Experience Points (XP)",
-    description: "Convert your gaming prowess into real-world currency.",
+    description: "Earn XP and unlock new levels of gaming mastery.",
     icon: ChevronDoubleUpIcon,
     image: experience,
   },
   {
     name: "Exclusive Rewards Awaits",
-    description: "Convert your gaming prowess into real-world currency.",
+    description: "Collect points and exchange them for exciting rewards.",
     icon: Diamond01,
     image: reward,
   },
