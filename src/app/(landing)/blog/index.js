@@ -1,8 +1,38 @@
 import { Button } from "@/components/ui/button";
 import Container from "@/components/ui/container";
-import { ArrowDownToLine } from "lucide-react";
+import { getAllPosts } from "@/server/blog";
+import { format } from "date-fns";
 
-export default function Blog() {
+export default async function Blog() {
+  const posts = await getAllPosts({ limit: 3 });
+  const firstPost = posts[0] || {};
+  const otherPosts = posts.slice(1);
+
+  if (posts.length == 0) return null;
+
+  function FirstPost() {
+    const { title, date, excerpt, featuredImage, author } = firstPost;
+    return (
+      <div className="flex-1 flex flex-col gap-6">
+        <img
+          src={featuredImage?.node?.sourceUrl}
+          className="flex-1 h-92 object-cover object-center"
+          alt={title}
+        />
+        <div className="space-y-2">
+          <div className="font-semibold text-sm text-primary-400">
+            {author?.node?.name} • {format(new Date(date), "dd MMM yyyy")}
+          </div>
+          <h2 className="text-2xl font-semibold">{title}</h2>
+          <div
+            dangerouslySetInnerHTML={{ __html: excerpt }}
+            className="line-clamp-2"
+          />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <Container className="md:py-24 py-8">
       <div className="flex justify-between items-start mb-12 flex-wrap gap-6">
@@ -16,44 +46,30 @@ export default function Blog() {
         <Button variant="black">All news</Button>
       </div>
       <div className="flex gap-8 flex-col lg:flex-row">
-        <div className="flex-1 flex flex-col gap-6">
-          <img src="/images/fortnite.webp" className="flex-1" />
-          <div className="space-y-2">
-            <div className="font-semibold text-sm text-primary-400">
-              Olivia Rhye • 20 Jan 2024
-            </div>
-            <h2 className="text-2xl font-semibold">
-              Valorant Championship Series concludes with a stunning upset
-            </h2>
-            <div>
-              Underdogs rise to the occasion, clinching the title from reigning
-              champions.
-            </div>
-          </div>
-        </div>
+        <FirstPost />
         <div className="flex-1 flex flex-col gap-8">
-          {Array(2)
-            .fill(0)
-            .map((_, i) => (
+          {otherPosts.map(
+            ({ title, date, excerpt, featuredImage, author }, i) => (
               <div className="grid md:grid-cols-2 gap-6 min-h-52" key={i}>
                 <img
-                  src="/images/fortnite.webp"
-                  className="mb-2 h-full object-cover"
+                  src={featuredImage?.node?.sourceUrl}
+                  className="mb-2 h-full object-cover object-center"
+                  alt={title}
                 />
                 <div className="space-y-2 flex-1">
                   <div className="font-semibold text-sm text-primary-400">
-                    Olivia Rhye • 20 Jan 2024
+                    {author?.node?.name} •{" "}
+                    {format(new Date(date), "dd MMM yyyy")}
                   </div>
-                  <h2 className="text-2xl md:text-lg font-semibold">
-                    Valorant Championship Series concludes with a stunning upset
-                  </h2>
-                  <div>
-                    Underdogs rise to the occasion, clinching the title from
-                    reigning champions.
-                  </div>
+                  <h2 className="text-2xl md:text-lg font-semibold">{title}</h2>
+                  <div
+                    dangerouslySetInnerHTML={{ __html: excerpt }}
+                    className="line-clamp-5"
+                  />
                 </div>
               </div>
-            ))}
+            )
+          )}
         </div>
       </div>
     </Container>
