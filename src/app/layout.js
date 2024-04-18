@@ -37,6 +37,11 @@ export default function RootLayout({ children }) {
     <html lang="en" className="bg-black text-white">
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
+        <script
+          defer
+          data-domain="tournaments.com"
+          src="https://plausible.ensidian.com/js/script.js"
+        ></script>
       </head>
       <body className={dmSans.className}>{children}</body>
     </html>
