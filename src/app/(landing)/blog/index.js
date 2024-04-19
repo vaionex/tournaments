@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import Container from "@/components/ui/container";
 import { getAllPosts } from "@/server/blog";
 import { format } from "date-fns";
+import Link from "next/link";
 
 export default async function Blog() {
   const posts = await getAllPosts({ limit: 3 });
@@ -11,7 +12,7 @@ export default async function Blog() {
   if (posts.length == 0) return null;
 
   function FirstPost() {
-    const { title, date, excerpt, featuredImage, author } = firstPost;
+    const { title, slug, date, excerpt, featuredImage, author } = firstPost;
     return (
       <div className="flex-1 flex flex-col gap-6">
         <img
@@ -23,7 +24,9 @@ export default async function Blog() {
           <div className="font-semibold text-sm text-primary-400">
             {author?.node?.name} • {format(new Date(date), "dd MMM yyyy")}
           </div>
-          <h2 className="text-2xl font-semibold">{title}</h2>
+          <Link href={`/news/${slug}`}>
+            <h2 className="text-2xl font-semibold">{title}</h2>
+          </Link>
           <div
             dangerouslySetInnerHTML={{ __html: excerpt }}
             className="line-clamp-2"
@@ -51,7 +54,7 @@ export default async function Blog() {
         <FirstPost />
         <div className="flex-1 flex flex-col gap-8">
           {otherPosts.map(
-            ({ title, date, excerpt, featuredImage, author }, i) => (
+            ({ title, date, slug, excerpt, featuredImage, author }, i) => (
               <div className="grid md:grid-cols-2 gap-6 min-h-52" key={i}>
                 <img
                   src={featuredImage?.node?.sourceUrl}
@@ -63,7 +66,11 @@ export default async function Blog() {
                     {author?.node?.name} •{" "}
                     {format(new Date(date), "dd MMM yyyy")}
                   </div>
-                  <h2 className="text-2xl md:text-lg font-semibold">{title}</h2>
+                  <Link href={`/news/${slug}`}>
+                    <h2 className="text-2xl md:text-lg font-semibold hover:underline">
+                      {title}
+                    </h2>
+                  </Link>
                   <div
                     dangerouslySetInnerHTML={{ __html: excerpt }}
                     className="line-clamp-5"
