@@ -15,8 +15,8 @@ import { Button } from "@/components/ui/button";
 import Logo from "@/components/ui/logo";
 
 const links = [
-  { name: "Home", href: "" },
-  { name: "News", href: "" },
+  { name: "Home", href: "/" },
+  { name: "News", href: "/news" },
   { name: "Tournaments", href: "" },
   { name: "Sponsors", href: "" },
 ];

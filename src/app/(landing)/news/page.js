@@ -3,8 +3,8 @@ import Container from "@/components/ui/container";
 import { getAllPosts } from "@/server/blog";
 import { format } from "date-fns";
 
-export default async function Blog() {
-  const posts = await getAllPosts({ limit: 3 });
+export default async function News() {
+  const posts = await getAllPosts();
   const firstPost = posts[0] || {};
   const otherPosts = posts.slice(1);
 
@@ -13,10 +13,10 @@ export default async function Blog() {
   function FirstPost() {
     const { title, date, excerpt, featuredImage, author } = firstPost;
     return (
-      <div className="flex-1 flex flex-col gap-6">
+      <div className="flex-1 flex-col md:flex-row flex gap-6">
         <img
           src={featuredImage?.node?.sourceUrl}
-          className="flex-1 h-92 object-cover object-center"
+          className="flex-1 h-[17.5rem] object-cover object-center"
           alt={title}
         />
         <div className="space-y-2">
@@ -26,7 +26,7 @@ export default async function Blog() {
           <h2 className="text-2xl font-semibold">{title}</h2>
           <div
             dangerouslySetInnerHTML={{ __html: excerpt }}
-            className="line-clamp-2"
+            className="line-clamp-4"
           />
         </div>
       </div>
@@ -34,7 +34,7 @@ export default async function Blog() {
   }
 
   return (
-    <Container className="md:py-24 py-8">
+    <Container className="py-36">
       <div className="flex justify-between items-start mb-12 flex-wrap gap-6">
         <div className="max-w-3xl">
           <h2 className="text-5xl font-bold mb-3">In the headline</h2>
@@ -43,19 +43,16 @@ export default async function Blog() {
             tournament results to game updates, stay in the know.
           </div>
         </div>
-        <Button variant="black" href="/news">
-          All news
-        </Button>
       </div>
-      <div className="flex gap-8 flex-col lg:flex-row">
+      <div className="flex gap-8 flex-col">
         <FirstPost />
-        <div className="flex-1 flex flex-col gap-8">
+        <div className="flex-1 grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {otherPosts.map(
             ({ title, date, excerpt, featuredImage, author }, i) => (
-              <div className="grid md:grid-cols-2 gap-6 min-h-52" key={i}>
+              <div className="flex flex-col gap-6 sm:gap-2" key={i}>
                 <img
                   src={featuredImage?.node?.sourceUrl}
-                  className="mb-2 h-full object-cover object-center"
+                  className="mb-2 h-48 object-cover object-center"
                   alt={title}
                 />
                 <div className="space-y-2 flex-1">
@@ -66,7 +63,7 @@ export default async function Blog() {
                   <h2 className="text-2xl md:text-lg font-semibold">{title}</h2>
                   <div
                     dangerouslySetInnerHTML={{ __html: excerpt }}
-                    className="line-clamp-5"
+                    className="line-clamp-2"
                   />
                 </div>
               </div>

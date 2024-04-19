@@ -3,6 +3,7 @@ import { Slot } from "@radix-ui/react-slot";
 import { cva } from "class-variance-authority";
 
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 
 const buttonVariants = cva(
   "inline-flex items-center justify-center whitespace-nowrap font-semibold ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 dark:ring-offset-slate-950 dark:focus-visible:ring-slate-300 items-center gap-2",
@@ -47,7 +48,7 @@ const Button = React.forwardRef(
     },
     ref
   ) => {
-    const Comp = asChild ? Slot : "button";
+    const Comp = asChild ? Slot : props.href ? Link : "button";
     return (
       <Comp
         className={cn(buttonVariants({ variant, size, className }))}

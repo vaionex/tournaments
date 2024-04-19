@@ -5,7 +5,7 @@ import Link from "next/link";
 const links = [
   { name: "Tournaments", href: "" },
   { name: "Subscriptions", href: "" },
-  { name: "News", href: "" },
+  { name: "News", href: "/news" },
   { name: "Discord", href: "https://discord.gg/Sm2UTKFeaM" },
 ];
 export default function Footer() {
@@ -25,7 +25,9 @@ export default function Footer() {
             <div>© 2024 Tournaments.com | All rights reserved.</div>
             <div className="flex gap-8 flex-wrap">
               {links.map(({ name, href }) => (
-                <Link href={href} key={href}>{name}</Link>
+                <Link href={href} key={href}>
+                  {name}
+                </Link>
               ))}
             </div>
           </div>
