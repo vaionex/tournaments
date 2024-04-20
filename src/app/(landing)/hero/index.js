@@ -24,7 +24,7 @@ export default function Example() {
   return (
     <div
       style={{
-        backgroundImage: `url('/images/landing-background.webp')`,
+        backgroundImage: `url('/images/fortnitebattle.jpg')`,
         backgroundRepeat: "no-repeat",
         backgroundPosition: "top",
         backgroundSize: "cover",
