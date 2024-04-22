@@ -18,10 +18,10 @@ export default function FeaturedTournaments() {
         </div>
         <CornerBorder>
           <div
-            style={{ backgroundImage: "url(/images/fortnite.webp)" }}
+            style={{ backgroundImage: "url(/images/zerobuild.webp)" }}
             className="bg-cover bg-center"
           >
-            <div className="bg-gradient-to-t from-black to-30% px-8 py-12 flex flex-col justify-between h-[30rem]">
+            <div className="bg-gradient-to-t from-black to-90% px-8 py-12 flex flex-col justify-between h-[30rem]">
               <DurationTag startDate={new Date()} endDate={new Date()} />
               <div>
                 <h2 className="text-3xl font-bold">
