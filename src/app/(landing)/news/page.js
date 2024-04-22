@@ -15,12 +15,14 @@ export default async function News() {
     const { title, date, slug, excerpt, featuredImage, author } = firstPost;
     return (
       <div className="flex flex-1 flex-col gap-6 md:flex-row">
-        <img
-          src={featuredImage?.node?.sourceUrl}
-          className="h-[17.5rem] flex-1 object-cover object-center"
-          alt={title}
-        />
-        <div className="space-y-2">
+        <Link href={`/news/${slug}`} className="flex-1">
+          <img
+            src={featuredImage?.node?.sourceUrl}
+            className="h-[17.5rem] w-full  object-cover object-center"
+            alt={title}
+          />
+        </Link>
+        <div className="flex-1 space-y-2">
           <div className="text-sm font-semibold text-primary-400">
             {author?.node?.name} • {format(new Date(date), "dd MMM yyyy")}
           </div>
@@ -53,11 +55,13 @@ export default async function News() {
           {otherPosts.map(
             ({ title, date, slug, excerpt, featuredImage, author }, i) => (
               <div className="flex flex-col gap-6 sm:gap-2" key={i}>
-                <img
-                  src={featuredImage?.node?.sourceUrl}
-                  className="mb-2 h-48 object-cover object-center"
-                  alt={title}
-                />
+                <Link href={`/news/${slug}`}>
+                  <img
+                    src={featuredImage?.node?.sourceUrl}
+                    className="mb-2 h-48 w-full object-cover object-center"
+                    alt={title}
+                  />
+                </Link>
                 <div className="flex-1 space-y-2">
                   <div className="text-sm font-semibold text-primary-400">
                     {author?.node?.name} •{" "}
