@@ -34,7 +34,7 @@ const buttonVariants = cva(
       variant: "default",
       size: "default",
     },
-  }
+  },
 );
 
 const Button = React.forwardRef(
@@ -44,19 +44,21 @@ const Button = React.forwardRef(
       variant = undefined,
       size = undefined,
       asChild = false,
+      loading,
       ...props
     },
-    ref
+    ref,
   ) => {
     const Comp = asChild ? Slot : props.href ? Link : "button";
     return (
       <Comp
         className={cn(buttonVariants({ variant, size, className }))}
+        disabled={props.disabled || loading}
         ref={ref}
         {...props}
       />
     );
-  }
+  },
 );
 Button.displayName = "Button";
 

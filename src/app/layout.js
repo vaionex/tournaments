@@ -1,5 +1,6 @@
 import { DM_Sans } from "next/font/google";
 import "./globals.css";
+import Providers from "./(landing)/providers";
 
 const dmSans = DM_Sans({ subsets: ["latin"] });
 
@@ -43,7 +44,9 @@ export default function RootLayout({ children }) {
           src="https://plausible.ensidian.com/js/script.js"
         ></script>
       </head>
-      <body className={dmSans.className}>{children}</body>
+      <body className={dmSans.className}>
+        <Providers>{children}</Providers>
+      </body>
     </html>
   );
 }

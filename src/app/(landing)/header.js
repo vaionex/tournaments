@@ -13,6 +13,8 @@ import {
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import Logo from "@/components/ui/logo";
+import useLogout from "@/hooks/auth/useLogout";
+import useAuthentication from "@/hooks/auth/useAuthentication";
 
 const links = [
   { name: "Home", href: "/" },
@@ -23,12 +25,18 @@ const links = [
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { isAuthenticated } = useAuthentication();
+  const logout = useLogout();
 
-  const ctaButton = <Button href="/signup">Get Started</Button>;
+  const ctaButton = isAuthenticated ? (
+    <Button onClick={logout}>Logout</Button>
+  ) : (
+    <Button href="/signup">Get Started</Button>
+  );
 
   return (
     <>
-      <header className="text-white backdrop-blur-md absolute top-0 inset-x-0 bg-black/20 z-10">
+      <header className="absolute inset-x-0 top-0 z-10 bg-black/20 text-white backdrop-blur-md">
         <nav
           className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8"
           aria-label="Global"
@@ -74,7 +82,7 @@ export default function Header() {
         onClose={setMobileMenuOpen}
       >
         <div className="fixed inset-0 z-10" />
-        <Dialog.Panel className="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10 bg-black">
+        <Dialog.Panel className="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-black px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
           <div className="flex items-center justify-between">
             <div className="-m-1.5 p-1.5">
               <span className="sr-only">Tournaments</span>
