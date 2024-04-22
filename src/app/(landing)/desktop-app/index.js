@@ -17,7 +17,7 @@ export default function DesktopApp() {
         </div>
         <Button>
           <ArrowDownToLine className="size-5" />
-          Download Now
+          Coming Soon
         </Button>
       </div>
       <Image src={app} />

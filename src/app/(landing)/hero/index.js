@@ -40,11 +40,11 @@ export default function Example() {
               Earn Cash Rewards in eSports Tournaments
             </h1>
             <p className="mt-6 text-lg leading-8">
-              Outlast the Legends to Win $30K + Legendary Skins!
+              Sign up now to get access to our first tournaments!
             </p>
             <div className="mt-10 flex items-center gap-6 flex-wrap">
-              <Button variant="white">Join the Game</Button>
-              <Button>Create a Tournament</Button>
+              <Button variant="white" href="/signup">Join the Game</Button>
+              {/* <Button>Create a Tournament</Button> */}
             </div>
           </div>
         </div>

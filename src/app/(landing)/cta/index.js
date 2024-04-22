@@ -20,8 +20,8 @@ export default function CTA() {
         with a single click.
       </div>
       <div className="flex items-center justify-center gap-4">
-        <Button variant="white">Join a Game</Button>
-        <Button>Create a Tournament</Button>
+        <Button variant="white" href="/signup">Join a Game</Button>
+        {/* <Button>Create a Tournament</Button> */}
       </div>
     </Container>
   );

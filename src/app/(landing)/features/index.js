@@ -33,7 +33,7 @@ export default function Features() {
                   audience
                 </div>
               </div>
-              <Button>Create a Tournament</Button>
+              {/* <Button>Create a Tournament</Button> */}
             </div>
             <Image
               src={analytics}
