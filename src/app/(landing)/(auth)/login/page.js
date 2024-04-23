@@ -13,7 +13,7 @@ export default function Login() {
   const { push } = useRouter();
   const { mutate: login, isLoading } = useLoginWithPassword({
     onError: () => toast.error("Invalid Email/Password"),
-    onSuccess: () => push("/"),
+    onSuccess: () => push("/dashboard"),
   });
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

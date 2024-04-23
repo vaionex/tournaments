@@ -6,6 +6,9 @@ export default function GoogleSignInButton() {
   async function handleClick() {
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: "google",
+      options: {
+        redirectTo: "/dashboard",
+      },
     });
     if (error) toast.error(error.message ?? "An unexpected error occured");
     window.location.href = data.url;

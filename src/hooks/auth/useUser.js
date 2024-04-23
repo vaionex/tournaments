@@ -7,11 +7,16 @@ export default function useUser() {
   return useQuery({
     enabled: isAuthenticated,
     queryKey: ["user"],
+    initialData: {},
     queryFn: async () => {
       const { data: user } = await supabase.auth.getUser();
       if (!user) return;
-      const { data } = await supabase.from("User").select("*").throwOnError();
-      return { ...user, ...data };
+      const { data, error } = await supabase
+        .from("User")
+        .select("*")
+        .throwOnError();
+      if (error) throw error;
+      return { ...user, ...data[0] };
     },
   });
 }
