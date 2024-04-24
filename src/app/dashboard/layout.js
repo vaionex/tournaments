@@ -1,6 +1,5 @@
 "use client";
 import LogoSimple from "@/components/icons/logo-simple";
-import Avatar from "@/components/ui/avatar";
 import LogoMark from "@/components/ui/logo-mark";
 import useAuthentication from "@/hooks/auth/useAuthentication";
 import useUser from "@/hooks/auth/useUser";
@@ -11,6 +10,7 @@ import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { twMerge } from "tailwind-merge";
 import { FlexAlignLeft } from "untitledui-js-base";
+import ProfileDropdown from "./profile-dropdown";
 
 const nav = [
   { name: "Overview", href: "overview", icon: LogoSimple },
@@ -61,7 +61,7 @@ export default function DashboardLayout({ children }) {
             <input className="bg-transparent" placeholder="Search" />
           </div>
           <div className="flex items-center gap-4">
-            <Avatar src={user.profile_picture} />
+            <ProfileDropdown />
             {user.name}
           </div>
         </header>
