@@ -62,7 +62,7 @@ export default function DashboardLayout({ children }) {
           </div>
           <div className="flex items-center gap-4">
             <ProfileDropdown />
-            {user.name}
+            {user.username}
           </div>
         </header>
         <div className="mb-4 mt-6 flex items-center gap-4 px-8 text-sm text-neutral-500">
