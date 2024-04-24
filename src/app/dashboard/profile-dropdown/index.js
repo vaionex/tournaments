@@ -1,5 +1,6 @@
 "use client";
 import Avatar from "@/components/ui/avatar";
+import useLogout from "@/hooks/auth/useLogout";
 import useUser from "@/hooks/auth/useUser";
 import { supabase } from "@/supabase/client";
 import { Menu, Transition } from "@headlessui/react";
@@ -15,6 +16,12 @@ const items = [
 export default function ProfileDropdown() {
   const { data: user } = useUser();
   const { push } = useRouter();
+  const logout = useLogout();
+
+  const items = [
+    { name: "Profile", href: "/dashboard/profile/account" },
+    { name: "Log out", onClick: () => logout() },
+  ];
   return (
     <Menu as="div" className="relative ml-3">
       <div>
