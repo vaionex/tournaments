@@ -11,5 +11,6 @@ export default function useUpdatePassword() {
       if (error) throw error;
     },
     onSuccess: () => toast.success("Password Updated"),
+    onError: () => toast.error("Failed to update password"),
   });
 }
