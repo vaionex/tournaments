@@ -1,30 +1,49 @@
 import { Input } from "@/components/ui/input";
 import Row from "../row";
 import { Button } from "@/components/ui/button";
+import useUpdatePassword from "@/hooks/user/useUpdatePassword";
+import { useState } from "react";
+import toast from "react-hot-toast";
 
 export default function ChangePasswordSection() {
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const { mutate: update, isLoading } = useUpdatePassword();
+
+  function handleUpdate() {
+    if (password != confirmPassword)
+      return toast.error("Passwords do not match");
+
+    update({ password });
+  }
   return (
     <div className="space-y-5">
       <Row>
-        <div>Current Password</div>
-        <div>
-          <Input placeholder="Current Password" type="password" />
-        </div>
-      </Row>
-      <Row>
         <div>New Password</div>
         <div>
-          <Input placeholder="New Password" type="password" />
+          <Input
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="New Password"
+            type="password"
+          />
         </div>
       </Row>
       <Row>
         <div>Confirm New Password</div>
         <div>
-          <Input placeholder="Confirm New Password" type="password" />
+          <Input
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            placeholder="Confirm New Password"
+            type="password"
+          />
         </div>
       </Row>
       <div>
-        <Button>Update Password</Button>
+        <Button loading={isLoading} onClick={handleUpdate}>
+          Update Password
+        </Button>
       </div>
     </div>
   );

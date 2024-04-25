@@ -3,9 +3,11 @@ import UpdateProfileSection from "./update-profile-section";
 import UpdateAvatar from "./update-avatar";
 import UpdateBannerSection from "./update-banner-section";
 import useUser from "@/hooks/auth/useUser";
+import ChangePasswordSection from "./change-password-section";
 
 export default function ProfileAccount() {
   const { data: user } = useUser();
+
   return (
     <div>
       <UpdateBannerSection />
@@ -32,7 +34,9 @@ export default function ProfileAccount() {
           </div>
         </div>
         <UpdateProfileSection />
-        {/* <ChangePasswordSection /> */}
+        {user?.identities?.some((identity) => identity.provider == "email") && (
+          <ChangePasswordSection />
+        )}
       </div>
     </div>
   );
