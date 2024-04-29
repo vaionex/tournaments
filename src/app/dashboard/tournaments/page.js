@@ -3,6 +3,8 @@ import TournamentCard from "./tournament-card";
 import { Plus } from "lucide-react";
 import { getTournaments } from "@/db/tournament";
 
+export const revalidate = 0;
+
 export default async function Overview() {
   const tournaments = await getTournaments();
   return (
