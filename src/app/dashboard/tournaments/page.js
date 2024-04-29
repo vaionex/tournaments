@@ -2,9 +2,10 @@ import { Button } from "@/components/ui/button";
 import TournamentCard from "./tournament-card";
 import { Plus } from "lucide-react";
 import { getTournaments } from "@/db/tournament";
-import { supabase } from "@/supabase/server";
+import { createClient } from "@/supabase/server";
 
 export default async function Overview() {
+  const supabase = createClient();
   const tournaments = await getTournaments(supabase);
   return (
     <div>
