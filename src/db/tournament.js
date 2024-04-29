@@ -16,11 +16,8 @@ export async function createTournament({ banner: bannerFile, ...rest }) {
   return data[0];
 }
 
-export async function getTournaments(supabaseClient = supabase) {
-  const { data } = await supabaseClient
-    .from("Tournament")
-    .select("*")
-    .throwOnError();
+export async function getTournaments() {
+  const { data } = await supabase.from("Tournament").select("*").throwOnError();
   return data;
 }
 

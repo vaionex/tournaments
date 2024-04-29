@@ -2,11 +2,9 @@ import { Button } from "@/components/ui/button";
 import TournamentCard from "./tournament-card";
 import { Plus } from "lucide-react";
 import { getTournaments } from "@/db/tournament";
-import { createClient } from "@/supabase/server";
 
 export default async function Overview() {
-  const supabase = createClient();
-  const tournaments = await getTournaments(supabase);
+  const tournaments = await getTournaments();
   return (
     <div>
       <div className="flex items-center justify-between">
