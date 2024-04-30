@@ -18,7 +18,7 @@ export default function CreateTournament() {
   const [end, setEnd] = useState(addDays(new Date(), 2));
   const [maxPlayers, setMaxPlayers] = useState(10);
   const [prizePool, setPrizePool] = useState(1000);
-  const [entryFee, setEntryFee] = useState(1000);
+  const [entryFee, setEntryFee] = useState(0);
   const { push } = useRouter();
 
   const { data: games = [] } = useGames();
@@ -105,6 +105,7 @@ export default function CreateTournament() {
           value={prizePool}
           onChange={(e) => setPrizePool(Number(e.target.value) || 0)}
           min={1}
+          leftSection="$"
           required
         />
 
@@ -123,6 +124,7 @@ export default function CreateTournament() {
           value={entryFee}
           onChange={(e) => setEntryFee(Number(e.target.value) || 0)}
           min={1}
+          leftSection="$"
           required
         />
 
