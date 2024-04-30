@@ -20,7 +20,7 @@ const Input = React.forwardRef(
           <Comp
             type={type}
             className={cn(
-              "flex-1 bg-transparent py-2.5 focus:outline-0",
+              "flex-1 bg-transparent py-2.5 [color-scheme:dark] focus:outline-0",
               className,
             )}
             ref={ref}

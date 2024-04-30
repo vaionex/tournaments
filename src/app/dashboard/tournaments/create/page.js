@@ -1,5 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
+import Dropzone from "@/components/ui/dropzone";
 import { Input } from "@/components/ui/input";
 import Select from "@/components/ui/select";
 import useGames from "@/hooks/games/useGames";
@@ -8,11 +9,13 @@ import { addDays, format } from "date-fns";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { Image } from "lucide-react";
+import useFile from "@/hooks/util/useFile";
 
 export default function CreateTournament() {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [banner, setBanner] = useState();
+  const [banner, setBanner, bannerUrl] = useFile();
   const [gameId, setGameId] = useState();
   const [start, setStart] = useState(new Date());
   const [end, setEnd] = useState(addDays(new Date(), 2));
@@ -46,8 +49,8 @@ export default function CreateTournament() {
     <div>
       <h2 className="mb-4 text-3xl font-semibold">Create Tournament</h2>
       <form
-        className="grid max-w-3xl gap-x-6 gap-y-6"
-        style={{ gridTemplateColumns: "1fr 1.4fr" }}
+        className="grid max-w-5xl gap-x-6 gap-y-6"
+        style={{ gridTemplateColumns: "1fr 2.2fr" }}
         onSubmit={handleCreate}
       >
         <div className="">Title</div>
@@ -58,11 +61,26 @@ export default function CreateTournament() {
         />
 
         <div className="">Banner</div>
-        <Input
-          type="file"
-          onChange={(e) => setBanner(e.target.files[0])}
-          required
+        <Dropzone
+          onDrop={(files) => {
+            if (files.length > 0) setBanner(files[0]);
+          }}
+          accept={{
+            png: ["png"],
+            svg: ["svg"],
+            jpg: ["jpg", "jpeg"],
+            gif: ["gif"],
+          }}
+          files={[banner]}
+          icon={Image}
         />
+
+        {bannerUrl && (
+          <>
+            <div />
+            <img src={bannerUrl} className="h-96 w-full object-cover" />
+          </>
+        )}
 
         <div>Select a game</div>
         <div>
@@ -73,7 +91,6 @@ export default function CreateTournament() {
             onChange={setGameId}
           />
         </div>
-
         <div>Description</div>
         <Input
           value={description}
@@ -82,23 +99,22 @@ export default function CreateTournament() {
           className="h-24"
           required
         />
-
         <div>Start</div>
+
         <Input
-          type="date"
-          value={format(start, "yyyy-MM-dd")}
+          type="datetime-local"
+          value={format(start, "yyyy-MM-dd'T'hh:mm")}
           onChange={(e) => setStart(new Date(e.target.value))}
           required
         />
 
         <div>End</div>
         <Input
-          type="date"
-          value={format(end, "yyyy-MM-dd")}
+          type="datetime-local"
+          value={format(end, "yyyy-MM-dd'T'hh:mm")}
           onChange={(e) => setEnd(new Date(e.target.value))}
           required
         />
-
         <div>Prize Pool</div>
         <Input
           type="number"
@@ -108,7 +124,6 @@ export default function CreateTournament() {
           leftSection="$"
           required
         />
-
         <div>Max Players</div>
         <Input
           type="number"
@@ -117,7 +132,6 @@ export default function CreateTournament() {
           min={1}
           required
         />
-
         <div>Entry Fee</div>
         <Input
           type="number"
@@ -127,7 +141,6 @@ export default function CreateTournament() {
           leftSection="$"
           required
         />
-
         <div />
         <div className="flex justify-end">
           <Button type="submit" loading={isLoading}>
