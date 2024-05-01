@@ -5,6 +5,9 @@ const links = [
   { name: "Overview", href: "overview" },
   { name: "Edit", href: "edit" },
 ];
+
+export const revalidate = 0;
+
 export default async function TournamentLayout({ children, params: { id } }) {
   const { name } = await getTournament(id);
   return (
@@ -15,7 +18,7 @@ export default async function TournamentLayout({ children, params: { id } }) {
           <MenuLink {...link} key={link.href} />
         ))}
       </div>
-      {children}
+      <div>{children}</div>
     </div>
   );
 }

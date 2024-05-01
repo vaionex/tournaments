@@ -16,6 +16,18 @@ export async function createTournament({ banner: bannerFile, ...rest }) {
   return data[0];
 }
 
+export async function updateTournament(id, { banner: bannerFile, ...rest }) {
+  const banner = bannerFile
+    ? await uploadPublicImage(bannerFile, `/tournaments/${v4()}`)
+    : undefined;
+
+  await supabase
+    .from("Tournament")
+    .update(pickBy({ ...rest, banner }, (value) => value != undefined))
+    .eq("id", id)
+    .throwOnError();
+}
+
 export async function getTournaments() {
   const { data } = await supabase.from("Tournament").select("*").throwOnError();
   return data;

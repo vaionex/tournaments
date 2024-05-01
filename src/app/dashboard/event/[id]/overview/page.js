@@ -3,6 +3,8 @@ import { formatCurrency } from "@/utils/format";
 import { format } from "date-fns";
 import { CalenderDate, Trophy01, Users01 } from "untitledui-js-base";
 
+export const revalidate = 0;
+
 export default async function Overview({ params: { id } }) {
   const { name, banner, prize_pool, entry_fee, start, end } =
     await getTournament(id);

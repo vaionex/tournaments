@@ -66,10 +66,10 @@ export default function CreateTournament() {
             if (files.length > 0) setBanner(files[0]);
           }}
           accept={{
-            png: ["png"],
-            svg: ["svg"],
-            jpg: ["jpg", "jpeg"],
-            gif: ["gif"],
+            "image/png": [".png"],
+            "image/svg": [".svg"],
+            "image/jpg": [".jpg", ".jpeg"],
+            "image/gif": [".gif"],
           }}
           files={[banner]}
           icon={Image}
@@ -142,7 +142,7 @@ export default function CreateTournament() {
           required
         />
         <div />
-        <div className="flex justify-end mb-12">
+        <div className="mb-12 flex justify-end">
           <Button type="submit" loading={isLoading}>
             Create
           </Button>
