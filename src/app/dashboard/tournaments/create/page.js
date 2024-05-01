@@ -142,7 +142,7 @@ export default function CreateTournament() {
           required
         />
         <div />
-        <div className="flex justify-end">
+        <div className="flex justify-end mb-12">
           <Button type="submit" loading={isLoading}>
             Create
           </Button>
