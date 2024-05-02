@@ -5,14 +5,13 @@ import { Input } from "@/components/ui/input";
 import Select from "@/components/ui/select";
 import useGames from "@/hooks/games/useGames";
 import { format } from "date-fns";
-import { useParams, usePathname, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import useFile from "@/hooks/util/useFile";
 import useTournament from "@/hooks/tournament/useTournament";
 import { Image } from "lucide-react";
 import useUpdateTournament from "@/hooks/tournament/useUpdateTournament";
 import toast from "react-hot-toast";
-import { revalidatePath } from "next/cache";
 
 export default function EditTournament() {
   const { id } = useParams();
@@ -28,8 +27,6 @@ export default function EditTournament() {
   const [entryFee, setEntryFee] = useState(0);
 
   const { data: games = [] } = useGames();
-  const { refresh } = useRouter();
-  const pathname = usePathname();
   const { mutate: update, isLoading } = useUpdateTournament({
     onSuccess: () => {
       window.location.href = "overview";
