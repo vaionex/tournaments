@@ -14,14 +14,10 @@ export default function useSignupWithEmailAndPassword(options) {
           data: {
             username,
           },
+          emailRedirectTo: `${window.location.origin}/dashboard`,
         },
       });
       if (error || !user) throw error;
-
-      await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
     },
     ...options,
   });

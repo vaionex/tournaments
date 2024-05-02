@@ -15,7 +15,7 @@ export default function Signup() {
   const { push } = useRouter();
   const { mutate: signup, isLoading } = useSignupWithEmailAndPassword({
     onError: (e) => toast.error(e.message ?? "Could not signup"),
-    onSuccess: () => push("/"),
+    onSuccess: () => push("/verification-email-sent"),
   });
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
