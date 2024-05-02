@@ -1,15 +1,25 @@
 import { getTournament } from "@/db/tournament";
 import MenuLink from "./MenuLink";
-
-const links = [
-  { name: "Overview", href: "overview" },
-  { name: "Edit", href: "edit" },
-];
+import { notFound } from "next/navigation";
+import { getUser } from "@/supabase/server";
 
 export const revalidate = 0;
 
 export default async function TournamentLayout({ children, params: { id } }) {
-  const { name } = await getTournament(id);
+  const tournament = await getTournament(id);
+  if (!tournament) return notFound();
+
+  const { name, user_id, start } = tournament;
+
+  const user = await getUser();
+  const isOwner = user?.id == user_id;
+  const isStarted = new Date(start) < new Date();
+  const canEdit = isOwner && !isStarted;
+  const links = [
+    { name: "Overview", href: "overview" },
+    canEdit && { name: "Edit", href: "edit" },
+  ].filter(Boolean);
+
   return (
     <div>
       <h1 className="text-3xl font-semibold">{name}</h1>

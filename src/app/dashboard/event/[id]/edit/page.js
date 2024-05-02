@@ -168,7 +168,7 @@ export default function EditTournament() {
           type="number"
           value={entryFee}
           onChange={(e) => setEntryFee(Number(e.target.value) || 0)}
-          min={1}
+          min={0}
           leftSection="$"
           required
         />

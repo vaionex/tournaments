@@ -2,6 +2,7 @@ import { supabase } from "@/supabase/client";
 import { uploadPublicImage } from "./public-images";
 import { pickBy } from "lodash";
 import { v4 } from "uuid";
+import { getUserId } from "@/supabase/utils";
 
 export async function createTournament({ banner: bannerFile, ...rest }) {
   const banner = bannerFile
@@ -10,7 +11,12 @@ export async function createTournament({ banner: bannerFile, ...rest }) {
 
   const { data } = await supabase
     .from("Tournament")
-    .insert(pickBy({ ...rest, banner }, (value) => value != undefined))
+    .insert(
+      pickBy(
+        { ...rest, banner, user_id: await getUserId() },
+        (value) => value != undefined,
+      ),
+    )
     .select()
     .throwOnError();
   return data[0];
