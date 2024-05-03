@@ -12,7 +12,13 @@ import GoogleSignInButton from "../GoogleSignInButton";
 export default function Login() {
   const { push } = useRouter();
   const { mutate: login, isLoading } = useLoginWithPassword({
-    onError: () => toast.error("Invalid Email/Password"),
+    onError: (e) => {
+      if (e.message == "Email not confirmed") {
+        push("/verification-email-sent");
+      } else {
+        toast.error("Invalid Email/Password");
+      }
+    },
     onSuccess: () => push("/dashboard"),
   });
   const [email, setEmail] = useState("");

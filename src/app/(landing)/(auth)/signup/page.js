@@ -66,6 +66,7 @@ export default function Signup() {
             label="I agree to terms and conditions"
             checked={acceptedTerms}
             onCheckedChange={setAcceptedTerms}
+            id="terms"
           />
           <Button onClick={handleSignup} loading={isLoading}>
             Get Started
