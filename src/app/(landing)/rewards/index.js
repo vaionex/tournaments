@@ -38,34 +38,35 @@ export default function Rewards() {
       }}
     >
       <Container className="!py-24">
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <h2 className="text-5xl font-bold mb-2">
+        <div className="mx-auto mb-16 max-w-3xl text-center">
+          <h2 className="mb-2 text-5xl font-bold">
             Elevate Your Gaming Experience with Rewards
           </h2>
-          <div className="text-supporting text-xl">
+          <div className="text-xl text-supporting">
             Explore our diverse range of rewards tailored to your gaming
             achievements.
           </div>
         </div>
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid gap-8 md:grid-cols-3">
           {rewards.map(({ name, description, icon: Icon, image }) => (
             <CornerBorder key={name}>
-              <div className="bg-cover bg-center relative overflow-hidden">
+              <div className="relative overflow-hidden bg-cover bg-center">
                 <Image
                   className="absolute inset-0 object-cover object-center"
                   src={image}
+                  alt={name}
                 />
-                <div className="h-[30rem] flex flex-col justify-between p-8 bg-gradient-to-t from-black to-50% relative z-10">
+                <div className="relative z-10 flex h-[30rem] flex-col justify-between bg-gradient-to-t from-black to-50% p-8">
                   <div className="w-fit">
                     <CornerBorder>
-                      <div className="w-12 h-12 bg-white/20 flex justify-center items-center">
-                        <Icon className="w-6 h-6" />
+                      <div className="flex h-12 w-12 items-center justify-center bg-white/20">
+                        <Icon className="h-6 w-6" />
                       </div>
                     </CornerBorder>
                   </div>
                   <div>
                     <div className="text-2xl font-bold">{name}</div>
-                    <div className="text-supporting text-xl">{description}</div>
+                    <div className="text-xl text-supporting">{description}</div>
                   </div>
                 </div>
               </div>

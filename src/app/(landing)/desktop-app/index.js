@@ -7,10 +7,10 @@ import { ArrowDownToLine } from "lucide-react";
 export default function DesktopApp() {
   return (
     <Container className="py-8 md:py-24">
-      <div className="flex justify-between items-start mb-12 flex-wrap gap-6">
+      <div className="mb-12 flex flex-wrap items-start justify-between gap-6">
         <div className="max-w-3xl">
-          <h2 className="text-5xl font-bold mb-3">Download Our Desktop App</h2>
-          <div className="text-supporting text-xl">
+          <h2 className="mb-3 text-5xl font-bold">Download Our Desktop App</h2>
+          <div className="text-xl text-supporting">
             Gain deeper insights into your gameplay performance, track your
             progress, and strategize like a pro with our desktop application.
           </div>
@@ -20,7 +20,7 @@ export default function DesktopApp() {
           Coming Soon
         </Button>
       </div>
-      <Image src={app} />
+      <Image src={app} alt="Desktop Application" />
     </Container>
   );
 }
