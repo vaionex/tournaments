@@ -28,7 +28,9 @@ export default function Dropzone({
       <div className="text-center">
         <div>
           {files.filter(Boolean).map((file) => (
-            <div className="font-semibold">{file?.name}</div>
+            <div className="font-semibold" key={file.name}>
+              {file?.name}
+            </div>
           ))}
         </div>
         <span className="text-primary">Click to upload</span> or drag and drop
