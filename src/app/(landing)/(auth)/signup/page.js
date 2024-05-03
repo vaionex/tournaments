@@ -9,12 +9,13 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import GoogleSignInButton from "../GoogleSignInButton";
 
 export default function Signup() {
   const { push } = useRouter();
   const { mutate: signup, isLoading } = useSignupWithEmailAndPassword({
     onError: (e) => toast.error(e.message ?? "Could not signup"),
-    onSuccess: () => push("/"),
+    onSuccess: () => push("/verification-email-sent"),
   });
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -69,6 +70,7 @@ export default function Signup() {
           <Button onClick={handleSignup} loading={isLoading}>
             Get Started
           </Button>
+          <GoogleSignInButton />
         </div>
 
         <div className="mt-10 text-center text-sm text-neutral-400">

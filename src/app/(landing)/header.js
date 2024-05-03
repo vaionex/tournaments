@@ -1,19 +1,10 @@
 "use client";
-import { Fragment, useState } from "react";
-import { Dialog, Disclosure, Popover, Transition } from "@headlessui/react";
-import {
-  ArrowPathIcon,
-  Bars3Icon,
-  ChartPieIcon,
-  CursorArrowRaysIcon,
-  FingerPrintIcon,
-  SquaresPlusIcon,
-  XMarkIcon,
-} from "@heroicons/react/24/outline";
+import { useState } from "react";
+import { Dialog, Popover } from "@headlessui/react";
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import Logo from "@/components/ui/logo";
-import useLogout from "@/hooks/auth/useLogout";
 import useAuthentication from "@/hooks/auth/useAuthentication";
 
 const links = [
@@ -26,10 +17,9 @@ const links = [
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { isAuthenticated } = useAuthentication();
-  const logout = useLogout();
 
   const ctaButton = isAuthenticated ? (
-    <Button onClick={logout}>Logout</Button>
+    <Button href="/dashboard">Dashboard</Button>
   ) : (
     <Button href="/signup">Get Started</Button>
   );

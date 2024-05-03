@@ -10,15 +10,14 @@ export default function useSignupWithEmailAndPassword(options) {
       } = await supabase.auth.signUp({
         email,
         password,
+        options: {
+          data: {
+            username,
+          },
+          emailRedirectTo: `${window.location.origin}/dashboard`,
+        },
       });
       if (error || !user) throw error;
-
-      const { id } = user;
-      await supabase.from("User").insert({ username, id });
-      await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
     },
     ...options,
   });

@@ -7,12 +7,13 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import GoogleSignInButton from "../GoogleSignInButton";
 
 export default function Login() {
   const { push } = useRouter();
   const { mutate: login, isLoading } = useLoginWithPassword({
     onError: () => toast.error("Invalid Email/Password"),
-    onSuccess: () => push("/"),
+    onSuccess: () => push("/dashboard"),
   });
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -44,6 +45,7 @@ export default function Login() {
           <Button onClick={handleLogin} loading={isLoading}>
             Login
           </Button>
+          <GoogleSignInButton />
         </div>
 
         <div className="mt-10 text-center text-sm text-neutral-400">
