@@ -10,20 +10,20 @@ export default function Logo(props) {
         {...props}
       >
         <path
-          fill-rule="evenodd"
-          clip-rule="evenodd"
+          fillRule="evenodd"
+          clipRule="evenodd"
           d="M0 13.9928L21.415 37.0617L6.61559 30.249L0 13.9928Z"
           fill="url(#paint0_linear_316_4211)"
         />
         <path
-          fill-rule="evenodd"
-          clip-rule="evenodd"
+          fillRule="evenodd"
+          clipRule="evenodd"
           d="M51.3566 13.9928L44.741 30.249L29.9416 37.0617L51.3566 13.9928Z"
           fill="url(#paint1_linear_316_4211)"
         />
         <path
-          fill-rule="evenodd"
-          clip-rule="evenodd"
+          fillRule="evenodd"
+          clipRule="evenodd"
           d="M35.4899 24.7119L25.6487 38.3729L15.8076 24.7119L25.6156 32.3758L35.4899 24.7119Z"
           fill="url(#paint2_linear_316_4211)"
         />
@@ -80,8 +80,8 @@ export default function Logo(props) {
             y2="37.0617"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#2E90FA" />
-            <stop offset="1" stop-color="#1D4DF8" />
+            <stop stopColor="#2E90FA" />
+            <stop offset="1" stopColor="#1D4DF8" />
           </linearGradient>
           <linearGradient
             id="paint1_linear_316_4211"
@@ -91,8 +91,8 @@ export default function Logo(props) {
             y2="37.0617"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#2E90FA" />
-            <stop offset="1" stop-color="#1D4DF8" />
+            <stop stopColor="#2E90FA" />
+            <stop offset="1" stopColor="#1D4DF8" />
           </linearGradient>
           <linearGradient
             id="paint2_linear_316_4211"
@@ -102,8 +102,8 @@ export default function Logo(props) {
             y2="38.3729"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="white" />
-            <stop offset="1" stop-color="#999999" />
+            <stop stopColor="white" />
+            <stop offset="1" stopColor="#999999" />
           </linearGradient>
         </defs>
       </svg>
