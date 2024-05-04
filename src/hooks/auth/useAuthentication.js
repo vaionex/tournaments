@@ -19,6 +19,7 @@ export default function useAuthentication() {
         queryClient.setQueryData(["auth-status"], "authenticated");
       } else if (event === "SIGNED_OUT") {
         queryClient.setQueryData(["auth-status"], "unauthenticated");
+        queryClient.clear();
       }
     });
     return () => data.subscription.unsubscribe();
