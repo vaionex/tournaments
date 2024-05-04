@@ -1,3 +1,4 @@
+import Notch from "@/components/ui/notch";
 import { getTournament } from "@/db/tournament";
 import { formatCurrency } from "@/utils/format";
 import { format } from "date-fns";
@@ -10,23 +11,13 @@ export default async function Overview({ params: { id } }) {
     await getTournament(id);
   function Container({ title, children, icon: Icon = () => null }) {
     return (
-      <div className="relative bg-neutral-900 p-3.5">
+      <Notch className="bg-neutral-900 p-3.5">
         <div className="mb-2 flex items-center gap-2 text-xs text-neutral-500">
           <Icon className="size-4" />
           <div className="text-sm">{title}</div>
         </div>
         <div>{children}</div>
-        <svg
-          width="26"
-          height="12"
-          viewBox="0 0 26 12"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          className="absolute bottom-0 right-0"
-        >
-          <path d="M0 27.2L26 0.199951V27.2H0Z" fill="#004EEB" />
-        </svg>
-      </div>
+      </Notch>
     );
   }
   return (

@@ -9,8 +9,10 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { twMerge } from "tailwind-merge";
-import { FlexAlignLeft } from "untitledui-js-base";
+import { FlexAlignLeft, Wallet03 } from "untitledui-js-base";
 import ProfileDropdown from "./profile-dropdown";
+import Notch from "@/components/ui/notch";
+import { formatCurrency } from "@/utils/format";
 
 const nav = [
   { name: "Overview", href: "overview", icon: LogoSimple },
@@ -24,6 +26,18 @@ export default function DashboardLayout({ children }) {
 
   if (isUnauthenticated) push("/login");
   const page = pathname.split("/")[2];
+
+  function Badge({ className = "", ...rest }) {
+    return (
+      <Notch
+        className={twMerge(
+          "flex items-center gap-1.5 bg-white/5 px-4 py-1.5 font-medium text-neutral-400",
+          className,
+        )}
+        {...rest}
+      />
+    );
+  }
 
   return (
     <div className="flex">
@@ -61,6 +75,14 @@ export default function DashboardLayout({ children }) {
             <input className="bg-transparent" placeholder="Search" />
           </div>
           <div className="flex items-center gap-4">
+            <Badge>
+              <LogoSimple className="size-4 text-white" />
+              Gold
+            </Badge>
+            <Badge>
+              <Wallet03 className="size-4 text-white" />
+              {formatCurrency(user.balance ?? 0)}
+            </Badge>
             <ProfileDropdown />
             {user.username}
           </div>
