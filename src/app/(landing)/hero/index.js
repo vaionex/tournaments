@@ -20,7 +20,7 @@ const tournaments = [
   },
 ];
 
-export default function Example() {
+export default function Hero() {
   return (
     <div
       style={{
