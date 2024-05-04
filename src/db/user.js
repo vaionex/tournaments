@@ -51,3 +51,14 @@ export async function updateUser({
   await supabase.from("User").update(data).eq("id", id).throwOnError();
   return data;
 }
+
+export async function getParticipations() {
+  const id = await getUserId();
+  const { data } = await supabase
+    .from("Participant")
+    .select()
+    .eq("user_id", id)
+    .throwOnError();
+
+  return data;
+}
