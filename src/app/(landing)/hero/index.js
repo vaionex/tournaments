@@ -24,7 +24,7 @@ export default function Hero() {
   return (
     <div
       style={{
-        backgroundImage: `url('/images/fortnitebattle.jpg')`,
+        backgroundImage: `url('/images/fortnitebattle.webp')`,
         backgroundRepeat: "no-repeat",
         backgroundPosition: "top",
         backgroundSize: "cover",
