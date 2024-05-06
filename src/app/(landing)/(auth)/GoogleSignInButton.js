@@ -2,12 +2,24 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/supabase/client";
 import toast from "react-hot-toast";
 
+const getURL = () => {
+  let url =
+    process?.env?.NEXT_PUBLIC_SITE_URL ?? // Set this to your site URL in production env.
+    process?.env?.NEXT_PUBLIC_VERCEL_URL ?? // Automatically set by Vercel.
+    "http://localhost:3000/";
+  // Make sure to include `https://` when not localhost.
+  url = url.includes("http") ? url : `https://${url}`;
+  // Make sure to include a trailing `/`.
+  url = url.charAt(url.length - 1) === "/" ? url : `${url}/`;
+  return `${url}dashboard`;
+};
+
 export default function GoogleSignInButton() {
   async function handleClick() {
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: "/dashboard",
+        redirectTo: getURL(),
       },
     });
     if (error) toast.error(error.message ?? "An unexpected error occured");
@@ -22,7 +34,7 @@ export default function GoogleSignInButton() {
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
-        <g clip-path="url(#clip0_507_567)">
+        <g clipPath="url(#clip0_507_567)">
           <path
             d="M24.2663 12.7764C24.2663 11.9607 24.2001 11.1406 24.059 10.3381H12.7402V14.9591H19.222C18.953 16.4494 18.0888 17.7678 16.8233 18.6056V21.6039H20.6903C22.9611 19.5139 24.2663 16.4274 24.2663 12.7764Z"
             fill="#4285F4"

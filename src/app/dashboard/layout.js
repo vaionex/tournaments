@@ -9,8 +9,10 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { twMerge } from "tailwind-merge";
-import { FlexAlignLeft } from "untitledui-js-base";
+import { FlexAlignLeft, Wallet03 } from "untitledui-js-base";
 import ProfileDropdown from "./profile-dropdown";
+import Notch from "@/components/ui/notch";
+import { formatCurrency } from "@/utils/format";
 
 const nav = [
   { name: "Overview", href: "overview", icon: LogoSimple },
@@ -25,6 +27,33 @@ export default function DashboardLayout({ children }) {
   if (isUnauthenticated) push("/login");
   const page = pathname.split("/")[2];
 
+  function Badge({ className = "", ...rest }) {
+    return (
+      <Notch
+        className={twMerge(
+          "flex items-center gap-1.5 bg-white/5 px-4 py-1.5 font-medium text-neutral-400",
+          className,
+        )}
+        {...rest}
+      />
+    );
+  }
+
+  function CornerHighlight() {
+    return (
+      <svg
+        width="20"
+        height="40"
+        viewBox="0 0 20 40"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        className="absolute right-0 top-0"
+      >
+        <path d="M0 0H20V40H16L0 0Z" fill="white" />
+      </svg>
+    );
+  }
+
   return (
     <div className="flex">
       <div className="sticky top-0 min-h-screen border-r border-neutral-700">
@@ -38,7 +67,7 @@ export default function DashboardLayout({ children }) {
             <Link
               href={`/dashboard/${href}`}
               className={twMerge(
-                "flex h-20 flex-col items-center justify-center gap-2",
+                "relative flex h-20 flex-col items-center justify-center gap-2",
                 page == href && "bg-primary",
               )}
               key={href}
@@ -50,6 +79,7 @@ export default function DashboardLayout({ children }) {
                 )}
               />
               {name}
+              {page == href && <CornerHighlight />}
             </Link>
           ))}
         </nav>
@@ -61,6 +91,14 @@ export default function DashboardLayout({ children }) {
             <input className="bg-transparent" placeholder="Search" />
           </div>
           <div className="flex items-center gap-4">
+            <Badge>
+              <LogoSimple className="size-4 text-white" />
+              Gold
+            </Badge>
+            <Badge>
+              <Wallet03 className="size-4 text-white" />
+              {formatCurrency(user.balance ?? 0)}
+            </Badge>
             <ProfileDropdown />
             {user.username}
           </div>

@@ -3,6 +3,7 @@ import { uploadPublicImage } from "./public-images";
 import { pickBy } from "lodash";
 import { v4 } from "uuid";
 import { getUserId } from "@/supabase/utils";
+import { api } from "@/utils/api";
 
 export async function createTournament({ banner: bannerFile, ...rest }) {
   const banner = bannerFile
@@ -42,8 +43,21 @@ export async function getTournaments() {
 export async function getTournament(id) {
   const { data } = await supabase
     .from("Tournament")
-    .select("*")
+    .select("*, Game (*)")
     .eq("id", id)
     .throwOnError();
   return data[0];
+}
+
+export async function getParticipants(id) {
+  const { data } = await supabase
+    .from("Participant")
+    .select("*, User (*)")
+    .eq("tournament_id", id)
+    .throwOnError();
+  return data;
+}
+
+export async function joinTournament(tournament_id) {
+  await api.post("tournament/join", { tournament_id });
 }

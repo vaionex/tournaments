@@ -33,3 +33,14 @@ export async function getUser() {
   } = await supabase.auth.getUser();
   return user;
 }
+
+export async function getUserDetails() {
+  const supabase = createClient();
+  const user = await getUser();
+  const { data: users } = await supabase
+    .from("User")
+    .select()
+    .eq("id", user.id)
+    .throwOnError();
+  return { ...user, ...users[0] };
+}

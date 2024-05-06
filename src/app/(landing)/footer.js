@@ -11,21 +11,21 @@ const links = [
 export default function Footer() {
   return (
     <div>
-      <div className="bg-gradient-to-r from-transparent via-white to bg-transparent w-full h-0.5" />
+      <div className="to h-0.5 w-full bg-transparent bg-gradient-to-r from-transparent via-white" />
       <Container>
         <footer className="">
           <div className="flex flex-col items-center justify-center space-y-6 py-16">
             <Logo className="h-12" />
-            <div className="text-xl max-w-3xl text-center">
+            <div className="max-w-3xl text-center text-xl">
               Immerse yourself in adrenaline-pumping battles and compete against
               the best to claim your victory on Tournaments.com today!
             </div>
           </div>
-          <div className="flex flex-col md:flex-row items-center justify-between py-14 border-t border-gray-800 gap-4">
+          <div className="flex flex-col items-center justify-between gap-4 border-t border-gray-800 py-14 md:flex-row">
             <div>© 2024 Tournaments.com | All rights reserved.</div>
-            <div className="flex gap-8 flex-wrap">
-              {links.map(({ name, href }) => (
-                <Link href={href} key={href}>
+            <div className="flex flex-wrap gap-8">
+              {links.map(({ name, href }, index) => (
+                <Link href={href} key={index}>
                   {name}
                 </Link>
               ))}
