@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function Logo(props) {
   return (
-    <Link href="/">
+    <Link aria-label="Tournaments Logo" href="/">
       <svg
         viewBox="0 0 198 52"
         fill="none"
