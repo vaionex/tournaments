@@ -36,11 +36,12 @@ export default async function Matchmaking({ params: { id } }) {
         description="Step-by-step guidance on how to use the matchmaking key to enter the tournament lobby."
       >
         <ul className="mb-4 ml-4 list-disc">
-          <li>In Fortnite, select 'Game Mode'</li>
-          <li>Choose 'Custom Match' and input your key</li>
+          <li>In Fortnite, select &apos;Game Mode&apos;</li>
+          <li>Choose &apos;Custom Match&apos; and input your key</li>
           <li>Ready up and join the lobby by 2:50 PM EST</li>
         </ul>
-        Keep this key confidential. For assistance, visit the ‘Support’ section.
+        Keep this key confidential. For assistance, visit the
+        &apos;Support&apos; section.
       </Section>
     </div>
   );
