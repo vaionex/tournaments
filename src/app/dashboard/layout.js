@@ -39,6 +39,21 @@ export default function DashboardLayout({ children }) {
     );
   }
 
+  function CornerHighlight() {
+    return (
+      <svg
+        width="20"
+        height="40"
+        viewBox="0 0 20 40"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        className="absolute right-0 top-0"
+      >
+        <path d="M0 0H20V40H16L0 0Z" fill="white" />
+      </svg>
+    );
+  }
+
   return (
     <div className="flex">
       <div className="sticky top-0 min-h-screen border-r border-neutral-700">
@@ -52,7 +67,7 @@ export default function DashboardLayout({ children }) {
             <Link
               href={`/dashboard/${href}`}
               className={twMerge(
-                "flex h-20 flex-col items-center justify-center gap-2",
+                "relative flex h-20 flex-col items-center justify-center gap-2",
                 page == href && "bg-primary",
               )}
               key={href}
@@ -64,6 +79,7 @@ export default function DashboardLayout({ children }) {
                 )}
               />
               {name}
+              {page == href && <CornerHighlight />}
             </Link>
           ))}
         </nav>

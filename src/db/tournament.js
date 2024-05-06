@@ -43,10 +43,19 @@ export async function getTournaments() {
 export async function getTournament(id) {
   const { data } = await supabase
     .from("Tournament")
-    .select("*")
+    .select("*, Game (*)")
     .eq("id", id)
     .throwOnError();
   return data[0];
+}
+
+export async function getParticipants(id) {
+  const { data } = await supabase
+    .from("Participant")
+    .select("*, User (*)")
+    .eq("tournament_id", id)
+    .throwOnError();
+  return data;
 }
 
 export async function joinTournament(tournament_id) {

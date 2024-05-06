@@ -19,6 +19,9 @@ export default async function TournamentLayout({ children, params: { id } }) {
   const canEdit = isOwner && !isStarted;
   const links = [
     { name: "Overview", href: "overview" },
+    { name: "Event Details", href: "details" },
+    { name: "Participants", href: "participants" },
+    { name: "Matchmaking Key", href: "matchmaking" },
     canEdit && { name: "Edit", href: "edit" },
   ].filter(Boolean);
 
