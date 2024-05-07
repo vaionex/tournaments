@@ -1,6 +1,6 @@
 "use client";
 import Facebook from "@/components/icons/logo-simple/Facebook";
-import Linkedin from "@/components/icons/logo-simple/LinkedIn";
+import Linkedin from "@/components/icons/logo-simple/Linkedin";
 import Twitter from "@/components/icons/logo-simple/Twitter";
 import { Button } from "@/components/ui/button";
 import toast from "react-hot-toast";
