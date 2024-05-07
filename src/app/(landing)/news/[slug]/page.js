@@ -7,6 +7,7 @@ import CTA from "../../cta";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Send01 } from "untitledui-js-base";
+import Link from "next/link";
 
 export async function generateMetadata({ params: { slug } }) {
   const { title } = await getPostBySlug(slug);
@@ -66,7 +67,10 @@ export default async function BlogPost({ params: { slug } }) {
             <Input placeholder="Enter your email" />
           </div>
           <div className="mb-4 text-sm text-neutral-400">
-            Read about our privacy policy.
+            Read about our{" "}
+            <Link href="/privacy-policy" className="underline">
+              privacy policy.
+            </Link>
           </div>
           <Button className="w-full">Subscribe</Button>
         </div>
