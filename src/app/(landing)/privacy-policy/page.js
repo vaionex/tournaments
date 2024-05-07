@@ -10,9 +10,9 @@ export default function PrivacyPolicy() {
         and running tournament events for gamers around the globe. Your privacy
         is of utmost importance to us. This Privacy Policy explains how we
         collect, use, protect, and disclose information and data when you use
-        the Tournaments.com website and services ("Services"). By using our
-        Services, you agree to the collection, use, and disclosure of your
-        information as described in this policy.
+        the Tournaments.com website and services (&apos;Services&apos;). By
+        using our Services, you agree to the collection, use, and disclosure of
+        your information as described in this policy.
       </p>
       <h2>Information We Collect</h2>
       <ul>
