@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Send01 } from "untitledui-js-base";
 import Link from "next/link";
+import Newsletter from "./Newsletter";
 
 export async function generateMetadata({ params: { slug } }) {
   const { title } = await getPostBySlug(slug);
@@ -48,32 +49,7 @@ export default async function BlogPost({ params: { slug } }) {
           />
           <Info />
         </div>
-        <div
-          className="h-fit w-96 rounded-xl border border-white/20 p-8"
-          style={{
-            backgroundImage:
-              "radial-gradient(circle at 10% 10%, #737373, transparent 35%)",
-          }}
-        >
-          <div className="mb-8 flex size-14 items-center justify-center rounded-lg border border-white/10 bg-white/10">
-            <Send01 className="size-5" />
-          </div>
-          <h2 className="mb-2 text-2xl font-semibold">Newsletter</h2>
-          <p className="mb-8 text-neutral-300">
-            Latest releases and tips, interesting articles, and exclusive
-            interviews in your inbox every week.
-          </p>
-          <div className="mb-1">
-            <Input placeholder="Enter your email" />
-          </div>
-          <div className="mb-4 text-sm text-neutral-400">
-            Read about our{" "}
-            <Link href="/privacy-policy" className="underline">
-              privacy policy.
-            </Link>
-          </div>
-          <Button className="w-full">Subscribe</Button>
-        </div>
+        <Newsletter />
       </div>
 
       <CTA />
