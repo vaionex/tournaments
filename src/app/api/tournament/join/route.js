@@ -1,4 +1,4 @@
-import { getTournament } from "@/db/tournament";
+import { getParticipants, getTournament } from "@/db/tournament";
 import { notifications } from "@/novu/notifications";
 import { admin } from "@/supabase/admin";
 import { getUserDetails } from "@/supabase/server";
@@ -6,7 +6,8 @@ import { getUserDetails } from "@/supabase/server";
 export async function POST(req) {
   const { tournament_id } = await req.json();
   const { id: user_id, balance } = await getUserDetails();
-  const { entry_fee, start } = await getTournament(tournament_id);
+  const { entry_fee, start, max_players } = await getTournament(tournament_id);
+  const participants = await getParticipants(tournament_id);
 
   if (new Date(start) < new Date())
     return Response.json(
@@ -16,6 +17,10 @@ export async function POST(req) {
 
   if (entry_fee > balance) {
     return Response.json({ error: "Insufficient Balance" }, { status: 400 });
+  }
+
+  if (participants.length >= max_players) {
+    return Response.json({ error: "Tournament Full" }, { status: 400 });
   }
 
   await admin
