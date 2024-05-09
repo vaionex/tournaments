@@ -3,6 +3,12 @@ import { getPostBySlug } from "@/server/blog";
 import { format } from "date-fns";
 import { notFound } from "next/navigation";
 import ShareSection from "./share-section";
+import CTA from "../../cta";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Send01 } from "untitledui-js-base";
+import Link from "next/link";
+import Newsletter from "./Newsletter";
 
 export async function generateMetadata({ params: { slug } }) {
   const { title } = await getPostBySlug(slug);
@@ -23,8 +29,8 @@ export default async function BlogPost({ params: { slug } }) {
     return (
       <div className="my-8 flex max-w-4xl items-center justify-between">
         <div>
-          <div className="text-primary">{author?.node?.name}</div>
-          <div>{format(new Date(date), "dd MMM yyyy")}</div>
+          <div className="text-sm text-primary">Published on</div>
+          <div className="text-lg">{format(new Date(date), "dd MMM yyyy")}</div>
         </div>
         <ShareSection title={title} />
       </div>
@@ -33,13 +39,20 @@ export default async function BlogPost({ params: { slug } }) {
 
   return (
     <Container className="py-36">
-      <h1 className="text-5xl font-bold">{title}</h1>
-      <Info />
-      <div
-        dangerouslySetInnerHTML={{ __html: content }}
-        className="prose-invert prose lg:prose-xl"
-      />
-      <Info />
+      <div className="mb-24 flex flex-col gap-24 lg:flex-row">
+        <div className="flex-1">
+          <h1 className="text-6xl font-bold">{title}</h1>
+          <Info />
+          <div
+            dangerouslySetInnerHTML={{ __html: content }}
+            className="prose-invert prose"
+          />
+          <Info />
+        </div>
+        <Newsletter />
+      </div>
+
+      <CTA />
     </Container>
   );
 }

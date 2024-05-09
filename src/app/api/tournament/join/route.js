@@ -1,6 +1,6 @@
 import { getTournament } from "@/db/tournament";
+import { notifications } from "@/novu/notifications";
 import { admin } from "@/supabase/admin";
-import { supabase } from "@/supabase/client";
 import { getUserDetails } from "@/supabase/server";
 
 export async function POST(req) {
@@ -28,6 +28,10 @@ export async function POST(req) {
     .update({ balance: balance - entry_fee })
     .eq("id", user_id)
     .throwOnError();
+
+  try {
+    await notifications.joinTournament(tournament_id, user_id);
+  } catch (e) {}
 
   return Response.json({ success: true });
 }

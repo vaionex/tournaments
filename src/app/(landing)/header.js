@@ -6,6 +6,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import Logo from "@/components/ui/logo";
 import useAuthentication from "@/hooks/auth/useAuthentication";
+import Container from "@/components/ui/container";
 
 const links = [
   { name: "Home", href: "/" },
@@ -27,42 +28,44 @@ export default function Header() {
   return (
     <>
       <header className="fixed inset-x-0 top-0 z-10 bg-black/20 text-white backdrop-blur-md">
-        <nav
-          className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8"
-          aria-label="Global"
-        >
-          <div className="flex lg:flex-1">
-            <div className="-m-1.5 p-1.5">
-              <span className="sr-only">Tournaments</span>
-              <Logo className="h-12 w-auto" />
+        <Container>
+          <nav
+            className="flex items-center justify-between py-6"
+            aria-label="Global"
+          >
+            <div className="flex lg:flex-1">
+              <div className="-m-1.5 p-1.5">
+                <span className="sr-only">Tournaments</span>
+                <Logo className="h-12 w-auto" />
+              </div>
             </div>
-          </div>
-          <div className="flex lg:hidden">
-            <button
-              type="button"
-              className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5"
-              onClick={() => setMobileMenuOpen(true)}
-            >
-              <span className="sr-only">Open main menu</span>
-              <Bars3Icon className="h-6 w-6" aria-hidden="true" />
-            </button>
-          </div>
-          <Popover.Group className="hidden lg:flex lg:gap-x-12">
-            {links.map(({ name, href }) => (
-              <Link
-                href={href}
-                className="text font-semibold leading-6"
-                key={name}
+            <div className="flex lg:hidden">
+              <button
+                type="button"
+                className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5"
+                onClick={() => setMobileMenuOpen(true)}
               >
-                {name}
-              </Link>
-            ))}
-          </Popover.Group>
+                <span className="sr-only">Open main menu</span>
+                <Bars3Icon className="h-6 w-6" aria-hidden="true" />
+              </button>
+            </div>
+            <Popover.Group className="hidden lg:flex lg:gap-x-12">
+              {links.map(({ name, href }) => (
+                <Link
+                  href={href}
+                  className="text font-semibold leading-6"
+                  key={name}
+                >
+                  {name}
+                </Link>
+              ))}
+            </Popover.Group>
 
-          <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-            {ctaButton}
-          </div>
-        </nav>
+            <div className="hidden lg:flex lg:flex-1 lg:justify-end">
+              {ctaButton}
+            </div>
+          </nav>
+        </Container>
       </header>
 
       <Dialog

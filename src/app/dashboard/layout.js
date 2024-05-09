@@ -13,6 +13,10 @@ import { FlexAlignLeft, Wallet03 } from "untitledui-js-base";
 import ProfileDropdown from "./profile-dropdown";
 import Notch from "@/components/ui/notch";
 import { formatCurrency } from "@/utils/format";
+import {
+  NotificationBell,
+  PopoverNotificationCenter,
+} from "@novu/notification-center";
 
 const nav = [
   { name: "Overview", href: "overview", icon: LogoSimple },
@@ -91,6 +95,11 @@ export default function DashboardLayout({ children }) {
             <input className="bg-transparent" placeholder="Search" />
           </div>
           <div className="flex items-center gap-4">
+            <PopoverNotificationCenter colorScheme="dark">
+              {({ unseenCount }) => (
+                <NotificationBell unseenCount={unseenCount} />
+              )}
+            </PopoverNotificationCenter>
             <Badge>
               <LogoSimple className="size-4 text-white" />
               Gold

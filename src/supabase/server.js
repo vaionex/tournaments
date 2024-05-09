@@ -1,5 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
+import { admin } from "./admin";
 
 export const createClient = () => {
   const cookieStore = cookies();
@@ -32,6 +33,16 @@ export async function getUser() {
     data: { user },
   } = await supabase.auth.getUser();
   return user;
+}
+
+export async function getUserById(id) {
+  const {
+    data: { user },
+    error,
+  } = await admin.auth.admin.getUserById(id);
+  if (error) throw error;
+  const { data: users } = await admin.from("User").select().eq("id", id);
+  return { ...user, ...users[0] };
 }
 
 export async function getUserDetails() {
