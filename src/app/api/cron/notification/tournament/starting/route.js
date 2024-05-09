@@ -14,14 +14,20 @@ export async function POST() {
     .lte("start", end)
     .throwOnError();
 
+  console.log(`Creating notifications for ${tournaments.length} tournaments`);
+
   const participants = (
     await Promise.all(tournaments.map(({ id }) => getParticipants(id)))
   ).flat();
 
+  console.log(`Creating notifications for ${participants.length} tournaments`);
+
   for (const { user_id, tournament_id } of participants) {
     try {
       await notifications.tournamentStarting(user_id, tournament_id);
-    } catch (e) {}
+    } catch (e) {
+      console.log("Error: ", e);
+    }
   }
   return Response.json({ success: true });
 }
