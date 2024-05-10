@@ -1,7 +1,7 @@
 {
   "crons": [
     {
-      "path": "/api/notification/tournament/starting",
+      "path": "/api/cron/notification/tournament/starting",
       "schedule": "*/10 * * * *"
     }
   ]
