@@ -10,8 +10,8 @@ export async function GET() {
   const { data: tournaments } = await admin
     .from("Tournament")
     .select()
-    .gte("start", start)
-    .lte("start", end)
+    .gte("start", start.toISOString())
+    .lte("start", end.toISOString())
     .throwOnError();
 
   console.log(`Creating notifications for ${tournaments.length} tournaments`);
