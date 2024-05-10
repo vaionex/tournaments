@@ -3,7 +3,7 @@ import { notifications } from "@/novu/notifications";
 import { admin } from "@/supabase/admin";
 import { addHours, addMinutes, subMinutes } from "date-fns";
 
-export async function POST() {
+export async function GET() {
   const oneHourLater = addHours(new Date(), 1);
   const start = subMinutes(oneHourLater, 5);
   const end = addMinutes(oneHourLater, 5);
