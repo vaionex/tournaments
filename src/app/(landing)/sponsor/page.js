@@ -10,7 +10,7 @@ export default function Sponsor() {
   return (
     <div
       style={{
-        backgroundImage: `url('/images/landing/games/background.webp')`,
+        backgroundImage: `url('/images/landing/sponsor/background.webp')`,
         backgroundPosition: "top center",
         backgroundRepeat: "no-repeat",
         backgroundSize: "contain",
