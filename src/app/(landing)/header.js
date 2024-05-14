@@ -13,6 +13,7 @@ const links = [
   { name: "News", href: "/news" },
   { name: "Tournaments", href: "" },
   { name: "Games", href: "/games" },
+  { name: "Sponsor", href: "/sponsor" },
 ];
 
 export default function Header() {
