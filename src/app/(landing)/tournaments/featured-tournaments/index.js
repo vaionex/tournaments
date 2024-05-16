@@ -40,7 +40,7 @@ export default async function FeaturedTournaments({ gameId }) {
             {format(start, "MMM dd")} - {format(end, "MMM dd")}{" "}
             <span className="mx-2 inline-block">•</span> {Game?.name}
           </div>
-          <div className="mt-10 space-x-2.5">
+          <div className="mt-10 flex items-center gap-2.5">
             <Button variant="neon">
               <Diamond01 className="size-4" />
               Become a sponsor
