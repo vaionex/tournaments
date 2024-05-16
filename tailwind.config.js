@@ -21,6 +21,9 @@ module.exports = {
         primary: { DEFAULT: "#004EEB", 400: "#528BFF", 950: "#002266" },
         supporting: "#D0D5DD",
       },
+      borderColor: {
+        DEFAULT: "#555",
+      },
       keyframes: {
         "accordion-down": {
           from: { height: "0" },

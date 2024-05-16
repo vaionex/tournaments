@@ -11,7 +11,7 @@ import Container from "@/components/ui/container";
 const links = [
   { name: "Home", href: "/" },
   { name: "News", href: "/news" },
-  { name: "Tournaments", href: "" },
+  { name: "Tournaments", href: "/tournaments" },
   { name: "Games", href: "/games" },
   { name: "Sponsor", href: "/sponsor" },
 ];

@@ -6,13 +6,14 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center whitespace-nowrap font-semibold ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 dark:ring-offset-slate-950 dark:focus-visible:ring-slate-300 items-center gap-2",
+  "inline-flex items-center justify-center whitespace-nowrap font-semibold ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 dark:ring-offset-slate-950 dark:focus-visible:ring-slate-300 items-center gap-2 rounded-md",
   {
     variants: {
       variant: {
         default: "bg-primary text-primary-foreground",
         white: "bg-white text-black",
         black: "bg-neutral-900 text-white hover:bg-neutral-800",
+        neon: "bg-lime-400 text-black hover:bg-lime-300",
         destructive:
           "bg-red-500 text-slate-50 hover:bg-red-500/90 dark:bg-red-900 dark:text-slate-50 dark:hover:bg-red-900/90",
         outline:

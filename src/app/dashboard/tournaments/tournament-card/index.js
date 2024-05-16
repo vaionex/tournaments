@@ -2,6 +2,8 @@ import DurationTag from "@/components/ui/duration-tag";
 import { formatCurrency } from "@/utils/format";
 import Link from "next/link";
 import { Trophy01, Users01 } from "untitledui-js-base";
+import Pill from "./pill";
+import { format } from "date-fns";
 
 export default function TournamentCard({
   id,
@@ -11,28 +13,26 @@ export default function TournamentCard({
   end,
   prize_pool,
   max_players,
+  Game,
 }) {
   return (
     <Link
       style={{ backgroundImage: `url('${banner}')` }}
-      className="h-80 rounded border border-neutral-700 bg-cover bg-center"
+      className="h-72 overflow-hidden rounded-2xl border bg-cover bg-center"
       href={`/dashboard/event/${id}`}
     >
       <div className="flex h-full flex-1 flex-col justify-between">
         <div className="p-8">
-          <DurationTag startDate={new Date(start)} endDate={new Date(end)} />
+          <div className="mb-1 flex items-center gap-2">
+            <Pill icon={Users01}>{max_players}</Pill>
+            <Pill icon={Trophy01}>{prize_pool}</Pill>
+          </div>
         </div>
-        <div className="bg-gradient-to-t from-black from-30% p-8">
-          <h2 className="mb-2 text-2xl font-bold">{name}</h2>
-          <div className="flex items-center gap-2">
-            <div className="flex w-fit items-center gap-2 bg-neutral-800 px-2 py-1">
-              <Users01 className="size-5 text-neutral-400" />
-              {max_players}
-            </div>
-            <div className="flex w-fit items-center gap-2 bg-neutral-800 px-2 py-1">
-              <Trophy01 className="size-5 text-neutral-400" />
-              {formatCurrency(prize_pool)}
-            </div>
+        <div className="border-t bg-black/70 px-6 py-4 backdrop-blur-lg">
+          <h2 className="mb-1 text-2xl font-bold">{name}</h2>
+          <div className="text-sm font-medium text-neutral-300">
+            {format(start, "MMM dd")} - {format(end, "MMM dd")}{" "}
+            <span className="mx-2 inline-block">•</span> {Game?.name}
           </div>
         </div>
       </div>
