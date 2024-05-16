@@ -2,7 +2,7 @@ import { getGames } from "@/db/game";
 import Link from "next/link";
 import { twMerge } from "tailwind-merge";
 
-export default async function Filters({ game }) {
+export default async function Filters({ gameId }) {
   const games = await getGames();
   return (
     <div className="mb-12 flex items-center gap-2 text-sm font-semibold">
@@ -10,7 +10,7 @@ export default async function Filters({ game }) {
         <Link
           className={twMerge(
             "rounded-lg border border-transparent px-4 py-2.5",
-            game == id && "border-primary bg-primary-950",
+            gameId == id && "border-primary bg-primary-950",
           )}
           href={`?game=${id}`}
         >

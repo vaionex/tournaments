@@ -4,7 +4,7 @@ import CTA from "../cta";
 import FeaturedTournaments from "./featured-tournaments";
 import Filters from "./filters";
 
-export default async function Tournaments({ searchParams }) {
+export default async function Tournaments({ searchParams: { game: gameId } }) {
   return (
     <div
       style={{
@@ -25,8 +25,8 @@ export default async function Tournaments({ searchParams }) {
             Range of Gaming Tournaments. Get Ready to Play!
           </h2>
         </div>
-        <Filters game={searchParams.game} />
-        <FeaturedTournaments />
+        <Filters gameId={gameId} />
+        <FeaturedTournaments gameId={gameId} />
         <CTA />
       </Container>
     </div>
