@@ -26,17 +26,27 @@ export default function Post({
           alt={title}
         />
       </Link>
-      <div className={twMerge("space-y-2", row && "flex-1")}>
-        <div className="text-sm font-semibold text-primary-400">
-          {author?.node?.name} • {format(new Date(date), "dd MMM yyyy")}
+      <div
+        className={twMerge(
+          "space-y-2 ",
+          row && "flex-1",
+          !row && "flex flex-col justify-between ",
+        )}
+      >
+        <div className="space-y-2">
+          <div className="text-sm font-semibold text-primary-400">
+            {author?.node?.name} • {format(new Date(date), "dd MMM yyyy")}
+          </div>
+          <Link
+            href={`/news/${slug}`}
+            className="flex items-start justify-between gap-2"
+          >
+            <h2 className="line-clamp-1 text-2xl font-semibold hover:underline">
+              {title}
+            </h2>
+            <ArrowRight className="size-6 shrink-0 -rotate-45" />
+          </Link>
         </div>
-        <Link
-          href={`/news/${slug}`}
-          className="flex items-start justify-between gap-2"
-        >
-          <h2 className="text-2xl font-semibold hover:underline">{title}</h2>
-          <ArrowRight className="size-6 shrink-0 -rotate-45" />
-        </Link>
         <div
           dangerouslySetInnerHTML={{ __html: excerpt }}
           className="line-clamp-2 text-neutral-200"
