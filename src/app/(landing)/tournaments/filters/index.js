@@ -1,13 +1,9 @@
+import { getGames } from "@/db/game";
 import Link from "next/link";
 import { twMerge } from "tailwind-merge";
 
-const games = [
-  { id: "fortnite", name: "Fortnite" },
-  { id: "valorant", name: "Valorant" },
-  { id: "lol", name: "League of Legends" },
-  { id: "dota2", name: "Dota 2" },
-];
 export default async function Filters({ game }) {
+  const games = await getGames();
   return (
     <div className="mb-12 flex items-center gap-2 text-sm font-semibold">
       {games.map(({ id, name }) => (
