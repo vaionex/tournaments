@@ -25,7 +25,7 @@ export default function TournamentCard({
         <div className="p-8">
           <div className="mb-1 flex items-center gap-2">
             <Pill icon={Users01}>{max_players}</Pill>
-            <Pill icon={Trophy01}>{prize_pool}</Pill>
+            <Pill icon={Trophy01}>${prize_pool}</Pill>
           </div>
         </div>
         <div className="rounded-b-2xl border-t bg-black/70 px-6 py-4 backdrop-blur-lg">
