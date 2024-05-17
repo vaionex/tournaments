@@ -18,7 +18,7 @@ export default function TournamentCard({
   return (
     <Link
       style={{ backgroundImage: `url('${banner}')` }}
-      className="h-72 overflow-hidden rounded-2xl border bg-cover bg-center"
+      className="block h-64 overflow-hidden rounded-2xl border bg-cover bg-center"
       href={`/dashboard/event/${id}`}
     >
       <div className="flex h-full flex-1 flex-col justify-between">
@@ -28,8 +28,8 @@ export default function TournamentCard({
             <Pill icon={Trophy01}>{prize_pool}</Pill>
           </div>
         </div>
-        <div className="border-t bg-black/70 px-6 py-4 backdrop-blur-lg">
-          <h2 className="mb-1 text-2xl font-bold">{name}</h2>
+        <div className="rounded-b-2xl border-t bg-black/70 px-6 py-4 backdrop-blur-lg">
+          <h2 className="mb-1 line-clamp-1 text-2xl font-bold">{name}</h2>
           <div className="text-sm font-medium text-neutral-300">
             {format(start, "MMM dd")} - {format(end, "MMM dd")}{" "}
             <span className="mx-2 inline-block">•</span> {Game?.name}
