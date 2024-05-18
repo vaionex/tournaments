@@ -5,7 +5,7 @@ export default function Brand() {
     {
       title: (
         <div>
-          Enhanced <span className="text-[#66C61C]">Brand</span> Visibility
+          <span className="text-[#66C61C]">Enhance</span> The Visibility Of Your Brand
         </div>
       ),
       description:
@@ -15,7 +15,7 @@ export default function Brand() {
     {
       title: (
         <div>
-          Drive <span className="text-indigo-500">Engagement</span> Through
+          <span className="text-indigo-500">Drive</span> Engagement Through
            Exclusive Sponsorships
         </div>
       ),
