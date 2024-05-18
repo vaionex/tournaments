@@ -36,7 +36,10 @@ export async function updateTournament(id, { banner: bannerFile, ...rest }) {
 }
 
 export async function getTournaments() {
-  const { data } = await supabase.from("Tournament").select("*").throwOnError();
+  const { data } = await supabase
+    .from("Tournament")
+    .select("*, Game (*)")
+    .throwOnError();
   return data;
 }
 

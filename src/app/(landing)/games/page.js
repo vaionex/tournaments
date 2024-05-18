@@ -6,7 +6,7 @@ import BadgeTitle from "../BadgeTitle";
 const games = [
   { name: "Fortnite" },
   { name: "Valorant" },
-  { name: "League of Legends" },
+  { name: "EA FC 24" },
   { name: "Apex" },
   { name: "CS2" },
   { name: "Dota 2" },
