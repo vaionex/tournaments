@@ -29,7 +29,7 @@ export default function Hero() {
         backgroundPosition: "top",
         backgroundSize: "cover",
       }}
-      className="mx-auto mb-24 max-w-screen-2xl"
+      className="mx-auto mb-24 max-w-[1920px]"
     >
       <div className="relative isolate overflow-hidden">
         <div className="mx-auto max-w-7xl px-6 pb-24 pt-20 sm:pb-32 lg:flex lg:px-8 lg:py-40">
