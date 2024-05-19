@@ -49,12 +49,15 @@ export default function Gamers() {
         </div>
         <div className="flex justify-end">
           <div className="max-w-xl border border-white/10 bg-white/5 p-12 backdrop-blur-lg">
-            <div className="mb-4 flex w-fit items-center gap-4 rounded border border-white/20 bg-white/10 p-0.5 pr-2.5">
-              <div className="bg-primary-950/50 rounded-sm border border-primary px-2.5 py-0.5">
+            <a
+              className="mb-4 flex w-fit items-center gap-4 rounded border border-white/20 bg-white/10 p-0.5 pr-2.5"
+              href="mailto:sponsor@tournaments.com"
+            >
+              <div className="rounded-sm border border-primary bg-primary-950/50 px-2.5 py-0.5">
                 Elevate Your Brand Presence
               </div>
               Become a sponsor <ArrowRight />
-            </div>
+            </a>
             <div className="mb-2 text-4xl font-semibold">
               Maximize Exposure in High-Stakes Competitions
             </div>

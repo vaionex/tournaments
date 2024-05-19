@@ -27,7 +27,11 @@ export default function Sponsor() {
           <h2 className="mb-6 text-xl text-gray-300">
             Connect Your Brand to the World of Competitive Gaming
           </h2>
-          <Button className="mb-24" variant="white">
+          <Button
+            className="mb-24"
+            variant="white"
+            href="mailto:sponsor@tournaments.com"
+          >
             Become a Sponsor
           </Button>
         </div>
