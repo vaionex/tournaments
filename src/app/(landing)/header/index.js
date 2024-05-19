@@ -69,7 +69,7 @@ export default function Header() {
 
             <div className="hidden lg:flex lg:gap-x-12">
               {links.map(({ name, href, popoverContent = null }) => (
-                <HoverCard.Root className="relative" key={name}>
+                <HoverCard.Root openDelay={0} className="relative" key={name}>
                   <HoverCard.Trigger asChild>
                     <Link
                       href={href}
