@@ -19,14 +19,16 @@ export default function ProfileDropdown() {
   const logout = useLogout();
 
   const items = [
+    { name: "Dashboard", href: "/dashboard/" },
     { name: "Profile", href: "/dashboard/profile/account" },
     { name: "Log out", onClick: () => logout() },
   ];
   return (
-    <Menu as="div" className="relative ml-3">
+    <Menu as="div" className="relative">
       <div>
-        <Menu.Button className="relative flex rounded-full bg-gray-800 text-sm">
+        <Menu.Button className="relative flex items-center gap-2 rounded-full">
           <Avatar src={user.profile_picture} />
+          {user.username}
         </Menu.Button>
       </div>
       <Transition

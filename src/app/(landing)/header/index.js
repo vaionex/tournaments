@@ -13,7 +13,12 @@ import * as HoverCard from "@radix-ui/react-hover-card";
 
 import * as Portal from "@radix-ui/react-portal";
 import { AnimatePresence, motion } from "framer-motion";
-import { ChevronDown } from "untitledui-js-base";
+import { ChevronDown, HomeLine } from "untitledui-js-base";
+import ProfileDropdown from "@/app/dashboard/profile-dropdown";
+import {
+  NotificationBell,
+  PopoverNotificationCenter,
+} from "@novu/notification-center";
 
 const links = [
   { name: "Home", href: "/" },
@@ -37,7 +42,15 @@ export default function Header() {
   const { isAuthenticated } = useAuthentication();
 
   const ctaButton = isAuthenticated ? (
-    <Button href="/dashboard">Dashboard</Button>
+    <div className="flex items-center gap-6">
+      <PopoverNotificationCenter colorScheme="dark">
+        {({ unseenCount }) => <NotificationBell unseenCount={unseenCount} />}
+      </PopoverNotificationCenter>
+      <Link href="/dashboard">
+        <HomeLine className="size-5" />
+      </Link>
+      <ProfileDropdown />
+    </div>
   ) : (
     <Button href="/signup">Get Started</Button>
   );
