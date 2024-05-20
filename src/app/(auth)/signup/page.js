@@ -12,7 +12,7 @@ import toast from "react-hot-toast";
 import GoogleSignInButton from "../GoogleSignInButton";
 import LogoMark from "@/components/ui/logo-mark";
 
-export default function Signup() {
+export default function Signup({}) {
   const { push } = useRouter();
   const { mutate: signup, isLoading } = useSignupWithEmailAndPassword({
     onError: (e) => toast.error(e.message ?? "Could not signup"),

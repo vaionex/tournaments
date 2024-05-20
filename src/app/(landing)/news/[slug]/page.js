@@ -4,11 +4,7 @@ import { format } from "date-fns";
 import { notFound } from "next/navigation";
 import ShareSection from "./share-section";
 import CTA from "../../cta";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Send01 } from "untitledui-js-base";
-import Link from "next/link";
-import Newsletter from "./Newsletter";
+import SignupSidebar from "./SignupSidebar";
 
 export async function generateMetadata({ params: { slug } }) {
   const { title } = await getPostBySlug(slug);
@@ -45,11 +41,11 @@ export default async function BlogPost({ params: { slug } }) {
           <Info />
           <div
             dangerouslySetInnerHTML={{ __html: content }}
-            className="prose-invert prose"
+            className="prose prose-invert"
           />
           <Info />
         </div>
-        <Newsletter />
+        <SignupSidebar />
       </div>
 
       <CTA />
