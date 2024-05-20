@@ -1,5 +1,5 @@
 import Container from "@/components/ui/container";
-import CTA from "../cta";
+import CTA from "./cta";
 import BadgeTitle from "../BadgeTitle";
 import { Button } from "@/components/ui/button";
 import Brand from "./Brand";
