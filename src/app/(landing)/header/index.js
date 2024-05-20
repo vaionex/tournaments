@@ -26,7 +26,6 @@ const links = [
   {
     name: "Tournaments",
     href: "/tournaments",
-    popoverContent: <TournamentsPopover />,
   },
   { name: "Games", href: "/games" },
   { name: "Sponsor", href: "/sponsor" },
