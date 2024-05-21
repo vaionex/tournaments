@@ -1,15 +1,17 @@
 import RankIcon from "@/components/icons/rank-icon";
 import Ranking from "@/components/icons/ranking";
+import { Button } from "@/components/ui/button";
 import { Coins } from "lucide-react";
 import { twMerge } from "tailwind-merge";
-import { Wallet02 } from "untitledui-js-base";
+import { Plus, Wallet02 } from "untitledui-js-base";
+import Tournaments from "./Tournaments";
 
 export default function Overview() {
   function Stat({ title, icon = null, children, className = "" }) {
     return (
       <div
         className={twMerge(
-          "flex-1 bg-opacity-0 bg-gradient-to-b from-white/5 to-white/5 px-6 py-7 hover:from-white/10 hover:to-gray-400/10",
+          "flex-1 bg-opacity-0 bg-gradient-to-b from-white/10 to-white/5 px-6 py-7 hover:from-white/15 hover:to-gray-400/10",
           className,
         )}
       >
@@ -25,7 +27,18 @@ export default function Overview() {
   const next = "Silver";
   return (
     <div>
-      <div className="flex divide-x divide-white/5 overflow-hidden rounded-lg border border-white/10">
+      <div className="mb-6 flex items-center justify-between">
+        <h1 className="text-3xl font-semibold">Dashboard</h1>
+        <Button
+          href="/dashboard/tournaments/create"
+          variant="white"
+          className="px-3.5 py-2 text-sm"
+        >
+          <Plus className="size-5" />
+          Create Tournament
+        </Button>
+      </div>
+      <div className="mb-12 flex divide-x divide-white/5 overflow-hidden rounded-lg border border-white/10">
         <Stat title="Balance" icon={<Wallet02 />}>
           <div className="text-3xl font-medium">$0</div>
         </Stat>
@@ -63,6 +76,7 @@ export default function Overview() {
           </div>
         </Stat>
       </div>
+      <Tournaments />
     </div>
   );
 }

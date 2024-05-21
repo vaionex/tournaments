@@ -1,5 +1,7 @@
 import { DM_Sans } from "next/font/google";
 import "./globals.css";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 import Providers from "./(landing)/providers";
 
 const dmSans = DM_Sans({ subsets: ["latin"] });

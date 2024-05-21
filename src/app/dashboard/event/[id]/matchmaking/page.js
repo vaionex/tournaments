@@ -16,7 +16,7 @@ export default async function Matchmaking({ params: { id } }) {
     );
   }
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 p-4">
       <Section
         title="Custom Matchmaking Key"
         description="Unique code provided to registered players for accessing private tournament games."

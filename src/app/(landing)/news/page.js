@@ -8,8 +8,9 @@ import Post from "./Post";
 
 export default async function News() {
   const posts = await getAllPosts();
-  const firstPost = posts[0] || {};
-  const otherPosts = posts.slice(1);
+  const top3Posts = posts.slice(0, 3);
+  const firstPost = top3Posts[0] || {};
+  const otherPosts = posts.slice(3);
 
   if (posts.length == 0) return null;
 
@@ -41,13 +42,13 @@ export default async function News() {
               <Post {...firstPost} />
             </div>
             <div className="flex flex-1 flex-col gap-8">
-              {otherPosts.map((post, i) => (
+              {top3Posts.slice(1).map((post, i) => (
                 <Post {...post} row key={i} />
               ))}
             </div>
           </div>
           <div className="mt-8 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {posts.map((post, i) => (
+            {otherPosts.map((post, i) => (
               <div className="h-96">
                 <Post {...post} key={i} />
               </div>
