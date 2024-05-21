@@ -11,7 +11,7 @@ export default function Overview() {
     return (
       <div
         className={twMerge(
-          "flex-1 bg-opacity-0 bg-gradient-to-b from-white/5 to-white/5 px-6 py-7 hover:from-white/10 hover:to-gray-400/10",
+          "flex-1 bg-opacity-0 bg-gradient-to-b from-white/10 to-white/5 px-6 py-7 hover:from-white/15 hover:to-gray-400/10",
           className,
         )}
       >
