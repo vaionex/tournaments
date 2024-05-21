@@ -41,7 +41,7 @@ export default async function FeaturedTournaments({ gameId }) {
             <span className="mx-2 inline-block">•</span> {Game?.name}
           </div>
           <div className="mt-10 flex items-center gap-2.5">
-            <Button variant="neon">
+            <Button variant="neon" href="mailto:sponsor@tournaments.com">
               <Diamond01 className="size-4" />
               Become a sponsor
             </Button>

@@ -17,6 +17,8 @@ import {
   NotificationBell,
   PopoverNotificationCenter,
 } from "@novu/notification-center";
+import Container from "@/components/ui/container";
+import Header from "../(landing)/header";
 
 const nav = [
   { name: "Overview", href: "overview", icon: LogoSimple },
@@ -59,66 +61,9 @@ export default function DashboardLayout({ children }) {
   }
 
   return (
-    <div className="flex">
-      <div className="sticky top-0 min-h-screen border-r border-neutral-700">
-        <div className="flex h-32 items-center justify-center">
-          <Link href="/">
-            <LogoMark />
-          </Link>
-        </div>
-        <nav className="flex w-32 flex-col gap-2">
-          {nav.map(({ name, href, icon: Icon }) => (
-            <Link
-              href={`/dashboard/${href}`}
-              className={twMerge(
-                "relative flex h-20 flex-col items-center justify-center gap-2",
-                page == href && "bg-primary",
-              )}
-              key={href}
-            >
-              <Icon
-                className={twMerge(
-                  "h-5 w-5 text-neutral-500",
-                  page == href && "text-white",
-                )}
-              />
-              {name}
-              {page == href && <CornerHighlight />}
-            </Link>
-          ))}
-        </nav>
-      </div>
-      <div className="flex-1">
-        <header className="flex items-center justify-between px-8 py-5">
-          <div className="flex items-center gap-2">
-            <Search />
-            <input className="bg-transparent" placeholder="Search" />
-          </div>
-          <div className="flex items-center gap-4">
-            <PopoverNotificationCenter colorScheme="dark">
-              {({ unseenCount }) => (
-                <NotificationBell unseenCount={unseenCount} />
-              )}
-            </PopoverNotificationCenter>
-            <Badge>
-              <LogoSimple className="size-4 text-white" />
-              Gold
-            </Badge>
-            <Badge>
-              <Wallet03 className="size-4 text-white" />
-              {formatCurrency(user.balance ?? 0)}
-            </Badge>
-            <ProfileDropdown />
-            {user.username}
-          </div>
-        </header>
-        <div className="mb-4 mt-6 flex items-center gap-4 px-8 text-sm text-neutral-500">
-          <FlexAlignLeft className="size-5" />
-          <ChevronRight className="size-4 font-medium text-white" />
-          {nav.find(({ href }) => href == page)?.name}
-        </div>
-        <div className="px-8">{children}</div>
-      </div>
-    </div>
+    <Container className="mt-36">
+      <Header />
+      {children}
+    </Container>
   );
 }

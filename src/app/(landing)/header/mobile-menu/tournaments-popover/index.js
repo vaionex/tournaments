@@ -12,7 +12,6 @@ export default function TournamentsPopover() {
   const [gameIndex, setGameIndex] = useState(0);
 
   const gameId = games[gameIndex]?.id || "";
-  console.log(gameId);
   const tournaments = allTournaments.filter(({ Game: { id } }) => id == gameId);
   const animation = {
     initial: { opacity: 0 },
