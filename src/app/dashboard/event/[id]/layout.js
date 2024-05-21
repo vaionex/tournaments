@@ -2,8 +2,8 @@ import { getTournament } from "@/db/tournament";
 import MenuLink from "./MenuLink";
 import { notFound } from "next/navigation";
 import { getUser } from "@/supabase/server";
-import { Button } from "@/components/ui/button";
 import JoinTournamentButton from "./JoinTournamentButton";
+import { links } from "./links";
 
 export const revalidate = 0;
 
@@ -17,32 +17,29 @@ export default async function TournamentLayout({ children, params: { id } }) {
   const isOwner = user?.id == user_id;
   const isStarted = new Date(start) < new Date();
   const canEdit = isOwner && !isStarted;
-  const links = [
-    { name: "Overview", href: "overview" },
-    { name: "Event Details", href: "details" },
-    { name: "Participants", href: "participants" },
-    { name: "Matchmaking Key", href: "matchmaking" },
-    canEdit && { name: "Edit", href: "edit" },
-  ].filter(Boolean);
 
   return (
     <div>
-      <div className="flex justify-between">
-        <h1 className="text-3xl font-semibold">{name}</h1>
-        <div>
-          <JoinTournamentButton
-            entryFee={entry_fee}
-            tournamentId={id}
-            start={start}
-          />
+      <h1 className="mb-8 text-4xl font-bold">{name}</h1>
+      <div className="flex border-t border-white/20">
+        <div className="flex flex-col border-r border-white/20 p-1 pr-8 pt-6 text-sm font-medium">
+          {links.map(({ icon, ...link }) => (
+            <MenuLink {...link} key={link.href} />
+          ))}
+        </div>
+        <div className="flex-1 border-r border-neutral-800">
+          <div>
+            <div>
+              <JoinTournamentButton
+                entryFee={entry_fee}
+                tournamentId={id}
+                start={start}
+              />
+            </div>
+          </div>
+          <div>{children}</div>
         </div>
       </div>
-      <div className="my-6 flex rounded border border-neutral-700 p-1 text-sm font-semibold">
-        {links.map((link) => (
-          <MenuLink {...link} key={link.href} />
-        ))}
-      </div>
-      <div>{children}</div>
     </div>
   );
 }

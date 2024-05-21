@@ -1,7 +1,6 @@
 import { getTournament } from "@/db/tournament";
 import { formatCurrency } from "@/utils/format";
 import { format } from "date-fns";
-import DetailBadges from "../DetailBadges";
 
 export default async function Details({ params: { id } }) {
   const { name, start, end, prize_pool, Game } = await getTournament(id);
@@ -24,7 +23,7 @@ export default async function Details({ params: { id } }) {
     );
   }
   return (
-    <div className="flex w-full flex-1 gap-6">
+    <div className="flex w-full flex-1 gap-6 p-4">
       <div className="flex-1">
         <h2 className="mb-6 text-3xl font-semibold">Event Details</h2>
         <div className="flex-1 divide-y divide-white/20">
@@ -33,7 +32,6 @@ export default async function Details({ params: { id } }) {
           ))}
         </div>
       </div>
-      <DetailBadges id={id} />
     </div>
   );
 }
