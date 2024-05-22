@@ -43,7 +43,7 @@ export default function Games() {
         <div className="mb-20 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
           {games.map(({ name }) => (
             <div
-              className="relative h-[31.5rem] rounded-lg border border-gray-600  bg-cover bg-center"
+              className="relative h-[31.5rem] overflow-hidden rounded-lg border  border-gray-600 bg-cover bg-center"
               style={{
                 backgroundImage: `url('/images/landing/games/${name.toLowerCase()}.webp')`,
               }}
