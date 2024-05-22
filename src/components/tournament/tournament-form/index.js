@@ -28,6 +28,7 @@ export default function TournamentForm({
     prize_pool,
     prize_pool_tiers = [100],
     entry_fee,
+    rules = [],
   } = tournament;
 
   function setValue(property, value) {
@@ -48,6 +49,22 @@ export default function TournamentForm({
     setTournament({
       ...tournament,
       prize_pool_tiers: temp,
+    });
+  }
+
+  function addRuleSection() {
+    setTournament({
+      ...tournament,
+      rules: [...rules, { title: "", description: "" }],
+    });
+  }
+
+  function updateRuleSection(value, property, index) {
+    const temp = [...rules];
+    temp[index][property] = value;
+    setTournament({
+      ...tournament,
+      rules: temp,
     });
   }
 
@@ -101,8 +118,8 @@ export default function TournamentForm({
         <Select
           items={games.map(({ name, id }) => ({ label: name, value: id }))}
           placeholder="Select a game..."
-          value={game_id}
-          onChange={(value) => setValue("game_id", value)}
+          value={game_id || ""}
+          onChange={(value) => value && setValue("game_id", value)}
         />
       </div>
       <div>Description</div>
@@ -150,7 +167,7 @@ export default function TournamentForm({
             </thead>
             <tbody>
               {prize_pool_tiers.map((tier, index) => (
-                <tr>
+                <tr key={index}>
                   <td className="h-11 w-20 rounded-xl bg-white/10 text-center">
                     {index + 1}
                   </td>
@@ -218,6 +235,34 @@ export default function TournamentForm({
             required
           />
         )}
+      </div>
+      <div>Rules</div>
+      <div className="space-y-4 p-4">
+        {rules.map(({ title, description }, index) => (
+          <div className="rounded-lg border border-white/20 p-4" key={index}>
+            <div className="mb-2">
+              <Input
+                value={title}
+                placeholder="Title"
+                onChange={(e) =>
+                  updateRuleSection(e.target.value, "title", index)
+                }
+              />
+            </div>
+            <Input
+              value={description}
+              onChange={(e) =>
+                updateRuleSection(e.target.value, "description", index)
+              }
+              type="textarea"
+              className="h-48"
+              placeholder="Details"
+            />
+          </div>
+        ))}
+        <Button variant="black" type="button" onClick={addRuleSection}>
+          Add Section
+        </Button>
       </div>
       {children}
     </form>
