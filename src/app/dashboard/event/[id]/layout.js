@@ -20,7 +20,14 @@ export default async function TournamentLayout({ children, params: { id } }) {
 
   return (
     <div>
-      <h1 className="mb-8 text-4xl font-bold">{name}</h1>
+      <div className="mb-8 flex items-center justify-between">
+        <h1 className="text-4xl font-bold">{name}</h1>
+        <JoinTournamentButton
+          entryFee={entry_fee}
+          tournamentId={id}
+          start={start}
+        />
+      </div>
       <div className="flex border-t border-white/20">
         <div className="flex flex-col border-r border-white/20 p-1 pr-8 pt-6 text-sm font-medium">
           {links.map(({ icon, ...link }) => (
@@ -28,15 +35,7 @@ export default async function TournamentLayout({ children, params: { id } }) {
           ))}
         </div>
         <div className="flex-1 border-r border-neutral-800">
-          <div>
-            <div>
-              <JoinTournamentButton
-                entryFee={entry_fee}
-                tournamentId={id}
-                start={start}
-              />
-            </div>
-          </div>
+          <div></div>
           <div>{children}</div>
         </div>
       </div>
