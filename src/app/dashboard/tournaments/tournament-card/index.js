@@ -17,6 +17,12 @@ export default function TournamentCard({
   Game,
   className = "",
 }) {
+  const status =
+    new Date() < new Date(start)
+      ? "Upcoming"
+      : new Date() < new Date(end)
+        ? "In Progress"
+        : "Finished";
   return (
     <Link
       style={{ backgroundImage: `url('${banner}')` }}
@@ -38,6 +44,7 @@ export default function TournamentCard({
           <div className="text-sm font-medium text-neutral-300">
             {format(start, "MMM dd")} - {format(end, "MMM dd")}{" "}
             <span className="mx-2 inline-block">•</span> {Game?.name}
+            <span className="mx-2 inline-block">•</span> {status}
           </div>
         </div>
       </div>
