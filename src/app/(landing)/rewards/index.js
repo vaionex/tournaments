@@ -1,10 +1,6 @@
 import Container from "@/components/ui/container";
 import CornerBorder from "@/components/ui/corner-border";
 import { DollarSign } from "lucide-react";
-import Image from "next/image";
-import cash from "./cash.webp";
-import experience from "./experience.webp";
-import reward from "./reward.webp";
 import { ChevronDoubleUpIcon } from "@heroicons/react/24/outline";
 import { Diamond01 } from "untitledui-js-base";
 
@@ -13,19 +9,19 @@ const rewards = [
     name: "Cold Hard Cash",
     description: "Convert your gaming prowess into real-world currency.",
     icon: DollarSign,
-    image: cash,
+    image: "cash",
   },
   {
     name: "Experience Points (XP)",
     description: "Earn XP and unlock new levels of gaming mastery.",
     icon: ChevronDoubleUpIcon,
-    image: experience,
+    image: "experience",
   },
   {
     name: "Exclusive Rewards Awaits",
     description: "Collect points and exchange them for exciting rewards.",
     icon: Diamond01,
-    image: reward,
+    image: "reward",
   },
 ];
 
@@ -51,9 +47,9 @@ export default function Rewards() {
           {rewards.map(({ name, description, icon: Icon, image }) => (
             <CornerBorder key={name}>
               <div className="relative overflow-hidden bg-cover bg-center">
-                <Image
-                  className="absolute inset-0 object-cover object-center"
-                  src={image}
+                <img
+                  className="absolute inset-0 h-full w-full object-cover object-center"
+                  src={`/images/landing/rewards/${image}.webp`}
                   alt={name}
                 />
                 <div className="relative z-10 flex h-[30rem] flex-col justify-between bg-gradient-to-t from-black to-50% p-8">
