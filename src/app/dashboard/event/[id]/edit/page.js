@@ -6,7 +6,6 @@ import useTournament from "@/hooks/tournament/useTournament";
 import useUpdateTournament from "@/hooks/tournament/useUpdateTournament";
 import toast from "react-hot-toast";
 import TournamentForm from "@/components/tournament/tournament-form";
-import { Loader } from "lucide-react";
 
 export default function EditTournament() {
   const { id } = useParams();
@@ -33,10 +32,10 @@ export default function EditTournament() {
     });
   }
 
-  if (isLoadingTournament) return <Loader />;
+  if (isLoadingTournament) return null;
 
   return (
-    <div>
+    <div className="p-4">
       <TournamentForm
         tournament={tournament}
         setTournament={setTournament}
