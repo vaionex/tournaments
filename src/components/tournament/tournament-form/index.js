@@ -156,7 +156,7 @@ export default function TournamentForm({
           leftSection="$"
           required
         />
-        <div className="mt-2.5 border p-4">
+        <div className="mt-2.5 rounded-lg border border-neutral-700 p-4">
           <table className="w-full">
             <thead>
               <tr className="">
