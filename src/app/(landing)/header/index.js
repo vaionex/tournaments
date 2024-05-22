@@ -15,10 +15,8 @@ import * as Portal from "@radix-ui/react-portal";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronDown, HomeLine } from "untitledui-js-base";
 import ProfileDropdown from "@/app/dashboard/profile-dropdown";
-import {
-  NotificationBell,
-  PopoverNotificationCenter,
-} from "@novu/notification-center";
+import { PopoverNotificationCenter } from "@novu/notification-center";
+import NotificationBell from "./NotificationBell";
 
 const links = [
   { name: "Home", href: "/" },
