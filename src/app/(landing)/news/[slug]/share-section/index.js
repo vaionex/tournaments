@@ -14,7 +14,7 @@ import {
 import { Copy01 } from "untitledui-js-base";
 
 export default function ShareSection({ title }) {
-  const shareUrl = window.location.href;
+  const shareUrl = typeof window != "undefined" ? window.location.href : "";
 
   function copyUrl() {
     navigator.clipboard.writeText(shareUrl);
@@ -28,19 +28,13 @@ export default function ShareSection({ title }) {
         Copy link
       </Button>
       <TwitterShareButton title={title} url={shareUrl}>
-        <Button variant="black" size="icon">
-          <Twitter className="size-5" />
-        </Button>
+        <Twitter className="size-5" />
       </TwitterShareButton>
       <FacebookShareButton title={title} url={shareUrl}>
-        <Button variant="black" size="icon">
-          <Facebook className="size-5" />
-        </Button>
+        <Facebook className="size-5" />
       </FacebookShareButton>
       <LinkedinShareButton title={title} url={shareUrl}>
-        <Button variant="black" size="icon">
-          <Linkedin className="size-5" />
-        </Button>
+        <Linkedin className="size-5" />
       </LinkedinShareButton>
     </div>
   );
