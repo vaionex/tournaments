@@ -1,0 +1,6 @@
+.mdxeditor {
+  @apply flex flex-col-reverse gap-2;
+}
+.mdxeditor-root-contenteditable {
+  @apply h-44 rounded-lg border border-white/20;
+}
