@@ -9,3 +9,8 @@ export function formatCurrency(value, options = {}) {
   });
   return formatter.format(value);
 }
+
+export function formatValue(value) {
+  const formatter = new Intl.NumberFormat("en-US", {});
+  return formatter.format(value);
+}

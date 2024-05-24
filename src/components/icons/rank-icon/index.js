@@ -1,11 +1,10 @@
-import Bronze from "./bronze";
-import Silver from "./silver";
-
-export default function RankIcon({ rank = "bronze", ...props }) {
-  switch (rank.toLowerCase()) {
-    case "bronze":
-      return <Bronze {...props} />;
-    case "silver":
-      return <Silver {...props} />;
-  }
+export default function RankIcon({ rank = "Bronze", ...props }) {
+  return (
+    <img
+      {...props}
+      src={`/images/ranks/${rank.toLowerCase()}.webp`}
+      onError={(e) => (e.target.style.opacity = "0")}
+      alt={rank}
+    />
+  );
 }
