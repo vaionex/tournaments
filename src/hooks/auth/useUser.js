@@ -1,11 +1,11 @@
 import { supabase } from "@/supabase/client";
 import { useQuery } from "react-query";
 import useAuthentication from "./useAuthentication";
-import { getUserId } from "@/supabase/utils";
+import { getNextRank, getRank, getRankProgressPercentage } from "@/utils/rank";
 
 export default function useUser() {
   const { isAuthenticated } = useAuthentication();
-  return useQuery({
+  const query = useQuery({
     enabled: isAuthenticated,
     queryKey: ["user"],
     initialData: {},
@@ -21,4 +21,15 @@ export default function useUser() {
       return { ...data.user, ...users[0] };
     },
   });
+
+  const xp = query.data?.xp ?? 0;
+  return {
+    ...query,
+    data: {
+      ...query.data,
+      rank: getRank(xp),
+      nextRank: getNextRank(xp),
+      rankProgress: getRankProgressPercentage(xp),
+    },
+  };
 }

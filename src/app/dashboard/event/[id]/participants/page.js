@@ -9,7 +9,7 @@ export default async function Participants({ params: { id } }) {
   if (participants.length == 0)
     return (
       <div>
-        <h2 className="mt-24 text-center text-3xl font-semibold text-neutral-400">
+        <h2 className="py-24 text-center text-3xl font-semibold text-neutral-400">
           There are no participants yet
         </h2>
       </div>

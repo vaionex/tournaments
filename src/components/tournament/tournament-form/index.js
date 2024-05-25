@@ -9,6 +9,7 @@ import { format } from "date-fns";
 import { add } from "lodash";
 import { Image } from "lucide-react";
 import toast from "react-hot-toast";
+import RuleDescriptionEditor from "./rule-description-editor";
 
 export default function TournamentForm({
   tournament = {},
@@ -249,13 +250,11 @@ export default function TournamentForm({
                 }
               />
             </div>
-            <Input
+            <RuleDescriptionEditor
               value={description}
-              onChange={(e) =>
-                updateRuleSection(e.target.value, "description", index)
+              onChange={(value) =>
+                updateRuleSection(value, "description", index)
               }
-              type="textarea"
-              className="h-48"
               placeholder="Details"
             />
           </div>
