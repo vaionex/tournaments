@@ -18,7 +18,7 @@ export const metadata = {
     description,
     images: [
       {
-        url: `https://tournaments-pzwa.vercel.app/card.webp`, // Must be an absolute URL
+        url: `https://tournaments.com/card.webp`, // Must be an absolute URL
         width: 1200,
         height: 615,
         alt: "Tournaments.com",
