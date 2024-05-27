@@ -35,11 +35,11 @@ export default function RankModal(props) {
           XP Rank Details
         </div>
         <div className="flex gap-4 text-center">
-          {Ranks.map(({ rank, startXP, endXP }) => (
-            <div className={twMerge("relative flex-1 p-4")} key={rank}>
+          {Ranks.map(({ name, startXP, endXP }) => (
+            <div className={twMerge("relative flex-1 p-4")} key={name}>
               <div className="relative z-10">
-                <div className="font-bold">{rank}</div>
-                <RankIcon rank={rank} className="mx-auto my-5 block size-24" />
+                <div className="font-bold">{name}</div>
+                <RankIcon rank={name} className="mx-auto my-5 block size-24" />
                 <div className="whitespace-nowrap text-xs">
                   {endXP ? (
                     <span>
@@ -52,14 +52,14 @@ export default function RankModal(props) {
                 </div>
                 <LogoMark
                   className="mx-auto mt-2.5 size-12"
-                  color={rank != currentRank && "#444"}
+                  color={name != currentRank && "#444"}
                 />
               </div>
 
-              {rank == currentRank && (
+              {name == currentRank && (
                 <div className="absolute inset-x-0 top-0 z-10 h-2 bg-gradient-to-b from-neutral-600 to-neutral-400" />
               )}
-              <RankBG active={rank == currentRank} />
+              <RankBG active={name == currentRank} />
             </div>
           ))}
         </div>

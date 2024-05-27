@@ -15,6 +15,8 @@ export default function CreateTournament() {
     end: addDays(new Date(), 2),
     max_players: 10,
     prize_pool: 0,
+    min_rank: "Bronze",
+    max_rank: "Grandmaster",
     prize_pool_tiers: [100],
     entry_fee: 0,
   });

@@ -10,6 +10,7 @@ import { add } from "lodash";
 import { Image } from "lucide-react";
 import toast from "react-hot-toast";
 import RuleDescriptionEditor from "./rule-description-editor";
+import { Ranks } from "@/utils/rank";
 
 export default function TournamentForm({
   tournament = {},
@@ -26,11 +27,16 @@ export default function TournamentForm({
     start = new Date(),
     end = new Date(),
     max_players,
+    min_rank = "Bronze",
+    max_rank = "Grandmaster",
     prize_pool,
     prize_pool_tiers = [100],
     entry_fee,
     rules = [],
   } = tournament;
+
+  const min_rank_index = Ranks.findIndex(({ name }) => name == min_rank);
+  const max_rank_index = Ranks.findIndex(({ name }) => name == max_rank);
 
   function setValue(property, value) {
     setTournament({ ...tournament, [property]: value });
@@ -213,6 +219,26 @@ export default function TournamentForm({
         min={1}
         required
       />
+      <div>Skill Level</div>
+      <div className="flex items-center gap-8">
+        <Select
+          items={Ranks.slice(0, max_rank_index + 1).map(({ name }) => ({
+            label: name,
+            value: name,
+          }))}
+          value={min_rank}
+          onChange={(value) => value && setValue("min_rank", value)}
+        />
+        <div> - </div>
+        <Select
+          items={Ranks.slice(min_rank_index).map(({ name }) => ({
+            label: name,
+            value: name,
+          }))}
+          value={max_rank}
+          onChange={(value) => value && setValue("max_rank", value)}
+        />
+      </div>
       <div>Entry Fee</div>
       <div className="space-y-4">
         <RadioGroup
