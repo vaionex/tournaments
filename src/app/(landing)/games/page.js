@@ -1,6 +1,6 @@
 import Container from "@/components/ui/container";
 import { HourGlass03 } from "untitledui-js-base";
-import CTA from "../cta";
+import CTA from "../components/cta";
 import BadgeTitle from "../BadgeTitle";
 
 const games = [

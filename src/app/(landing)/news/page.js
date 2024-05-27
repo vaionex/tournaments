@@ -2,7 +2,7 @@ import Container from "@/components/ui/container";
 import { getAllPosts } from "@/server/blog";
 import { format } from "date-fns";
 import Link from "next/link";
-import CTA from "../cta";
+import CTA from "../components/cta";
 import BadgeTitle from "../BadgeTitle";
 import Post from "./Post";
 

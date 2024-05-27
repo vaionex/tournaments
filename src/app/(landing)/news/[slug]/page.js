@@ -3,7 +3,7 @@ import { getPostBySlug } from "@/server/blog";
 import { format } from "date-fns";
 import { notFound } from "next/navigation";
 import ShareSection from "./share-section";
-import CTA from "../../cta";
+import CTA from "../../components/cta";
 import SignupSidebar from "./SignupSidebar";
 
 export async function generateMetadata({ params: { slug } }) {
