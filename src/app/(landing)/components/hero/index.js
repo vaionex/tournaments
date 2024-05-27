@@ -23,7 +23,7 @@ export default async function Hero() {
       className="mx-auto mb-24 max-w-[1920px]"
     >
       <div className="relative isolate overflow-hidden">
-        <div className="mx-auto max-w-7xl px-6 pb-24 pt-20 sm:pb-32 lg:flex lg:px-8 lg:py-40">
+        <Container className="mx-auto max-w-7xl px-6 pb-24 pt-20 sm:pb-32 lg:flex lg:px-8 lg:py-40">
           <div className="mx-auto mt-12 max-w-2xl flex-shrink-0 lg:mx-0 lg:max-w-3xl lg:pt-8">
             <DurationTag startDate={new Date()} endDate={new Date()} />
 
@@ -37,7 +37,7 @@ export default async function Hero() {
               <CreateTournamentButton />
             </div>
           </div>
-        </div>
+        </Container>
         <Container>
           <div className="grid gap-4 md:grid-cols-3">
             {tournaments.map(({ start, end, name }, index) => (
