@@ -22,8 +22,8 @@ export const RankDetails = {
   },
 };
 
-export const Ranks = Object.entries(RankDetails).map(([rank, { xp }]) => ({
-  rank,
+export const Ranks = Object.entries(RankDetails).map(([name, { xp }]) => ({
+  name,
   startXP: xp,
   endXP: RankDetails[getNextRank(xp)]
     ? RankDetails[getNextRank(xp)]?.xp - 1

@@ -1,10 +1,10 @@
-import Hero from "./hero";
-import CTA from "./cta";
-import FeaturedTournaments from "./featured-tournaments";
-import Rewards from "./rewards";
-import DesktopApp from "./desktop-app";
-import Blog from "./blog";
-import Features from "./features";
+import Hero from "./components/hero";
+import CTA from "./components/cta";
+import FeaturedTournaments from "./components/featured-tournaments";
+import Rewards from "./components/rewards";
+import DesktopApp from "./components/desktop-app";
+import Blog from "./components/blog";
+import Features from "./components/features";
 
 export default function Home() {
   return (

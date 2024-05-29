@@ -2,15 +2,16 @@ import { format } from "date-fns";
 
 export default function DurationTag({ startDate, endDate }) {
   return (
-    <div className="inline-flex w-fit space-x-6 border-r-2 border-primary bg-black/50 px-4 py-2 text-sm">
-      <div className="flex items-center gap-2">
-        <div className="flex h-3 w-3 items-center justify-center rounded-full bg-white/50">
-          <div className="h-1.5 w-1.5 rounded-full bg-white/80" />
+    <div className="flex h-8 w-fit items-center gap-3 rounded-full  bg-black/40 pr-3 text-sm">
+      <div className="mx-0.5 flex h-6 items-center gap-1 rounded-full bg-black/60 pl-[7px] pr-2">
+        <div className="flex size-3 items-center justify-center rounded-full bg-white/30">
+          <div className="size-1.5 rounded-full bg-white" />
         </div>
-        {format(startDate, "MMM")} {format(startDate, "dd")} –
-        {format(endDate, "MMM")} {format(endDate, "dd")}
+        <div>
+          {format(startDate, "MMM")} {format(startDate, "dd")} –
+          {format(endDate, "MMM")} {format(endDate, "dd")}
+        </div>
       </div>
-
       <div>{startDate.getFullYear()}</div>
     </div>
   );

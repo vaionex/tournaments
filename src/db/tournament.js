@@ -40,7 +40,11 @@ export async function getTournaments() {
     .from("Tournament")
     .select("*, Game (*)")
     .throwOnError();
-  return data;
+  return data.map(({ start, end, ...rest }) => ({
+    ...rest,
+    start: new Date(start),
+    end: new Date(end),
+  }));
 }
 
 export async function getTournament(id) {

@@ -1,6 +1,6 @@
 import Container from "@/components/ui/container";
 import BadgeTitle from "../BadgeTitle";
-import CTA from "../cta";
+import CTA from "../components/cta";
 import FeaturedTournaments from "./featured-tournaments";
 import Filters from "./filters";
 

@@ -1,26 +1,17 @@
 import Container from "@/components/ui/container";
 import { Button } from "@/components/ui/button";
 import DurationTag from "@/components/ui/duration-tag";
+import { getTournaments } from "@/db/tournament";
+import { format } from "date-fns";
+import { twMerge } from "tailwind-merge";
+import CreateTournamentButton from "./create-tournament-button";
 
-const tournaments = [
-  {
-    startDate: "1st May 2024",
-    endDate: "2nd May 2024",
-    name: "Fortnite Zero Build – $10 Prize Pool!",
-  },
-  {
-    startDate: new Date(),
-    endDate: new Date(),
-    name: "Fortnite Battle Royale – $10 Prize Pool!",
-  },
-  {
-    startDate: new Date(),
-    endDate: new Date(),
-    name: "Fortnite Race – $5 Prize Pool!",
-  },
-];
+export default async function Hero() {
+  const allTournaments = await getTournaments();
+  const tournaments = allTournaments.slice(0, 3);
 
-export default function Hero() {
+  const selectedIndex = 0;
+
   return (
     <div
       style={{
@@ -32,7 +23,7 @@ export default function Hero() {
       className="mx-auto mb-24 max-w-[1920px]"
     >
       <div className="relative isolate overflow-hidden">
-        <div className="mx-auto max-w-7xl px-6 pb-24 pt-20 sm:pb-32 lg:flex lg:px-8 lg:py-40">
+        <Container className="mx-auto max-w-7xl px-6 pb-24 pt-20 sm:pb-32 lg:flex lg:px-8 lg:py-40">
           <div className="mx-auto mt-12 max-w-2xl flex-shrink-0 lg:mx-0 lg:max-w-3xl lg:pt-8">
             <DurationTag startDate={new Date()} endDate={new Date()} />
 
@@ -43,17 +34,20 @@ export default function Hero() {
               Sign up now to get access to our first tournaments!
             </p>
             <div className="mt-10 flex flex-wrap items-center gap-6">
-              <Button variant="white" href="/signup">
-                Join the Game
-              </Button>
-              {/* <Button>Create a Tournament</Button> */}
+              <CreateTournamentButton />
             </div>
           </div>
-        </div>
+        </Container>
         <Container>
           <div className="grid gap-4 md:grid-cols-3">
-            {tournaments.map(({ startDate, endDate, name }, index) => (
-              <div className="relative bg-neutral-900 px-4 py-3" key={index}>
+            {tournaments.map(({ start, end, name }, index) => (
+              <div
+                className={twMerge(
+                  "relative rounded-lg border border-neutral-800 bg-white/5  px-4 py-3",
+                  index == selectedIndex && "border-primary bg-primary-950",
+                )}
+                key={index}
+              >
                 <div className="flex items-center gap-2 text-xs text-gray-400">
                   <svg
                     width="20"
@@ -77,19 +71,13 @@ export default function Hero() {
                     />
                   </svg>
 
-                  <div>May 1 – May 2, 2024</div>
+                  <div>
+                    {" "}
+                    {format(start, "MMM dd")} – {format(end, "MMM dd")},{" "}
+                    {start.getFullYear()}
+                  </div>
                 </div>
                 <div className="mt-2 text-sm">{name}</div>
-                <svg
-                  width="26"
-                  height="27"
-                  viewBox="0 0 26 27"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="absolute bottom-0 right-0"
-                >
-                  <path d="M0 27L26 0V27H0Z" fill="#004EEB" />
-                </svg>
               </div>
             ))}
           </div>
