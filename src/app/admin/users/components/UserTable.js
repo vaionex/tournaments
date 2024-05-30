@@ -50,7 +50,7 @@ export default function UsersTable() {
               </td>
               <td>{formatCurrency(balance)}</td>
               <td className="text-nowrap">
-                {format(new Date(created_at), "dd/MM/yyyy")}
+                {format(new Date(created_at), "dd MMM yy")}
               </td>
             </tr>
           ),
