@@ -6,6 +6,7 @@ import { formatCurrency } from "@/utils/format";
 import { getRank } from "@/utils/rank";
 import { CheckIcon, Mail } from "lucide-react";
 import RankPill from "./RankPill";
+import { format } from "date-fns";
 
 export default function UsersTable() {
   const { data: users = [], isLoading } = useUsers({ limit: 1000 });
@@ -24,30 +25,36 @@ export default function UsersTable() {
           <th className="w-full">Status</th>
           <th>Rank</th>
           <th>Balance</th>
+          <th>Joined</th>
         </tr>
       </thead>
       <tbody>
-        {users.map(({ id, profile_picture, username, xp, balance }) => (
-          <tr>
-            <td className="h-16 w-fit text-nowrap">{id}</td>
-            <td>
-              <div className="flex items-center gap-4">
-                <Avatar src={profile_picture} />
-                {username}
-              </div>
-            </td>
-            <td>
-              <div className="flex items-center gap-2 text-green-500">
-                <CheckIcon className="size-4" />
-                Active
-              </div>
-            </td>
-            <td>
-              <RankPill rank={getRank(xp)} />
-            </td>
-            <td>{formatCurrency(balance)}</td>
-          </tr>
-        ))}
+        {users.map(
+          ({ id, profile_picture, username, xp, balance, created_at }) => (
+            <tr>
+              <td className="h-16 w-fit text-nowrap">{id}</td>
+              <td>
+                <div className="flex items-center gap-4">
+                  <Avatar src={profile_picture} />
+                  {username}
+                </div>
+              </td>
+              <td>
+                <div className="flex items-center gap-2 text-green-500">
+                  <CheckIcon className="size-4" />
+                  Active
+                </div>
+              </td>
+              <td>
+                <RankPill rank={getRank(xp)} />
+              </td>
+              <td>{formatCurrency(balance)}</td>
+              <td className="text-nowrap">
+                {format(new Date(created_at), "dd/MM/yyyy")}
+              </td>
+            </tr>
+          ),
+        )}
       </tbody>
     </table>
   );
