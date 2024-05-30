@@ -56,14 +56,12 @@ export default function UserTableRow({
       </td>
       <td>
         {actions.map(({ icon: Icon, title, onClick }, index) => (
-          <Tooltip>
-            <TooltipTrigger>
-              <button
-                className="flex size-8 items-center justify-center hover:bg-white/10"
-                key={index}
-              >
-                <Icon onClick={onClick} className="size-5 opacity-70" />
-              </button>
+          <Tooltip key={index}>
+            <TooltipTrigger
+              onClick={onClick}
+              className="flex size-8 items-center justify-center hover:bg-white/10"
+            >
+              <Icon className="size-5 opacity-70" />
             </TooltipTrigger>
             <TooltipContent>{title}</TooltipContent>
           </Tooltip>

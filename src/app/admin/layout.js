@@ -1,9 +1,18 @@
+"use client";
+
 import Logo from "@/components/ui/logo";
+import useAdmin from "@/hooks/auth/useAdmin";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Users01 } from "untitledui-js-base";
 
 const links = [{ name: "Users", href: "users" }];
 export default function AdminLayout({ children }) {
+  const { isNotAdmin } = useAdmin();
+  const { push } = useRouter();
+
+  // if (isNotAdmin) push("/");
+
   return (
     <div className="relative flex">
       <div className="sticky top-0">
