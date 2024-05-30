@@ -5,6 +5,7 @@ import useUsers from "@/hooks/admin/useUsers";
 import { formatCurrency } from "@/utils/format";
 import { getRank } from "@/utils/rank";
 import { CheckIcon, Mail } from "lucide-react";
+import RankPill from "./RankPill";
 
 export default function UsersTable() {
   const { data: users = [], isLoading } = useUsers({ limit: 1000 });
@@ -41,7 +42,9 @@ export default function UsersTable() {
                 Active
               </div>
             </td>
-            <td>{getRank(xp)}</td>
+            <td>
+              <RankPill rank={getRank(xp)} />
+            </td>
             <td>{formatCurrency(balance)}</td>
           </tr>
         ))}
