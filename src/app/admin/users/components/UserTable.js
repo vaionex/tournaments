@@ -1,15 +1,11 @@
 "use client";
-import Avatar from "@/components/ui/avatar";
 import Loader from "@/components/ui/loader";
 import useUsers from "@/hooks/admin/useUsers";
-import { formatCurrency } from "@/utils/format";
-import { getRank } from "@/utils/rank";
-import { CheckIcon, Mail } from "lucide-react";
-import RankPill from "./RankPill";
-import { format } from "date-fns";
+import UserTableRow from "./UserTableRow";
 
 export default function UsersTable() {
   const { data: users = [], isLoading } = useUsers({ limit: 1000 });
+
   if (isLoading)
     return (
       <div className="flex w-full items-center justify-center pt-36">
@@ -26,35 +22,13 @@ export default function UsersTable() {
           <th>Rank</th>
           <th>Balance</th>
           <th>Joined</th>
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody>
-        {users.map(
-          ({ id, profile_picture, username, xp, balance, created_at }) => (
-            <tr>
-              <td className="h-16 w-fit text-nowrap">{id}</td>
-              <td>
-                <div className="flex items-center gap-4">
-                  <Avatar src={profile_picture} />
-                  {username}
-                </div>
-              </td>
-              <td>
-                <div className="flex items-center gap-2 text-green-500">
-                  <CheckIcon className="size-4" />
-                  Active
-                </div>
-              </td>
-              <td>
-                <RankPill rank={getRank(xp)} />
-              </td>
-              <td>{formatCurrency(balance)}</td>
-              <td className="text-nowrap">
-                {format(new Date(created_at), "dd MMM yy")}
-              </td>
-            </tr>
-          ),
-        )}
+        {users.map((user) => (
+          <UserTableRow {...user} key={user.id} />
+        ))}
       </tbody>
     </table>
   );
