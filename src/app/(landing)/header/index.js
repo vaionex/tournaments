@@ -54,7 +54,7 @@ export default function Header() {
 
   return (
     <>
-      <header className="fixed inset-x-0 top-0 z-10 bg-black/20 text-white backdrop-blur-md">
+      <header className="fixed inset-x-0 top-0 z-20 bg-black/20 text-white backdrop-blur-md">
         <Container>
           <nav
             className="flex items-center justify-between py-6"

@@ -1,4 +1,5 @@
 "use client";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import useUser from "@/hooks/auth/useUser";
 import { NovuProvider } from "@novu/notification-center";
 import { useState } from "react";
@@ -22,8 +23,10 @@ export default function Providers({ children }) {
   return (
     <QueryClientProvider client={client}>
       <CustomNovuProvider>
-        {children}
-        <Toaster />
+        <TooltipProvider>
+          {children}
+          <Toaster />
+        </TooltipProvider>
       </CustomNovuProvider>
     </QueryClientProvider>
   );
