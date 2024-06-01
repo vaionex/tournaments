@@ -41,7 +41,7 @@ export default async function TournamentLayout({ children, params: { id } }) {
             {children}
           </div>
 
-          <div className="mt-10 flex justify-between">
+          <div className="my-10 flex justify-between">
             {canEdit ? (
               <Button variant="black" href="edit">
                 Edit
