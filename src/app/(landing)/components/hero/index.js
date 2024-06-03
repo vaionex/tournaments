@@ -28,17 +28,17 @@ export default async function Hero() {
             <DurationTag startDate={new Date()} endDate={new Date()} />
 
             <h1 className="mt-10 text-4xl font-bold tracking-tight text-white sm:text-6xl">
-              Earn Cash Rewards in eSports Tournaments
+              Fortnite 2024 – $30K Prize Pool Battle Royale!
             </h1>
             <p className="mt-6 text-lg leading-8">
-              Sign up now to get access to our first tournaments!
+              Outlast the Legends to Win $30K + Legendary Skins!
             </p>
             <div className="mt-10 flex flex-wrap items-center gap-6">
-              <CreateTournamentButton />
+              <Button href="/tournaments">Explore Tournaments</Button>
             </div>
           </div>
         </Container>
-        <Container>
+        {/* <Container>
           <div className="grid gap-4 md:grid-cols-3">
             {tournaments.map(({ start, end, name }, index) => (
               <div
@@ -81,7 +81,7 @@ export default async function Hero() {
               </div>
             ))}
           </div>
-        </Container>
+        </Container> */}
       </div>
     </div>
   );

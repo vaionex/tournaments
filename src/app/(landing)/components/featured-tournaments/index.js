@@ -2,41 +2,27 @@ import CornerBorder from "@/components/ui/corner-border";
 import { Button } from "@/components/ui/button";
 import DurationTag from "@/components/ui/duration-tag";
 import Container from "@/components/ui/container";
+import FirstTournament from "../../tournaments/featured-tournaments/FirstTournament";
+import { getTournaments } from "@/db/tournament";
 
-export default function FeaturedTournaments() {
+export default async function FeaturedTournaments() {
+  const tournaments = await getTournaments();
   return (
     <div>
       <Container>
-        <div className="flex justify-between items-start mb-10 flex-wrap gap-6">
+        <div className="mb-10 flex flex-wrap items-start justify-between gap-6">
           <div>
-            <h2 className="text-5xl font-bold mb-3">Featured Tournaments</h2>
-            <div className="text-supporting text-xl">
+            <h2 className="mb-3 text-5xl font-bold">Featured Tournaments</h2>
+            <div className="text-xl text-supporting">
               Join the fray in your favorite game and claim glory!
             </div>
           </div>
           <Button variant="black">All Tournaments</Button>
         </div>
-        <CornerBorder>
-          <div
-            style={{ backgroundImage: "url(/images/fortnite.webp)" }}
-            className="bg-cover bg-center"
-          >
-            <div className="bg-gradient-to-t from-black to-30% px-8 py-12 flex flex-col justify-between h-[30rem]">
-              <DurationTag startDate={new Date()} endDate={new Date()} />
-              <div>
-                <h2 className="text-3xl font-bold">
-                  Fortnite Zero Build – $10 Prize Pool!
-                </h2>
-                <div className="text-supporting">
-                  Outlast the Legends to Win $10 + Points + XP!
-                </div>
-              </div>
-            </div>
-          </div>
-        </CornerBorder>
+        <FirstTournament {...tournaments[0]} />
       </Container>
 
-      <div className="bg-gradient-to-r from-transparent via-white to bg-transparent w-full h-0.5 mt-20" />
+      <div className="to mt-20 h-0.5 w-full bg-transparent bg-gradient-to-r from-transparent via-white" />
     </div>
   );
 }
