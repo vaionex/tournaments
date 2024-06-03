@@ -5,12 +5,30 @@ import { Input } from "@/components/ui/input";
 import { Radio, RadioGroup } from "@/components/ui/radio-group";
 import Select from "@/components/ui/select";
 import useGames from "@/hooks/games/useGames";
-import { format } from "date-fns";
+import { format as formatDate } from "date-fns";
 import { add } from "lodash";
 import { Image } from "lucide-react";
 import toast from "react-hot-toast";
 import RuleDescriptionEditor from "./rule-description-editor";
 import { Ranks } from "@/utils/rank";
+import { Target03 } from "untitledui-js-base";
+import { Crown1 } from "iconsax-react";
+import Bracket from "@/components/icons/bracket";
+
+const Formats = [
+  {
+    name: "Bracket",
+    icon: Bracket,
+  },
+  {
+    name: "Kill Race",
+    icon: Target03,
+  },
+  {
+    name: "Victory Royal Race",
+    icon: Crown1,
+  },
+];
 
 export default function TournamentForm({
   tournament = {},
@@ -23,6 +41,7 @@ export default function TournamentForm({
     name,
     description,
     banner,
+    format,
     game_id,
     start = new Date(),
     end = new Date(),
@@ -129,6 +148,24 @@ export default function TournamentForm({
           onChange={(value) => value && setValue("game_id", value)}
         />
       </div>
+
+      <div>Format</div>
+      <div>
+        <Select
+          items={Formats.map(({ name, icon: Icon }) => ({
+            value: name,
+            label: (
+              <div className="flex items-center gap-2">
+                <Icon className="size-4" /> {name}
+              </div>
+            ),
+          }))}
+          placeholder="Select a format..."
+          value={format || ""}
+          onChange={(value) => value && setValue("format", value)}
+        />
+      </div>
+
       <div>Description</div>
       <Input
         value={description}
@@ -141,7 +178,7 @@ export default function TournamentForm({
 
       <Input
         type="datetime-local"
-        value={format(start, "yyyy-MM-dd'T'hh:mm")}
+        value={formatDate(start, "yyyy-MM-dd'T'hh:mm")}
         onChange={(e) => setValue("start", new Date(e.target.value))}
         required
       />
@@ -149,7 +186,7 @@ export default function TournamentForm({
       <div>End</div>
       <Input
         type="datetime-local"
-        value={format(end, "yyyy-MM-dd'T'hh:mm")}
+        value={formatDate(end, "yyyy-MM-dd'T'hh:mm")}
         onChange={(e) => setValue("end", new Date(e.target.value))}
         required
       />
