@@ -8,40 +8,39 @@ export default function Features() {
   return (
     <div>
       <Container className="!py-24">
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <h2 className="text-5xl font-bold mb-2">Anyone can do it.</h2>
-          <div className="text-supporting text-xl">
+        <div className="mx-auto mb-16 max-w-3xl text-center">
+          <h2 className="mb-2 text-5xl font-bold">Anyone can do it.</h2>
+          <div className="text-xl text-supporting">
             Everything you need to organize and manage tournaments!
           </div>
         </div>
-        <CornerBorder>
-          <div
-            className="flex justify-between md:flex-row flex-col"
-            style={{
-              background:
-                "radial-gradient(at 70% 90%, rgba(0,15,89,0.8) 0%, black 80%)",
-            }}
-          >
-            <div className="flex flex-col justify-between items-start flex-[5] gap-4 p-8">
-              <div>
-                <h2 className="text-4xl font-bold mb-4">
-                  Game specific features
-                </h2>
-                <div className="text-xl text-supporting">
-                  Create and manage your esports tournaments with ease. From
-                  brackets to registration — empower your team, engage your
-                  audience
-                </div>
-              </div>
-              {/* <Button>Create a Tournament</Button> */}
+        <div
+          className="flex justify-end"
+          style={{
+            backgroundImage: `url('/images/landing/fortnite.webp')`,
+            backgroundPosition: "bottom left",
+            backgroundRepeat: "no-repeat",
+            backgroundSize: "70%",
+          }}
+        >
+          <div className="my-10 max-w-md border border-white/10 bg-white/5 p-12 backdrop-blur-lg">
+            <div className="mb-4 text-4xl font-semibold">
+              Empower Your Events
             </div>
-            <Image
-              src={analytics}
-              className="flex-[7] pt-5 object-contain object-right-bottom"
-              alt="Analytics"
-            />
+            <div className="mb-4 text-neutral-100">
+              Unlock the full potential of your gaming events with our
+              comprehensive tournament management tools.
+            </div>
+            <div className="my-8 h-px bg-white/20" />
+            <div className="text-neutral-300">
+              Whether you're hosting a local showdown or an international
+              esports competition, our platform provides all the tools you need
+              to run a smooth and successful event. From player registration to
+              real-time match updates, everything is handled with precision to
+              ensure a great experience for participants and spectators alike.
+            </div>
           </div>
-        </CornerBorder>
+        </div>
       </Container>
     </div>
   );
