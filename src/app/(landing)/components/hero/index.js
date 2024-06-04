@@ -23,15 +23,15 @@ export default async function Hero() {
       className="mx-auto mb-24 max-w-[1920px]"
     >
       <div className="relative isolate overflow-hidden">
-        <Container className="mx-auto max-w-7xl px-6 pb-24 pt-20 sm:pb-32 lg:flex lg:px-8 lg:py-40 lg:pt-72">
+        <Container className="mx-auto max-w-7xl px-6 pb-24 pt-10 sm:pb-32 lg:flex lg:px-8 lg:py-40 lg:pt-52">
           <div className="mx-auto mt-12 max-w-2xl flex-shrink-0 lg:mx-0 lg:max-w-3xl lg:pt-8">
             <DurationTag startDate={new Date()} endDate={new Date()} />
 
             <h1 className="mt-10 text-4xl font-bold tracking-tight text-white sm:text-6xl">
-              Fortnite 2024 – $30K Prize Pool Battle Royale!
+              Compete with the Best and Earn Cash Rewards
             </h1>
             <p className="mt-6 text-lg leading-8">
-              Outlast the Legends to Win $30K + Legendary Skins!
+            Earn Money and Improve Your Rank in Our Weekly Competitions!
             </p>
             <div className="mt-10 flex flex-wrap items-center gap-6">
               <Button href="/tournaments">Explore Tournaments</Button>
