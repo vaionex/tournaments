@@ -1,17 +1,8 @@
 import Container from "@/components/ui/container";
 import { Button } from "@/components/ui/button";
 import DurationTag from "@/components/ui/duration-tag";
-import { getTournaments } from "@/db/tournament";
-import { format } from "date-fns";
-import { twMerge } from "tailwind-merge";
-import CreateTournamentButton from "./create-tournament-button";
 
 export default async function Hero() {
-  const allTournaments = await getTournaments();
-  const tournaments = allTournaments.slice(0, 3);
-
-  const selectedIndex = 0;
-
   return (
     <div
       style={{
@@ -22,9 +13,9 @@ export default async function Hero() {
       }}
       className="mx-auto mb-24 max-w-[1920px]"
     >
-      <div className="relative isolate overflow-hidden">
-        <Container className="mx-auto max-w-7xl px-6 pb-24 pt-10 sm:pb-32 lg:flex lg:px-8 lg:py-56">
-          <div className="mx-auto mt-12 max-w-2xl flex-shrink-0 lg:mx-0 lg:max-w-3xl lg:pt-8">
+      <div className="relative isolate overflow-hidden backdrop-blur-md lg:backdrop-blur-none">
+        <Container className="px-6 py-32 pb-24 sm:pb-32 lg:flex lg:px-8 lg:py-56">
+          <div className="mx-auto mt-12 flex-shrink-0 lg:mx-0 lg:max-w-3xl lg:pt-8">
             <DurationTag startDate={new Date()} endDate={new Date()} />
 
             <h1 className="mt-10 text-4xl font-bold tracking-tight text-white sm:text-6xl">
