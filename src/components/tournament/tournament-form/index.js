@@ -276,7 +276,8 @@ export default function TournamentForm({
           onChange={(value) => value && setValue("max_rank", value)}
         />
       </div>
-      <div>Entry Fee</div>
+
+      {/* <div>Entry Fee</div>
       <div className="space-y-4">
         <RadioGroup
           value={entry_fee == 0 ? "free" : "paid"}
@@ -299,7 +300,8 @@ export default function TournamentForm({
             required
           />
         )}
-      </div>
+      </div> */}
+
       <div>Rules</div>
       <div className="space-y-4 p-4">
         {rules.map(({ title, description }, index) => (
