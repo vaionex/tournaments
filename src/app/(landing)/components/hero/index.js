@@ -13,9 +13,9 @@ export default async function Hero() {
       }}
       className="mx-auto mb-24 max-w-[1920px]"
     >
-      <div className="relative isolate overflow-hidden backdrop-blur-md lg:backdrop-blur-none">
-        <Container className="px-6 py-32 pb-24 sm:pb-32 lg:flex lg:px-8 lg:py-56">
-          <div className="mx-auto mt-12 flex-shrink-0 lg:mx-0 lg:max-w-3xl lg:pt-8">
+      <div className="backdrop-blurmd relative isolate overflow-hidden lg:backdrop-blur-none">
+        <Container className="relative px-6 py-32 pb-24 sm:pb-32 lg:flex lg:px-8 lg:py-56">
+          <div className="z-10 mx-auto mt-12 flex-shrink-0 lg:mx-0 lg:max-w-3xl lg:pt-8">
             <DurationTag startDate={new Date()} endDate={new Date()} />
 
             <h1 className="mt-10 text-4xl font-bold tracking-tight text-white sm:text-6xl">
@@ -28,6 +28,10 @@ export default async function Hero() {
               <Button href="/tournaments">Explore Tournaments</Button>
             </div>
           </div>
+          <img
+            src="/images/landing/hero-element.webp"
+            className="absolute right-0 top-1/2 z-0 hidden w-2/3 -translate-y-1/2 translate-x-12 lg:block"
+          />
         </Container>
         {/* <Container>
           <div className="grid gap-4 md:grid-cols-3">
