@@ -14,7 +14,7 @@ export default async function Hero() {
       className="mx-auto mb-24 max-w-[1920px]"
     >
       <div className="backdrop-blurmd relative isolate overflow-hidden lg:backdrop-blur-none">
-        <Container className="relative px-6 py-32 pb-24 sm:pb-32 lg:flex lg:px-8 lg:py-56">
+        <Container className="relative px-6 py-32 pb-0 sm:pb-32 lg:flex lg:px-8 lg:py-56">
           <div className="z-10 mx-auto mt-12 flex-shrink-0 lg:mx-0 lg:max-w-3xl lg:pt-8">
             <DurationTag startDate={new Date()} endDate={new Date()} />
 

@@ -34,8 +34,8 @@ export default function FirstTournament({
           {format(start, "MMM dd")} - {format(end, "MMM dd")}{" "}
           <span className="mx-2 inline-block">•</span> {Game?.name}
         </div>
-        <div className="mt-10 flex items-center gap-2.5">
-        <Button href={href}>Join Tournament</Button>
+        <div className="mt-10 flex flex-wrap items-center gap-2.5">
+          <Button href={href}>Join Tournament</Button>
           <Button
             variant="neon"
             href="mailto:sponsor@tournaments.com"
@@ -47,7 +47,6 @@ export default function FirstTournament({
             <Diamond01 className="size-4" />
             Become a sponsor
           </Button>
-          
         </div>
       </div>
     </div>
