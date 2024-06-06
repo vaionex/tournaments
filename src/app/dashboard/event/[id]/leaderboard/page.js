@@ -1,6 +1,7 @@
-import Rank1 from "@/components/icons/rank1";
-import Rank2 from "@/components/icons/rank2";
-import Rank3 from "@/components/icons/rank3";
+import TournamentRank from "@/components/icons/tournament-rank";
+import Rank1 from "@/components/icons/tournament-rank/rank1";
+import Rank2 from "@/components/icons/tournament-rank/rank2";
+import Rank3 from "@/components/icons/tournament-rank/rank3";
 import Avatar from "@/components/ui/avatar";
 import { getParticipants } from "@/db/tournament";
 import { twMerge } from "tailwind-merge";
@@ -18,9 +19,7 @@ export default async function Leaderboard({ params: { id } }) {
   ];
 
   function getRank(rank) {
-    if (rank == 1) return <Rank1 />;
-    if (rank == 2) return <Rank2 />;
-    if (rank == 3) return <Rank3 />;
+    if (rank < 4) return <TournamentRank position={rank} />;
     return rank;
   }
 
