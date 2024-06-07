@@ -2,8 +2,11 @@ import { Input } from "@/components/ui/input";
 import { getTournament } from "@/db/tournament";
 import { format } from "date-fns";
 
+export const revalidate = 0;
+
 export default async function Matchmaking({ params: { id } }) {
-  const { start } = await getTournament(id);
+  const { start, matchmaking_key } = await getTournament(id);
+
   function Section({ children, title, description }) {
     return (
       <div className="flex gap-8 text-sm">
@@ -22,7 +25,12 @@ export default async function Matchmaking({ params: { id } }) {
         description="Unique code provided to registered players for accessing private tournament games."
       >
         <div className="space-y-4">
-          <Input value={id} label="Key" className="bg-primary" readOnly />
+          <Input
+            value={matchmaking_key}
+            label="Key"
+            className="bg-primary"
+            readOnly
+          />
           <Input
             value={format(start, "PPP")}
             label="Your match date"

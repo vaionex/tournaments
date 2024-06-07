@@ -43,6 +43,7 @@ export default function TournamentForm({
     banner,
     format,
     game_id,
+    matchmaking_key = "",
     start = new Date(),
     end = new Date(),
     max_players,
@@ -95,6 +96,9 @@ export default function TournamentForm({
   }
 
   const { data: games = [] } = useGames();
+
+  const { requires_matchmaking_key = false } =
+    games.find(({ id }) => id == game_id) || {};
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -149,6 +153,18 @@ export default function TournamentForm({
         />
       </div>
 
+      {requires_matchmaking_key && (
+        <>
+          <div>Matchmaking Key</div>
+          <div>
+            <Input
+              value={matchmaking_key}
+              onChange={(e) => setValue("matchmaking_key", e.target.value)}
+              required
+            />
+          </div>
+        </>
+      )}
       <div>Format</div>
       <div>
         <Select
