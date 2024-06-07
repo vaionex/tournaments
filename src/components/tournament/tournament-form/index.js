@@ -194,8 +194,10 @@ export default function TournamentForm({
       <div>
         <Input
           type="number"
-          value={prize_pool}
-          onChange={(e) => setValue("prize_pool", Number(e.target.value) || 0)}
+          value={prize_pool / 100}
+          onChange={(e) =>
+            setValue("prize_pool", Number(e.target.value * 100) || 0)
+          }
           min={1}
           leftSection="$"
           required
@@ -229,7 +231,9 @@ export default function TournamentForm({
                   </td>
                   <td>
                     <Input
-                      value={Math.round((tier / 100) * prize_pool)}
+                      value={(
+                        Math.round((tier / 100) * prize_pool) / 100
+                      ).toFixed(2)}
                       leftSection="$"
                       readOnly
                     />
@@ -284,7 +288,7 @@ export default function TournamentForm({
           onValueChange={(value) =>
             value == "free"
               ? setValue("entry_fee", 0)
-              : setValue("entry_fee", 100)
+              : setValue("entry_fee", 10000)
           }
         >
           <Radio value="free" label="Free entry" />
@@ -293,8 +297,8 @@ export default function TournamentForm({
         {entry_fee != 0 && (
           <Input
             type="number"
-            value={entry_fee}
-            onChange={(e) => setValue("entry_fee", Number(e.target.value) || 0)}
+            value={entry_fee / 100}
+            onChange={(e) => setValue("entry_fee", Number(e.target.value * 100) || 0)}
             min={0}
             leftSection="$"
             required

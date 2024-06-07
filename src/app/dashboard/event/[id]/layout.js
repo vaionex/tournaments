@@ -6,6 +6,7 @@ import JoinTournamentButton from "./JoinTournamentButton";
 import { links } from "./links";
 import ShareSection from "@/app/(landing)/news/[slug]/share-section";
 import { Button } from "@/components/ui/button";
+import EndTournamentButton from "./end-tournament-button";
 
 export const revalidate = 0;
 
@@ -24,6 +25,7 @@ export default async function TournamentLayout({ children, params: { id } }) {
     <div>
       <div className="mb-8 flex items-center justify-between">
         <h1 className="text-4xl font-bold">{name}</h1>
+        <EndTournamentButton tournamentId={id} />
         <JoinTournamentButton
           entryFee={entry_fee}
           tournamentId={id}
