@@ -7,7 +7,7 @@ import Select from "@/components/ui/select";
 import useGames from "@/hooks/games/useGames";
 import { format as formatDate } from "date-fns";
 import { add } from "lodash";
-import { Image } from "lucide-react";
+import { Image, Swords } from "lucide-react";
 import toast from "react-hot-toast";
 import RuleDescriptionEditor from "./rule-description-editor";
 import { Ranks } from "@/utils/rank";
@@ -27,6 +27,10 @@ const Formats = [
   {
     name: "Victory Royal Race",
     icon: Crown1,
+  },
+  {
+    name: "Battle Royal",
+    icon: Swords,
   },
 ];
 
