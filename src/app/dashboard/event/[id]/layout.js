@@ -25,12 +25,14 @@ export default async function TournamentLayout({ children, params: { id } }) {
     <div>
       <div className="mb-8 flex items-center justify-between">
         <h1 className="text-4xl font-bold">{name}</h1>
-        <EndTournamentButton tournamentId={id} />
-        <JoinTournamentButton
-          entryFee={entry_fee}
-          tournamentId={id}
-          start={start}
-        />
+        <div className="flex items-center gap-2">
+          <EndTournamentButton tournamentId={id} />
+          <JoinTournamentButton
+            entryFee={entry_fee}
+            tournamentId={id}
+            start={start}
+          />
+        </div>
       </div>
       <div className="flex border-t border-white/20">
         <div className="flex flex-col  p-1 pr-8 pt-6 text-sm font-medium">
