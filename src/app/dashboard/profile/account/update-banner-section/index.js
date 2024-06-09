@@ -3,6 +3,7 @@ import useUser from "@/hooks/auth/useUser";
 import useUpdateUser from "@/hooks/user/useUpdateUser";
 import { Camera } from "lucide-react";
 import { useDropzone } from "react-dropzone";
+import toast from "react-hot-toast";
 
 export default function UpdateBannerSection() {
   const { data: user } = useUser();
@@ -13,7 +14,14 @@ export default function UpdateBannerSection() {
       "image/png": [".png"],
     },
     onDrop: (acceptedFiles) => {
-      if (acceptedFiles.length > 0) update({ banner: acceptedFiles[0] });
+      if (acceptedFiles.length > 0)
+        update(
+          { banner: acceptedFiles[0] },
+          {
+            onSuccess: () => toast.success("Updated"),
+            onError: () => toast.error("An unexpected error occurred"),
+          },
+        );
     },
   });
   return (

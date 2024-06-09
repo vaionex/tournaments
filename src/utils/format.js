@@ -1,5 +1,5 @@
-export function formatCurrency(value, options = {}) {
-  const fractional = (value * 100) % 100 > 0;
+export function formatCurrency(amountInCents, options = {}) {
+  const fractional = amountInCents % 100 > 0;
   const formatter = new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
@@ -7,7 +7,7 @@ export function formatCurrency(value, options = {}) {
     ...options,
     minimumFractionDigits: fractional ? 2 : 0,
   });
-  return formatter.format(value);
+  return formatter.format(amountInCents / 100);
 }
 
 export function formatValue(value) {

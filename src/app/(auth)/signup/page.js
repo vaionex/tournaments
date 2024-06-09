@@ -24,7 +24,7 @@ export default function Signup({}) {
   const [acceptedTerms, setAcceptedTerms] = useState(false);
 
   function handleSignup() {
-    if (!username) return toast.error("Please provide a name");
+    if (!username) return toast.error("Please provide a username");
     if (!acceptedTerms)
       return toast.error("Please accept the terms and conditions");
     signup({

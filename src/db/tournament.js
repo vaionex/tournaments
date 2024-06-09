@@ -71,3 +71,7 @@ export async function getParticipants(id) {
 export async function joinTournament(tournament_id) {
   await api.post("tournament/join", { tournament_id });
 }
+
+export async function endTournament({ tournament_id, prize_pool_tiers }) {
+  await api.post("tournament/end", { tournament_id, prize_pool_tiers });
+}

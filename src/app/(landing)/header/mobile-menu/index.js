@@ -29,6 +29,7 @@ export default function MobileMenu({ links, open, setOpen, ctaButton }) {
                 <Link
                   href={href}
                   className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7"
+                  onClick={() => setOpen(false)}
                   key={name}
                 >
                   {name}

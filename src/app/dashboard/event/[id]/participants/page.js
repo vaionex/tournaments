@@ -1,5 +1,8 @@
 import Avatar from "@/components/ui/avatar";
 import { getParticipants } from "@/db/tournament";
+import { twMerge } from "tailwind-merge";
+import { Users01 } from "untitledui-js-base";
+import ParticipantsList from "./Participants";
 
 export const revalidate = 0;
 
@@ -14,15 +17,5 @@ export default async function Participants({ params: { id } }) {
         </h2>
       </div>
     );
-
-  return (
-    <div className="grid gap-6 lg:grid-cols-3">
-      {participants.map(({ id, User: { username, profile_picture } }) => (
-        <div className="flex gap-5 bg-white/5" key={id}>
-          <Avatar src={profile_picture} className="size-28 rounded-none" />
-          <div className="mt-4 text-xl font-semibold">{username}</div>
-        </div>
-      ))}
-    </div>
-  );
+  return <ParticipantsList participants={participants} />;
 }

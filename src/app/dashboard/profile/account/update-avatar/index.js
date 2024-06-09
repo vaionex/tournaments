@@ -4,6 +4,7 @@ import useUser from "@/hooks/auth/useUser";
 import useUpdateUser from "@/hooks/user/useUpdateUser";
 import { Camera } from "lucide-react";
 import { useDropzone } from "react-dropzone";
+import toast from "react-hot-toast";
 
 export default function UpdateAvatar() {
   const { data: user } = useUser();
@@ -16,7 +17,13 @@ export default function UpdateAvatar() {
     },
     onDrop: (acceptedFiles) => {
       if (acceptedFiles.length > 0)
-        update({ profile_picture: acceptedFiles[0] });
+        update(
+          { profile_picture: acceptedFiles[0] },
+          {
+            onSuccess: () => toast.success("Updated"),
+            onError: () => toast.error("An unexpected error occurred"),
+          },
+        );
     },
   });
 

@@ -7,7 +7,7 @@ import Select from "@/components/ui/select";
 import useGames from "@/hooks/games/useGames";
 import { format as formatDate } from "date-fns";
 import { add } from "lodash";
-import { Image } from "lucide-react";
+import { Image, Swords } from "lucide-react";
 import toast from "react-hot-toast";
 import RuleDescriptionEditor from "./rule-description-editor";
 import { Ranks } from "@/utils/rank";
@@ -28,6 +28,10 @@ const Formats = [
     name: "Victory Royal Race",
     icon: Crown1,
   },
+  {
+    name: "Battle Royal",
+    icon: Swords,
+  },
 ];
 
 export default function TournamentForm({
@@ -43,6 +47,7 @@ export default function TournamentForm({
     banner,
     format,
     game_id,
+    matchmaking_key = "",
     start = new Date(),
     end = new Date(),
     max_players,
@@ -95,6 +100,9 @@ export default function TournamentForm({
   }
 
   const { data: games = [] } = useGames();
+
+  const { requires_matchmaking_key = false } =
+    games.find(({ id }) => id == game_id) || {};
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -149,6 +157,18 @@ export default function TournamentForm({
         />
       </div>
 
+      {requires_matchmaking_key && (
+        <>
+          <div>Matchmaking Key</div>
+          <div>
+            <Input
+              value={matchmaking_key}
+              onChange={(e) => setValue("matchmaking_key", e.target.value)}
+              required
+            />
+          </div>
+        </>
+      )}
       <div>Format</div>
       <div>
         <Select
@@ -194,8 +214,10 @@ export default function TournamentForm({
       <div>
         <Input
           type="number"
-          value={prize_pool}
-          onChange={(e) => setValue("prize_pool", Number(e.target.value) || 0)}
+          value={prize_pool / 100}
+          onChange={(e) =>
+            setValue("prize_pool", Number(e.target.value * 100) || 0)
+          }
           min={1}
           leftSection="$"
           required
@@ -229,7 +251,9 @@ export default function TournamentForm({
                   </td>
                   <td>
                     <Input
-                      value={Math.round((tier / 100) * prize_pool)}
+                      value={(
+                        Math.round((tier / 100) * prize_pool) / 100
+                      ).toFixed(2)}
                       leftSection="$"
                       readOnly
                     />
@@ -284,7 +308,7 @@ export default function TournamentForm({
           onValueChange={(value) =>
             value == "free"
               ? setValue("entry_fee", 0)
-              : setValue("entry_fee", 100)
+              : setValue("entry_fee", 10000)
           }
         >
           <Radio value="free" label="Free entry" />
@@ -293,8 +317,8 @@ export default function TournamentForm({
         {entry_fee != 0 && (
           <Input
             type="number"
-            value={entry_fee}
-            onChange={(e) => setValue("entry_fee", Number(e.target.value) || 0)}
+            value={entry_fee / 100}
+            onChange={(e) => setValue("entry_fee", Number(e.target.value * 100) || 0)}
             min={0}
             leftSection="$"
             required
