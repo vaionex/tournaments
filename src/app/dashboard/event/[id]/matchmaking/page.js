@@ -46,7 +46,7 @@ export default async function Matchmaking({ params: { id } }) {
         <ul className="mb-4 ml-4 list-disc">
           <li>In Fortnite, select &apos;Game Mode&apos;</li>
           <li>Choose &apos;Custom Match&apos; and input your key</li>
-          <li>Ready up and join the lobby by 2:50 PM EST</li>
+          <li>Ready up and join the lobby by {format(start, "hh:mm O")} </li>
         </ul>
         Keep this key confidential. For assistance, visit the
         &apos;Support&apos; section.
