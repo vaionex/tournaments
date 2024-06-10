@@ -18,10 +18,15 @@ export default async function Hero() {
           <div className="z-10 mx-auto mt-12 flex-shrink-0 lg:mx-0 lg:max-w-3xl lg:pt-8">
             <DurationTag startDate={new Date()} endDate={new Date()} />
 
-            <h1 className="mt-10 text-4xl font-bold tracking-tight text-white sm:text-6xl">
-              Compete with the Best and Earn Cash Rewards
+            <h1
+              className="mt-10 text-4xl font-bold !leading-[4.8rem] tracking-tight text-white sm:text-6xl"
+              style={{
+                textShadow: "0 0 15px #ffffff63",
+              }}
+            >
+              Compete with the Best <br /> and Earn Cash Rewards
             </h1>
-            <p className="mt-6 text-lg leading-8">
+            <p className="mt-4 text-lg leading-8">
               Earn Money and Improve Your Rank in Our Weekly Competitions!
             </p>
             <div className="mt-10 flex flex-wrap items-center gap-6">

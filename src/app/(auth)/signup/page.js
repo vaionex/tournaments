@@ -36,7 +36,7 @@ export default function Signup({}) {
 
   return (
     <div className="w-full max-w-sm">
-      <LogoMark className="mx-auto size-24" />
+      {/* <LogoMark className="mx-auto hidden size-24 xl:block" /> */}
       <h1 className="mb-2 text-center text-4xl font-semibold">
         Start your journey
       </h1>
