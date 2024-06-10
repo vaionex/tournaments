@@ -8,13 +8,14 @@ import Stat from "./Stat";
 import XPRank from "../components/XPRank";
 import useUser from "@/hooks/auth/useUser";
 import { formatCurrency } from "@/utils/format";
+import Payouts from "./components/Payouts";
 
 export default function Overview() {
   const {
     data: { balance },
   } = useUser();
   return (
-    <div>
+    <div className="pb-24">
       <div className="mb-6 flex items-center justify-between">
         <h1 className="text-3xl font-semibold">Dashboard</h1>
         <Button
@@ -36,6 +37,7 @@ export default function Overview() {
         <XPRank />
       </div>
       <Tournaments />
+      <Payouts />
     </div>
   );
 }
