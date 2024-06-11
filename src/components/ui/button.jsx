@@ -25,7 +25,7 @@ const buttonVariants = cva(
       },
       size: {
         default: "px-5 py-3",
-        sm: "h-9 px-3",
+        sm: "px-3 py-2 text-sm",
         lg: "h-11 px-8",
         icon: "py-3 px-3",
       },
@@ -53,7 +53,7 @@ const Button = React.forwardRef(
     const Comp = asChild ? Slot : props.href ? Link : "button";
     return (
       <Comp
-        className={cn(buttonVariants({ variant, size, className }))}
+        className={cn(buttonVariants({ variant, size, className }), className)}
         disabled={disabled || loading}
         ref={ref}
         {...props}

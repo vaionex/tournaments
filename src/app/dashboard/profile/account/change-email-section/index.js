@@ -36,11 +36,17 @@ export default function ChangeEmailSection() {
           )}
         </div>
       </Row>
-      <div>
-        <Button loading={isLoading} onClick={handleUpdate}>
+      <Row>
+        <div />
+        <Button
+          loading={isLoading}
+          onClick={handleUpdate}
+          size="sm"
+          className="ml-auto"
+        >
           Update Email
         </Button>
-      </div>
+      </Row>
     </div>
   );
 }
