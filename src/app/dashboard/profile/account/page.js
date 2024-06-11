@@ -5,6 +5,16 @@ import UpdateBannerSection from "./update-banner-section";
 import useUser from "@/hooks/auth/useUser";
 import ChangePasswordSection from "./change-password-section";
 import ChangeEmailSection from "./change-email-section";
+import Social from "./Social";
+import Steam from "@/components/icons/steam";
+import EA from "@/components/icons/ea";
+import Epic from "@/components/icons/epic";
+
+const socials = [
+  { name: "Steam", id: "steam_id", icon: Steam },
+  { name: "Electronic Arts", id: "ea_id", icon: EA },
+  { name: "Epic Games", id: "epic_id", icon: Epic },
+];
 
 export default function ProfileAccount() {
   const { data: user } = useUser();
@@ -41,6 +51,11 @@ export default function ProfileAccount() {
             <ChangeEmailSection />
           </>
         )}
+      </div>
+      <div className="space-y-2">
+        {socials.map((social) => (
+          <Social {...social} key={social.id} />
+        ))}
       </div>
     </div>
   );
