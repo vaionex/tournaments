@@ -40,11 +40,17 @@ export default function ChangePasswordSection() {
           />
         </div>
       </Row>
-      <div>
-        <Button loading={isLoading} onClick={handleUpdate}>
+      <Row>
+        <div />
+        <Button
+          loading={isLoading}
+          onClick={handleUpdate}
+          size="sm"
+          className="ml-auto"
+        >
           Update Password
         </Button>
-      </div>
+      </Row>
     </div>
   );
 }

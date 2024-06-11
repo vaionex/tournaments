@@ -47,6 +47,27 @@ export async function getTournaments() {
   }));
 }
 
+export async function getUpcomingTournaments() {
+  const { data } = await supabase
+    .from("Tournament")
+    .select("*, Game (*)")
+    .gt("start", new Date().toISOString())
+    .order("start")
+    .throwOnError();
+  return data;
+}
+
+export async function getPastTournaments({ limit = 9 } = {}) {
+  const { data } = await supabase
+    .from("Tournament")
+    .select("*, Game (*)")
+    .lt("end", new Date().toISOString())
+    .order("end")
+    .limit(limit)
+    .throwOnError();
+  return data;
+}
+
 export async function getTournament(id) {
   const { data } = await supabase
     .from("Tournament")

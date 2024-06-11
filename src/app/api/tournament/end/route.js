@@ -40,7 +40,12 @@ export async function POST(req) {
 
       await admin
         .from("Payout")
-        .insert({ user_id: User.id, amount: prize, tournament_id })
+        .insert({
+          user_id: User.id,
+          amount: prize,
+          tournament_id,
+          position: index + 1,
+        })
         .throwOnError();
     }),
   );

@@ -1,8 +1,9 @@
 import Container from "@/components/ui/container";
 import BadgeTitle from "../BadgeTitle";
 import CTA from "../components/cta";
-import FeaturedTournaments from "./featured-tournaments";
-import Filters from "./filters";
+import FeaturedTournaments from "./components/featured-tournaments";
+import Filters from "./components/filters";
+import PastEvents from "./components/PastEvents";
 
 export default async function Tournaments({ searchParams: { game: gameId } }) {
   return (
@@ -27,6 +28,7 @@ export default async function Tournaments({ searchParams: { game: gameId } }) {
         </div>
         <Filters gameId={gameId} />
         <FeaturedTournaments gameId={gameId} />
+        <PastEvents />
         <CTA />
       </Container>
     </div>
