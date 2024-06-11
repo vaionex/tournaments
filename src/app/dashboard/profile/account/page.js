@@ -11,7 +11,8 @@ import Epic from "@/components/icons/epic";
 import RankIcon from "@/components/icons/rank-icon";
 import Row from "./row";
 import { Button } from "@/components/ui/button";
-import { Eye, LinkExternal01, Share06 } from "untitledui-js-base";
+import { Copy06, Eye, LinkExternal01, Share06 } from "untitledui-js-base";
+import toast from "react-hot-toast";
 
 const socials = [
   { name: "Steam", id: "steam_id", icon: Steam },
@@ -35,7 +36,17 @@ export default function ProfileAccount() {
               </div>
             </div>
             <div className="text-3xl font-semibold">{user.username}</div>
-            <div className="text-neutral-400">User ID: {user.id}</div>
+            <div className="flex items-center gap-2 text-neutral-400">
+              User ID: {user.id}{" "}
+              <button
+                onClick={() => {
+                  navigator.clipboard.writeText(user.id);
+                  toast.success("Copied");
+                }}
+              >
+                <Copy06 className="size-5" />
+              </button>
+            </div>
           </div>
         </div>
         <div className="space-x-4">
