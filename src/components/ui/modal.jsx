@@ -1,7 +1,17 @@
-import { Dialog, Transition } from "@headlessui/react";
+import { Transition } from "@headlessui/react";
 import { Fragment } from "react";
+import * as Dialog from "@radix-ui/react-dialog";
 
 export default function Modal({ open, setOpen, ...props }) {
+  return (
+    <Dialog.Root open={open} onOpenChange={setOpen}>
+      <Dialog.Portal>
+        <Dialog.Overlay className="fixed inset-0 flex w-screen items-center justify-center bg-black/25 p-4 animate-in fade-in">
+          <Dialog.Content {...props} />
+        </Dialog.Overlay>
+      </Dialog.Portal>
+    </Dialog.Root>
+  );
   return (
     <Transition appear show={open} as={Fragment}>
       <Dialog
