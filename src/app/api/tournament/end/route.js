@@ -9,17 +9,17 @@ export async function POST(req) {
 
   const tournament = await getTournament(tournament_id);
 
-  // if (tournament.user_id != user.id)
-  //   return Response.json(
-  //     { error: "You do not own this tournament" },
-  //     { status: 400 },
-  //   );
+  if (tournament.user_id != user.id)
+    return Response.json(
+      { error: "You do not own this tournament" },
+      { status: 400 },
+    );
 
-  // if (tournament.completed)
-  //   return Response.json(
-  //     { error: "Tournament has already been completed" },
-  //     { status: 400 },
-  //   );
+  if (tournament.completed)
+    return Response.json(
+      { error: "Tournament has already been completed" },
+      { status: 400 },
+    );
 
   const participants = await getParticipants(tournament_id);
   const validParicipantIds = participants.map(property("id"));
