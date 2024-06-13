@@ -1,14 +1,23 @@
 import { twMerge } from "tailwind-merge";
+import Border from "./border";
+import { getRank } from "@/utils/rank";
 
-export default function Avatar({ src, className = "" }) {
+export default function Avatar({ profile_picture, src, xp, className = "" }) {
+  const rank = getRank(xp);
   return (
-    <img
-      src={src ?? "/images/profile-picture-placeholder.webp"}
-      className={twMerge(
-        "size-8 rounded-md object-cover object-center",
-        className,
-      )}
-      alt="Avatar"
-    />
+    <div className="relative">
+      <img
+        src={
+          profile_picture ?? src ?? "/images/profile-picture-placeholder.webp"
+        }
+        className={twMerge("size-8 object-cover object-center", className)}
+        alt="Avatar"
+      />
+      <Border
+        className="absolute -inset-0 scale-[1.16]"
+        rank={rank}
+        preserveAspectRatio="none"
+      />
+    </div>
   );
 }

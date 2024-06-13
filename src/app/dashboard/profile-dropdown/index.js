@@ -27,7 +27,7 @@ export default function ProfileDropdown() {
     <Menu as="div" className="relative">
       <div>
         <Menu.Button className="relative flex items-center gap-2 rounded-full">
-          <Avatar src={user.profile_picture} />
+          <Avatar {...user} />
           {user.username}
         </Menu.Button>
       </div>
