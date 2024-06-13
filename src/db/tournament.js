@@ -62,7 +62,7 @@ export async function getPastTournaments({ limit = 9 } = {}) {
     .from("Tournament")
     .select("*, Game (*)")
     .lt("end", new Date().toISOString())
-    .order("end")
+    .order("end", { ascending: false })
     .limit(limit)
     .throwOnError();
   return data;
@@ -93,6 +93,6 @@ export async function joinTournament(tournament_id) {
   await api.post("tournament/join", { tournament_id });
 }
 
-export async function endTournament({ tournament_id, prize_pool_tiers }) {
-  await api.post("tournament/end", { tournament_id, prize_pool_tiers });
+export async function endTournament({ tournament_id, winners }) {
+  await api.post("tournament/end", { tournament_id, winners });
 }

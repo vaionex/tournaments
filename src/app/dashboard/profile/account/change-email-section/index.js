@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import useUpdateEmail from "@/hooks/user/useUpdateEmail";
 import useUser from "@/hooks/auth/useUser";
+import toast from "react-hot-toast";
 
 export default function ChangeEmailSection() {
   const [email, setEmail] = useState();
@@ -15,6 +16,8 @@ export default function ChangeEmailSection() {
   }, [user]);
 
   function handleUpdate() {
+    if (email == user.email)
+      return toast.error("You are already using this email");
     update({ email });
   }
   return (

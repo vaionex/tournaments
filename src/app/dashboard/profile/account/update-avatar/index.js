@@ -29,7 +29,7 @@ export default function UpdateAvatar() {
 
   return (
     <div className="relative" {...getRootProps()}>
-      <Avatar className="size-36" src={user.profile_picture} />
+      <Avatar className="size-36" {...user} />
       <button
         className="absolute bottom-2 right-2 bg-black/30 p-2"
         {...getRootProps()}

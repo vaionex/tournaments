@@ -11,7 +11,7 @@ import GoogleSignInButton from "../GoogleSignInButton";
 import LogoMark from "@/components/ui/logo-mark";
 
 export default function Login() {
-  const { push } = useRouter();
+  const { replace, push } = useRouter();
   const { mutate: login, isLoading } = useLoginWithPassword({
     onError: (e) => {
       if (e.message == "Email not confirmed") {
@@ -20,7 +20,7 @@ export default function Login() {
         toast.error("Invalid Email/Password");
       }
     },
-    onSuccess: () => push("/dashboard"),
+    onSuccess: () => replace("/dashboard"),
   });
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

@@ -1,6 +1,9 @@
+"use client";
 import Link from "next/link";
 import Header from "../(landing)/header";
 import Container from "@/components/ui/container";
+import useAuthentication from "@/hooks/auth/useAuthentication";
+import { useRouter } from "next/navigation";
 
 const links = [
   { name: "Terms", href: "" },
@@ -9,6 +12,12 @@ const links = [
 ];
 
 export default function AuthLayout({ children }) {
+  const { isUnauthenticated, isLoading } = useAuthentication();
+  const { push } = useRouter();
+
+  if (!isUnauthenticated) push("/dashboard");
+  if (isLoading) return null;
+
   return (
     <div
       style={{ backgroundImage: `url('/images/auth/background.webp')` }}
@@ -16,7 +25,7 @@ export default function AuthLayout({ children }) {
     >
       <Header />
       <div className="hidden flex-1 bg-gradient-to-t from-black lg:block"></div>
-      <div className="ml-auto flex h-full flex-1 items-center justify-center bg-black/80">
+      <div className="ml-auto flex h-full flex-1 items-center justify-center bg-black/80 px-6 lg:px-0">
         {children}
       </div>
       <footer className="absolute inset-x-0 bottom-0 hidden items-center justify-between  text-neutral-400 lg:flex">
