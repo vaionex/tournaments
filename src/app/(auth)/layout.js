@@ -25,7 +25,7 @@ export default function AuthLayout({ children }) {
     >
       <Header />
       <div className="hidden flex-1 bg-gradient-to-t from-black lg:block"></div>
-      <div className="ml-auto flex h-full flex-1 items-center justify-center bg-black/80">
+      <div className="ml-auto flex h-full flex-1 items-center justify-center bg-black/80 px-6 lg:px-0">
         {children}
       </div>
       <footer className="absolute inset-x-0 bottom-0 hidden items-center justify-between  text-neutral-400 lg:flex">
