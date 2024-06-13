@@ -8,7 +8,8 @@ import { Trophy01, Users01 } from "untitledui-js-base";
 export const revalidate = 0;
 
 export default async function Overview({ params: { id } }) {
-  const { name, banner, start, end, prize_pool } = await getTournament(id);
+  const { name, banner, start, end, prize_pool, description } =
+    await getTournament(id);
   const participants = await getParticipants(id);
 
   const stats = [
@@ -60,8 +61,11 @@ export default async function Overview({ params: { id } }) {
           </div>
         ))}
       </div>
-
       <img src={banner} alt={name} className="mt-4 rounded-md object-cover" />
+      <div className="mt-4">
+        <h2 className="mb-2 text-2xl font-semibold">Description</h2>
+        <p className="text-sm text-neutral-400">{description}</p>
+      </div>
     </div>
   );
 }
