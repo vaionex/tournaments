@@ -17,7 +17,9 @@ export default async function FeaturedTournaments() {
               Join the fray in your favorite game and claim glory!
             </div>
           </div>
-          <Button variant="black">All Tournaments</Button>
+          <Button variant="black" href="/tournaments">
+            All Tournaments
+          </Button>
         </div>
         <FirstTournament {...tournaments[0]} />
       </Container>
