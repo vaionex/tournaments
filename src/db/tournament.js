@@ -62,7 +62,7 @@ export async function getPastTournaments({ limit = 9 } = {}) {
     .from("Tournament")
     .select("*, Game (*)")
     .lt("end", new Date().toISOString())
-    .order("end")
+    .order("end", { ascending: false })
     .limit(limit)
     .throwOnError();
   return data;
