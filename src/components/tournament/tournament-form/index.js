@@ -14,6 +14,11 @@ import { Ranks } from "@/utils/rank";
 import { Target03 } from "untitledui-js-base";
 import { Crown1 } from "iconsax-react";
 import Bracket from "@/components/icons/bracket";
+import DateTimePicker from "react-datetime-picker";
+import "react-datetime-picker/dist/DateTimePicker.css";
+import "react-calendar/dist/Calendar.css";
+import "react-clock/dist/Clock.css";
+import "./DateTimePicker.css";
 
 const Formats = [
   {
@@ -194,22 +199,21 @@ export default function TournamentForm({
         className="h-24"
         required
       />
-      <div>Start</div>
 
-      <Input
-        type="datetime-local"
-        value={formatDate(start, "yyyy-MM-dd'T'hh:mm")}
-        onChange={(e) => setValue("start", new Date(e.target.value))}
+      <div>Start</div>
+      <DateTimePicker
+        value={start}
+        onChange={(value) => setValue("start", value)}
         required
       />
 
       <div>End</div>
-      <Input
-        type="datetime-local"
-        value={formatDate(end, "yyyy-MM-dd'T'hh:mm")}
-        onChange={(e) => setValue("end", new Date(e.target.value))}
+      <DateTimePicker
+        value={end}
+        onChange={(value) => setValue("end", value)}
         required
       />
+
       <div>Prize Pool</div>
       <div>
         <Input
