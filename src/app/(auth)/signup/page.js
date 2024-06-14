@@ -12,7 +12,7 @@ import toast from "react-hot-toast";
 import GoogleSignInButton from "../GoogleSignInButton";
 import LogoMark from "@/components/ui/logo-mark";
 
-export default function Signup({}) {
+export default function Signup({ showLogo }) {
   const { push } = useRouter();
   const { mutate: signup, isLoading } = useSignupWithEmailAndPassword({
     onError: (e) => toast.error(e.message ?? "Could not signup"),
@@ -36,7 +36,7 @@ export default function Signup({}) {
 
   return (
     <div className="w-full max-w-sm">
-      {/* <LogoMark className="mx-auto hidden size-24 xl:block" /> */}
+      {showLogo && <LogoMark className="mx-auto hidden size-24 xl:block" />}
       <h1 className="mb-2 text-center text-4xl font-semibold">
         Start your journey
       </h1>
