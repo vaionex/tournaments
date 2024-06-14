@@ -19,7 +19,7 @@ export default async function BlogPost({ params: { slug } }) {
   const post = await getPostBySlug(slug);
   if (!post) return notFound();
 
-  const { title, content, author, date } = post;
+  const { title, content, featuredImage, date } = post;
 
   function Info() {
     return (
@@ -38,10 +38,11 @@ export default async function BlogPost({ params: { slug } }) {
       <div className="mb-24 flex flex-col gap-24 lg:flex-row">
         <div className="flex-1">
           <h1 className="text-6xl font-bold">{title}</h1>
+          <img src={featuredImage?.node?.sourceUrl} className="mt-8" />
           <Info />
           <div
             dangerouslySetInnerHTML={{ __html: content }}
-            className="prose prose-invert"
+            className="prose prose-invert max-w-7xl"
           />
           <Info />
         </div>

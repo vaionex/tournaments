@@ -2,7 +2,7 @@
 import Facebook from "@/components/icons/logo-simple/Facebook";
 import Linkedin from "@/components/icons/logo-simple/Linkedin";
 import Twitter from "@/components/icons/logo-simple/Twitter";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import toast from "react-hot-toast";
 import {
   FacebookIcon,
@@ -11,6 +11,7 @@ import {
   LinkedinShareButton,
   TwitterShareButton,
 } from "react-share";
+import { twMerge } from "tailwind-merge";
 import { Copy01 } from "untitledui-js-base";
 
 export default function ShareSection({ title }) {
@@ -21,6 +22,7 @@ export default function ShareSection({ title }) {
     toast.success("Copied!");
   }
 
+  console.log(buttonVariants({ variant: "black" }));
   return (
     <div className="flex items-center gap-3">
       <Button variant="black" className="text-sm" onClick={copyUrl}>
@@ -28,13 +30,34 @@ export default function ShareSection({ title }) {
         Copy link
       </Button>
       <TwitterShareButton title={title} url={shareUrl}>
-        <Twitter className="size-5" />
+        <div
+          className={twMerge(
+            buttonVariants({ variant: "black" }),
+            "size-11 p-0",
+          )}
+        >
+          <Twitter className="size-5" />
+        </div>
       </TwitterShareButton>
       <FacebookShareButton title={title} url={shareUrl}>
-        <Facebook className="size-5" />
+        <div
+          className={twMerge(
+            buttonVariants({ variant: "black" }),
+            "size-11 p-0",
+          )}
+        >
+          <Facebook className="size-5" />
+        </div>
       </FacebookShareButton>
       <LinkedinShareButton title={title} url={shareUrl}>
-        <Linkedin className="size-5" />
+        <div
+          className={twMerge(
+            buttonVariants({ variant: "black" }),
+            "size-11 p-0",
+          )}
+        >
+          <Linkedin className="size-5" />
+        </div>
       </LinkedinShareButton>
     </div>
   );
