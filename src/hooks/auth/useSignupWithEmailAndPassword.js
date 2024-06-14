@@ -18,6 +18,7 @@ export default function useSignupWithEmailAndPassword(options) {
         },
       });
       if (error || !user) throw error;
+      if (user.identities.length === 0) throw new Error("Email already exists");
     },
     ...options,
   });

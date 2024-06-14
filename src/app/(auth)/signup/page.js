@@ -2,7 +2,6 @@
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import Container from "@/components/ui/container";
 import { Input } from "@/components/ui/input";
 import useSignupWithEmailAndPassword from "@/hooks/auth/useSignupWithEmailAndPassword";
 import Link from "next/link";
@@ -18,15 +17,17 @@ export default function Signup({ showLogo }) {
     onError: (e) => toast.error(e.message ?? "Could not signup"),
     onSuccess: () => push("/verification-email-sent"),
   });
+
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [acceptedTerms, setAcceptedTerms] = useState(false);
 
-  function handleSignup() {
+  async function handleSignup() {
     if (!username) return toast.error("Please provide a username");
     if (!acceptedTerms)
       return toast.error("Please accept the terms and conditions");
+
     signup({
       username,
       email,
