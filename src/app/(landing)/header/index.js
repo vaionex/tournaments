@@ -36,9 +36,9 @@ const animation = {
 };
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { isAuthenticated } = useAuthentication();
+  const { isAuthenticated, isLoading } = useAuthentication();
 
-  const ctaButton = isAuthenticated ? (
+  const ctaButton = isLoading ? null : isAuthenticated ? (
     <div className="flex items-center gap-6">
       <PopoverNotificationCenter colorScheme="dark">
         {({ unseenCount }) => <NotificationBell unseenCount={unseenCount} />}

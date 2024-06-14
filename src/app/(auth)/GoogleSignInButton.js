@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/supabase/client";
 import toast from "react-hot-toast";

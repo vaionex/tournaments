@@ -20,8 +20,10 @@ export default async function Tournaments({ searchParams: { game: gameId } }) {
           <div className="mx-auto mb-3 w-fit">
             <BadgeTitle>Events</BadgeTitle>
           </div>
-          <h1 className="mb-6 text-5xl font-semibold">Our Tournaments</h1>
-          <h2 className="mb-24 text-xl text-gray-300">
+          <h1 className="mb-6 text-5xl font-semibold leading-[60px]">
+            Our Tournaments
+          </h1>
+          <h2 className="mb-24 text-xl leading-[30px] text-gray-300">
             Join the Excitement: Compete, Win, and Rise to Glory in Our Wide
             Range of Gaming Tournaments. Get Ready to Play!
           </h2>

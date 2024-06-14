@@ -4,6 +4,7 @@ import Header from "../(landing)/header";
 import Container from "@/components/ui/container";
 import useAuthentication from "@/hooks/auth/useAuthentication";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 const links = [
   { name: "Terms", href: "" },
@@ -15,8 +16,11 @@ export default function AuthLayout({ children }) {
   const { isUnauthenticated, isLoading } = useAuthentication();
   const { push } = useRouter();
 
-  if (!isUnauthenticated) push("/dashboard");
-  if (isLoading) return null;
+  useEffect(() => {
+    if (!isUnauthenticated) push("/dashboard");
+  }, [isUnauthenticated]);
+
+  if (isLoading || !isUnauthenticated) return null;
 
   return (
     <div

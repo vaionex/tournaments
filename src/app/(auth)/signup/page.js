@@ -2,7 +2,6 @@
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import Container from "@/components/ui/container";
 import { Input } from "@/components/ui/input";
 import useSignupWithEmailAndPassword from "@/hooks/auth/useSignupWithEmailAndPassword";
 import Link from "next/link";
@@ -12,21 +11,23 @@ import toast from "react-hot-toast";
 import GoogleSignInButton from "../GoogleSignInButton";
 import LogoMark from "@/components/ui/logo-mark";
 
-export default function Signup({}) {
+export default function Signup({ showLogo }) {
   const { push } = useRouter();
   const { mutate: signup, isLoading } = useSignupWithEmailAndPassword({
     onError: (e) => toast.error(e.message ?? "Could not signup"),
     onSuccess: () => push("/verification-email-sent"),
   });
+
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [acceptedTerms, setAcceptedTerms] = useState(false);
 
-  function handleSignup() {
+  async function handleSignup() {
     if (!username) return toast.error("Please provide a username");
     if (!acceptedTerms)
       return toast.error("Please accept the terms and conditions");
+
     signup({
       username,
       email,
@@ -36,7 +37,7 @@ export default function Signup({}) {
 
   return (
     <div className="w-full max-w-sm">
-      {/* <LogoMark className="mx-auto hidden size-24 xl:block" /> */}
+      {showLogo && <LogoMark className="mx-auto hidden size-24 xl:block" />}
       <h1 className="mb-2 text-center text-4xl font-semibold">
         Start your journey
       </h1>
