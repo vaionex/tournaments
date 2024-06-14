@@ -53,11 +53,11 @@ export default async function Overview({ params: { id } }) {
               backgroundImage: `url('/images/dashboard/tournament/overview/${image}.webp')`,
             }}
           >
-            <div className="flex items-center gap-2 text-xs text-neutral-400">
+            <div className="flex items-center gap-2 text-xs text-white">
               <Icon className={twMerge("size-5", iconClassName)} />
               {name}
             </div>
-            <div className="text-sm font-medium text-neutral-400">{value}</div>
+            <div className="text-sm font-medium text-white">{value}</div>
           </div>
         ))}
       </div>
