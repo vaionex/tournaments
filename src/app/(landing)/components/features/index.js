@@ -14,15 +14,16 @@ export default function Features() {
             Everything you need to organize and manage tournaments!
           </div>
         </div>
-        <div
-          className="flex justify-end"
-          style={{
-            backgroundImage: `url('/images/landing/fortnite.webp')`,
-            backgroundPosition: "bottom left",
-            backgroundRepeat: "no-repeat",
-            backgroundSize: "70%",
-          }}
-        >
+        <div className="relative flex justify-end">
+          <div
+            className="absolute inset-0 hidden md:block"
+            style={{
+              backgroundImage: `url('/images/landing/fortnite.webp')`,
+              backgroundPosition: "bottom left",
+              backgroundRepeat: "no-repeat",
+              backgroundSize: "70%",
+            }}
+          />
           <div className="my-10 max-w-md border border-white/10 bg-white/5 p-12 backdrop-blur-lg">
             <div className="mb-4 text-4xl font-semibold">
               Empower Your Events
