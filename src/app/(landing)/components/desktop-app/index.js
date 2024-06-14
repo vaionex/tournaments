@@ -46,6 +46,7 @@ export default function DesktopApp() {
                 <img
                   src={`/images/landing/desktop-app/slide${index + 1}.webp`}
                   className="pointer-events-none h-full w-full object-contain focus:outline-0"
+                  alt={`Desktop App ${index + 1}`}
                 />
               </div>
             ))}

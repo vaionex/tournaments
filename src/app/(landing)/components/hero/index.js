@@ -36,6 +36,7 @@ export default async function Hero() {
           <img
             src="/images/landing/hero-element.webp"
             className="absolute right-0 top-1/2 z-0 hidden w-2/3 -translate-y-1/2 translate-x-12 lg:block"
+            alt="Hero Image"
           />
         </Container>
         {/* <Container>
