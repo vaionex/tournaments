@@ -19,7 +19,7 @@ export default async function Hero() {
             <DurationTag startDate={new Date()} endDate={new Date()} />
 
             <h1
-              className="mt-10 text-4xl font-bold !leading-[4.8rem] tracking-tight text-white sm:text-6xl"
+              className="mt-10 text-4xl font-bold leading-normal tracking-tight text-white sm:text-6xl md:leading-[4.8rem]"
               style={{
                 textShadow: "0 0 15px #ffffff63",
               }}
