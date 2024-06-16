@@ -11,7 +11,7 @@ import EndTournamentButton from "./end-tournament-button";
 export const revalidate = 0;
 
 export async function generateMetadata() {
-  const { name, banner } = await getTournament();
+  const { id, name, banner } = await getTournament();
   return {
     title: name,
     description: name,
