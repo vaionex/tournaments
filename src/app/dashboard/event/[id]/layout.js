@@ -10,6 +10,35 @@ import EndTournamentButton from "./end-tournament-button";
 
 export const revalidate = 0;
 
+export async function generateMetadata() {
+  const { name, banner } = await getTournament();
+  return {
+    title: name,
+    description: name,
+    openGraph: {
+      url: `https://tournaments.com/dashboard/event/${id}`,
+      title: name,
+      description: name,
+      images: [
+        {
+          url: banner, // Must be an absolute URL
+          width: 1200,
+          height: 615,
+          alt: "Tournaments.com",
+        },
+      ],
+      siteName: "Tournaments.com",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: name,
+      description: name,
+      creator: "@Tournaments.com",
+      images: [banner],
+    },
+  };
+}
+
 export default async function TournamentLayout({ children, params: { id } }) {
   const tournament = await getTournament(id);
   if (!tournament) return notFound();
