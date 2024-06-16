@@ -42,13 +42,11 @@ export default function DesktopApp() {
           {Array(3)
             .fill(0)
             .map((_, index) => (
-              <div className="h-[30vw] w-11/12 px-10" key={index}>
-                <img
-                  src={`/images/landing/desktop-app/slide${index + 1}.webp`}
-                  className="pointer-events-none h-full w-full object-contain focus:outline-0"
-                  alt={`Desktop App ${index + 1}`}
-                />
-              </div>
+              <img
+                src={`/images/landing/desktop-app/slide${index + 1}.webp`}
+                className="pointer-events-none !w-[80vw] object-contain px-2 focus:outline-0 md:px-10"
+                alt={`Desktop App ${index + 1}`}
+              />
             ))}
         </Slider>
       </div>
