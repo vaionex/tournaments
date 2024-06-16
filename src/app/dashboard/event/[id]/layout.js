@@ -10,8 +10,8 @@ import EndTournamentButton from "./end-tournament-button";
 
 export const revalidate = 0;
 
-export async function generateMetadata() {
-  const { id, name, banner } = await getTournament();
+export async function generateMetadata({ params: { id } }) {
+  const { name, banner } = await getTournament(id);
   return {
     title: name,
     description: name,
