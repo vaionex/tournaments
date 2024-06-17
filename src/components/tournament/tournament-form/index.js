@@ -218,7 +218,7 @@ export default function TournamentForm({
       <div>
         <Input
           type="number"
-          value={prize_pool / 100}
+          value={Number(prize_pool / 100).toString()}
           onChange={(e) =>
             setValue("prize_pool", Number(e.target.value * 100) || 0)
           }
@@ -246,7 +246,7 @@ export default function TournamentForm({
                   <td className="px-2">
                     <Input
                       className="w-20"
-                      value={tier}
+                      value={Number(tier).toString()}
                       type="number"
                       min="0"
                       max="100"
