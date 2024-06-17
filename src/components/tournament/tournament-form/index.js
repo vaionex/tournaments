@@ -238,8 +238,10 @@ export default function TournamentForm({
             <tbody>
               {prize_pool_tiers.map((tier, index) => (
                 <tr key={index}>
-                  <td className="h-11 w-20 rounded-xl bg-white/10 text-center">
-                    {index + 1}
+                  <td className="mb-3 flex items-center justify-center">
+                    <div className="flex h-11 w-20 items-center justify-center rounded-xl bg-white/10  text-center align-middle">
+                      <div>{index + 1}</div>
+                    </div>
                   </td>
                   <td className="px-2">
                     <Input

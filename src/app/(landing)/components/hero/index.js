@@ -19,7 +19,7 @@ export default async function Hero() {
             <DurationTag startDate={new Date()} endDate={new Date()} />
 
             <h1
-              className="mt-10 text-4xl font-bold !leading-[4.8rem] tracking-tight text-white sm:text-6xl"
+              className="mt-10 text-4xl font-bold leading-normal tracking-tight text-white sm:text-6xl md:leading-[4.8rem]"
               style={{
                 textShadow: "0 0 15px #ffffff63",
               }}
@@ -36,6 +36,7 @@ export default async function Hero() {
           <img
             src="/images/landing/hero-element.webp"
             className="absolute right-0 top-1/2 z-0 hidden w-2/3 -translate-y-1/2 translate-x-12 lg:block"
+            alt="Hero Image"
           />
         </Container>
         {/* <Container>
