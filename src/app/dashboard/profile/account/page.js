@@ -73,7 +73,7 @@ export default function ProfileAccount() {
             ))}
           </div>
         </Row>
-        {user?.identities?.some((identity) => identity.provider != "email") && (
+        {user?.identities?.some((identity) => identity.provider == "email") && (
           <>
             <ChangePasswordSection />
             <ChangeEmailSection />
