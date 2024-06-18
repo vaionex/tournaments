@@ -1,12 +1,12 @@
 import { Button } from "@/components/ui/button";
 import TournamentCard from "./tournament-card";
 import { Plus } from "lucide-react";
-import { getTournaments } from "@/db/tournament";
+import { getUpcomingTournaments } from "@/db/tournament";
 
 export const revalidate = 0;
 
 export default async function Overview() {
-  const tournaments = await getTournaments();
+  const tournaments = await getUpcomingTournaments();
   return (
     <div>
       <div className="flex items-center justify-between">
