@@ -13,14 +13,14 @@ const links = [
 ];
 
 export default function AuthLayout({ children }) {
-  const { isUnauthenticated, isLoading } = useAuthentication();
+  const { isAuthenticated, isLoading } = useAuthentication();
   const { push } = useRouter();
 
   useEffect(() => {
-    if (!isUnauthenticated) push("/dashboard");
-  }, [isUnauthenticated]);
+    if (isAuthenticated) push("/dashboard");
+  }, [isAuthenticated]);
 
-  if (isLoading || !isUnauthenticated) return null;
+  if (isLoading || isAuthenticated) return null;
 
   return (
     <div
