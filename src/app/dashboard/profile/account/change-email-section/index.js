@@ -7,12 +7,13 @@ import useUser from "@/hooks/auth/useUser";
 import toast from "react-hot-toast";
 
 export default function ChangeEmailSection() {
-  const [email, setEmail] = useState();
+  const [email, setEmail] = useState("");
   const { mutate: update, isLoading, isSuccess } = useUpdateEmail();
   const { data: user } = useUser();
 
   useEffect(() => {
-    setEmail(user.email);
+    if (user.email) setEmail(user.email);
+    console.log("change");
   }, [user]);
 
   function handleUpdate() {
