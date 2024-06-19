@@ -3,7 +3,7 @@ import Link from "next/link";
 import Header from "../(landing)/header";
 import Container from "@/components/ui/container";
 import useAuthentication from "@/hooks/auth/useAuthentication";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 const links = [
@@ -12,15 +12,23 @@ const links = [
   { name: "Cookies", href: "" },
 ];
 
+const exemptedRoutes = ["update-password"];
 export default function AuthLayout({ children }) {
+  const pathname = usePathname();
   const { isAuthenticated, isLoading } = useAuthentication();
   const { push } = useRouter();
 
+  const isExemptedRoute = exemptedRoutes.some(
+    (route) => `/${route}` == pathname,
+  );
+
+  const shouldRedirect = isAuthenticated && !isExemptedRoute;
+
   useEffect(() => {
-    if (isAuthenticated) push("/dashboard");
+    if (shouldRedirect) push("/dashboard");
   }, [isAuthenticated]);
 
-  if (isLoading || isAuthenticated) return null;
+  if (isLoading || shouldRedirect) return null;
 
   return (
     <div
