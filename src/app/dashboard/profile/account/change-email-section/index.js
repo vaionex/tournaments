@@ -13,7 +13,6 @@ export default function ChangeEmailSection() {
 
   useEffect(() => {
     if (user.email) setEmail(user.email);
-    console.log("change");
   }, [user]);
 
   function handleUpdate() {
