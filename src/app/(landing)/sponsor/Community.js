@@ -28,15 +28,16 @@ export default function Gamers() {
   ];
   return (
     <div>
-      <div
-        style={{
-          backgroundImage: `url('/images/landing/sponsor/community.webp')`,
-          backgroundPosition: "bottom left",
-          backgroundRepeat: "no-repeat",
-          backgroundSize: "75%",
-        }}
-        className="mb-24 w-full pb-24"
-      >
+      <div className="relative mb-24 w-full pb-24">
+        <div
+          style={{
+            backgroundImage: `url('/images/landing/sponsor/community.webp')`,
+            backgroundPosition: "bottom left",
+            backgroundRepeat: "no-repeat",
+            backgroundSize: "75%",
+          }}
+          className="absolute inset-0 hidden md:block"
+        />
         <div className="mx-auto mb-12 flex max-w-3xl flex-col items-center text-center">
           <div className="mb-5 flex-1 text-5xl font-bold leading-tight">
             Driving Engagement, Visibility, and Community Growth
