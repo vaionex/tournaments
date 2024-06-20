@@ -12,7 +12,7 @@ export default async function PastEvents() {
           Dive into completed tournaments and discover the battles.
         </div>
       </div>
-      <div className="grid grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
         {tournaments.map((tournament) => (
           <TournamentCard {...tournament} />
         ))}
