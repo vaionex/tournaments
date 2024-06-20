@@ -3,8 +3,7 @@ import Logo from "@/components/ui/logo";
 import Link from "next/link";
 
 const links = [
-  { name: "Tournaments", href: "" },
-  { name: "Subscriptions", href: "" },
+  { name: "Tournaments", href: "/tournaments" },
   { name: "News", href: "/news" },
   { name: "Discord", href: "https://discord.gg/Sm2UTKFeaM" },
 ];
