@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import useUser from "@/hooks/auth/useUser";
 import { useEffect, useState } from "react";
 import useUpdateUser from "@/hooks/user/useUpdateUser";
+import toast from "react-hot-toast";
 
 export default function UpdateProfileSection() {
   const { data: user } = useUser();
@@ -51,7 +52,13 @@ export default function UpdateProfileSection() {
         <div />
         <Button
           loading={isLoading}
-          onClick={() => update({ username, bio })}
+          onClick={() =>
+            update(
+              { username, bio },
+              { onSuccess: () => toast.success("Updated") },
+              { onError: () => toast.error("An unexpected error occurred") },
+            )
+          }
           className="ml-auto"
           size="sm"
         >
