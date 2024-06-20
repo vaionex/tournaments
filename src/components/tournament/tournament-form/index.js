@@ -227,7 +227,7 @@ export default function TournamentForm({
           required
         />
         <div className="mt-2.5 rounded-lg border border-neutral-700 p-4">
-          <table className="w-full">
+          <table className="w-full border-separate border-spacing-y-2">
             <thead>
               <tr className="">
                 <th className="pb-3 text-left">Position</th>
@@ -238,8 +238,8 @@ export default function TournamentForm({
             <tbody>
               {prize_pool_tiers.map((tier, index) => (
                 <tr key={index}>
-                  <td className="mb-3 flex items-center justify-center">
-                    <div className="flex h-11 w-20 items-center justify-center rounded-xl bg-white/10  text-center align-middle">
+                  <td>
+                    <div className="flex h-11 w-20 w-full items-center justify-center rounded-xl bg-white/10 text-center align-middle">
                       <div>{index + 1}</div>
                     </div>
                   </td>
