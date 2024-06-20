@@ -36,3 +36,7 @@ button.react-calendar__navigation__arrow {
 .react-clock__hand__body {
   @apply bg-white;
 }
+
+.react-datetime-picker__inputGroup__input {
+  @apply [color-scheme:dark];
+}
