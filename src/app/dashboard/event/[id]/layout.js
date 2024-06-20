@@ -44,7 +44,7 @@ export default async function TournamentLayout({ children, params: { id } }) {
   const participants = await getParticipants(id);
   if (!tournament) return notFound();
 
-  const { name, user_id, start, entry_fee } = tournament;
+  const { name, user_id, start, entry_fee, max_players } = tournament;
 
   const user = await getUser();
   const isOwner = user?.id == user_id;
@@ -62,6 +62,7 @@ export default async function TournamentLayout({ children, params: { id } }) {
             entryFee={entry_fee}
             tournamentId={id}
             start={start}
+            maxPlayers={max_players}
           />
         </div>
       </div>
