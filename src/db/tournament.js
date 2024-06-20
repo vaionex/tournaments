@@ -74,10 +74,7 @@ export async function getTournament(id) {
     .select("*, Game (*)")
     .eq("id", id)
     .throwOnError();
-  const item = data[0];
-  item.start = new Date(item.start);
-  item.end = new Date(item.end);
-  return item;
+  return data[0];
 }
 
 export async function getParticipants(id) {

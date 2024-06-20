@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Radio, RadioGroup } from "@/components/ui/radio-group";
 import Select from "@/components/ui/select";
 import useGames from "@/hooks/games/useGames";
-import { format as formatDate } from "date-fns";
+import { addDays, format as formatDate } from "date-fns";
 import { add } from "lodash";
 import { Image, Swords } from "lucide-react";
 import toast from "react-hot-toast";
@@ -68,7 +68,7 @@ export default function TournamentForm({
   const max_rank_index = Ranks.findIndex(({ name }) => name == max_rank);
 
   function setValue(property, value) {
-    setTournament({ ...tournament, [property]: value });
+    setTournament((tournament) => ({ ...tournament, [property]: value }));
   }
 
   function addPrizePoolTier() {
@@ -204,6 +204,7 @@ export default function TournamentForm({
       <DateTimePicker
         value={start}
         onChange={(value) => setValue("start", value)}
+        minDate={new Date()}
         required
       />
 
@@ -211,6 +212,7 @@ export default function TournamentForm({
       <DateTimePicker
         value={end}
         onChange={(value) => setValue("end", value)}
+        minDate={addDays(start, 1)}
         required
       />
 
@@ -218,7 +220,7 @@ export default function TournamentForm({
       <div>
         <Input
           type="number"
-          value={prize_pool / 100}
+          value={Number(prize_pool / 100).toString()}
           onChange={(e) =>
             setValue("prize_pool", Number(e.target.value * 100) || 0)
           }
@@ -227,7 +229,7 @@ export default function TournamentForm({
           required
         />
         <div className="mt-2.5 rounded-lg border border-neutral-700 p-4">
-          <table className="w-full">
+          <table className="w-full border-separate border-spacing-y-2">
             <thead>
               <tr className="">
                 <th className="pb-3 text-left">Position</th>
@@ -238,15 +240,15 @@ export default function TournamentForm({
             <tbody>
               {prize_pool_tiers.map((tier, index) => (
                 <tr key={index}>
-                  <td className="mb-3 flex items-center justify-center">
-                    <div className="flex h-11 w-20 items-center justify-center rounded-xl bg-white/10  text-center align-middle">
+                  <td>
+                    <div className="flex h-11 w-20 w-full items-center justify-center rounded-xl bg-white/10 text-center align-middle">
                       <div>{index + 1}</div>
                     </div>
                   </td>
                   <td className="px-2">
                     <Input
                       className="w-20"
-                      value={tier}
+                      value={Number(tier).toString()}
                       type="number"
                       min="0"
                       max="100"
@@ -268,21 +270,27 @@ export default function TournamentForm({
               ))}
             </tbody>
           </table>
-          <Button
-            onClick={addPrizePoolTier}
-            type="button"
-            variant="black"
-            className="mt-2"
-          >
-            Add Tier
-          </Button>
+          {prize_pool_tiers.length < max_players && (
+            <Button
+              onClick={addPrizePoolTier}
+              type="button"
+              variant="black"
+              className="mt-2"
+            >
+              Add Tier
+            </Button>
+          )}
         </div>
       </div>
       <div>Max Players</div>
       <Input
         type="number"
         value={max_players}
-        onChange={(e) => setValue("max_players", Number(e.target.value) || 0)}
+        onChange={(e) => {
+          const players = Number(e.target.value) || 1;
+          setValue("max_players", players);
+          setValue("prize_pool_tiers", prize_pool_tiers.slice(0, players));
+        }}
         min={1}
         required
       />

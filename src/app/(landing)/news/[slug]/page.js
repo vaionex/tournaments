@@ -23,7 +23,7 @@ export default async function BlogPost({ params: { slug } }) {
 
   function Info() {
     return (
-      <div className="my-8 flex max-w-4xl items-center justify-between">
+      <div className="my-8 flex max-w-4xl flex-col items-start justify-between gap-2 sm:flex-row sm:items-center">
         <div>
           <div className="text-sm text-primary">Published on</div>
           <div className="text-lg">{format(new Date(date), "dd MMM yyyy")}</div>

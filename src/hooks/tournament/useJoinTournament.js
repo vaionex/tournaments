@@ -14,6 +14,7 @@ export default function useJoinTournament() {
     mutationFn: ({ tournament_id }) => joinTournament(tournament_id),
     onSuccess: (_, { tournament_id }) => {
       queryClient.refetchQueries(["user"]);
+      queryClient.refetchQueries(["tournament", tournament_id, "participants"]);
       queryClient.setQueryData(["participations"], (participations = []) => [
         ...participations,
         { tournament_id, user_id: user.id, created_on: new Date() },

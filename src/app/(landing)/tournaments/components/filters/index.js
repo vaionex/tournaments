@@ -2,10 +2,10 @@ import { getGames } from "@/db/game";
 import Link from "next/link";
 import { twMerge } from "tailwind-merge";
 
-export default async function Filters({ gameId, search }) {
+export default async function Filters({ gameId }) {
   const games = await getGames();
   return (
-    <div className="mb-12 flex items-center gap-2 text-sm font-semibold">
+    <div className="mb-12 flex w-fit items-center gap-2 rounded-lg border border-white/5 bg-white/5 text-sm font-semibold">
       {games.map(({ id, name }) => (
         <Link
           className={twMerge(

@@ -1,14 +1,13 @@
 "use client";
-import { getTournaments } from "@/db/tournament";
 import TournamentCard from "../tournaments/tournament-card";
 import Link from "next/link";
 import Slider from "react-slick";
-import useTournaments from "@/hooks/tournament/useTournaments";
 import { ChevronLeft, ChevronRight } from "untitledui-js-base";
 import { useRef } from "react";
+import useUpcomingTournaments from "@/hooks/tournament/useUpcomingTournaments";
 
 export default function Tournaments() {
-  const { data: tournaments = [] } = useTournaments();
+  const { data: tournaments = [] } = useUpcomingTournaments();
   const slickRef = useRef();
 
   function Arrow() {

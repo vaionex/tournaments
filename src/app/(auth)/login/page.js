@@ -52,6 +52,9 @@ export default function Login() {
           placeholder="Enter your password"
           label="Password"
         />
+        <div className="text-right text-sm text-neutral-300">
+          <Link href="/forgot-password">Forgot Password</Link>
+        </div>
         <Button onClick={handleLogin} loading={isLoading}>
           Login
         </Button>

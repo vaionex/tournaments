@@ -12,7 +12,7 @@ import Payouts from "./components/Payouts";
 
 export default function Overview() {
   const {
-    data: { balance },
+    data: { balance = 0 },
   } = useUser();
   return (
     <div className="pb-24">
