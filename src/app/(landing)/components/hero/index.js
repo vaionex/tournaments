@@ -1,6 +1,8 @@
 import Container from "@/components/ui/container";
 import { Button } from "@/components/ui/button";
 import DurationTag from "@/components/ui/duration-tag";
+import Discord from "@/components/icons/discord";
+import { DISCORD_URL } from "@/utils/constants";
 
 export default async function Hero() {
   return (
@@ -31,6 +33,14 @@ export default async function Hero() {
             </p>
             <div className="mt-10 flex flex-wrap items-center gap-6">
               <Button href="/tournaments">Explore Tournaments</Button>
+              <Button
+                variant="ghost"
+                className="gap-3 bg-white/20 backdrop-blur-2xl hover:bg-white/30"
+                href={DISCORD_URL}
+              >
+                <Discord />
+                Join our discord
+              </Button>
             </div>
           </div>
           <img
