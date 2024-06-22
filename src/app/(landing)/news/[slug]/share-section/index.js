@@ -22,7 +22,6 @@ export default function ShareSection({ title }) {
     toast.success("Copied!");
   }
 
-  console.log(buttonVariants({ variant: "black" }));
   return (
     <div className="flex items-center gap-3">
       <Button variant="black" className="text-sm" onClick={copyUrl}>

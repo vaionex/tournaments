@@ -8,8 +8,6 @@ export default function useAdmin() {
   const status =
     isLoading || !user.id ? "loading" : isAdmin ? "admin" : "not-admin";
 
-  console.log({ status, user });
-
   return {
     status,
     isLoading: status == "loading",
