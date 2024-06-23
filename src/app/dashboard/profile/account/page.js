@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Copy06, Eye, LinkExternal01, Share06 } from "untitledui-js-base";
 import toast from "react-hot-toast";
 
-const socials = [
+export const socials = [
   { name: "Steam", id: "steam_id", icon: Steam },
   { name: "Electronic Arts", id: "ea_id", icon: EA },
   { name: "Epic Games", id: "epic_id", icon: Epic },
@@ -71,7 +71,7 @@ export default function ProfileAccount() {
         <UpdateProfileSection />
 
         <Row>
-          <div>Social</div>
+          <div id="social">Social</div>
 
           <div className="space-y-2">
             {socials.map((social) => (

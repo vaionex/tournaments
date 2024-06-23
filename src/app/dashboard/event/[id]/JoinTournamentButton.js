@@ -22,7 +22,7 @@ export default function JoinTournamentButton({
 
   const insufficientBalance = entryFee > balance;
   const isStarted = new Date().valueOf() > new Date(start).valueOf();
-  const hasConnectedSocial = socials.some((social) => user[social]);
+  const hasConnectedSocial = socials.some((social) => user[social.id]);
 
   if (isParticipant) return <div>Joined</div>;
   if (isStarted || isLoadingParticipations) return null;
@@ -32,7 +32,7 @@ export default function JoinTournamentButton({
   if (!hasConnectedSocial)
     return (
       <div>
-        Social not connected.{" "}
+        Social not connected -{" "}
         <Link href="/dashboard/profile/account#social" className="text-primary">
           Connect Social
         </Link>
