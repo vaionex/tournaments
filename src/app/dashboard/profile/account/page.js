@@ -55,8 +55,14 @@ export default function ProfileAccount() {
             Share
           </Button>
           <Button size="sm" variant="black" className="px-4 py-2.5">
-            <Eye className="size-5" />
-            View Profile
+            <a
+              href={`/user/${user.id}`}
+              className="flex items-center gap-2"
+              target="_blank"
+            >
+              <Eye className="size-5" />
+              View Profile
+            </a>
             <LinkExternal01 className="size-5" />
           </Button>
         </div>
