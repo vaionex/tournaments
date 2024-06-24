@@ -35,6 +35,10 @@ export async function updateTournament(id, { banner: bannerFile, ...rest }) {
     .throwOnError();
 }
 
+export async function deleteTournament(id) {
+  await supabase.from("Tournament").delete().eq("id", id).throwOnError();
+}
+
 export async function getTournaments() {
   const { data } = await supabase
     .from("Tournament")

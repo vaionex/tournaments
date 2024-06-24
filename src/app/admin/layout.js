@@ -6,18 +6,22 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Users01 } from "untitledui-js-base";
 
-const links = [{ name: "Users", href: "users" }];
+const links = [
+  { name: "Users", href: "users" },
+  { name: "Tournaments", href: "tournaments" },
+];
+
 export default function AdminLayout({ children }) {
   const { isNotAdmin } = useAdmin();
   const { push } = useRouter();
 
-  // if (isNotAdmin) push("/");
+  if (isNotAdmin) push("/");
 
   return (
     <div className="relative flex">
-      <div className="sticky top-0">
+      <div className="sticky top-0 h-screen border-r border-neutral-800">
         <Logo className="mx-6 my-8 h-12" />
-        <div className="w-72 space-y-1 border-r border-neutral-800 p-4">
+        <div className="w-72 space-y-1 p-4">
           {links.map(({ name, href }) => (
             <Link
               className="flex items-center gap-3 rounded-lg px-3 py-2 font-semibold transition hover:bg-white/10"
