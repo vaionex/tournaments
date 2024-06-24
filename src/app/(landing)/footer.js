@@ -1,11 +1,12 @@
 import Container from "@/components/ui/container";
 import Logo from "@/components/ui/logo";
+import { DISCORD_URL } from "@/utils/constants";
 import Link from "next/link";
 
 const links = [
   { name: "Tournaments", href: "/tournaments" },
   { name: "News", href: "/news" },
-  { name: "Discord", href: "https://discord.gg/Sm2UTKFeaM" },
+  { name: "Discord", href: DISCORD_URL },
 ];
 export default function Footer() {
   return (

@@ -1,3 +1,4 @@
+"use client";
 export default function RankIcon({ rank = "Bronze", ...props }) {
   return (
     <img

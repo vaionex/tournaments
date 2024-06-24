@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { getUser } from "@/supabase/server";
 import JoinTournamentButton from "./JoinTournamentButton";
 import { links } from "./links";
-import ShareSection from "@/app/(landing)/news/[slug]/share-section";
+import ShareSection from "@/components/ui/share-section";
 import { Button } from "@/components/ui/button";
 import EndTournamentButton from "./end-tournament-button";
 

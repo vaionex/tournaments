@@ -1,5 +1,6 @@
 import { supabase } from "@/supabase/client";
 import { getUserId } from "@/supabase/utils";
+import { getNextRank, getRank, getRankProgressPercentage } from "@/utils/rank";
 import { pickBy } from "lodash";
 
 async function uploadProfilePicture(file) {
@@ -52,13 +53,36 @@ export async function updateUser({
   return data;
 }
 
-export async function getParticipations() {
-  const id = await getUserId();
+export async function getParticipationsById(id) {
   const { data } = await supabase
     .from("Participant")
-    .select()
+    .select("*, Tournament (*)")
     .eq("user_id", id)
     .throwOnError();
 
   return data;
+}
+
+export async function getParticipations() {
+  const id = await getUserId();
+  return await getParticipationsById(id);
+}
+
+export async function getUserById(id) {
+  const { data } = await supabase
+    .from("User")
+    .select()
+    .eq("id", id)
+    .throwOnError();
+
+  const user = data[0];
+  if (!user) return;
+
+  const { xp = 0 } = user;
+  return {
+    ...user,
+    rank: getRank(xp),
+    nextRank: getNextRank(xp),
+    rankProgress: getRankProgressPercentage(xp),
+  };
 }

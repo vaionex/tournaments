@@ -2,7 +2,7 @@ import Container from "@/components/ui/container";
 import { getPostBySlug } from "@/server/blog";
 import { format } from "date-fns";
 import { notFound } from "next/navigation";
-import ShareSection from "./share-section";
+import ShareSection from "../../../../components/ui/share-section";
 import CTA from "../../components/cta";
 import SignupSidebar from "./SignupSidebar";
 

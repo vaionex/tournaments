@@ -35,6 +35,10 @@ export async function updateTournament(id, { banner: bannerFile, ...rest }) {
     .throwOnError();
 }
 
+export async function deleteTournament(id) {
+  await supabase.from("Tournament").delete().eq("id", id).throwOnError();
+}
+
 export async function getTournaments() {
   const { data } = await supabase
     .from("Tournament")
@@ -92,4 +96,21 @@ export async function joinTournament(tournament_id) {
 
 export async function endTournament({ tournament_id, winners }) {
   await api.post("tournament/end", { tournament_id, winners });
+}
+
+export async function getTournamentChat(id) {
+  const { data } = await supabase
+    .from("TournamentChat")
+    .select("*, User (*)")
+    .eq("tournament_id", id)
+    .order("created_at")
+    .throwOnError();
+  return data;
+}
+
+export async function sendTournamentChatMessage(id, message) {
+  await supabase
+    .from("TournamentChat")
+    .insert({ tournament_id: id, message })
+    .throwOnError();
 }
