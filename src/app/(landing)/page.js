@@ -6,6 +6,7 @@ import DesktopApp from "./components/desktop-app";
 import Blog from "./components/blog";
 import Features from "./components/features";
 
+export const revalidate = 0;
 export default function Home() {
   return (
     <div>

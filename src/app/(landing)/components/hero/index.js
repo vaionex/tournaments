@@ -1,8 +1,8 @@
 import Container from "@/components/ui/container";
 import { Button } from "@/components/ui/button";
-import DurationTag from "@/components/ui/duration-tag";
 import Discord from "@/components/icons/discord";
 import { DISCORD_URL } from "@/utils/constants";
+import GameList from "./GameList";
 
 export default async function Hero() {
   return (
@@ -18,8 +18,7 @@ export default async function Hero() {
       <div className="backdrop-blurmd relative isolate overflow-hidden lg:backdrop-blur-none">
         <Container className="relative px-6 py-32 pb-0 sm:pb-32 lg:flex lg:px-8 lg:py-56">
           <div className="z-10 mx-auto mt-12 flex-shrink-0 lg:mx-0 lg:max-w-3xl lg:pt-8">
-            <DurationTag startDate={new Date()} endDate={new Date()} />
-
+            <GameList />
             <h1
               className="mt-10 text-4xl font-bold leading-normal tracking-tight text-white sm:text-6xl md:leading-[4.8rem]"
               style={{

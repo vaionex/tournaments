@@ -155,7 +155,18 @@ export default function TournamentForm({
       <div>Select a game</div>
       <div>
         <Select
-          items={games.map(({ name, id }) => ({ label: name, value: id }))}
+          items={games.map(({ name, id, icon }) => ({
+            label: (
+              <div className="flex items-center gap-2">
+                <img
+                  src={icon}
+                  className="size-6 overflow-hidden rounded-lg object-cover"
+                />
+                {name}
+              </div>
+            ),
+            value: id,
+          }))}
           placeholder="Select a game..."
           value={game_id || ""}
           onChange={(value) => value && setValue("game_id", value)}
