@@ -1,12 +1,11 @@
-import CornerBorder from "@/components/ui/corner-border";
 import { Button } from "@/components/ui/button";
-import DurationTag from "@/components/ui/duration-tag";
 import Container from "@/components/ui/container";
 import FirstTournament from "../../tournaments/components/featured-tournaments/FirstTournament";
-import { getTournaments } from "@/db/tournament";
+import { getUpcomingTournaments } from "@/db/tournament";
 
 export default async function FeaturedTournaments() {
-  const tournaments = await getTournaments();
+  const tournaments = await getUpcomingTournaments();
+  if (tournaments.length == 0) return;
   return (
     <div>
       <Container>
