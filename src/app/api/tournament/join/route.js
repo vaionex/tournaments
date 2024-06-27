@@ -35,8 +35,14 @@ export async function POST(req) {
     .throwOnError();
 
   try {
-    await notifications.joinTournament(tournament_id, user_id);
+    await notifications.newParticipant(tournament_id, user_id);
   } catch (e) {}
+
+  try {
+    await notifications.joinedTournament(user_id, tournament_id);
+  } catch (e) {
+    console.log(e);
+  }
 
   return Response.json({ success: true });
 }
