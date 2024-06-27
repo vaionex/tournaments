@@ -20,6 +20,7 @@ export default function Tournaments() {
     slidesToShow: 1,
     slidesToScroll: 1,
     variableWidth: true,
+    infinite: false,
     nextArrow: <Arrow />,
     prevArrow: <Arrow />,
   };
