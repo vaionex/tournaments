@@ -7,11 +7,33 @@ import CTA from "../../components/cta";
 import SignupSidebar from "./SignupSidebar";
 
 export async function generateMetadata({ params: { slug } }) {
-  const { title } = await getPostBySlug(slug);
+  const { title, featuredImage } = await getPostBySlug(slug);
+  const image = featuredImage?.node?.sourceUrl;
 
   return {
     title,
     description: title,
+    openGraph: {
+      url: `https://tournaments.com/news/${slug}`,
+      title,
+      description: title,
+      images: [
+        {
+          url: image,
+          width: 1200,
+          height: 615,
+          alt: "Tournaments.com",
+        },
+      ],
+      siteName: "Tournaments.com",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description: title,
+      creator: "@Tournaments.com",
+      images: [image],
+    },
   };
 }
 
