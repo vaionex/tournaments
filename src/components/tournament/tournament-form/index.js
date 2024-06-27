@@ -53,6 +53,7 @@ export default function TournamentForm({
     format,
     game_id,
     matchmaking_key = "",
+    server_ip = "",
     start = new Date(),
     end = new Date(),
     max_players,
@@ -106,7 +107,7 @@ export default function TournamentForm({
 
   const { data: games = [] } = useGames();
 
-  const { requires_matchmaking_key = false } =
+  const { requires_matchmaking_key = false, requires_server_ip } =
     games.find(({ id }) => id == game_id) || {};
 
   function handleSubmit(e) {
@@ -185,6 +186,21 @@ export default function TournamentForm({
           </div>
         </>
       )}
+
+      {requires_server_ip && (
+        <>
+          <div>Server IP</div>
+          <div>
+            <Input
+              value={server_ip}
+              onChange={(e) => setValue("server_ip", e.target.value)}
+              placeholder="129.119.108.181"
+              required
+            />
+          </div>
+        </>
+      )}
+
       <div>Format</div>
       <div>
         <Select
