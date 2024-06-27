@@ -1,3 +1,4 @@
+import { JoinTournamentChallenge } from "@/db/server/challenges/join-tournament";
 import { getParticipants, getTournament } from "@/db/tournament";
 import { notifications } from "@/novu/notifications";
 import { admin } from "@/supabase/admin";
@@ -40,6 +41,10 @@ export async function POST(req) {
 
   try {
     await notifications.joinedTournament(user_id, tournament_id);
+  } catch (e) {}
+
+  try {
+    await JoinTournamentChallenge.update();
   } catch (e) {
     console.log(e);
   }

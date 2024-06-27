@@ -67,12 +67,10 @@ class Notifications {
         keyOrIP: ip || matchmaking_key,
       },
     };
-    console.log({ payload });
-    const res = await novu.trigger("joined-tournament", {
+    await novu.trigger("joined-tournament", {
       to: await createTo(userId),
       payload,
     });
-    console.log({ res });
   }
 }
 
