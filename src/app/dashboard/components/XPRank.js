@@ -1,5 +1,5 @@
 import Ranking from "@/components/icons/ranking";
-import Stat from "../overview/Stat";
+import Stat from "../overview/components/Stat";
 import RankIcon from "@/components/icons/rank-icon";
 import useUser from "@/hooks/auth/useUser";
 import { useState } from "react";

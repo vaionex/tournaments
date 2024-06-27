@@ -15,13 +15,13 @@ export default function Payouts() {
 
   if (payouts.length == 0)
     return (
-      <div className="mt-24 text-center text-2xl font-semibold text-neutral-500">
+      <div className="py-24 text-center text-2xl font-semibold text-neutral-500">
         No Recent Payouts
       </div>
     );
 
   return (
-    <div className="mt-6 rounded-xl border border-white/10 bg-white/5">
+    <div className="rounded-xl border border-white/10 bg-white/5">
       <h2 className="px-6 py-4 text-2xl font-bold">Recent history</h2>
       <table className="w-full text-sm">
         <thead>

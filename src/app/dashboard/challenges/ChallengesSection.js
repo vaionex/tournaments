@@ -2,10 +2,12 @@
 
 import Checks from "@/components/icons/checks";
 import Progress from "@/components/icons/progress";
+import Recharging from "@/components/icons/recharging";
 import CardPill from "@/components/ui/card-pill";
 import FilterTabs from "@/components/ui/filter-tabs";
 import { Swords } from "lucide-react";
 import { useState } from "react";
+import { twMerge } from "tailwind-merge";
 
 const filters = [
   { label: "Daily Challenges", value: "Daily" },
@@ -14,6 +16,29 @@ const filters = [
 export default function ChallengesSection({ challenges: allChallenges }) {
   const [filter, setFilter] = useState(filters[0].value);
   const challenges = allChallenges.filter(({ interval }) => interval == filter);
+
+  function Status({ completed }) {
+    return (
+      <div
+        className={twMerge(
+          "absolute left-6 top-0 flex -translate-y-5 items-center gap-1.5 rounded-lg border border-neutral-500 bg-black/70 px-2 py-1 text-sm",
+          completed && "border-lime-500",
+        )}
+      >
+        {completed ? (
+          <>
+            <Checks className="text-lime-500" />
+            Claimed
+          </>
+        ) : (
+          <>
+            <Recharging />
+            In progress
+          </>
+        )}
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -38,12 +63,7 @@ export default function ChallengesSection({ challenges: allChallenges }) {
               <div className="line-clamp-2 text-sm text-neutral-400">
                 {description}
               </div>
-              {status && status.progress == status.total && (
-                <div className="absolute left-6 top-0 flex -translate-y-5 items-center gap-1.5 rounded-lg border border-lime-500 bg-black/70 px-2 py-1 text-sm ">
-                  <Checks className="text-lime-500" />
-                  Claimed
-                </div>
-              )}
+              <Status completed={status && status.progress == status.total} />
             </div>
           </div>
         ))}
