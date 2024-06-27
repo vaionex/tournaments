@@ -1,7 +1,7 @@
 "use client";
 
-import Pill from "@/app/dashboard/tournaments/tournament-card/pill";
 import { Button } from "@/components/ui/button";
+import Pill from "@/components/ui/card-pill";
 import { formatCurrency } from "@/utils/format";
 import { format } from "date-fns";
 import { useRouter } from "next/navigation";

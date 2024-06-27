@@ -2,9 +2,9 @@ import DurationTag from "@/components/ui/duration-tag";
 import { formatCurrency } from "@/utils/format";
 import Link from "next/link";
 import { Trophy01, Users01 } from "untitledui-js-base";
-import Pill from "./pill";
 import { format } from "date-fns";
 import { twMerge } from "tailwind-merge";
+import Pill from "@/components/ui/card-pill";
 
 export default function TournamentCard({
   id,

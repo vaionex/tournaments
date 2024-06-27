@@ -14,7 +14,6 @@ export default async function ProfileAccount({ params: { id } }) {
   if (!user) return notFound();
 
   const participations = await getParticipationsById(id);
-  console.log(user);
 
   function Heading({ children }) {
     return <h2 className="mb-4 font-semibold">{children}</h2>;
