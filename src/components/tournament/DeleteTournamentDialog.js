@@ -76,7 +76,7 @@ export default function DeleteTouramentDialog({ open, setOpen, id }) {
                 onSuccess: () => {
                   toast.success("Tournament Deleted");
                   setOpen(false);
-                  push("/dashboard/tournaments");
+                  window.location.href = "/dashboard/tournaments";
                 },
               },
             ),

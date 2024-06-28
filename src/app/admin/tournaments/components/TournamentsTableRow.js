@@ -6,7 +6,6 @@ import { Trash } from "iconsax-react";
 import TournamentStatus from "./Status";
 import Dialog from "@/components/ui/dialog";
 import { useState } from "react";
-import useDeleteTournament from "@/hooks/tournament/useDeleteTournament";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import useParticipants from "@/hooks/tournament/useParticipants";
@@ -25,8 +24,6 @@ export default function TournamentsTableRow({
 }) {
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
 
-  const { mutate: deleteTournament, isLoading: isLoadingDelete } =
-    useDeleteTournament();
   const { data: participants = [], isLoading: isLoadingParticipants } =
     useParticipants(id);
   const { push } = useRouter();

@@ -23,6 +23,6 @@ export async function POST(req) {
       { status: 400 },
     );
 
-  await admin.from("Tournament").delete().eq("id", tournamentId);
+  await admin.from("Tournament").delete().eq("id", tournamentId).throwOnError();
   return Response.json({ success: true });
 }
