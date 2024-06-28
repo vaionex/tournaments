@@ -229,7 +229,7 @@ export default function TournamentForm({
 
       <div>Start</div>
       <DateTimePicker
-        value={start}
+        value={new Date(start)}
         onChange={(value) => setValue("start", value)}
         minDate={new Date()}
         required
@@ -237,9 +237,9 @@ export default function TournamentForm({
 
       <div>End</div>
       <DateTimePicker
-        value={end}
+        value={new Date(end)}
         onChange={(value) => setValue("end", value)}
-        minDate={start}
+        minDate={new Date(start)}
         required
       />
 
@@ -393,6 +393,7 @@ export default function TournamentForm({
           Add Section
         </Button>
       </div>
+
       {children}
     </form>
   );

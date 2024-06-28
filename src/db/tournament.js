@@ -36,7 +36,7 @@ export async function updateTournament(id, { banner: bannerFile, ...rest }) {
 }
 
 export async function deleteTournament(id) {
-  await supabase.from("Tournament").delete().eq("id", id).throwOnError();
+  await api.post("tournament/delete", { id });
 }
 
 export async function getTournaments() {

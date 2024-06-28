@@ -6,12 +6,14 @@ import useTournament from "@/hooks/tournament/useTournament";
 import useUpdateTournament from "@/hooks/tournament/useUpdateTournament";
 import toast from "react-hot-toast";
 import TournamentForm from "@/components/tournament/tournament-form";
+import DeleteTouramentDialog from "@/components/tournament/DeleteTournamentDialog";
 
 export default function EditTournament() {
   const { id } = useParams();
   const { data: originalTournament, isLoading: isLoadingTournament } =
     useTournament(id);
   const [tournament, setTournament] = useState({});
+  const [openDeleteModal, setOpenDeleteModal] = useState("");
 
   const { mutate: update, isLoading } = useUpdateTournament({
     onSuccess: () => {
@@ -42,6 +44,24 @@ export default function EditTournament() {
         onSubmit={handleUpdate}
         bannerUrl={originalTournament?.banner}
       >
+        <div>
+          Delete
+          <div className="text-sm text-neutral-400">
+            Deleting this event will permanently remove all activities and
+            records associated with it. However, any XP ranks gained by
+            participants will not be affected and will remain intact.{" "}
+          </div>
+        </div>
+        <div>
+          <Button
+            variant="danger"
+            type="button"
+            onClick={() => setOpenDeleteModal(true)}
+          >
+            Yes, delete this event
+          </Button>
+        </div>
+
         <div />
         <div className="mb-12 flex justify-end">
           <Button type="submit" loading={isLoading}>
@@ -49,6 +69,11 @@ export default function EditTournament() {
           </Button>
         </div>
       </TournamentForm>
+      <DeleteTouramentDialog
+        id={id}
+        open={openDeleteModal}
+        setOpen={setOpenDeleteModal}
+      />
     </div>
   );
 }

@@ -12,6 +12,7 @@ import { useRouter } from "next/navigation";
 import useParticipants from "@/hooks/tournament/useParticipants";
 import Loader from "@/components/ui/loader";
 import { Edit03, Trash03 } from "untitledui-js-base";
+import DeleteTouramentDialog from "@/components/tournament/DeleteTournamentDialog";
 
 export default function TournamentsTableRow({
   id,
@@ -81,28 +82,10 @@ export default function TournamentsTableRow({
           </div>
         </td>
       </tr>
-      <Dialog
-        title="Delete Tournament"
-        content="Are you sure you want to permanently delete this tournament?"
-        actions={[
-          {
-            children: "Confirm",
-            variant: "danger",
-            loading: isLoadingDelete,
-            onClick: () =>
-              deleteTournament(
-                { id },
-                {
-                  onSettled: () => setOpenDeleteModal(false),
-                  onError: () => toast.error("Something went wrong"),
-                },
-              ),
-          },
-        ]}
-        variant="danger"
-        icon={Trash}
+      <DeleteTouramentDialog
         open={openDeleteModal}
         setOpen={setOpenDeleteModal}
+        id={id}
       />
     </>
   );

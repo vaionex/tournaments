@@ -7,6 +7,7 @@ import { twMerge } from "tailwind-merge";
 const variants = {
   default: "bg-primary",
   danger: "bg-red-500",
+  warning: "bg-orange-500",
 };
 
 export default function Dialog({
@@ -23,7 +24,7 @@ export default function Dialog({
 
   return (
     <Modal
-      className="max-w-xl rounded-xl border border-white/20 bg-neutral-900 p-8"
+      className="w-full max-w-xl rounded-xl border border-white/20 bg-neutral-900 p-8"
       {...{ open, setOpen }}
     >
       <div className="mb-9 flex items-center gap-4">
