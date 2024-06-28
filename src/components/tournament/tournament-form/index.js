@@ -239,7 +239,7 @@ export default function TournamentForm({
       <DateTimePicker
         value={end}
         onChange={(value) => setValue("end", value)}
-        minDate={addDays(start, 1)}
+        minDate={start}
         required
       />
 
