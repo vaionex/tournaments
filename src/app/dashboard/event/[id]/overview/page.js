@@ -5,6 +5,7 @@ import { Calendar, Swords, Users } from "lucide-react";
 import { twMerge } from "tailwind-merge";
 import { Trophy01, Users01 } from "untitledui-js-base";
 import Chat from "./components/chat";
+import DateSection from "./components/DateSection";
 
 export const revalidate = 0;
 
@@ -23,7 +24,7 @@ export default async function Overview({ params: { id } }) {
     },
     {
       name: "Date",
-      value: `${format(start, "Pp")} - ${format(end, "Pp")}`,
+      value: <DateSection start={start} end={end} />,
       icon: Calendar,
       iconClassName: "text-indigo-600",
       image: "date",

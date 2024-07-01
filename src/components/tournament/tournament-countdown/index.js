@@ -1,0 +1,22 @@
+"use client";
+import { useInterval } from "ahooks";
+import { intervalToDuration } from "date-fns";
+import { useState } from "react";
+
+export default function TournamentCountdown({ start }) {
+  const [countdown, setCountdown] = useState("");
+
+  const duration = intervalToDuration({
+    start: new Date(),
+    end: new Date(start),
+  });
+  const [hours, minutes, seconds] = [
+    duration.hours,
+    duration.minutes,
+    duration.seconds,
+  ].map((value) => value?.toString().padStart(2, "0"));
+
+  useInterval(() => setCountdown(`${hours}:${minutes}:${seconds}`), 1000);
+
+  return <span>{countdown}</span>;
+}

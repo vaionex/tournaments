@@ -2,9 +2,10 @@ import DurationTag from "@/components/ui/duration-tag";
 import { formatCurrency } from "@/utils/format";
 import Link from "next/link";
 import { Trophy01, Users01 } from "untitledui-js-base";
-import { format } from "date-fns";
+import { differenceInHours, format, intervalToDuration } from "date-fns";
 import { twMerge } from "tailwind-merge";
 import Pill from "@/components/ui/card-pill";
+import TournamentCountdown from "../tournament-countdown";
 
 export default function TournamentCard({
   id,
@@ -23,6 +24,10 @@ export default function TournamentCard({
       : new Date() < new Date(end)
         ? "In Progress"
         : "Finished";
+
+  const hoursToStart = differenceInHours(start, new Date());
+  const startingIn24hours = 0 <= hoursToStart && hoursToStart < 24;
+
   return (
     <Link
       style={{ backgroundImage: `url('${banner}')` }}
@@ -42,7 +47,13 @@ export default function TournamentCard({
         <div className="rounded-b-2xl border-t bg-black/70 px-6 py-4 backdrop-blur-lg">
           <h2 className="mb-1 line-clamp-1 text-xl font-bold">{name}</h2>
           <div className="text-sm font-medium text-neutral-300">
-            {format(start, "MMM dd")} - {format(end, "MMM dd")}{" "}
+            {startingIn24hours ? (
+              <TournamentCountdown start={start} />
+            ) : (
+              <>
+                {format(start, "MMM dd")} - {format(end, "MMM dd")}
+              </>
+            )}{" "}
             <span className="mx-2 inline-block">•</span> {Game?.name}
             <span className="mx-2 inline-block">•</span> {status}
           </div>

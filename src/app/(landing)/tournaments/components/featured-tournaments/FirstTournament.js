@@ -1,10 +1,12 @@
 "use client";
 
+import TournamentCountdown from "@/components/tournament/tournament-countdown";
 import { Button } from "@/components/ui/button";
 import Pill from "@/components/ui/card-pill";
 import { formatCurrency } from "@/utils/format";
-import { format } from "date-fns";
+import { differenceInHours, format } from "date-fns";
 import { useRouter } from "next/navigation";
+import { useMemo } from "react";
 import { Diamond01, Trophy01, Users01 } from "untitledui-js-base";
 
 export default function FirstTournament({
@@ -19,6 +21,10 @@ export default function FirstTournament({
 }) {
   const { push } = useRouter();
   const href = `/dashboard/event/${id}`;
+
+  const hoursToStart = differenceInHours(start, new Date());
+  const startingIn24hours = 0 <= hoursToStart && hoursToStart < 24;
+
   return (
     <div
       style={{ backgroundImage: `url('${banner}')` }}
@@ -32,7 +38,13 @@ export default function FirstTournament({
         </div>
         <h2 className="mb-2 text-5xl font-bold lg:w-1/2">{name}</h2>
         <div className="text-lg font-medium text-neutral-300">
-          {format(start, "MMM dd")} - {format(end, "MMM dd")}{" "}
+          {startingIn24hours ? (
+            <TournamentCountdown start={start} />
+          ) : (
+            <>
+              {format(start, "MMM dd")} - {format(end, "MMM dd")}
+            </>
+          )}{" "}
           <span className="mx-2 inline-block">•</span> {Game?.name}
         </div>
         <div className="mt-10 flex flex-wrap items-center gap-2.5">
