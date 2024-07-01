@@ -1,4 +1,4 @@
-import TournamentCard from "@/app/dashboard/tournaments/tournament-card";
+import TournamentGrid from "@/components/tournament/tournament-grid";
 import { getPastTournaments } from "@/db/tournament";
 
 export default async function PastEvents() {
@@ -12,11 +12,7 @@ export default async function PastEvents() {
           Dive into completed tournaments and discover the battles.
         </div>
       </div>
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {tournaments.map((tournament) => (
-          <TournamentCard {...tournament} />
-        ))}
-      </div>
+      <TournamentGrid tournaments={tournaments} />
     </div>
   );
 }

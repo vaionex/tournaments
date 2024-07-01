@@ -1,6 +1,6 @@
-import TournamentCard from "@/app/dashboard/tournaments/tournament-card";
-import { getTournaments, getUpcomingTournaments } from "@/db/tournament";
+import { getUpcomingTournaments } from "@/db/tournament";
 import FirstTournament from "./FirstTournament";
+import TournamentGrid from "@/components/tournament/tournament-grid";
 
 // Revalidate every 24 hours
 export const revalidate = 60 * 60 * 24;
@@ -22,11 +22,7 @@ export default async function FeaturedTournaments({ gameId }) {
   return (
     <div className="mb-24">
       <FirstTournament {...firstTournament} />
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {rest.map((tournament) => (
-          <TournamentCard {...tournament} />
-        ))}
-      </div>
+      <TournamentGrid tournaments={rest} />
     </div>
   );
 }
