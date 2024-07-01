@@ -367,7 +367,7 @@ export default function TournamentForm({
       </div> */}
 
       <div>Rules</div>
-      <div className="space-y-4 p-4">
+      <div className="space-y-4 py-4">
         {rules.map(({ title, description }, index) => (
           <div className="rounded-lg border border-white/20 p-4" key={index}>
             <div className="mb-2">
