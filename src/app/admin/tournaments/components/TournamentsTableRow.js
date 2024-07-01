@@ -6,12 +6,12 @@ import { Trash } from "iconsax-react";
 import TournamentStatus from "./Status";
 import Dialog from "@/components/ui/dialog";
 import { useState } from "react";
-import useDeleteTournament from "@/hooks/tournament/useDeleteTournament";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import useParticipants from "@/hooks/tournament/useParticipants";
 import Loader from "@/components/ui/loader";
 import { Edit03, Trash03 } from "untitledui-js-base";
+import DeleteTouramentDialog from "@/components/tournament/DeleteTournamentDialog";
 
 export default function TournamentsTableRow({
   id,
@@ -24,8 +24,6 @@ export default function TournamentsTableRow({
 }) {
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
 
-  const { mutate: deleteTournament, isLoading: isLoadingDelete } =
-    useDeleteTournament();
   const { data: participants = [], isLoading: isLoadingParticipants } =
     useParticipants(id);
   const { push } = useRouter();
@@ -81,28 +79,10 @@ export default function TournamentsTableRow({
           </div>
         </td>
       </tr>
-      <Dialog
-        title="Delete Tournament"
-        content="Are you sure you want to permanently delete this tournament?"
-        actions={[
-          {
-            children: "Confirm",
-            variant: "danger",
-            loading: isLoadingDelete,
-            onClick: () =>
-              deleteTournament(
-                { id },
-                {
-                  onSettled: () => setOpenDeleteModal(false),
-                  onError: () => toast.error("Something went wrong"),
-                },
-              ),
-          },
-        ]}
-        variant="danger"
-        icon={Trash}
+      <DeleteTouramentDialog
         open={openDeleteModal}
         setOpen={setOpenDeleteModal}
+        id={id}
       />
     </>
   );

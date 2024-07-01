@@ -1,11 +1,14 @@
 "use client";
+
+import "react-datetime-picker/dist/DateTimePicker.css";
+import "react-calendar/dist/Calendar.css";
+import "react-clock/dist/Clock.css";
+import "./DateTimePicker.css";
 import { Button } from "@/components/ui/button";
 import Dropzone from "@/components/ui/dropzone";
 import { Input } from "@/components/ui/input";
-import { Radio, RadioGroup } from "@/components/ui/radio-group";
 import Select from "@/components/ui/select";
 import useGames from "@/hooks/games/useGames";
-import { addDays, format as formatDate } from "date-fns";
 import { add } from "lodash";
 import { Image, Swords } from "lucide-react";
 import toast from "react-hot-toast";
@@ -15,10 +18,6 @@ import { Target03 } from "untitledui-js-base";
 import { Crown1 } from "iconsax-react";
 import Bracket from "@/components/icons/bracket";
 import DateTimePicker from "react-datetime-picker";
-import "react-datetime-picker/dist/DateTimePicker.css";
-import "react-calendar/dist/Calendar.css";
-import "react-clock/dist/Clock.css";
-import "./DateTimePicker.css";
 
 const Formats = [
   {
@@ -229,7 +228,7 @@ export default function TournamentForm({
 
       <div>Start</div>
       <DateTimePicker
-        value={start}
+        value={new Date(start)}
         onChange={(value) => setValue("start", value)}
         minDate={new Date()}
         required
@@ -237,9 +236,9 @@ export default function TournamentForm({
 
       <div>End</div>
       <DateTimePicker
-        value={end}
+        value={new Date(end)}
         onChange={(value) => setValue("end", value)}
-        minDate={addDays(start, 1)}
+        minDate={new Date(start)}
         required
       />
 
@@ -393,6 +392,7 @@ export default function TournamentForm({
           Add Section
         </Button>
       </div>
+
       {children}
     </form>
   );

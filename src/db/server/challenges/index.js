@@ -1,6 +1,7 @@
 import { admin } from "@/supabase/admin";
 import { createClient } from "@/supabase/server";
-import { getChallengeStatus } from "./resolvers";
+import { LoginChallenge } from "./login";
+import { JoinTournamentChallenge } from "./join-tournament";
 
 export async function getChallenges() {
   const supabase = createClient();
@@ -30,4 +31,14 @@ export async function getChallenge(id) {
     .eq("id", id)
     .throwOnError();
   return data[0];
+}
+
+export async function getChallengeStatus(id, user_id) {
+  const resolvers = {
+    login: LoginChallenge,
+    "join-tournament": JoinTournamentChallenge,
+  };
+
+  const resolver = resolvers[id].getStatus || (() => undefined);
+  return await resolver(user_id);
 }

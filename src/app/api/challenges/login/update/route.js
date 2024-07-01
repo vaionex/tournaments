@@ -1,6 +1,6 @@
-import { updateLoginChallenge } from "@/db/server/challenges/update";
+import { LoginChallenge } from "@/db/server/challenges/login";
 
 export async function POST() {
-  await updateLoginChallenge();
+  await LoginChallenge.update();
   return Response.json({ success: true });
 }

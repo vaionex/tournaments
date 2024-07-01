@@ -42,7 +42,6 @@ export default function EndTournamentModal({ open, setOpen, tournamentId }) {
           toast.success("Tournament Completed");
         },
         onError: (e) => {
-          console.log(e);
           toast.error(
             e?.response?.data?.error ?? "An unexpected error occurred",
           );

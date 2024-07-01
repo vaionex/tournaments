@@ -5,6 +5,7 @@ import { useState } from "react";
 import LogoMark from "@/components/ui/logo-mark";
 import toast from "react-hot-toast";
 import useSendResetPasswordLink from "@/hooks/auth/useSendResetPasswordLink";
+import Link from "next/link";
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
@@ -32,21 +33,32 @@ export default function ForgotPassword() {
         Send a password reset link to your email
       </div>
       {sent ? (
-        <h2 className="text-center text-2xl font-semibold text-neutral-400">
-          Reset link sent
-        </h2>
+        <div className="text-center">
+          <h2 className="mb-2 text-3xl font-semibold">Success</h2>
+          <div className="text-neutral-400">
+            If you have an account with us, a reset mail will be sent to the
+            given email address
+          </div>
+        </div>
       ) : (
-        <div className="flex flex-col gap-4">
-          <Input
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            type="email"
-            placeholder="Enter your email"
-            label="Email"
-          />
-          <Button onClick={handleReset} loading={isLoading}>
-            Send Reset Link
-          </Button>
+        <div>
+          <div className="flex flex-col gap-4">
+            <Input
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              type="email"
+              placeholder="Enter your email"
+              label="Email"
+            />
+            <Button onClick={handleReset} loading={isLoading}>
+              Send Reset Link
+            </Button>
+          </div>
+          <div className="mt-2 flex justify-end">
+            <Link className="text-right text-sm text-neutral-300" href="/login">
+              Back to login
+            </Link>
+          </div>
         </div>
       )}
     </div>

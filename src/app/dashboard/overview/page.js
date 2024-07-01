@@ -1,19 +1,11 @@
-"use client";
-
 import { Button } from "@/components/ui/button";
-import { Coins } from "lucide-react";
-import { Plus, Wallet02 } from "untitledui-js-base";
+import { Plus } from "untitledui-js-base";
 import Tournaments from "./Tournaments";
-import Stat from "./Stat";
-import XPRank from "../components/XPRank";
-import useUser from "@/hooks/auth/useUser";
-import { formatCurrency } from "@/utils/format";
 import Payouts from "./components/Payouts";
+import Challenges from "../challenges/page";
+import Stats from "./components/Stats";
 
 export default function Overview() {
-  const {
-    data: { balance = 0 },
-  } = useUser();
   return (
     <div className="pb-24">
       <div className="mb-6 flex items-center justify-between">
@@ -27,17 +19,12 @@ export default function Overview() {
           Create Tournament
         </Button>
       </div>
-      <div className="mb-12 flex divide-x divide-white/5 overflow-hidden rounded-lg border border-white/10">
-        <Stat title="Balance" icon={<Wallet02 />}>
-          <div className="text-3xl font-medium">{formatCurrency(balance)}</div>
-        </Stat>
-        <Stat title="Earnings" icon={<Coins className="text-green-500" />}>
-          <div className="text-3xl font-medium">$0</div>
-        </Stat>
-        <XPRank />
+      <div className="space-y-8">
+        <Stats />
+        <Tournaments />
+        <Payouts />
+        <Challenges />
       </div>
-      <Tournaments />
-      <Payouts />
     </div>
   );
 }
