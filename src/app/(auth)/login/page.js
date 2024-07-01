@@ -32,10 +32,14 @@ export default function Login() {
   }
   return (
     <div className="w-full max-w-sm">
-      <LogoMark className="mx-auto size-24" />
-      <h1 className="mb-2 text-center text-4xl font-semibold">Welcome Back!</h1>
-      <div className="mb-8 text-center text-neutral-300">
-        Your path begins with a single click
+      <div className="hidden sm:block">
+        <LogoMark className="mx-auto size-24" />
+        <h1 className="mb-2 text-center text-4xl font-semibold">
+          Welcome Back!
+        </h1>
+        <div className="mb-8 text-center text-neutral-300">
+          Your path begins with a single click
+        </div>
       </div>
       <div className="flex flex-col gap-4">
         <Input
