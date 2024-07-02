@@ -1,8 +1,5 @@
 "use client";
 
-import "react-datetime-picker/dist/DateTimePicker.css";
-import "react-calendar/dist/Calendar.css";
-import "react-clock/dist/Clock.css";
 import "./DateTimePicker.css";
 import { Button } from "@/components/ui/button";
 import Dropzone from "@/components/ui/dropzone";
