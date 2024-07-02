@@ -13,7 +13,7 @@ export default async function FeaturedTournaments() {
           <div>
             <h2 className="mb-3 text-5xl font-bold">Featured Tournaments</h2>
             <div className="text-xl text-supporting">
-              Join the fray in your favorite game and claim glory!
+              {/* Play your favorite games and claim glory! */}
             </div>
           </div>
           <Button variant="black" href="/tournaments">

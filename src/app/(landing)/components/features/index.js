@@ -9,9 +9,9 @@ export default function Features() {
     <div>
       <Container className="!py-24">
         <div className="mx-auto mb-16 max-w-3xl text-center">
-          <h2 className="mb-2 text-5xl font-bold">Anyone can do it.</h2>
+          <h2 className="mb-2 text-5xl font-bold">Create your own Events</h2>
           <div className="text-xl text-supporting">
-            Everything you need to organize and manage tournaments!
+            Everything you need to organise and manage tournaments!
           </div>
         </div>
         <div className="relative flex justify-end">
@@ -26,7 +26,7 @@ export default function Features() {
           />
           <div className="my-10 max-w-md border border-white/10 bg-white/5 p-12 backdrop-blur-lg">
             <div className="mb-4 text-4xl font-semibold">
-              Empower Your Events
+              Supercharged Events
             </div>
             <div className="mb-4 text-neutral-100">
               Unlock the full potential of your gaming events with our

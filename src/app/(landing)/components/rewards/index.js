@@ -40,8 +40,8 @@ export default function Rewards() {
             Elevate Your Gaming Experience with Rewards
           </h2>
           <div className="text-xl text-supporting">
-            Explore our diverse range of rewards tailored to your gaming
-            achievements.
+            {/* Explore our diverse range of rewards tailored to your gaming
+            achievements. */}
           </div>
         </div>
         <div className="flex flex-col items-stretch gap-8 md:flex-row md:items-end">
