@@ -6,12 +6,15 @@ import useJoinTournament from "@/hooks/tournament/useJoinTournament";
 import useParticipants from "@/hooks/tournament/useParticipants";
 import { socials } from "../../profile/account/page";
 import Link from "next/link";
+import { isRankInRange } from "@/utils/rank";
 
 export default function JoinTournamentButton({
-  entryFee,
-  tournamentId,
+  entry_fee: entryFee,
+  id: tournamentId,
   start,
-  maxPlayers,
+  max_players: maxPlayers,
+  min_rank,
+  max_rank,
 }) {
   const { data: user } = useUser();
   const { mutate: join, isLoading: isLoadingJoin } = useJoinTournament();
@@ -23,6 +26,7 @@ export default function JoinTournamentButton({
   const insufficientBalance = entryFee > balance;
   const isStarted = new Date().valueOf() > new Date(start).valueOf();
   const hasConnectedSocial = socials.some((social) => user[social.id]);
+  const rankInRange = isRankInRange(user.rank, min_rank, max_rank);
 
   if (isParticipant) return <div>Joined</div>;
   if (isStarted || isLoadingParticipations) return null;
@@ -39,20 +43,27 @@ export default function JoinTournamentButton({
       </div>
     );
 
+  if (insufficientBalance)
+    return (
+      <div className="text-center text-xs text-red-400">
+        Insufficient Balance
+      </div>
+    );
+
+  if (!rankInRange)
+    return (
+      <div className="text-red-500">
+        You do not meet the skill requirement of this tournament
+      </div>
+    );
+
   return (
-    <div>
-      {insufficientBalance && (
-        <div className="text-center text-xs text-red-400">
-          Insufficient Balance
-        </div>
-      )}
-      <Button
-        onClick={() => join({ tournament_id: tournamentId })}
-        disabled={insufficientBalance}
-        loading={isLoadingJoin}
-      >
-        Join Tournament
-      </Button>
-    </div>
+    <Button
+      onClick={() => join({ tournament_id: tournamentId })}
+      disabled={insufficientBalance}
+      loading={isLoadingJoin}
+    >
+      Join Tournament
+    </Button>
   );
 }

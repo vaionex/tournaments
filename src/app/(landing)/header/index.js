@@ -8,7 +8,6 @@ import Logo from "@/components/ui/logo";
 import useAuthentication from "@/hooks/auth/useAuthentication";
 import Container from "@/components/ui/container";
 import MobileMenu from "./mobile-menu";
-import TournamentsPopover from "./mobile-menu/tournaments-popover";
 import * as HoverCard from "@radix-ui/react-hover-card";
 
 import * as Portal from "@radix-ui/react-portal";

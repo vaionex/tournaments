@@ -1,5 +1,5 @@
-import TournamentCard from "@/app/dashboard/tournaments/tournament-card";
 import RankIcon from "@/components/icons/rank-icon";
+import TournamentGrid from "@/components/tournament/tournament-grid";
 import Avatar from "@/components/ui/avatar";
 import Container from "@/components/ui/container";
 import ShareSection from "@/components/ui/share-section";
@@ -37,13 +37,11 @@ export default async function ProfileAccount({ params: { id } }) {
         <ShareSection />
       </div>
       <div className="flex flex-col gap-8 py-8 md:flex-row">
-        <div className="@container flex-1">
+        <div className="flex-1">
           <Heading>Tournaments</Heading>
-          <div className="@xl:grid-cols-2 grid gap-4">
-            {participations.map(({ Tournament, id }) => (
-              <TournamentCard {...Tournament} key={id} />
-            ))}
-          </div>
+          <TournamentGrid
+            tournaments={participations.map(({ Tournament }) => Tournament)}
+          />
         </div>
         <div className="w-[25rem]">
           <div>

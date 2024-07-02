@@ -1,20 +1,24 @@
 "use client";
 
+import LogoSimple from "@/components/icons/logo-simple";
 import Logo from "@/components/ui/logo";
 import useAdmin from "@/hooks/auth/useAdmin";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { twMerge } from "tailwind-merge";
 import { Users01 } from "untitledui-js-base";
 
 const links = [
-  { name: "Users", href: "users" },
-  { name: "Tournaments", href: "tournaments" },
+  { name: "Users", href: "users", icon: Users01 },
+  { name: "Tournaments", href: "tournaments", icon: LogoSimple },
 ];
 
 export default function AdminLayout({ children }) {
-  const { isNotAdmin } = useAdmin();
+  const { isNotAdmin, isLoading } = useAdmin();
   const { push } = useRouter();
+  const pathname = usePathname();
 
+  if (isLoading) return null;
   if (isNotAdmin) push("/");
 
   return (
@@ -22,13 +26,16 @@ export default function AdminLayout({ children }) {
       <div className="sticky top-0 h-screen border-r border-neutral-800">
         <Logo className="mx-6 my-8 h-12" />
         <div className="w-72 space-y-1 p-4">
-          {links.map(({ name, href }) => (
+          {links.map(({ name, href, icon: Icon }) => (
             <Link
-              className="flex items-center gap-3 rounded-lg px-3 py-2 font-semibold transition hover:bg-white/10"
+              className={twMerge(
+                "flex items-center gap-3 rounded-lg px-3 py-2 font-semibold transition hover:bg-white/10",
+                pathname.endsWith(href) && "bg-white/10",
+              )}
               key={name}
               href={href}
             >
-              <Users01 className="size-4 opacity-70" />
+              <Icon className="size-4 opacity-70" />
               {name}
             </Link>
           ))}

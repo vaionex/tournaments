@@ -1,5 +1,5 @@
 "use client";
-import TournamentCard from "../tournaments/tournament-card";
+import TournamentCard from "../../../components/tournament/tournament-card";
 import Link from "next/link";
 import Slider from "react-slick";
 import { ChevronLeft, ChevronRight } from "untitledui-js-base";

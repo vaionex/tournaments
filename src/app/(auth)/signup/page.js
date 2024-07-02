@@ -37,12 +37,14 @@ export default function Signup({ showLogo }) {
 
   return (
     <div className="w-full max-w-sm">
-      {showLogo && <LogoMark className="mx-auto hidden size-24 xl:block" />}
-      <h1 className="mb-2 text-center text-4xl font-semibold">
-        Start your journey
-      </h1>
-      <div className="mb-8 text-center text-neutral-300">
-        Your path begins with a single click
+      <div className="hidden sm:block">
+        {showLogo && <LogoMark className="mx-auto hidden size-24 xl:block" />}
+        <h1 className="mb-2 text-center text-4xl font-semibold">
+          Start your journey
+        </h1>
+        <div className="mb-8 text-center text-neutral-300">
+          Your path begins with a single click
+        </div>
       </div>
       <div className="flex flex-col gap-4">
         <Input

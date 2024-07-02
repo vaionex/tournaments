@@ -17,11 +17,10 @@ export default function CTA() {
       }}
     >
       <LogoMark className="mx-auto h-10" />
-      <h2 className="text-4xl font-bold">Start Your Journey to Glory</h2>
+      <h2 className="text-4xl font-bold"> Start your Journey</h2>
       <div className="mx-auto max-w-2xl text-xl">
-        Whether you&apos;re here to make your mark as a legendary organizer or
-        to rise through the ranks as a champion competitor, your path begins
-        with a single click.
+        Whether you&apos;re here to rise through the ranks as a competitor
+        or make your mark as an organiser, your path begins with a single click.
       </div>
       <div className="flex items-center justify-center gap-4">
         <Button

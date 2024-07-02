@@ -25,7 +25,7 @@ export default async function Hero() {
                 textShadow: "0 0 15px #ffffff63",
               }}
             >
-              Compete with the Best <br /> and Earn Cash Rewards
+              Compete with Friends <br /> and Earn Cash Rewards
             </h1>
             <p className="mt-4 text-lg leading-8">
               Earn Money and Improve Your Rank in Our Weekly Competitions!

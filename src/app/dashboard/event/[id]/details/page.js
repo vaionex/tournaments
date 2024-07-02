@@ -16,6 +16,8 @@ export default async function Details({ params: { id } }) {
     Game,
     prize_pool_tiers = [100],
     rules = [],
+    min_rank,
+    max_rank,
   } = await getTournament(id);
 
   const highlighted = "bg-white/5 border border-white/10 rounded-lg";
@@ -107,6 +109,7 @@ export default async function Details({ params: { id } }) {
           {[
             { name: "Event Details", details: name },
             { name: "Game", details: Game?.name },
+            { name: "Skill Level", details: `${min_rank} - ${max_rank}` },
             {
               name: "Date",
               details: `${format(start, "dd/MM/yyyy")} - ${format(end, "dd/MM/yyyy")}`,

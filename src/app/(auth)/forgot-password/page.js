@@ -13,7 +13,8 @@ export default function ForgotPassword() {
 
   const { mutate: reset, isLoading } = useSendResetPasswordLink();
 
-  function handleReset() {
+  function handleReset(e) {
+    e.preventDefault();
     reset(
       { email },
       {
@@ -42,20 +43,21 @@ export default function ForgotPassword() {
         </div>
       ) : (
         <div>
-          <div className="flex flex-col gap-4">
+          <form className="flex flex-col gap-4" onSubmit={handleReset}>
             <Input
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               type="email"
               placeholder="Enter your email"
               label="Email"
+              required
             />
-            <Button onClick={handleReset} loading={isLoading}>
+            <Button loading={isLoading} type="submit">
               Send Reset Link
             </Button>
-          </div>
-          <div className="mt-2 flex justify-end">
-            <Link className="text-right text-sm text-neutral-300" href="/login">
+          </form>
+          <div className="mt-2 flex justify-start">
+            <Link className="text-left text-sm text-neutral-300" href="/login">
               Back to login
             </Link>
           </div>
