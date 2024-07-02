@@ -20,6 +20,7 @@ export default function TournamentChat({ id }) {
     useSendTournamentChatMessage();
 
   function handleSend() {
+    if (message.trim() == "") return;
     send({ id, message });
     setMessage("");
   }
