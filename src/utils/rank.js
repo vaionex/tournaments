@@ -56,3 +56,12 @@ export function getRankProgressPercentage(xp) {
   const total = nextRankXP - currentRankXP;
   return ((xp - currentRankXP) / total) * 100;
 }
+
+export function isRankInRange(rank, minRank, maxRank) {
+  const currentIndex = Ranks.findIndex(({ name }) => name == rank);
+  const minIndex = Ranks.findIndex(({ name }) => name == minRank);
+  const maxIndex = Ranks.findIndex(({ name }) => name == maxRank);
+
+  if (currentIndex == -1) return false;
+  return currentIndex >= minIndex && currentIndex <= maxIndex;
+}

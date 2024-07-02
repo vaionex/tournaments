@@ -58,12 +58,7 @@ export default async function TournamentLayout({ children, params: { id } }) {
         <h1 className="text-4xl font-bold">{name}</h1>
         <div className="flex items-center gap-2">
           <EndTournamentButton tournamentId={id} />
-          <JoinTournamentButton
-            entryFee={entry_fee}
-            tournamentId={id}
-            start={start}
-            maxPlayers={max_players}
-          />
+          <JoinTournamentButton {...tournament} />
         </div>
       </div>
       <div className="flex border-t border-white/20">
