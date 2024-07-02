@@ -17,7 +17,7 @@ export default function ChatContainer({ children }) {
   }, [elementRef, bottomRef]);
 
   return (
-    <div className="relative h-72 flex-1 overflow-y-auto">
+    <div className="relative h-[30rem] flex-1 overflow-y-auto">
       <div className="space-y-4 p-4" ref={elementRef}>
         {children}
       </div>
