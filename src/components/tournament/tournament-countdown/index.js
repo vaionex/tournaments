@@ -14,7 +14,7 @@ export default function TournamentCountdown({ start }) {
     duration.hours,
     duration.minutes,
     duration.seconds,
-  ].map((value) => value?.toString().padStart(2, "0"));
+  ].map((value = 0) => value?.toString().padStart(2, "0"));
 
   useInterval(() => setCountdown(`${hours}:${minutes}:${seconds}`), 1000);
 
