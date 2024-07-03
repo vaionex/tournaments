@@ -36,7 +36,9 @@ export default function FirstTournament({
           <Pill icon={Users01}>{max_players}</Pill>
           <Pill icon={Trophy01}>{formatCurrency(prize_pool)}</Pill>
         </div>
-        <h2 className="mb-2 text-5xl font-bold lg:w-1/2">{name}</h2>
+        <h2 className="mb-2 text-5xl font-bold leading-[60px] lg:w-1/2">
+          {name}
+        </h2>
         <div className="text-lg font-medium text-neutral-300">
           {startingIn24hours ? (
             <TournamentCountdown start={start} />

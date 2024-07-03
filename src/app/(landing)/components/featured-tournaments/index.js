@@ -11,7 +11,9 @@ export default async function FeaturedTournaments() {
       <Container>
         <div className="mb-10 flex flex-wrap items-start justify-between gap-6">
           <div>
-            <h2 className="mb-3 text-5xl font-bold">Featured Tournaments</h2>
+            <h2 className="mb-3 text-5xl font-bold leading-[60px]">
+              Featured Tournaments
+            </h2>
             <div className="text-xl text-supporting">
               {/* Play your favorite games and claim glory! */}
             </div>

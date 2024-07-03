@@ -22,10 +22,10 @@ export default function DesktopApp() {
       <Container className="py-8 md:py-24">
         <div className="mb-12 flex flex-wrap items-start justify-between gap-6">
           <div className="max-w-3xl">
-            <h2 className="mb-3 text-5xl font-bold">
+            <h2 className="mb-3 text-5xl font-bold leading-[60px]">
               Experience Enhanced Gameplay
             </h2>
-            <div className="text-xl text-supporting">
+            <div className="text-xl leading-[30px] text-neutral-300">
               Watch real-time game analytics and performance tracking with our
               desktop app.
             </div>
