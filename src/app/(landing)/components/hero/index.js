@@ -22,7 +22,7 @@ export default async function Hero() {
             <h1
               className="mt-10 text-4xl font-bold leading-normal tracking-tight text-white sm:text-6xl md:leading-[4.8rem]"
               style={{
-                textShadow: "0 0 15px #ffffff63",
+                textShadow: "0 0 30px #ffffff63",
               }}
             >
               Compete with Friends <br /> and Earn Cash Rewards
@@ -31,7 +31,9 @@ export default async function Hero() {
               Earn Money and Improve Your Rank in Our Weekly Competitions!
             </p>
             <div className="mt-10 flex flex-wrap items-center gap-6">
-              <Button href="/tournaments">Explore Tournaments</Button>
+              <Button className="py-4" href="/tournaments">
+                Explore Tournaments
+              </Button>
               <Button
                 variant="ghost"
                 className="gap-3 bg-white/20 backdrop-blur-2xl hover:bg-white/30"
