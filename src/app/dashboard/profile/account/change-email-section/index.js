@@ -33,8 +33,9 @@ export default function ChangeEmailSection() {
           />
           {isSuccess && (
             <div className="mt-2 text-sm text-neutral-400">
-              A confirmation email has been sent to the submitted email address.
-              Please check your inbox.
+              Confirmation links have been sent to both old and new email
+              addresses. Please check your inbox. Both links will have to be
+              clicked to complete the process
             </div>
           )}
         </div>
