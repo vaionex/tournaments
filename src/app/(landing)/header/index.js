@@ -16,6 +16,7 @@ import { ChevronDown, HomeLine } from "untitledui-js-base";
 import ProfileDropdown from "@/app/dashboard/profile-dropdown";
 import { PopoverNotificationCenter } from "@novu/notification-center";
 import NotificationBell from "./NotificationBell";
+import { useSearchParams } from "next/navigation";
 
 const links = [
   { name: "Home", href: "/" },
@@ -37,6 +38,9 @@ export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { isAuthenticated, isLoading } = useAuthentication();
 
+  const searchParams = useSearchParams();
+  const message = searchParams.get("message");
+
   const ctaButton = isLoading ? null : isAuthenticated ? (
     <div className="flex items-center gap-6">
       <PopoverNotificationCenter colorScheme="dark">
@@ -54,6 +58,11 @@ export default function Header() {
   return (
     <>
       <header className="fixed inset-x-0 top-0 z-20 bg-black/20 text-white backdrop-blur-md">
+        {message && (
+          <div className="bg-primary py-1 text-center text-white">
+            {message}
+          </div>
+        )}
         <Container>
           <nav
             className="flex items-center justify-between py-6"
