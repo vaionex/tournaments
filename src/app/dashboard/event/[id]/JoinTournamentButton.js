@@ -7,6 +7,7 @@ import useParticipants from "@/hooks/tournament/useParticipants";
 import { socials } from "../../profile/account/page";
 import Link from "next/link";
 import { isRankInRange } from "@/utils/rank";
+import Social from "../../profile/account/Social";
 
 export default function JoinTournamentButton({
   entry_fee: entryFee,
@@ -15,6 +16,7 @@ export default function JoinTournamentButton({
   max_players: maxPlayers,
   min_rank,
   max_rank,
+  Game: { required_social },
 }) {
   const { data: user } = useUser();
   const { mutate: join, isLoading: isLoadingJoin } = useJoinTournament();
@@ -25,7 +27,7 @@ export default function JoinTournamentButton({
 
   const insufficientBalance = entryFee > balance;
   const isStarted = new Date().valueOf() > new Date(start).valueOf();
-  const hasConnectedSocial = socials.some((social) => user[social.id]);
+  const hasRequiredSocial = required_social ? user[required_social] : true;
   const rankInRange = isRankInRange(user.rank, min_rank, max_rank);
 
   if (isParticipant) return <div>Joined</div>;
@@ -33,13 +35,13 @@ export default function JoinTournamentButton({
 
   if (participants.length >= maxPlayers) return <div>Tournament Full</div>;
 
-  if (!hasConnectedSocial)
+  const social = socials.find(({ id }) => id == required_social);
+
+  if (!hasRequiredSocial && social)
     return (
-      <div>
-        Social not connected -{" "}
-        <Link href="/dashboard/profile/account#social" className="text-primary">
-          Connect Social
-        </Link>
+      <div className="flex flex-col items-end gap-1">
+        <div className="text-sm text-neutral-300">Connection Required</div>
+        <Social {...social} />
       </div>
     );
 
