@@ -2,6 +2,9 @@ import { DM_Sans } from "next/font/google";
 import "./globals.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import "react-datetime-picker/dist/DateTimePicker.css";
+import "react-calendar/dist/Calendar.css";
+import "react-clock/dist/Clock.css";
 import Providers from "./(landing)/providers";
 
 const dmSans = DM_Sans({ subsets: ["latin"] });

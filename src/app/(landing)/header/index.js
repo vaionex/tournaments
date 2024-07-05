@@ -1,7 +1,6 @@
 "use client";
-import { useState } from "react";
-import * as NavigationMenu from "@radix-ui/react-navigation-menu";
-import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import { Suspense, useState } from "react";
+import { Bars3Icon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import Logo from "@/components/ui/logo";
@@ -10,12 +9,12 @@ import Container from "@/components/ui/container";
 import MobileMenu from "./mobile-menu";
 import * as HoverCard from "@radix-ui/react-hover-card";
 
-import * as Portal from "@radix-ui/react-portal";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronDown, HomeLine } from "untitledui-js-base";
 import ProfileDropdown from "@/app/dashboard/profile-dropdown";
 import { PopoverNotificationCenter } from "@novu/notification-center";
 import NotificationBell from "./NotificationBell";
+import HeaderMessage from "./HeaderMessage";
 
 const links = [
   { name: "Home", href: "/" },
@@ -54,6 +53,9 @@ export default function Header() {
   return (
     <>
       <header className="fixed inset-x-0 top-0 z-20 bg-black/20 text-white backdrop-blur-md">
+        <Suspense>
+          <HeaderMessage />
+        </Suspense>
         <Container>
           <nav
             className="flex items-center justify-between py-6"

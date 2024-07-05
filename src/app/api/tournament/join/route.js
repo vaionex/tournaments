@@ -3,7 +3,7 @@ import { getParticipants, getTournament } from "@/db/tournament";
 import { notifications } from "@/novu/notifications";
 import { admin } from "@/supabase/admin";
 import { getUserDetails } from "@/supabase/server";
-import { isRankInRange } from "@/utils/rank";
+import { getRank, isRankInRange } from "@/utils/rank";
 
 export async function POST(req) {
   const { tournament_id } = await req.json();
@@ -30,7 +30,7 @@ export async function POST(req) {
     return Response.json({ error: "Tournament Full" }, { status: 400 });
   }
 
-  if (!isRankInRange(xp, min_rank, max_rank))
+  if (!isRankInRange(getRank(xp), min_rank, max_rank))
     return Response.json(
       { error: "You do not meet the skill requirement of this tournament" },
       { status: 400 },

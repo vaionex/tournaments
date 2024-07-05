@@ -19,7 +19,9 @@ export default function TournamentChat({ id }) {
   const { mutate: send, isLoading: isLoadingSend } =
     useSendTournamentChatMessage();
 
+  const emptyMessage = message.trim() == "";
   function handleSend() {
+    if (emptyMessage) return;
     send({ id, message });
     setMessage("");
   }
@@ -65,6 +67,7 @@ export default function TournamentChat({ id }) {
           className="ml-auto block"
           onClick={handleSend}
           loading={isLoadingSend}
+          disabled={emptyMessage}
         >
           Send
         </Button>
