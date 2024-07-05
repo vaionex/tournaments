@@ -3,7 +3,7 @@ import Link from "next/link";
 import Header from "../(landing)/header";
 import Container from "@/components/ui/container";
 import useAuthentication from "@/hooks/auth/useAuthentication";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 
 const links = [
@@ -17,6 +17,8 @@ export default function AuthLayout({ children }) {
   const pathname = usePathname();
   const { isAuthenticated, isLoading } = useAuthentication();
   const { push } = useRouter();
+  const searchParams = useSearchParams();
+  const redirect = searchParams.get("redirect") || "/dashboard";
 
   const isExemptedRoute = exemptedRoutes.some(
     (route) => `/${route}` == pathname,
@@ -25,7 +27,7 @@ export default function AuthLayout({ children }) {
   const shouldRedirect = isAuthenticated && !isExemptedRoute;
 
   useEffect(() => {
-    if (shouldRedirect) push("/dashboard");
+    if (shouldRedirect) push(redirect);
   }, [isAuthenticated]);
 
   if (isLoading || shouldRedirect) return null;
