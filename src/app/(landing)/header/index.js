@@ -1,7 +1,6 @@
 "use client";
-import { useState } from "react";
-import * as NavigationMenu from "@radix-ui/react-navigation-menu";
-import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import { Suspense, useState } from "react";
+import { Bars3Icon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import Logo from "@/components/ui/logo";
@@ -10,13 +9,12 @@ import Container from "@/components/ui/container";
 import MobileMenu from "./mobile-menu";
 import * as HoverCard from "@radix-ui/react-hover-card";
 
-import * as Portal from "@radix-ui/react-portal";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronDown, HomeLine } from "untitledui-js-base";
 import ProfileDropdown from "@/app/dashboard/profile-dropdown";
 import { PopoverNotificationCenter } from "@novu/notification-center";
 import NotificationBell from "./NotificationBell";
-import { useSearchParams } from "next/navigation";
+import HeaderMessage from "./HeaderMessage";
 
 const links = [
   { name: "Home", href: "/" },
@@ -38,9 +36,6 @@ export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { isAuthenticated, isLoading } = useAuthentication();
 
-  const searchParams = useSearchParams();
-  const message = searchParams.get("message");
-
   const ctaButton = isLoading ? null : isAuthenticated ? (
     <div className="flex items-center gap-6">
       <PopoverNotificationCenter colorScheme="dark">
@@ -58,11 +53,9 @@ export default function Header() {
   return (
     <>
       <header className="fixed inset-x-0 top-0 z-20 bg-black/20 text-white backdrop-blur-md">
-        {message && (
-          <div className="bg-primary py-1 text-center text-white">
-            {message}
-          </div>
-        )}
+        <Suspense>
+          <HeaderMessage />
+        </Suspense>
         <Container>
           <nav
             className="flex items-center justify-between py-6"
