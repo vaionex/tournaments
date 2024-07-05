@@ -5,7 +5,6 @@ import useIsParticipant from "@/hooks/tournament/useIsParticipant";
 import useJoinTournament from "@/hooks/tournament/useJoinTournament";
 import useParticipants from "@/hooks/tournament/useParticipants";
 import { socials } from "../../profile/account/page";
-import Link from "next/link";
 import { isRankInRange } from "@/utils/rank";
 import Social from "../../profile/account/Social";
 
