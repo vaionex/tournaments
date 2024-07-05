@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/supabase/client";
+import { useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
 
 const getURL = () => {
@@ -11,17 +12,19 @@ const getURL = () => {
     "http://localhost:3000/";
   // Make sure to include `https://` when not localhost.
   url = url.includes("http") ? url : `https://${url}`;
-  // Make sure to include a trailing `/`.
-  url = url.charAt(url.length - 1) === "/" ? url : `${url}/`;
-  return `${url}dashboard`;
+  // Make sure not to include a trailing `/`.
+  url = url.charAt(url.length - 1) === "/" ? url.slice(0, url.length - 1) : url;
+  return url;
 };
 
 export default function GoogleSignInButton() {
+  const searchParams = useSearchParams();
+  const redirect = searchParams.get("redirect") || "/dashboard";
   async function handleClick() {
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: getURL(),
+        redirectTo: getURL() + redirect,
       },
     });
     if (error) toast.error(error.message ?? "An unexpected error occured");

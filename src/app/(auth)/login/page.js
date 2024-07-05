@@ -1,10 +1,9 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import Container from "@/components/ui/container";
 import { Input } from "@/components/ui/input";
 import useLoginWithPassword from "@/hooks/auth/useLoginWithPassword";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import GoogleSignInButton from "../GoogleSignInButton";
@@ -12,6 +11,8 @@ import LogoMark from "@/components/ui/logo-mark";
 
 export default function Login() {
   const { replace, push } = useRouter();
+  const searchParams = useSearchParams();
+  const redirect = searchParams.get("redirect") || "/dashboard";
   const { mutate: login, isLoading } = useLoginWithPassword({
     onError: (e) => {
       if (e.message == "Email not confirmed") {
@@ -20,7 +21,6 @@ export default function Login() {
         toast.error("Invalid Email/Password");
       }
     },
-    onSuccess: () => replace("/dashboard"),
   });
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
