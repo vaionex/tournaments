@@ -15,6 +15,7 @@ export default function JoinTournamentButton({
   max_players: maxPlayers,
   min_rank,
   max_rank,
+  status,
   Game: { required_social },
 }) {
   const { data: user } = useUser();
@@ -35,6 +36,14 @@ export default function JoinTournamentButton({
   if (participants.length >= maxPlayers) return <div>Tournament Full</div>;
 
   const social = socials.find(({ id }) => id == required_social);
+
+  if (status == "Pending") {
+    return <div className="text-sm text-neutral-300">Approval Pending</div>;
+  }
+
+  if (status == "Denied") {
+    return <div className="text-sm text-red-500">Approval request denied</div>;
+  }
 
   if (!hasRequiredSocial && social)
     return (

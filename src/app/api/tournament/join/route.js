@@ -8,9 +8,15 @@ import { getRank, isRankInRange } from "@/utils/rank";
 export async function POST(req) {
   const { tournament_id } = await req.json();
   const { id: user_id, balance, xp } = await getUserDetails();
-  const { entry_fee, start, max_players, min_rank, max_rank } =
+  const { entry_fee, start, max_players, min_rank, max_rank, status } =
     await getTournament(tournament_id);
   const participants = await getParticipants(tournament_id);
+
+  if (status != "Approved")
+    return Response.json(
+      { error: "Tournament is not approved" },
+      { status: 400 },
+    );
 
   if (new Date(start) < new Date())
     return Response.json(

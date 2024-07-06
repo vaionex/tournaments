@@ -10,17 +10,14 @@ export async function createTournament({ banner: bannerFile, ...rest }) {
     ? await uploadPublicImage(bannerFile, `/tournaments/${v4()}`)
     : undefined;
 
-  const { data } = await supabase
-    .from("Tournament")
-    .insert(
-      pickBy(
-        { ...rest, banner, user_id: await getUserId() },
-        (value) => value != undefined,
-      ),
-    )
-    .select()
-    .throwOnError();
-  return data[0];
+  const { data } = await api.post(
+    "tournament/create",
+    pickBy(
+      { ...rest, banner, user_id: await getUserId() },
+      (value) => value != undefined,
+    ),
+  );
+  return data;
 }
 
 export async function updateTournament(id, { banner: bannerFile, ...rest }) {
@@ -55,6 +52,7 @@ export async function getUpcomingTournaments() {
   const { data } = await supabase
     .from("Tournament")
     .select("*, Game (*)")
+    .eq("status", "Approved")
     .gt("start", new Date().toISOString())
     .order("start")
     .throwOnError();
@@ -65,6 +63,7 @@ export async function getPastTournaments({ limit = 9 } = {}) {
   const { data } = await supabase
     .from("Tournament")
     .select("*, Game (*)")
+    .eq("status", "Approved")
     .lt("end", new Date().toISOString())
     .order("end", { ascending: false })
     .limit(limit)
