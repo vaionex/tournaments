@@ -73,7 +73,7 @@ export default async function Matchmaking({ params: { id } }) {
           <div className="space-y-4">
             <Input
               value={server_ip}
-              label="Key"
+              label="Server IP"
               className="bg-primary"
               readOnly
             />
@@ -92,7 +92,7 @@ export default async function Matchmaking({ params: { id } }) {
       </Section>
       <Section
         title="Instructions"
-        description="Step-by-step guidance on how to use the matchmaking key to enter the tournament lobby."
+        description="Step-by-step guidance on how to enter the tournament lobby."
       >
         {instructions[Game.name]}
       </Section>
