@@ -29,7 +29,7 @@ export default function Games() {
           </div>
           <h1 className="mb-6 text-5xl font-semibold">Our Games Library</h1>
           <h2 className="mb-24 text-xl text-gray-300">
-            Browse and Select from Our Extensive Collection of Competitive
+            Browse and Select from Our Growing Collection of Competitive
             Games.
           </h2>
         </div>

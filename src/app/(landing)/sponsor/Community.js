@@ -60,7 +60,7 @@ export default function Gamers() {
               Become a sponsor <ArrowRight />
             </a>
             <div className="mb-2 text-4xl font-semibold">
-              Maximize Exposure in High-Stakes Competitions
+              Increase Exposure in High-Stakes Competitions
             </div>
             <div className="mb-4 text-neutral-100">
               Harness the Power of Esports for Unmatched Brand Exposure and
@@ -68,7 +68,7 @@ export default function Gamers() {
             </div>
             <div className="text-neutral-300">
               Sponsorship with Tournaments.com puts your brand front and center
-              in major esports events, offering prime visibility in streamed
+              in events, offering prime visibility in streamed
               matches, event spaces, and related content. Gain extensive
               exposure through branded game integrations and promotional events
               that resonate with gamers worldwide.
