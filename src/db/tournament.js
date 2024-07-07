@@ -20,16 +20,15 @@ export async function createTournament({ banner: bannerFile, ...rest }) {
   return data;
 }
 
-export async function updateTournament(id, { banner: bannerFile, ...rest }) {
+export async function updateTournament({ banner: bannerFile, ...rest }) {
   const banner = bannerFile
     ? await uploadPublicImage(bannerFile, `/tournaments/${v4()}`)
     : undefined;
 
-  await supabase
-    .from("Tournament")
-    .update(pickBy({ ...rest, banner }, (value) => value != undefined))
-    .eq("id", id)
-    .throwOnError();
+  await api.post(
+    "tournament/update",
+    pickBy({ ...rest, banner }, (value) => value != undefined),
+  );
 }
 
 export async function deleteTournament(id) {
@@ -67,6 +66,16 @@ export async function getPastTournaments({ limit = 9 } = {}) {
     .lt("end", new Date().toISOString())
     .order("end", { ascending: false })
     .limit(limit)
+    .throwOnError();
+  return data;
+}
+
+export async function getPendingTournaments() {
+  const { data } = await supabase
+    .from("Tournament")
+    .select("*, Game (*)")
+    .eq("status", "Pending")
+    .order("created_at")
     .throwOnError();
   return data;
 }

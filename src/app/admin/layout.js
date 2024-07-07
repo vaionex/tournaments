@@ -11,6 +11,11 @@ import { Users01 } from "untitledui-js-base";
 const links = [
   { name: "Users", href: "users", icon: Users01 },
   { name: "Tournaments", href: "tournaments", icon: LogoSimple },
+  {
+    name: "Pending Tournaments",
+    href: "pending-tournaments",
+    icon: LogoSimple,
+  },
 ];
 
 export default function AdminLayout({ children }) {
@@ -30,7 +35,7 @@ export default function AdminLayout({ children }) {
             <Link
               className={twMerge(
                 "flex items-center gap-3 rounded-lg px-3 py-2 font-semibold transition hover:bg-white/10",
-                pathname.endsWith(href) && "bg-white/10",
+                pathname.endsWith("/" + href) && "bg-white/10",
               )}
               key={name}
               href={href}
