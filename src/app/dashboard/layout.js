@@ -1,16 +1,22 @@
 "use client";
+
 import useAuthentication from "@/hooks/auth/useAuthentication";
 import { usePathname, useRouter } from "next/navigation";
 import Container from "@/components/ui/container";
 import Header from "../(landing)/header";
+import { useEffect } from "react";
 
 export default function DashboardLayout({ children }) {
   const { push } = useRouter();
-  const { isUnauthenticated } = useAuthentication();
+  const { isUnauthenticated, isLoading } = useAuthentication();
   const pathname = usePathname();
 
-  if (isUnauthenticated)
-    push(`/login?redirect=${encodeURIComponent(pathname)}`);
+  useEffect(() => {
+    if (!isLoading && isUnauthenticated)
+      push(`/login?redirect=${encodeURIComponent(pathname)}`);
+  }, [isUnauthenticated, isLoading]);
+
+  if (isLoading || isUnauthenticated) return null;
 
   return (
     <Container className="mt-36">
