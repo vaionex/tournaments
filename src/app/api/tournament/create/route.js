@@ -1,17 +1,17 @@
-import { createClient, getUserDetails } from "@/supabase/server";
+import { admin } from "@/supabase/admin";
+import { getUserDetails } from "@/supabase/server";
 
 export async function POST(req) {
-  const supabase = createClient();
   const tournamentData = await req.json();
-  const { admin } = await getUserDetails();
+  const { admin: isAdmin, id: user_id } = await getUserDetails();
 
-  const status = admin ? "Approved" : "Pending";
+  const status = isAdmin ? "Approved" : "Pending";
 
-  const { data } = await supabase
+  const { data } = await admin
     .from("Tournament")
-    .insert({ ...tournamentData, status })
+    .insert({ ...tournamentData, status, user_id })
     .select()
     .throwOnError();
 
-  return data[0];
+  return Response.json(data[0]);
 }

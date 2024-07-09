@@ -108,6 +108,8 @@ export default function TournamentForm({
 
   function handleSubmit(e) {
     e.preventDefault();
+    if (!bannerUrl && !banner)
+      return toast.error("Tournament banner is required");
     if (!game_id) return toast.error("Game is required");
     if (prize_pool_tiers.reduce(add) != 100)
       return toast.error("Prize Pool Tiers must add to 100");
