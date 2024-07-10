@@ -54,7 +54,7 @@ export default function ProfileAccount() {
             <Share06 className="size-5" />
             Share
           </Button>
-          <Button size="sm" variant="black" className="px-4 py-2.5">
+          <Button size="sm" variant="black" className="px-4 py-2.5" asChild>
             <a
               href={`/user/${user.id}`}
               className="flex items-center gap-2"
@@ -62,8 +62,8 @@ export default function ProfileAccount() {
             >
               <Eye className="size-5" />
               View Profile
+              <LinkExternal01 className="size-5" />
             </a>
-            <LinkExternal01 className="size-5" />
           </Button>
         </div>
       </div>
