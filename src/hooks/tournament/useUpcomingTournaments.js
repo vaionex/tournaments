@@ -3,7 +3,7 @@ import { useQuery } from "react-query";
 
 export default function useUpcomingTournaments() {
   return useQuery({
-    queryKey: ["tournaments"],
+    queryKey: ["tournaments", "upcoming"],
     queryFn: () => getUpcomingTournaments(),
   });
 }

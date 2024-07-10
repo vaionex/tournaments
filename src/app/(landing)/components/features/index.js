@@ -34,9 +34,8 @@ export default function Features() {
             </div>
             <div className="my-8 h-px bg-white/20" />
             <div className="text-neutral-300">
-              Whether you're hosting a local showdown or an international
-              esports competition, our platform provides all the tools you need
-              to run a smooth and successful event. From player registration to
+              Our platform provides all the tools you need
+              to run a smooth and successful eSports tournament. From player registration to
               real-time match updates, everything is handled with precision to
               ensure a great experience for participants and spectators alike.
             </div>

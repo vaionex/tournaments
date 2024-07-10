@@ -24,8 +24,8 @@ export default async function Tournaments({ searchParams: { game: gameId } }) {
             Our Tournaments
           </h1>
           <h2 className="mb-24 text-xl leading-[30px] text-gray-300">
-            Join the Excitement: Compete, Win, and Rise to Glory in Our Wide
-            Range of Gaming Tournaments. Get Ready to Play!
+            Compete to Win Cash Prizes in Our Wide
+            Range of Gaming Tournaments!
           </h2>
         </div>
         <Filters gameId={gameId} />

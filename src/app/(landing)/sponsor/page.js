@@ -22,10 +22,10 @@ export default function Sponsor() {
             <BadgeTitle>Sponsor</BadgeTitle>
           </div>
           <h1 className="mb-6 text-5xl font-semibold">
-            Partner with Us to Elevate Your Brand
+            Partner with Us
           </h1>
           <h2 className="mb-6 text-xl text-gray-300">
-            Connect Your Brand to the World of Competitive Gaming
+            Connect With Global Gamers
           </h2>
           <Button
             className="mb-24"
