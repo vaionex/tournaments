@@ -50,7 +50,17 @@ export default function ProfileAccount() {
           </div>
         </div>
         <div className="space-x-4">
-          <Button size="sm" variant="black" className="px-4 py-2.5">
+          <Button
+            size="sm"
+            variant="black"
+            className="px-4 py-2.5"
+            onClick={() => {
+              window.navigator.clipboard.writeText(
+                `${window.origin}/user/${user.id}`,
+              );
+              toast.success("Copied to clipboard!");
+            }}
+          >
             <Share06 className="size-5" />
             Share
           </Button>
