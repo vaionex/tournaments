@@ -33,7 +33,7 @@ export default function Perks() {
           waived entry fees, and more!
         </div>
       </div>
-      <div className="grid grid-cols-3 gap-6">
+      <div className="grid gap-6 lg:grid-cols-3">
         {perks.map(({ name, description, highlight = false, icon: Icon }) => (
           <div
             className={twMerge(

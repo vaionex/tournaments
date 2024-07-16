@@ -26,7 +26,7 @@ export default function Benefits() {
         </h2>
       </div>
       <div>
-        <div className="mb-12 grid grid-cols-2 gap-8">
+        <div className="mb-8 grid gap-8 lg:mb-12 lg:grid-cols-2">
           <div className="relative h-[43rem] rounded-lg bg-primary px-8 py-14">
             <Details
               title="Unrestricted Participation"
