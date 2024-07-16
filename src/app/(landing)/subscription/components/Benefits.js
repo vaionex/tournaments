@@ -37,7 +37,12 @@ export default function Benefits() {
               className="absolute inset-x-0 bottom-0"
             />
           </div>
-          <div className="flex flex-col justify-end bg-neutral-800 px-8 py-14">
+          <div
+            className="flex flex-col justify-end bg-neutral-800 bg-cover px-8 py-14"
+            style={{
+              backgroundImage: `url(/images/landing/subscription/soldier.webp)`,
+            }}
+          >
             <Details
               title="Priority Access"
               description="Benefit from priority team placement and reduced waiting times. Our premium users are always positioned optimally to compete, ensuring a smoother and more efficient tournament experience."
@@ -45,7 +50,12 @@ export default function Benefits() {
           </div>
         </div>
 
-        <div className="rounded-xl bg-neutral-800 px-8 py-14">
+        <div
+          className="rounded-xl bg-neutral-800 bg-cover px-8 py-14"
+          style={{
+            backgroundImage: `url(/images/landing/subscription/rewards.webp)`,
+          }}
+        >
           <div className="max-w-sm">
             <div className="mb-8 flex size-12 items-center justify-center rounded-lg border border-white/50 bg-white/10">
               <CoinsStacked03 />
