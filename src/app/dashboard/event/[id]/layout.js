@@ -66,6 +66,8 @@ export default async function TournamentLayout({ children, params: { id } }) {
           {links
             .filter(({ name }) => {
               if (name == "Matchmaking Key" && !hasParticipants) return false;
+              if (name == "Brackets" && tournament.format == "Brackets")
+                return false;
               return true;
             })
             .map(({ icon, ...link }) => (
