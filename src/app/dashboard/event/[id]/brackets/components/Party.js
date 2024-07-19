@@ -21,7 +21,6 @@ export default function Party({
     particpants.find(({ id: participantId }) => id == participantId)?.User ||
     {};
   const { isAdmin } = useAdmin();
-
   const isLoser = matchCompleted && !isWinner;
   const canAdvanceToNextRound = !matchCompleted && bothPartiesAvailable;
   return (

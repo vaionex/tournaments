@@ -1,4 +1,3 @@
-import useAuthentication from "./useAuthentication";
 import useUser from "./useUser";
 
 export default function useAdmin() {
