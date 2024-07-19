@@ -3,8 +3,10 @@ import { Dropdown } from "@/components/ui/dropdown-menu";
 import useAdmin from "@/hooks/auth/useAdmin";
 import useAdvanceToNextRound from "@/hooks/tournament/match/useAdvanceToNextRound";
 import useParticipants from "@/hooks/tournament/useParticipants";
+import { useState } from "react";
 import { twMerge } from "tailwind-merge";
 import { DotsVertical } from "untitledui-js-base";
+import Score from "./Score";
 
 export default function Party({
   id,
@@ -14,7 +16,9 @@ export default function Party({
   matchId,
   matchCompleted,
   bothPartiesAvailable,
+  index,
 }) {
+  const [edit, setEdit] = useState(false);
   const { data: particpants = [] } = useParticipants(tournamentId);
   const { mutate: advance } = useAdvanceToNextRound();
   const { profile_picture, username = " " } =
@@ -23,6 +27,7 @@ export default function Party({
   const { isAdmin } = useAdmin();
   const isLoser = matchCompleted && !isWinner;
   const canAdvanceToNextRound = !matchCompleted && bothPartiesAvailable;
+
   return (
     <div className="flex items-center">
       <div
@@ -35,16 +40,27 @@ export default function Party({
         <div
           className={twMerge("flex justify-between", isLoser && "opacity-25")}
         >
-          <div className={twMerge("flex items-center gap-2")}>
+          <div className={twMerge("flex w-24 flex-1 items-center gap-2")}>
             {id && (
               <Avatar
                 profile_picture={profile_picture}
                 className="size-8 rounded-full"
+                containerClassName="shrink-0"
               />
             )}
-            <div className="whitespace-pre">{username}&nbsp;</div>
+            <div className="truncate whitespace-pre">{username}&nbsp;</div>
           </div>
-          {id && <div className={isWinner && "text-primary"}>{score}</div>}
+          {id && (
+            <Score
+              isWinner={isWinner}
+              score={score}
+              edit={edit}
+              tournamentId={tournamentId}
+              matchId={matchId}
+              onComplete={() => setEdit(false)}
+              index={index}
+            />
+          )}
         </div>
       </div>
 
@@ -56,7 +72,7 @@ export default function Party({
                 label: "Advance to next round",
                 onClick: () => advance({ tournamentId, matchId, winnerId: id }),
               },
-              { label: "Edit Score" },
+              { label: "Edit Score", onClick: () => setEdit(true) },
             ].filter(Boolean)}
             trigger={
               <button>

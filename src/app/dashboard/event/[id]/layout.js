@@ -74,7 +74,7 @@ export default async function TournamentLayout({ children, params: { id } }) {
               <MenuLink {...link} key={link.href} />
             ))}
         </div>
-        <div className="h-full flex-1 ">
+        <div className="h-full min-w-0 flex-1">
           <div className="border-b border-l border-r border-white/20">
             {children}
           </div>

@@ -25,16 +25,23 @@ export default function Brackets() {
           participant1_id,
           participant2_id,
           winner_id,
+          score1,
+          score2,
           ...match
         }) => ({
           ...match,
           nextMatchId: next_match_id,
           nextLooserMatchId: next_looser_match_id,
-          participants: [participant1_id, participant2_id].map((id) => ({
+          participants: [
+            { id: participant1_id, score: score1 },
+            { id: participant2_id, score: score2 },
+          ].map(({ id, score }, index) => ({
             id,
             name: id,
             isWinner: winner_id && id == winner_id,
             winner_id,
+            score,
+            index,
           })),
         }),
       ),
@@ -66,7 +73,7 @@ export default function Brackets() {
   }
 
   return (
-    <div>
+    <div className="min-w-0 overflow-auto">
       {isAdmin && <Button onClick={() => generate({ id })}>Reset</Button>}
       <EliminationBracket matches={matches} tournamentId={id} />
     </div>

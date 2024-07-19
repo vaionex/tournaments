@@ -29,18 +29,15 @@ export default memo(function EliminationBracket({ matches, tournamentId }) {
     <DoubleEliminationBracket
       matches={{ lower, upper }}
       matchComponent={CustomMatch}
-      svgWrapper={({ children, ...props }) => (
-        <SVGViewer
-          width={1600}
-          height={1000}
+      svgWrapper={({ ...props }) => (
+        <div
+          style={{ width: "2000px", height: "100%" }}
           theme={svgTheme}
           background="black"
           SVGbackground="black"
           {...props}
           className="[&_rect]:fill-black"
-        >
-          {children}
-        </SVGViewer>
+        />
       )}
     />
   );
