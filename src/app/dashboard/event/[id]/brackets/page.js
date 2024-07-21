@@ -63,7 +63,7 @@ export default function Brackets() {
     );
 
   if (participants.length == 0)
-    return <div>Waiting for participants to join</div>;
+    return <div>Waiting for participants to join...</div>;
 
   if (matches.length == 0) {
     if (isAdmin)
