@@ -1,7 +1,7 @@
 import {
   createTheme,
   DoubleEliminationBracket,
-  SVGViewer,
+  SingleEliminationBracket,
 } from "@g-loot/react-tournament-brackets";
 import { partition } from "lodash";
 import { memo, useCallback, useMemo } from "react";
@@ -25,9 +25,27 @@ export default memo(function EliminationBracket({ matches, tournamentId }) {
     [tournamentId],
   );
 
+  if (matches.length > 3)
+    return (
+      <DoubleEliminationBracket
+        matches={{ lower, upper }}
+        matchComponent={CustomMatch}
+        svgWrapper={({ ...props }) => (
+          <div
+            style={{ width: "2000px", height: "100%" }}
+            theme={svgTheme}
+            background="black"
+            SVGbackground="black"
+            {...props}
+            className="[&_rect]:fill-black"
+          />
+        )}
+      />
+    );
+
   return (
-    <DoubleEliminationBracket
-      matches={{ lower, upper }}
+    <SingleEliminationBracket
+      matches={matches}
       matchComponent={CustomMatch}
       svgWrapper={({ ...props }) => (
         <div

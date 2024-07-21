@@ -28,7 +28,10 @@ export async function POST(req) {
   const participants = await getParticipants(tournamentId);
   const ids = participants.map(({ id }) => id);
 
-  const matches = DoubleElimination(ids, 1).map((match) => ({
+  const EliminationFactory =
+    ids.length > 3 ? DoubleElimination : SingleElimination;
+
+  const matches = EliminationFactory(ids, 1).map((match) => ({
     id: generateId(match),
     tournament_id: tournamentId,
     next_match_id: match.win ? generateId(match.win) : null,
