@@ -6,6 +6,7 @@ import Link from "next/link";
 const links = [
   { name: "Tournaments", href: "/tournaments" },
   { name: "News", href: "/news" },
+  { name: "Subscription", href: "/subscription" },
   { name: "Discord", href: DISCORD_URL },
 ];
 export default function Footer() {
@@ -17,8 +18,7 @@ export default function Footer() {
           <div className="flex flex-col items-center justify-center space-y-6 py-16">
             <Logo className="h-12" />
             <div className="max-w-3xl text-center text-xl">
-              Compete against
-              friends to claim victory on Tournaments.com today!
+              Compete against friends to claim victory on Tournaments.com today!
             </div>
           </div>
           <div className="flex flex-col items-center justify-between gap-4 border-t border-gray-800 py-14 md:flex-row">

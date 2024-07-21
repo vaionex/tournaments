@@ -7,13 +7,13 @@ import Header from "../(landing)/header";
 import { useEffect } from "react";
 
 export default function DashboardLayout({ children }) {
-  const { push } = useRouter();
+  const { replace } = useRouter();
   const { isUnauthenticated, isLoading } = useAuthentication();
   const pathname = usePathname();
 
   useEffect(() => {
     if (!isLoading && isUnauthenticated)
-      push(`/login?redirect=${encodeURIComponent(pathname)}`);
+      replace(`/login?redirect=${encodeURIComponent(pathname)}`);
   }, [isUnauthenticated, isLoading]);
 
   if (isLoading || isUnauthenticated) return null;

@@ -55,3 +55,8 @@ export async function getUserDetails() {
     .throwOnError();
   return { ...user, ...users[0] };
 }
+
+export async function isUserAdmin() {
+  const { admin } = await getUserDetails();
+  return admin;
+}
