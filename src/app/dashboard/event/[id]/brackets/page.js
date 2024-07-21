@@ -8,13 +8,20 @@ import Loader from "@/components/ui/loader";
 import useAdmin from "@/hooks/auth/useAdmin";
 import { useMemo } from "react";
 import EliminationBracket from "./components/EliminationBracket";
+import useParticipants from "@/hooks/tournament/useParticipants";
 
 export default function Brackets() {
   const { id } = useParams();
-  const { data = [], isLoading } = useMatches({ tournamentId: id });
+  const { data = [], isLoading: isLoadingMatches } = useMatches({
+    tournamentId: id,
+  });
+  const { data: participants = [], isLoading: isLoadingParticipants } =
+    useParticipants(id);
   const { mutate: generate, isLoading: isLoadingGenerate } =
     useGenerateMatches();
   const { isAdmin } = useAdmin();
+
+  const isLoading = isLoadingMatches || isLoadingParticipants;
 
   const matches = useMemo(
     () =>
@@ -54,6 +61,9 @@ export default function Brackets() {
         <Loader className="mx-auto" />
       </div>
     );
+
+  if (participants.length == 0)
+    return <div>Waiting for participants to join</div>;
 
   if (matches.length == 0) {
     if (isAdmin)
