@@ -1,22 +1,30 @@
-import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
-import { getUpcomingTournaments } from "@/db/tournament";
+import FeaturedTournaments from "@/app/(landing)/components/featured-tournaments";
+import FirstTournament from "@/app/(landing)/tournaments/components/featured-tournaments/FirstTournament";
+import Filters from "@/app/(landing)/tournaments/components/filters";
+import PastEvents from "@/app/(landing)/tournaments/components/PastEvents";
 import TournamentGrid from "@/components/tournament/tournament-grid";
+import { Button } from "@/components/ui/button";
+import Container from "@/components/ui/container";
+import { getUpcomingTournaments } from "@/db/tournament";
 
-export const revalidate = 0;
-
-export default async function Overview() {
-  const tournaments = await getUpcomingTournaments();
+export default async function Tournaments({ searchParams: { game: gameId } }) {
+  const allTournaments = await getUpcomingTournaments();
+  const filteredTournaments = allTournaments.filter(
+    (tournament) => tournament.Game.id === gameId || !gameId,
+  );
+  const firstTournament = filteredTournaments[0];
+  const tournaments = filteredTournaments.slice(1);
   return (
-    <div>
-      <div className="mb-8 flex items-center justify-between">
-        <h2 className="text-3xl font-semibold">Tournaments</h2>
-        <Button href="/dashboard/tournaments/create" variant="black">
-          <Plus className="size-5" />
-          Create a Tournament
-        </Button>
+    <Container>
+      <div className="flex items-center justify-between">
+        <Filters gameId={gameId} />
+        <Button>Create a tournament</Button>
       </div>
+      {firstTournament && <FirstTournament {...firstTournament} />}
       <TournamentGrid tournaments={tournaments} />
-    </div>
+      <div className="mt-20">
+        <PastEvents />
+      </div>
+    </Container>
   );
 }
