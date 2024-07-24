@@ -9,9 +9,9 @@ import Providers from "./(landing)/providers";
 
 const dmSans = DM_Sans({ subsets: ["latin"] });
 
-const title = "Tournaments.com";
+const title = "Play & Win Cash in Esports Tournaments | Tournaments.com";
 const description =
-  "Join Tournaments.com for the ultimate gaming and earn rewards";
+  "Compete in esports tournaments on Tournaments.com! Play with friends, showcase your skills, and win cash rewards. Join the action today!";
 export const metadata = {
   title,
   description,
