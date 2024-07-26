@@ -57,6 +57,6 @@ export async function getUserDetails() {
 }
 
 export async function isUserAdmin() {
-  const { admin } = await getUserDetails();
-  return admin;
+  const { is_admin } = await getUserDetails();
+  return is_admin;
 }

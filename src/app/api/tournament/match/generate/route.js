@@ -9,7 +9,7 @@ export async function POST(req) {
   const { tournamentId } = await req.json();
 
   if (matchesExist(tournamentId)) {
-    const { admin: is_admin } = await getUserDetails();
+    const { is_admin } = await getUserDetails();
     if (is_admin) clearMatches(tournamentId);
     else
       return Response.json({ error: "Matches already exist" }, { status: 400 });

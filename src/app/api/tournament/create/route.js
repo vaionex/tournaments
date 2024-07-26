@@ -3,9 +3,9 @@ import { getUserDetails } from "@/supabase/server";
 
 export async function POST(req) {
   const tournamentData = await req.json();
-  const { admin: isAdmin, id: user_id } = await getUserDetails();
+  const { is_admin, id: user_id } = await getUserDetails();
 
-  const status = isAdmin ? "Approved" : "Pending";
+  const status = is_admin ? "Approved" : "Pending";
 
   const { data } = await admin
     .from("Tournament")
