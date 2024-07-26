@@ -1,5 +1,6 @@
 import { supabase } from "@/supabase/client";
 import { getUserId } from "@/supabase/utils";
+import { api } from "@/utils/api";
 import { getNextRank, getRank, getRankProgressPercentage } from "@/utils/rank";
 import { pickBy } from "lodash";
 
@@ -44,12 +45,11 @@ export async function updateUser({
 
   const banner = bannerFile ? await uploadBanner(bannerFile) : undefined;
 
-  const id = await getUserId();
   const data = pickBy(
     { ...user, profile_picture, banner },
     (value) => value != undefined,
   );
-  await supabase.from("User").update(data).eq("id", id).throwOnError();
+  await api.post("user/update", data);
   return data;
 }
 
