@@ -4,10 +4,10 @@ import { getUserDetails } from "@/supabase/server";
 
 export async function POST(req) {
   const { id: tournamentId } = await req.json();
-  const { id: user_id, admin: isAdmin } = await getUserDetails();
+  const { id: user_id, is_admin } = await getUserDetails();
   const tournament = await getTournament(tournamentId);
 
-  const canDelete = tournament.user_id == user_id || isAdmin;
+  const canDelete = tournament.user_id == user_id || is_admin;
   if (!canDelete)
     return Response.json({ error: "Not authorized" }, { status: 401 });
 
