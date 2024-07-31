@@ -1,5 +1,5 @@
 import Container from "@/components/ui/container";
-import { HourGlass03 } from "untitledui-js-base";
+import { ArrowUpRight, HourGlass03 } from "untitledui-js-base";
 import CTA from "../components/cta";
 import BadgeTitle from "../BadgeTitle";
 
@@ -50,12 +50,19 @@ export default function Games() {
             >
               <div className="absolute inset-x-0 bottom-0 flex h-24 flex-col items-center justify-center border-t border-white/20 bg-black/40 p-4 text-center backdrop-blur-xl">
                 <span className="text-2xl font-bold">{name}</span>
-                {comingSoon && (
-                  <div className="mx-auto mt-1 flex w-fit items-center gap-1 rounded border border-white/10 bg-white/5 px-2.5 py-0.5 text-sm">
-                    <HourGlass03 className="size-3" />
-                    Coming Soon
-                  </div>
-                )}
+                <div className="mx-auto mt-1 flex w-fit items-center gap-1 rounded border border-white/10 bg-white/5 px-2.5 py-0.5 text-sm">
+                  {comingSoon ? (
+                    <>
+                      <HourGlass03 className="size-3" />
+                      Coming Soon
+                    </>
+                  ) : (
+                    <>
+                      <ArrowUpRight className="size-3" />
+                      Play Now
+                    </>
+                  )}
+                </div>
               </div>
             </div>
           ))}
