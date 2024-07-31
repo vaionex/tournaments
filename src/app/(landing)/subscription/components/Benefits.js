@@ -1,3 +1,4 @@
+import Container from "@/components/ui/container";
 import { CoinsStacked03 } from "untitledui-js-base";
 
 export default function Benefits() {
@@ -12,61 +13,68 @@ export default function Benefits() {
     );
   }
   return (
-    <div className="py-24">
-      <div className="text-center">
-        <h1 className="mb-5 text-5xl font-bold leading-[60px]">
-          Premium Membership{" "}
-          <span className="inline-block bg-gradient-to-r from-[#155EEF] to-[#09C4FF] bg-clip-text text-transparent">
-            Benefits
-          </span>
-        </h1>
-        <h2 className="mb-12 text-xl leading-[30px] text-gray-300">
-          Elevate your tournament experience with exclusive perks and
-          privileges!
-        </h2>
-      </div>
-      <div>
-        <div className="mb-8 grid gap-8 lg:mb-12 lg:grid-cols-2">
-          <div className="relative h-[43rem] rounded-lg bg-primary px-8 py-14">
-            <Details
-              title="Unrestricted Participation"
-              description="Join multiple teams and enter numerous competitions without restrictions. Our premium membership affords you the freedom to explore various tournaments and maximize your potential."
-            />
-            <img
-              src="/images/landing/subscription/team.webp"
-              className="absolute inset-x-0 bottom-0"
-            />
+    <div
+      className="bg-cover bg-center py-24"
+      style={{
+        backgroundImage: `url(/images/landing/subscription/blue-background.svg)`,
+      }}
+    >
+      <Container>
+        <div className="text-center">
+          <h1 className="mb-5 text-5xl font-bold leading-[60px]">
+            Premium Membership{" "}
+            <span className="inline-block bg-gradient-to-r from-[#155EEF] to-[#09C4FF] bg-clip-text text-transparent">
+              Benefits
+            </span>
+          </h1>
+          <h2 className="mb-12 text-xl leading-[30px] text-gray-300">
+            Elevate your tournament experience with exclusive perks and
+            privileges!
+          </h2>
+        </div>
+        <div>
+          <div className="mb-8 grid gap-8 lg:mb-12 lg:grid-cols-2">
+            <div className="relative h-[43rem] rounded-lg bg-primary px-8 py-14">
+              <Details
+                title="Unrestricted Participation"
+                description="Join multiple teams and enter numerous competitions without restrictions. Our premium membership affords you the freedom to explore various tournaments and maximize your potential."
+              />
+              <img
+                src="/images/landing/subscription/team.webp"
+                className="absolute inset-x-0 bottom-0"
+              />
+            </div>
+            <div
+              className="flex flex-col justify-end bg-neutral-800 bg-cover px-8 py-14"
+              style={{
+                backgroundImage: `url(/images/landing/subscription/soldier.webp)`,
+              }}
+            >
+              <Details
+                title="Priority Access"
+                description="Benefit from priority team placement and reduced waiting times. Our premium users are always positioned optimally to compete, ensuring a smoother and more efficient tournament experience."
+              />
+            </div>
           </div>
+
           <div
-            className="flex flex-col justify-end bg-neutral-800 bg-cover px-8 py-14"
+            className="rounded-xl bg-neutral-800 bg-cover px-8 py-14"
             style={{
-              backgroundImage: `url(/images/landing/subscription/soldier.webp)`,
+              backgroundImage: `url(/images/landing/subscription/rewards.webp)`,
             }}
           >
-            <Details
-              title="Priority Access"
-              description="Benefit from priority team placement and reduced waiting times. Our premium users are always positioned optimally to compete, ensuring a smoother and more efficient tournament experience."
-            />
-          </div>
-        </div>
-
-        <div
-          className="rounded-xl bg-neutral-800 bg-cover px-8 py-14"
-          style={{
-            backgroundImage: `url(/images/landing/subscription/rewards.webp)`,
-          }}
-        >
-          <div className="max-w-sm">
-            <div className="mb-8 flex size-12 items-center justify-center rounded-lg border border-white/50 bg-white/10">
-              <CoinsStacked03 />
+            <div className="max-w-sm">
+              <div className="mb-8 flex size-12 items-center justify-center rounded-lg border border-white/50 bg-white/10">
+                <CoinsStacked03 />
+              </div>
+              <Details
+                title="Expedited Rewards"
+                description="Enjoy faster payout processes after winning. Premium users receive their rewards promptly, allowing them to benefit from their victories without delay."
+              />
             </div>
-            <Details
-              title="Expedited Rewards"
-              description="Enjoy faster payout processes after winning. Premium users receive their rewards promptly, allowing them to benefit from their victories without delay."
-            />
           </div>
         </div>
-      </div>
+      </Container>
     </div>
   );
 }

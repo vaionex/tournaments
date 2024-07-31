@@ -29,7 +29,9 @@ export default function Subscription() {
           </h2>
         </div>
         <Perks />
-        <Benefits />
+      </Container>
+      <Benefits />
+      <Container>
         <FAQs />
         <CTA />
       </Container>
