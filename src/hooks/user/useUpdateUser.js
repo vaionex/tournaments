@@ -9,7 +9,7 @@ export default function useUpdateUser() {
       const id = await getUserId();
       await updateUser({ id, ...data });
     },
-    onSuccess: (data) => {
+    onSuccess: (_, { id, ...data }) => {
       queryClient.setQueryData(["user"], (user = {}) => {
         return {
           ...user,
