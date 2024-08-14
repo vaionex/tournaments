@@ -9,7 +9,7 @@ export default function UserFilterSection({
   onChange,
 }) {
   const [filters, setFilters] = useState(originalFilters);
-  const { minimumBalace, maximumBalance } = filters;
+  const { minimumBalance, maximumBalance } = filters;
 
   function update(value) {
     setFilters({ ...filters, ...value });
@@ -20,12 +20,12 @@ export default function UserFilterSection({
       <FilterSection
         label="Balance"
         icon={CurrencyDollar}
-        onReset={() => update({ minimumBalace: 0, maximumBalance: Infinity })}
+        onReset={() => update({ minimumBalance: 0, maximumBalance: Infinity })}
       >
         <div className="flex min-w-0 items-center justify-between gap-2">
           <Input
-            value={minimumBalace}
-            onChange={(e) => update({ minimumBalace: Number(e.target.value) })}
+            value={minimumBalance}
+            onChange={(e) => update({ minimumBalance: Number(e.target.value) })}
             type="number"
             placeholder="Min"
           />
