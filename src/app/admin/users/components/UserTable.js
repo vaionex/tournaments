@@ -1,20 +1,16 @@
 "use client";
 import Loader from "@/components/ui/loader";
-import useUsers from "@/hooks/admin/useUsers";
 import UserTableRow from "./UserTableRow";
 import Pagination from "../../components/Pagination";
-import { useState } from "react";
 
-const limit = 15;
-export default function UsersTable() {
-  const [page, setPage] = useState(1);
-  const { data: { users = [], total = 0 } = {}, isLoading } = useUsers({
-    limit,
-    page,
-  });
-  const pages = Math.ceil(total / limit);
-
-  if (isLoading)
+export default function UsersTable({
+  loading,
+  users,
+  pages,
+  page,
+  onPageChange,
+}) {
+  if (loading)
     return (
       <div className="flex w-full items-center justify-center pt-36">
         <Loader className="size-10" />
@@ -40,7 +36,7 @@ export default function UsersTable() {
           ))}
         </tbody>
       </table>
-      <Pagination page={page} total={pages} onChange={setPage} />
+      <Pagination page={page} total={pages} onChange={onPageChange} />
     </div>
   );
 }
