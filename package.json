@@ -12,6 +12,7 @@
     "@g-loot/react-tournament-brackets": "^1.0.31-rc",
     "@headlessui/react": "^1.7.19",
     "@heroicons/react": "^2.1.3",
+    "@mantine/hooks": "^5.10.5",
     "@mdxeditor/editor": "^3.4.0",
     "@novu/node": "^0.24.1",
     "@novu/notification-center": "^0.24.1",
