@@ -35,16 +35,34 @@ export async function deleteTournament(id) {
   await api.post("tournament/delete", { id });
 }
 
-export async function getTournaments() {
+export async function getTournaments({
+  limit = 25,
+  page = 1,
+  minimum_prize_pool = 0,
+  maximum_prize_pool = 99999999,
+} = {}) {
+  console.log({ minimum_prize_pool, maximum_prize_pool });
   const { data } = await supabase
     .from("Tournament")
     .select("*, Game (*)")
+    .range(limit * (page - 1), limit * page - 1)
+    .lte("prize_pool", maximum_prize_pool)
+    .gte("prize_pool", minimum_prize_pool)
     .throwOnError();
-  return data.map(({ start, end, ...rest }) => ({
+
+  const { count } = await supabase
+    .from("Tournament")
+    .select("", { count: "exact", head: true })
+    .lte("prize_pool", maximum_prize_pool)
+    .gte("prize_pool", minimum_prize_pool);
+
+  const tournaments = data.map(({ start, end, ...rest }) => ({
     ...rest,
     start: new Date(start),
     end: new Date(end),
   }));
+
+  return { tournaments, total: count };
 }
 
 export async function getUpcomingTournaments() {
