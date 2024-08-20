@@ -5,15 +5,33 @@ import { v4 } from "uuid";
 import { getUserId } from "@/supabase/utils";
 import { api } from "@/utils/api";
 
-export async function createTournament({ banner: bannerFile, ...rest }) {
+export async function createTournament({
+  banner: bannerFile,
+  prizes: _prizes,
+  ...rest
+}) {
   const banner = bannerFile
     ? await uploadPublicImage(bannerFile, `/tournaments/${v4()}`)
+    : undefined;
+
+  const prizes = _prizes
+    ? await Promise.all(
+        _prizes.map(async (prize) => ({
+          ...prize,
+          giftCard: prize.giftCard?.file
+            ? {
+                ...prize.giftCard,
+                file: await uploadGiftCard(prize.giftCard.file, v4()),
+              }
+            : undefined,
+        })),
+      )
     : undefined;
 
   const { data } = await api.post(
     "tournament/create",
     pickBy(
-      { ...rest, banner, user_id: await getUserId() },
+      { ...rest, banner, user_id: await getUserId(), prizes },
       (value) => value != undefined,
     ),
   );
@@ -139,4 +157,19 @@ export async function sendTournamentChatMessage(id, message) {
     .from("TournamentChat")
     .insert({ tournament_id: id, message })
     .throwOnError();
+}
+
+export async function uploadGiftCard(file, path) {
+  const GIFT_CARD_BUCKET = "gift-cards";
+
+  const { data, error } = await supabase.storage
+    .from(GIFT_CARD_BUCKET)
+    .upload(path, file);
+
+  if (error) throw error;
+  const { path: filePath } = data;
+  const {
+    data: { publicUrl },
+  } = supabase.storage.from(GIFT_CARD_BUCKET).getPublicUrl(filePath);
+  return publicUrl + `?id=${Math.random().toString()}`;
 }

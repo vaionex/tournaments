@@ -17,16 +17,13 @@ import { Trophy01 } from "untitledui-js-base";
 export default function EndTournamentModal({ open, setOpen, tournamentId }) {
   const [reviewed, setReviewed] = useState(false);
   const [winners, setWinners] = useState([]);
-  const { data: { prize_pool_tiers = [100], prize_pool = 0 } = {} } =
-    useTournament(tournamentId);
+  const { data: { prizes = [] } = {} } = useTournament(tournamentId);
   const { data: participants = [] } = useParticipants(tournamentId);
   const { mutate: end, isLoading } = useEndTournament();
 
   useEffect(() => {
-    setWinners(
-      prize_pool_tiers.map((tier) => ({ participant_id: undefined, tier })),
-    );
-  }, [prize_pool_tiers]);
+    setWinners(prizes.map((prize) => ({ participant_id: undefined, prize })));
+  }, [prizes]);
 
   function handleEnd() {
     const tierSum = winners.map(({ tier }) => tier).reduce(add, 0);
@@ -75,51 +72,56 @@ export default function EndTournamentModal({ open, setOpen, tournamentId }) {
         <div className="text-red-500">This action cannot be undone.</div>
       </div>
       <div className="my-3 space-y-4">
-        {winners.map(({ participant_id, tier }, index) => (
-          <div className="flex items-center gap-2 rounded-lg border border-white/20 bg-black p-4 text-xl">
-            <div className="w-10 font-medium opacity-50">
-              {ordinal(index + 1)}
-            </div>
-            <div className="flex flex-1 items-center gap-2">
-              <Select
-                items={participants.map(
-                  ({ id, User: { username, profile_picture } }) => ({
-                    label: (
-                      <div className="flex items-center gap-2">
-                        <Avatar src={profile_picture} className="size-6" />
-                        {username}
-                      </div>
-                    ),
-                    value: id,
-                  }),
-                )}
-                value={participant_id}
-                onChange={(value) => {
-                  const temp = [...winners];
-                  temp[index].participant_id = value;
-                  setWinners(temp);
-                }}
-              />
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-16">
-                <Input
-                  value={`${tier}%`}
-                  onChange={(e) => {
+        {winners.map(
+          (
+            { participant_id, prize: { cash = 0, xp = 0, giftCard } },
+            index,
+          ) => (
+            <div className="flex items-center gap-2 rounded-lg border border-white/20 bg-black p-4 text-xl">
+              <div className="w-10 font-medium opacity-50">
+                {ordinal(index + 1)}
+              </div>
+              <div className="flex flex-1 items-center gap-2">
+                <Select
+                  items={participants.map(
+                    ({ id, User: { username, profile_picture } }) => ({
+                      label: (
+                        <div className="flex items-center gap-2">
+                          <Avatar src={profile_picture} className="size-6" />
+                          {username}
+                        </div>
+                      ),
+                      value: id,
+                    }),
+                  )}
+                  value={participant_id}
+                  onChange={(value) => {
                     const temp = [...winners];
-                    temp[index].tier = Number(
-                      e.target.value.replaceAll("%", ""),
-                    );
+                    temp[index].participant_id = value;
                     setWinners(temp);
                   }}
                 />
               </div>
-              <div className="rounded-lg border border-white/10 bg-white/10 px-3 py-2 text-base font-normal">
-                {formatCurrency(prize_pool * (tier / 100))}
+              <div className="flex items-center gap-2">
+                {!!cash && (
+                  <div className="rounded-lg border border-white/10 bg-white/10 px-3 py-2 text-base font-normal">
+                    {formatCurrency(cash)}
+                  </div>
+                )}
+                {!!xp && (
+                  <div className="rounded-lg border border-white/10 bg-white/10 px-3 py-2 text-base font-normal">
+                    {xp}XP
+                  </div>
+                )}
+                {giftCard?.file && (
+                  <div className="rounded-lg border border-white/10 bg-white/10 px-3 py-2 text-base font-normal">
+                    {giftCard?.label}
+                  </div>
+                )}
               </div>
             </div>
-          </div>
-        ))}
+          ),
+        )}
       </div>
       <div className="mb-4 space-y-3">
         <Checkbox

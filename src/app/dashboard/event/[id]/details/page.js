@@ -14,7 +14,7 @@ export default async function Details({ params: { id } }) {
     end,
     prize_pool,
     Game,
-    prize_pool_tiers = [100],
+    prizes = [],
     rules = [],
     min_rank,
     max_rank,
@@ -37,26 +37,17 @@ export default async function Details({ params: { id } }) {
   return (
     <div className="grid grid-cols-2 gap-6 p-6">
       <Section title="Prizes" icon={DollarCircle}>
-        <div className={twMerge("mb-2.5 px-4 py-3", highlighted)}>
-          <div
-            className={twMerge("mb-2 flex items-center gap-2 text-neutral-400")}
-          >
-            <Trophy01 className="size-4" />
-            Prize Pool
-          </div>
-          <div className="text-3xl font-semibold">
-            {formatCurrency(prize_pool)}
-          </div>
-        </div>
         <table className="w-full">
           <thead>
             <tr className="text-left font-normal">
               <th className="w-20 py-2">Position</th>
-              <th className="w-20 py-2">Prize</th>
+              <th className="w-20 py-2">Cash</th>
+              <th className="w-20 py-2">XP</th>
+              <th className="w-20 py-2">Gift Card</th>
             </tr>
           </thead>
           <tbody>
-            {prize_pool_tiers.map((tier, index) => (
+            {prizes.map(({ xp, cash, giftCard }, index) => (
               <tr key={index}>
                 <td>
                   <div
@@ -69,24 +60,40 @@ export default async function Details({ params: { id } }) {
                   </div>
                 </td>
                 <td>
-                  <div
-                    className={twMerge(
-                      "m-1 w-full py-2.5 text-center",
-                      highlighted,
-                    )}
-                  >
-                    {tier}%
-                  </div>
+                  {cash && (
+                    <div
+                      className={twMerge(
+                        "m-1 w-full py-2.5 text-center",
+                        highlighted,
+                      )}
+                    >
+                      {formatCurrency(cash)}
+                    </div>
+                  )}
                 </td>
                 <td>
-                  <div
-                    className={twMerge(
-                      "ml-2 w-full py-2.5 text-center",
-                      highlighted,
-                    )}
-                  >
-                    {formatCurrency((tier / 100) * prize_pool)}
-                  </div>
+                  {xp && (
+                    <div
+                      className={twMerge(
+                        "ml-2 w-full py-2.5 text-center",
+                        highlighted,
+                      )}
+                    >
+                      {xp}
+                    </div>
+                  )}
+                </td>
+                <td>
+                  {giftCard?.file && (
+                    <div
+                      className={twMerge(
+                        "ml-2 w-full py-2.5 text-center",
+                        highlighted,
+                      )}
+                    >
+                      {giftCard?.label}
+                    </div>
+                  )}
                 </td>
               </tr>
             ))}

@@ -31,28 +31,44 @@ export async function POST(req) {
     return Response.json({ error: "Invalid Pariticipant(s)" }, { status: 400 });
 
   await Promise.all(
-    winners.map(async ({ participant_id, tier }, index) => {
-      const participant = participants.find(({ id }) => id == participant_id);
-      if (typeof tier == "undefined") return;
+    winners.map(
+      async (
+        { participant_id, prize: { xp = 0, cash = 0, giftCard } },
+        index,
+      ) => {
+        const participant = participants.find(({ id }) => id == participant_id);
 
-      const prize = Math.round(tournament.prize_pool * (tier / 100));
+        await admin
+          .from("User")
+          .update({ balance: user.balance + cash, xp: user.xp + xp })
+          .eq("id", participant.user_id)
+          .throwOnError();
 
-      await admin
-        .from("User")
-        .update({ balance: user.balance + prize })
-        .eq("id", participant.user_id)
-        .throwOnError();
+        if (cash > 0) {
+          await admin
+            .from("Payout")
+            .insert({
+              user_id: participant.user_id,
+              amount: cash,
+              tournament_id,
+              position: index + 1,
+            })
+            .throwOnError();
+        }
 
-      await admin
-        .from("Payout")
-        .insert({
-          user_id: participant.user_id,
-          amount: prize,
-          tournament_id,
-          position: index + 1,
-        })
-        .throwOnError();
-    }),
+        if (giftCard?.file) {
+          await admin
+            .from("Inventory")
+            .insert({
+              user_id: participant.user_id,
+              name: giftCard.label || "",
+              type: "GiftCard",
+              file: giftCard.file,
+            })
+            .throwOnError();
+        }
+      },
+    ),
   );
 
   await admin
