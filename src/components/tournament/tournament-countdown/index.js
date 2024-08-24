@@ -10,6 +10,7 @@ export default function TournamentCountdown({ start }) {
     start: new Date(),
     end: new Date(start),
   });
+  console.log(duration);
   const [hours, minutes, seconds] = [
     duration.hours,
     duration.minutes,
