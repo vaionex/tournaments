@@ -21,6 +21,7 @@ export default function TournamentsTableRow({
   end,
   prize_pool,
   completed,
+  created_at,
 }) {
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
 

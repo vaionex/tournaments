@@ -13,12 +13,14 @@ export async function getUsers({
     .range(limit * (page - 1), limit * page - 1)
     .lte("balance", maximumBalance)
     .gte("balance", minimumBalance)
+    .order("created_at")
     .throwOnError();
   const { count } = await supabase
     .from("User")
     .select("", { count: "exact", head: true })
     .lte("balance", maximumBalance)
-    .gte("balance", minimumBalance);
+    .gte("balance", minimumBalance)
+    .order("created_at");
   return { users, total: count };
 }
 

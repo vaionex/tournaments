@@ -66,6 +66,7 @@ export async function getTournaments({
     .range(limit * (page - 1), limit * page - 1)
     .lte("prize_pool", maximum_prize_pool)
     .gte("prize_pool", minimum_prize_pool)
+    .order("start", { ascending: false })
     .throwOnError();
 
   const { count } = await supabase
