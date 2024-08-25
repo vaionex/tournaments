@@ -17,7 +17,7 @@ export default function UsersPage() {
   return (
     <div className="p-4">
       <h1 className="mb-4 text-4xl font-semibold">Users</h1>
-      <div className="mb-4 flex justify-end">
+      <div className="flex justify-end p-4">
         <UserFilterSection filters={filters} onChange={setFilters} />
       </div>
       <UsersTable

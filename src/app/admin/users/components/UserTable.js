@@ -36,7 +36,9 @@ export default function UsersTable({
           ))}
         </tbody>
       </table>
-      <Pagination page={page} total={pages} onChange={onPageChange} />
+      <div className="p-4">
+        <Pagination page={page} total={pages} onChange={onPageChange} />
+      </div>
     </div>
   );
 }

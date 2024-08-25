@@ -58,22 +58,39 @@ export async function getTournaments({
   page = 1,
   minimum_prize_pool = 0,
   maximum_prize_pool = 99999999,
+  status = "All",
 } = {}) {
-  console.log({ minimum_prize_pool, maximum_prize_pool });
-  const { data } = await supabase
+  let query = supabase
     .from("Tournament")
     .select("*, Game (*)")
     .range(limit * (page - 1), limit * page - 1)
     .lte("prize_pool", maximum_prize_pool)
     .gte("prize_pool", minimum_prize_pool)
-    .order("start", { ascending: false })
-    .throwOnError();
+    .order("start", { ascending: false });
 
-  const { count } = await supabase
+  let countQuery = supabase
     .from("Tournament")
     .select("", { count: "exact", head: true })
     .lte("prize_pool", maximum_prize_pool)
     .gte("prize_pool", minimum_prize_pool);
+
+  if (status == "Upcoming") {
+    query = query.gt("start", new Date().toISOString());
+    countQuery = countQuery.gt("start", new Date().toISOString());
+  } else if (status == "Waiting for payout") {
+    query = query.lt("end", new Date().toISOString()).eq("completed", false);
+    countQuery = countQuery
+      .lt("end", new Date().toISOString())
+      .eq("completed", false);
+  } else if (status == "Completed") {
+    query = query.lt("end", new Date().toISOString()).eq("completed", true);
+    countQuery = countQuery
+      .lt("end", new Date().toISOString())
+      .eq("completed", true);
+  }
+
+  const { data } = await query.throwOnError();
+  const { count } = await countQuery.throwOnError();
 
   const tournaments = data.map(({ start, end, ...rest }) => ({
     ...rest,

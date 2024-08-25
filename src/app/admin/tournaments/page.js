@@ -20,7 +20,7 @@ export default function UsersPage() {
   return (
     <div>
       <h1 className="my-4 ml-4 text-4xl font-semibold">Tournaments</h1>
-      <div className="mb-4 flex justify-end">
+      <div className="flex justify-end p-4">
         <TournamentFilterSection filters={filters} onChange={setFilters} />
       </div>
       <TournamentsTable
