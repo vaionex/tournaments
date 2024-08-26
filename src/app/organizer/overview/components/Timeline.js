@@ -1,7 +1,10 @@
 "use client";
-import { Scheduler } from "@bitnoi.se/react-scheduler";
+const Scheduler = dynamic(() =>
+  import("@bitnoi.se/react-scheduler").then((mod) => mod.Scheduler),
+);
 import "@bitnoi.se/react-scheduler/dist/style.css";
 import "./Timeline.css";
+import dynamic from "next/dynamic";
 
 export default function Timeline({ tournaments }) {
   return (
