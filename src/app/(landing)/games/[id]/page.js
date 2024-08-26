@@ -23,7 +23,6 @@ export default function GameDetails() {
   const callback = useMemoizedFn((entry) => {
     if (entry.isIntersecting) {
       const active = entry.target.getAttribute("id") || "";
-      console.log(active);
       setActiveSection(active);
     }
   });
