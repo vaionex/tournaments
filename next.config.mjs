@@ -12,6 +12,11 @@ const nextConfig = {
         destination: "/admin/users",
         permanent: true,
       },
+      {
+        source: "/organizer",
+        destination: "/organizer/overview",
+        permanent: true,
+      },
     ];
   },
 };

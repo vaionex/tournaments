@@ -3,11 +3,10 @@ import Facebook from "@/components/icons/logo-simple/Facebook";
 import Linkedin from "@/components/icons/logo-simple/Linkedin";
 import Twitter from "@/components/icons/logo-simple/Twitter";
 import { Button, buttonVariants } from "@/components/ui/button";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import {
-  FacebookIcon,
   FacebookShareButton,
-  LinkedinIcon,
   LinkedinShareButton,
   TwitterShareButton,
 } from "react-share";
@@ -15,7 +14,11 @@ import { twMerge } from "tailwind-merge";
 import { Copy01 } from "untitledui-js-base";
 
 export default function ShareSection({ title }) {
-  const shareUrl = typeof window != "undefined" ? window.location.href : "";
+  const [shareUrl, setShareUrl] = useState("");
+
+  useEffect(() => {
+    setShareUrl(typeof window != "undefined" ? window.location.href : "");
+  }, [window.location.href]);
 
   function copyUrl() {
     navigator.clipboard.writeText(shareUrl);

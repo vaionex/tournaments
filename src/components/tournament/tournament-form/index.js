@@ -6,7 +6,6 @@ import Dropzone from "@/components/ui/dropzone";
 import { Input } from "@/components/ui/input";
 import Select from "@/components/ui/select";
 import useGames from "@/hooks/games/useGames";
-import { add } from "lodash";
 import { Image, Swords } from "lucide-react";
 import toast from "react-hot-toast";
 import RuleDescriptionEditor from "./rule-description-editor";
@@ -15,6 +14,7 @@ import { Target03 } from "untitledui-js-base";
 import { Crown1 } from "iconsax-react";
 import Bracket from "@/components/icons/bracket";
 import DateTimePicker from "react-datetime-picker";
+import PrizesSection from "./prizes-section";
 
 const Formats = [
   {
@@ -55,9 +55,7 @@ export default function TournamentForm({
     max_players,
     min_rank = "Bronze",
     max_rank = "Grandmaster",
-    prize_pool,
-    prize_pool_tiers = [100],
-    entry_fee,
+    prizes = [],
     rules = [],
   } = tournament;
 
@@ -68,20 +66,10 @@ export default function TournamentForm({
     setTournament((tournament) => ({ ...tournament, [property]: value }));
   }
 
-  function addPrizePoolTier() {
+  function addPrizeTier() {
     setTournament({
       ...tournament,
-      prize_pool_tiers: [...prize_pool_tiers, 0],
-    });
-  }
-
-  function updatePrizePoolTier(value, index) {
-    if (index >= prize_pool_tiers.length) return;
-    const temp = [...prize_pool_tiers];
-    temp[index] = value;
-    setTournament({
-      ...tournament,
-      prize_pool_tiers: temp,
+      prizes: [...prizes, {}],
     });
   }
 
@@ -111,8 +99,6 @@ export default function TournamentForm({
     if (!bannerUrl && !banner)
       return toast.error("Tournament banner is required");
     if (!game_id) return toast.error("Game is required");
-    if (prize_pool_tiers.reduce(add) != 100)
-      return toast.error("Prize Pool Tiers must add to 100");
     onSubmit?.();
   }
 
@@ -241,63 +227,16 @@ export default function TournamentForm({
         required
       />
 
-      <div>Prize Pool</div>
+      <div>Prizes</div>
       <div>
-        <Input
-          type="number"
-          value={Number(prize_pool / 100).toString()}
-          onChange={(e) =>
-            setValue("prize_pool", Number(e.target.value * 100) || 0)
-          }
-          min={1}
-          leftSection="$"
-          required
-        />
         <div className="mt-2.5 rounded-lg border border-neutral-700 p-4">
-          <table className="w-full border-separate border-spacing-y-2">
-            <thead>
-              <tr className="">
-                <th className="pb-3 text-left">Position</th>
-                <th className="pb-3 text-left">Prize (%)</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {prize_pool_tiers.map((tier, index) => (
-                <tr key={index}>
-                  <td>
-                    <div className="flex h-11 w-20 w-full items-center justify-center rounded-xl bg-white/10 text-center align-middle">
-                      <div>{index + 1}</div>
-                    </div>
-                  </td>
-                  <td className="px-2">
-                    <Input
-                      className="w-20"
-                      value={Number(tier).toString()}
-                      type="number"
-                      min="0"
-                      max="100"
-                      onChange={(e) =>
-                        updatePrizePoolTier(Number(e.target.value), index)
-                      }
-                    />
-                  </td>
-                  <td>
-                    <Input
-                      value={(
-                        Math.round((tier / 100) * prize_pool) / 100
-                      ).toFixed(2)}
-                      leftSection="$"
-                      readOnly
-                    />
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          {prize_pool_tiers.length < max_players && (
+          <PrizesSection
+            prizes={prizes}
+            onChange={(v) => setValue("prizes", v)}
+          />
+          {prizes?.length < max_players && (
             <Button
-              onClick={addPrizePoolTier}
+              onClick={addPrizeTier}
               type="button"
               variant="black"
               className="mt-2"
@@ -314,7 +253,7 @@ export default function TournamentForm({
         onChange={(e) => {
           const players = Number(e.target.value) || 1;
           setValue("max_players", players);
-          setValue("prize_pool_tiers", prize_pool_tiers.slice(0, players));
+          setValue("prizes", prizes.slice(0, players));
         }}
         min={1}
         required

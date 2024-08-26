@@ -6,7 +6,7 @@ const Input = React.forwardRef(
   ({ className, type, label, leftSection, ...props }, ref) => {
     const Comp = type == "textarea" ? "textarea" : "input";
     return (
-      <div>
+      <div className="min-w-0">
         {label && (
           <label
             className="mb-1.5 block text-sm font-medium"

@@ -1,7 +1,6 @@
 import { getParticipants, getTournament } from "@/db/tournament";
 import { formatCurrency } from "@/utils/format";
-import { format } from "date-fns";
-import { Calendar, Swords, Users } from "lucide-react";
+import { Calendar } from "lucide-react";
 import { twMerge } from "tailwind-merge";
 import { Trophy01, Users01 } from "untitledui-js-base";
 import Chat from "./components/chat";

@@ -5,15 +5,33 @@ import { v4 } from "uuid";
 import { getUserId } from "@/supabase/utils";
 import { api } from "@/utils/api";
 
-export async function createTournament({ banner: bannerFile, ...rest }) {
+export async function createTournament({
+  banner: bannerFile,
+  prizes: _prizes,
+  ...rest
+}) {
   const banner = bannerFile
     ? await uploadPublicImage(bannerFile, `/tournaments/${v4()}`)
+    : undefined;
+
+  const prizes = _prizes
+    ? await Promise.all(
+        _prizes.map(async (prize) => ({
+          ...prize,
+          giftCard: prize.giftCard?.file
+            ? {
+                ...prize.giftCard,
+                file: await uploadGiftCard(prize.giftCard.file, v4()),
+              }
+            : undefined,
+        })),
+      )
     : undefined;
 
   const { data } = await api.post(
     "tournament/create",
     pickBy(
-      { ...rest, banner, user_id: await getUserId() },
+      { ...rest, banner, user_id: await getUserId(), prizes },
       (value) => value != undefined,
     ),
   );
@@ -35,16 +53,52 @@ export async function deleteTournament(id) {
   await api.post("tournament/delete", { id });
 }
 
-export async function getTournaments() {
-  const { data } = await supabase
+export async function getTournaments({
+  limit = 25,
+  page = 1,
+  minimum_prize_pool = 0,
+  maximum_prize_pool = 99999999,
+  status = "All",
+} = {}) {
+  let query = supabase
     .from("Tournament")
     .select("*, Game (*)")
-    .throwOnError();
-  return data.map(({ start, end, ...rest }) => ({
+    .range(limit * (page - 1), limit * page - 1)
+    .lte("prize_pool", maximum_prize_pool)
+    .gte("prize_pool", minimum_prize_pool)
+    .order("start", { ascending: false });
+
+  let countQuery = supabase
+    .from("Tournament")
+    .select("", { count: "exact", head: true })
+    .lte("prize_pool", maximum_prize_pool)
+    .gte("prize_pool", minimum_prize_pool);
+
+  if (status == "Upcoming") {
+    query = query.gt("start", new Date().toISOString());
+    countQuery = countQuery.gt("start", new Date().toISOString());
+  } else if (status == "Waiting for payout") {
+    query = query.lt("end", new Date().toISOString()).eq("completed", false);
+    countQuery = countQuery
+      .lt("end", new Date().toISOString())
+      .eq("completed", false);
+  } else if (status == "Completed") {
+    query = query.lt("end", new Date().toISOString()).eq("completed", true);
+    countQuery = countQuery
+      .lt("end", new Date().toISOString())
+      .eq("completed", true);
+  }
+
+  const { data } = await query.throwOnError();
+  const { count } = await countQuery.throwOnError();
+
+  const tournaments = data.map(({ start, end, ...rest }) => ({
     ...rest,
     start: new Date(start),
     end: new Date(end),
   }));
+
+  return { tournaments, total: count };
 }
 
 export async function getUpcomingTournaments() {
@@ -121,4 +175,19 @@ export async function sendTournamentChatMessage(id, message) {
     .from("TournamentChat")
     .insert({ tournament_id: id, message })
     .throwOnError();
+}
+
+export async function uploadGiftCard(file, path) {
+  const GIFT_CARD_BUCKET = "gift-cards";
+
+  const { data, error } = await supabase.storage
+    .from(GIFT_CARD_BUCKET)
+    .upload(path, file);
+
+  if (error) throw error;
+  const { path: filePath } = data;
+  const {
+    data: { publicUrl },
+  } = supabase.storage.from(GIFT_CARD_BUCKET).getPublicUrl(filePath);
+  return publicUrl + `?id=${Math.random().toString()}`;
 }

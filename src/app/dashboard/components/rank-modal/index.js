@@ -103,7 +103,7 @@ export default function RankModal(props) {
           <div className="mb-6 text-xl font-semibold">How to Earn XP:</div>
           <div className="space-y-2.5 text-sm">
             <div className="flex items-center gap-2">
-              <LogoMarkOutline className="size-5" />
+              <LogoMarkOutline className="size-5 text-primary" />
               <span className="font-bold">Compete</span> in tournaments: Gain XP
               based on your standings.
             </div>

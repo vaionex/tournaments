@@ -1,6 +1,7 @@
 import { Input } from "@/components/ui/input";
 import { getTournament } from "@/db/tournament";
 import { format } from "date-fns";
+import TimeWithTimezone from "./TimeWithTimezone";
 
 export const revalidate = 0;
 
@@ -13,7 +14,9 @@ export default async function Matchmaking({ params: { id } }) {
         <ul className="mb-4 ml-4 list-disc">
           <li>In Fortnite, select &apos;Game Mode&apos;</li>
           <li>Choose &apos;Custom Match&apos; and input your key</li>
-          <li>Ready up and join the lobby by {format(start, "hh:mm O")} </li>
+          <li>
+            Ready up and join the lobby by {<TimeWithTimezone time={start} />}{" "}
+          </li>
         </ul>
         Keep this key confidential. For assistance, visit the
         &apos;Support&apos; section.
@@ -28,7 +31,9 @@ export default async function Matchmaking({ params: { id } }) {
             In console, type
             <span className="font-mono"> connect {server_ip}</span>
           </li>
-          <li>Ready up and join the server by {format(start, "hh:mm O")} </li>
+          <li>
+            Ready up and join the server by {<TimeWithTimezone time={start} />}{" "}
+          </li>
         </ul>
         Keep this server IP confidential. For assistance, visit the
         &apos;Support&apos; section.
