@@ -1,7 +1,9 @@
 import { getParticipants, getTournament } from "@/db/tournament";
+import { notifications } from "@/novu/notifications";
 import { admin } from "@/supabase/admin";
 import { getUserDetails } from "@/supabase/server";
 import { property } from "lodash";
+import ordinal from "ordinal";
 
 export async function POST(req) {
   const user = await getUserDetails();
@@ -67,6 +69,11 @@ export async function POST(req) {
             })
             .throwOnError();
         }
+        await notifications.wonTournament(
+          participant.user_id,
+          tournament_id,
+          ordinal(index + 1),
+        );
       },
     ),
   );
