@@ -69,6 +69,12 @@ export async function POST(req) {
             })
             .throwOnError();
         }
+        await admin
+          .from("Participant")
+          .update({ position: index + 1 })
+          .eq("id", participant.id)
+          .throwOnError();
+
         await notifications.wonTournament(
           participant.user_id,
           tournament_id,
