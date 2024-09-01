@@ -3,6 +3,8 @@ import { getUserId } from "@/supabase/utils";
 import { api } from "@/utils/api";
 import { getNextRank, getRank, getRankProgressPercentage } from "@/utils/rank";
 import { pickBy } from "lodash";
+import { getPayouts } from "./payouts";
+import { getInventory } from "./inventory";
 
 async function uploadProfilePicture(file) {
   const id = await getUserId();
@@ -56,7 +58,7 @@ export async function updateUser({
 export async function getParticipationsById(id) {
   const { data } = await supabase
     .from("Participant")
-    .select("*, Tournament (*)")
+    .select("*, Tournament (*, Game (*))")
     .eq("user_id", id)
     .throwOnError();
 
@@ -85,4 +87,48 @@ export async function getUserById(id) {
     nextRank: getNextRank(xp),
     rankProgress: getRankProgressPercentage(xp),
   };
+}
+
+export async function getXpRewards({
+  start = new Date(0),
+  end = new Date(),
+  limit = 1000,
+  select = "amount, xp, created_at",
+} = {}) {
+  const user_id = await getUserId();
+  const { data } = await supabase
+    .from("UserXP")
+    .select(select)
+    .eq("user_id", user_id)
+    .gte("created_at", start.toISOString())
+    .lte("created_at", end.toISOString())
+    .order("created_at", { ascending: true })
+    .limit(limit)
+    .throwOnError();
+  return data;
+}
+
+export async function getRecentRewards() {
+  const payouts = (await getPayouts({ limit: 10 })).map((item) => ({
+    ...item,
+    reward_type: "payout",
+  }));
+  const xps = (
+    await getXpRewards({
+      select: "*, Participant(Tournament(name))",
+      limit: 10,
+    })
+  ).map((item) => ({
+    ...item,
+    reward_type: "xp",
+  }));
+  const inventory = (await getInventory({ limit: 10 })).map((item) => ({
+    ...item,
+    reward_type: "inventory",
+  }));
+  console.log({ inventory });
+  return [...payouts, ...xps, ...inventory].sort(
+    (a, b) =>
+      new Date(b.created_at).valueOf() - new Date(a.created_at).valueOf(),
+  );
 }

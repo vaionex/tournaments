@@ -1,3 +1,4 @@
+import { giveUserXP } from "@/db/server/user";
 import { getParticipants, getTournament } from "@/db/tournament";
 import { notifications } from "@/novu/notifications";
 import { admin } from "@/supabase/admin";
@@ -40,20 +41,22 @@ export async function POST(req) {
       ) => {
         const participant = participants.find(({ id }) => id == participant_id);
 
-        await admin
-          .from("User")
-          .update({ balance: user.balance + cash, xp: user.xp + xp })
-          .eq("id", participant.user_id)
-          .throwOnError();
+        if (xp > 0)
+          await giveUserXP(participant.user_id, xp, { participant_id });
 
         if (cash > 0) {
+          await admin
+            .from("User")
+            .update({ balance: user.balance + cash })
+            .eq("id", participant.user_id)
+            .throwOnError();
+
           await admin
             .from("Payout")
             .insert({
               user_id: participant.user_id,
               amount: cash,
-              tournament_id,
-              position: index + 1,
+              participant_id,
             })
             .throwOnError();
         }
@@ -66,6 +69,7 @@ export async function POST(req) {
               name: giftCard.label || "",
               type: "GiftCard",
               file: giftCard.file,
+              participant_id,
             })
             .throwOnError();
         }

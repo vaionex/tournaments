@@ -30,7 +30,7 @@ export class JoinTournamentChallenge {
       .throwOnError();
 
     const { xp } = await getChallenge("join-tournament");
-    await giveUserXP(id, xp);
+    await giveUserXP(id, xp, { challenge_id: "join-tournament" });
   }
 }
 
