@@ -5,6 +5,7 @@ import Slider from "react-slick";
 import { ChevronLeft, ChevronRight } from "untitledui-js-base";
 import { useRef } from "react";
 import useUpcomingTournaments from "@/hooks/tournament/useUpcomingTournaments";
+import LogoMarkOutline from "@/components/icons/logo-mark-outline";
 
 export default function Tournaments() {
   const { data: tournaments = [] } = useUpcomingTournaments();
@@ -26,9 +27,12 @@ export default function Tournaments() {
   };
 
   return (
-    <div className="rounded-lg border border-neutral-800 p-6">
+    <div className="rounded-lg p-6">
       <div className="mb-5 flex items-center justify-between">
-        <h2 className="text-2xl font-bold">Tournaments</h2>
+        <h2 className="font-bold">
+          <LogoMarkOutline className="mr-2 inline-block text-neutral-500" />
+          Upcoming tournaments
+        </h2>
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-4">
             <button onClick={() => slickRef.current.slickPrev()}>
@@ -38,12 +42,6 @@ export default function Tournaments() {
               <ChevronRight />
             </button>
           </div>
-          <Link
-            className="text-lg font-semibold text-neutral-300"
-            href="/dashboard/tournaments"
-          >
-            View All
-          </Link>
         </div>
       </div>
       <Slider {...settings} ref={slickRef}>

@@ -26,8 +26,6 @@ export default function EndTournamentModal({ open, setOpen, tournamentId }) {
   }, [prizes]);
 
   function handleEnd() {
-    const tierSum = winners.map(({ tier }) => tier).reduce(add, 0);
-    if (tierSum != 100) return toast.error("Percentages must add up to 100");
     if (winners.some(({ participant_id }) => !participant_id))
       toast.error("Please fill all tiers");
 
@@ -130,7 +128,6 @@ export default function EndTournamentModal({ open, setOpen, tournamentId }) {
           onCheckedChange={setReviewed}
           id="reviewed"
         />
-        <Checkbox label="Notify the winners." id="notify" />
       </div>
       <Button
         className="w-full"

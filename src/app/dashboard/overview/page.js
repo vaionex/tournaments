@@ -1,29 +1,28 @@
-import { Button } from "@/components/ui/button";
-import { Plus } from "untitledui-js-base";
 import Tournaments from "./Tournaments";
-import Payouts from "./components/Payouts";
+import RecentHistory from "./components/RecentHistory";
 import Challenges from "../challenges/page";
 import Stats from "./components/Stats";
+import XPOverTimeChart from "./components/XPOverTimeChart";
+import Rewards from "./components/Rewards";
 
 export default function Overview() {
   return (
-    <div className="pb-24">
-      <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-3xl font-semibold">Dashboard</h1>
-        <Button
-          href="/dashboard/tournaments/create"
-          variant="white"
-          className="px-3.5 py-2 text-sm"
-        >
-          <Plus className="size-5" />
-          Create Tournament
-        </Button>
+    <div className="space-y-8 pb-8">
+      <div className="flex gap-4">
+        <div className="flex-1">
+          <Stats />
+          <div className="h-64"></div>
+        </div>
+        <XPOverTimeChart />
       </div>
-      <div className="space-y-8">
-        <Stats />
-        <Tournaments />
-        <Payouts />
-        <Challenges />
+      <Tournaments />
+      <div className="flex gap-4">
+        <div className="flex-[2.5]">
+          <RecentHistory />
+        </div>
+        <div className="flex-1">
+          <Rewards />
+        </div>
       </div>
     </div>
   );

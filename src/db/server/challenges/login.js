@@ -28,7 +28,7 @@ export class LoginChallenge {
       .insert({ user_id: id, created_at: new Date().toISOString() });
 
     const { xp } = await getChallenge("login");
-    await giveUserXP(id, xp);
+    await giveUserXP(id, xp, { challenge_id: "login" });
   }
 }
 

@@ -72,6 +72,20 @@ class Notifications {
       payload,
     });
   }
+
+  async wonTournament(winnerUserId, tournamentId, position) {
+    const payload = {
+      position,
+      tournament: {
+        id: tournamentId,
+        name: (await getTournament(tournamentId)).name,
+      },
+    };
+    await novu.trigger("won-tournament", {
+      to: await createTo(winnerUserId),
+      payload,
+    });
+  }
 }
 
 export const notifications = new Notifications();

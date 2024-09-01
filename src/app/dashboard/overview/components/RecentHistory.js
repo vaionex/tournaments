@@ -1,28 +1,29 @@
 "use client";
 
 import Loader from "@/components/ui/loader";
-import usePayouts from "@/hooks/user/usePayouts";
-import { formatCurrency } from "@/utils/format";
+import useParticipations from "@/hooks/user/useParticipations";
 import { format } from "date-fns";
-import ordinal from "ordinal";
+import { ClockFastForward } from "untitledui-js-base";
+import ResultPill from "./ResultPill";
 
-export const revalidate = 0;
-
-export default function Payouts() {
-  const { data: payouts = [], isLoading } = usePayouts();
+export default function RecentHistory() {
+  const { data: participations = [], isLoading } = useParticipations();
 
   if (isLoading) return <Loader className="mx-auto mt-24" />;
 
-  if (payouts.length == 0)
+  if (participations.length == 0)
     return (
-      <div className="py-24 text-center text-2xl font-semibold text-neutral-500">
-        No Recent Payouts
+      <div className="flex items-center gap-2 py-24 text-center font-semibold text-neutral-500">
+        No Recent Participations
       </div>
     );
 
   return (
     <div className="rounded-xl border border-white/10 bg-white/5">
-      <h2 className="px-6 py-4 text-2xl font-bold">Recent history</h2>
+      <h2 className="flex items-center px-6 py-4 font-bold">
+        <ClockFastForward className="mr-2 text-neutral-500" />
+        Recent history
+      </h2>
       <table className="w-full text-sm">
         <thead>
           <tr className="border-b border-t border-white/10 font-semibold">
@@ -30,21 +31,24 @@ export default function Payouts() {
             <td className="text-center">Date</td>
             <td className="text-center">Event</td>
             <td className="text-center">Result</td>
-            <td className="text-center">Earnings</td>
             <td className="text-center"></td>
           </tr>
         </thead>
         <tbody>
-          {payouts.map(({ id, Tournament, created_at, amount, position }) => (
+          {participations.map(({ id, Tournament, created_at, position }) => (
             <tr key={id}>
-              <td className="h-16 pl-6">{Tournament.Game.name}</td>
+              <td className="h-16 pl-6">
+                <div className="flex items-center gap-2">
+                  <img className="size-10" src={Tournament.Game.icon} />
+                  {Tournament.Game.name}
+                </div>
+              </td>
               <td className="text-center">
                 {format(created_at, "dd-MM-yyyy")}
               </td>
               <td className="text-center">{Tournament.name}</td>
-              <td className="text-center">{ordinal(position)}</td>
-              <td className="text-center text-lime-600">
-                {formatCurrency(amount)}
+              <td className="text-center">
+                <ResultPill position={position} />
               </td>
               <td></td>
             </tr>
