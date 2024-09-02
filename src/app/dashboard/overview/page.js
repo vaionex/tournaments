@@ -1,17 +1,19 @@
+"use client";
+
 import Tournaments from "./Tournaments";
 import RecentHistory from "./components/RecentHistory";
-import Challenges from "../challenges/page";
 import Stats from "./components/Stats";
 import XPOverTimeChart from "./components/XPOverTimeChart";
 import Rewards from "./components/Rewards";
+import LatestTournament from "./components/LatestTournament";
 
 export default function Overview() {
   return (
     <div className="space-y-8 pb-8">
       <div className="flex gap-4">
-        <div className="flex-1">
+        <div className="flex flex-1 flex-col gap-[inherit]">
           <Stats />
-          <div className="h-64"></div>
+          <LatestTournament />
         </div>
         <XPOverTimeChart />
       </div>

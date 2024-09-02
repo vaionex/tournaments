@@ -126,9 +126,20 @@ export async function getRecentRewards() {
     ...item,
     reward_type: "inventory",
   }));
-  console.log({ inventory });
   return [...payouts, ...xps, ...inventory].sort(
     (a, b) =>
       new Date(b.created_at).valueOf() - new Date(a.created_at).valueOf(),
   );
+}
+
+export async function getUpcomingParticipations() {
+  const id = await getUserId();
+  const { data } = await supabase
+    .from("Participant")
+    .select("*, Tournament!inner(name, banner, start, Game (*))")
+    .eq("user_id", id)
+    .order("Tournament(start)", { ascending: true })
+    .gt("Tournament.start", new Date().toISOString())
+    .throwOnError();
+  return data;
 }
