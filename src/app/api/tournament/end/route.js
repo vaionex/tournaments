@@ -11,8 +11,9 @@ export async function POST(req) {
   const { tournament_id, winners } = await req.json();
 
   const tournament = await getTournament(tournament_id);
+  const { is_admin } = user;
 
-  if (tournament.user_id != user.id)
+  if (tournament.user_id != user.id && !is_admin)
     return Response.json(
       { error: "You do not own this tournament" },
       { status: 400 },

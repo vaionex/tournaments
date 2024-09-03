@@ -4,6 +4,7 @@ import EndTournamentModal from "./end-tournament-modal";
 import { useState } from "react";
 import useTournament from "@/hooks/tournament/useTournament";
 import useUser from "@/hooks/auth/useUser";
+import useAdmin from "@/hooks/auth/useAdmin";
 
 export default function EndTournamentButton({ tournamentId }) {
   const [open, setOpen] = useState(false);
@@ -11,6 +12,7 @@ export default function EndTournamentButton({ tournamentId }) {
     data: { end, completed, user_id } = {},
     isLoading: isLoadingTournament,
   } = useTournament(tournamentId);
+  const { isAdmin } = useAdmin();
   const { data: { id } = {}, isLoading: isLoadingUser } = useUser();
 
   const isInProgress = end > new Date();
@@ -18,7 +20,7 @@ export default function EndTournamentButton({ tournamentId }) {
   const canEnd =
     !isInProgress &&
     !completed &&
-    isOwner &&
+    (isOwner || isAdmin) &&
     !isLoadingTournament &&
     !isLoadingUser;
 
