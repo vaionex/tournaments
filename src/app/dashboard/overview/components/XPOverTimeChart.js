@@ -16,6 +16,7 @@ import RankIcon from "@/components/icons/rank-icon";
 import { useState } from "react";
 import { format, subMonths, subWeeks, subYears } from "date-fns";
 import Loader from "@/components/ui/loader";
+import FilterSegment from "./FilterSegment";
 
 const durations = [
   {
@@ -65,17 +66,11 @@ export default function XPOverTimeChart() {
             <RankIcon rank={rank} className="size-5" />
           </div>
         </div>
-        <div className="rounded-md bg-white/5 p-1">
-          {durations.map(({ value, label }) => (
-            <button
-              key={value}
-              className={`${value === selectedDuration ? "bg-white/10" : ""} rounded-md px-1 py-0.5 text-xs font-medium`}
-              onClick={() => setSelectedDuration(value)}
-            >
-              {label}
-            </button>
-          ))}
-        </div>
+        <FilterSegment
+          value={selectedDuration}
+          onChange={setSelectedDuration}
+          items={durations}
+        />
       </div>
       <div className="flex-1">
         <ResponsiveContainer width="100%" height="100%">
