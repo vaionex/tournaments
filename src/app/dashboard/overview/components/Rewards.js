@@ -17,9 +17,8 @@ const filters = [
 ];
 
 export default function Rewards() {
-  const { data: alRewards = [], isLoading } = useRecentRewards();
+  const { data: allRewards = [], isLoading } = useRecentRewards();
   const [selectedFilter, setSelectedFilter] = useState("all");
-  const allRewards = [];
 
   const rewards = allRewards.filter((reward) => {
     if (selectedFilter === "all") return true;
