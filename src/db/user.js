@@ -115,7 +115,7 @@ export async function getRecentRewards() {
   }));
   const xps = (
     await getXpRewards({
-      select: "*, Participant(Tournament(name))",
+      select: "*, Participant(Tournament(name)), Challenge(description)",
       limit: 10,
     })
   ).map((item) => ({

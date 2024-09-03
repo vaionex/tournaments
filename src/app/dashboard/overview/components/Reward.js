@@ -8,25 +8,29 @@ export default function Reward({
   amount = 0,
   reward_type,
   Participant,
+  Challenge,
 }) {
   const wonTournament = Boolean(Participant?.Tournament?.name);
+  const completedChallenge = Boolean(Challenge?.description);
+  const description = wonTournament
+    ? `Won ${Participant?.Tournament?.name}`
+    : completedChallenge
+      ? `${Challenge?.description}`
+      : "";
 
-  const { icon, title, description } = {
+  const { icon, title } = {
     xp: {
       icon: <Upload03 className="text-primary" />,
       title: `${xp} XP`,
-      description: wonTournament && `Won ${Participant?.Tournament?.name}`,
     },
     payout: {
       icon: <CurrencyDollarCircle className="text-yellow-500" />,
       title: `${formatCurrency(amount)}`,
-      description: wonTournament && `Won ${Participant?.Tournament?.name}`,
     },
 
     inventory: {
       icon: <Gamepad2 className="text-green-500" />,
       title: name,
-      description: wonTournament && `Won ${Participant?.Tournament?.name}`,
     },
   }[reward_type] || { icon: null, title: null };
 
