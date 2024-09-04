@@ -4,8 +4,10 @@ import { format } from "date-fns";
 import { DollarCircle } from "iconsax-react";
 import Markdown from "react-markdown";
 import { twMerge } from "tailwind-merge";
-import { File06, List, Trophy01 } from "untitledui-js-base";
+import { File06, GamingPad01, List, Trophy01 } from "untitledui-js-base";
 import rehypeRaw from "rehype-raw";
+import RewardPill from "@/app/dashboard/components/RewardPill";
+import ordinal from "ordinal";
 
 export default async function Details({ params: { id } }) {
   const {
@@ -37,68 +39,35 @@ export default async function Details({ params: { id } }) {
   return (
     <div className="grid grid-cols-2 gap-6 p-6">
       <Section title="Prizes" icon={DollarCircle}>
-        <table className="w-full">
-          <thead>
-            <tr className="text-left font-normal">
-              <th className="w-20 py-2">Position</th>
-              <th className="w-20 py-2">Cash</th>
-              <th className="w-20 py-2">XP</th>
-              <th className="w-20 py-2">Gift Card</th>
-            </tr>
-          </thead>
-          <tbody>
-            {prizes.map(({ xp, cash, giftCard }, index) => (
-              <tr key={index}>
-                <td>
-                  <div
-                    className={twMerge(
-                      "w-full py-2.5 text-center",
-                      highlighted,
-                    )}
-                  >
-                    {index + 1}
+        <div className="space-y-6">
+          {prizes.map(({ xp, cash, giftCard }, index) => {
+            const Icon = index == 0 ? Trophy01 : GamingPad01;
+            return (
+              <div className="flex gap-4" key={index}>
+                <div
+                  className={twMerge(
+                    "flex size-12 items-center justify-center rounded-lg border bg-white/10",
+                    index == 0 && "border-lime-300 bg-lime-700",
+                  )}
+                >
+                  <Icon />
+                </div>
+                <div>
+                  <div className="mb-1 font-semibold">
+                    {ordinal(index + 1)} Position
                   </div>
-                </td>
-                <td>
-                  {cash && (
-                    <div
-                      className={twMerge(
-                        "m-1 w-full py-2.5 text-center",
-                        highlighted,
-                      )}
-                    >
-                      {formatCurrency(cash)}
-                    </div>
-                  )}
-                </td>
-                <td>
-                  {xp && (
-                    <div
-                      className={twMerge(
-                        "ml-2 w-full py-2.5 text-center",
-                        highlighted,
-                      )}
-                    >
-                      {xp}
-                    </div>
-                  )}
-                </td>
-                <td>
-                  {giftCard?.file && (
-                    <div
-                      className={twMerge(
-                        "ml-2 w-full py-2.5 text-center",
-                        highlighted,
-                      )}
-                    >
-                      {giftCard?.label}
-                    </div>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+                  <div className="flex flex-wrap gap-2">
+                    {cash && <RewardPill type="cash" value={cash} />}
+                    {xp && <RewardPill type="xp" value={xp} />}
+                    {giftCard?.label && (
+                      <RewardPill type="gift-card" value={giftCard.label} />
+                    )}
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </Section>
 
       <Section icon={File06} title="Rules" className="row-span-2">
