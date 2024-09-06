@@ -10,7 +10,14 @@ import { WalletMoney } from "iconsax-react";
 
 export default function Stats() {
   const {
-    data: { balance = 0, rank, xp = 0, nextRank, nextRankXP = 0 },
+    data: {
+      balance = 0,
+      rank,
+      xp = 0,
+      nextRank,
+      nextRankXP = 0,
+      rankProgress = 0,
+    },
   } = useUser();
 
   return (
@@ -43,7 +50,7 @@ export default function Stats() {
           <div className="rounded-full border border-white/10 bg-white/5 p-1 text-xs">
             <div
               className="h-1 rounded-full bg-gradient-to-l from-white/50"
-              style={{ width: `50%` }}
+              style={{ width: `${rankProgress}%` }}
             />
           </div>
         </div>
