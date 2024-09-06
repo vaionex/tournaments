@@ -2,6 +2,7 @@ import useUpcomingParticipations from "@/hooks/user/useUpcomingParticipations";
 import Card from "../../components/Card";
 import { GamingPad01, GamingPad02 } from "untitledui-js-base";
 import { Timer } from "iconsax-react";
+import TournamentImagePlaceholder from "./TournamentImagePlaceholder";
 
 export default function LatestTournament() {
   const { data: participations = [], isLoading } = useUpcomingParticipations();
@@ -10,9 +11,22 @@ export default function LatestTournament() {
   if (isLoading) return <div className="py-16" />;
   if (!latest && !isLoading)
     return (
-      <div className="py-16 text-center text-2xl font-semibold text-neutral-400">
-        No Upcoming Tournaments
-      </div>
+      <Card className="relative flex items-center gap-8">
+        <TournamentImagePlaceholder />
+        <div className="to-50 flex items-center gap-4 space-y-2 rounded-full border border-white/10 bg-gradient-to-r from-green-700/60 to-black bg-no-repeat p-2 px-3 text-xs font-semibold text-neutral-300">
+          <div className="size-3 rounded-full border border-white/20 bg-gradient-to-b from-green-600 to-green-400" />
+          No data yet. Join upcoming tournament
+        </div>
+        <div
+          className="absolute right-0 top-0 rounded-bl-2xl border-b border-l border-green-700 px-4 py-1 text-xs font-medium text-neutral-400"
+          style={{
+            background:
+              "radial-gradient(at center top, rgb(16, 121, 3), #10790229 39%)",
+          }}
+        >
+          Latest tournament
+        </div>
+      </Card>
     );
 
   const { name, start, banner, Game } = latest?.Tournament;
