@@ -10,7 +10,7 @@ import { WalletMoney } from "iconsax-react";
 
 export default function Stats() {
   const {
-    data: { balance = 0, rank, xp, nextRank, nextRankXP },
+    data: { balance = 0, rank, xp = 0, nextRank, nextRankXP = 0 },
   } = useUser();
 
   return (
