@@ -229,21 +229,12 @@ export default function TournamentForm({
 
       <div>Prizes</div>
       <div>
-        <div className="mt-2.5 rounded-lg border border-neutral-700 p-4">
+        <div className="">
           <PrizesSection
             prizes={prizes}
             onChange={(v) => setValue("prizes", v)}
+            disableAddPrize={prizes?.length >= max_players}
           />
-          {prizes?.length < max_players && (
-            <Button
-              onClick={addPrizeTier}
-              type="button"
-              variant="black"
-              className="mt-2"
-            >
-              Add Tier
-            </Button>
-          )}
         </div>
       </div>
       <div>Max Players</div>

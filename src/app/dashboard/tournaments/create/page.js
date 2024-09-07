@@ -17,7 +17,7 @@ export default function CreateTournament() {
     prize_pool: 0,
     min_rank: "Bronze",
     max_rank: "Grandmaster",
-    prizes: [],
+    prizes: [{}],
     entry_fee: 0,
   });
   const { push } = useRouter();

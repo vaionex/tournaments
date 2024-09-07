@@ -67,7 +67,7 @@ export async function POST(req) {
             .from("Inventory")
             .insert({
               user_id: participant.user_id,
-              name: giftCard.label || "",
+              name: giftCard.label || "Gift Card",
               type: "GiftCard",
               file: giftCard.file,
               participant_id,

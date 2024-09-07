@@ -8,6 +8,7 @@ import { File06, GamingPad01, List, Trophy01 } from "untitledui-js-base";
 import rehypeRaw from "rehype-raw";
 import RewardPill from "@/app/dashboard/components/RewardPill";
 import ordinal from "ordinal";
+import PositionIcon from "@/app/dashboard/components/PositionIcon";
 
 export default async function Details({ params: { id } }) {
   const {
@@ -41,17 +42,9 @@ export default async function Details({ params: { id } }) {
       <Section title="Prizes" icon={DollarCircle}>
         <div className="space-y-6">
           {prizes.map(({ xp, cash, giftCard }, index) => {
-            const Icon = index == 0 ? Trophy01 : GamingPad01;
             return (
               <div className="flex gap-4" key={index}>
-                <div
-                  className={twMerge(
-                    "flex size-12 items-center justify-center rounded-lg border bg-white/10",
-                    index == 0 && "border-lime-300 bg-lime-700",
-                  )}
-                >
-                  <Icon />
-                </div>
+                <PositionIcon position={index + 1} />
                 <div>
                   <div className="mb-1 font-semibold">
                     {ordinal(index + 1)} Position
@@ -59,8 +52,11 @@ export default async function Details({ params: { id } }) {
                   <div className="flex flex-wrap gap-2">
                     {cash && <RewardPill type="cash" value={cash} />}
                     {xp && <RewardPill type="xp" value={xp} />}
-                    {giftCard?.label && (
-                      <RewardPill type="gift-card" value={giftCard.label} />
+                    {giftCard?.file && (
+                      <RewardPill
+                        type="gift-card"
+                        value={giftCard.label || "Gift Card"}
+                      />
                     )}
                   </div>
                 </div>
