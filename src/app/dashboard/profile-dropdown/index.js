@@ -22,6 +22,7 @@ export default function ProfileDropdown() {
       href: "/dashboard/tournaments/create",
     },
     { name: "Dashboard", href: "/dashboard/" },
+    { name: "Organizer", href: "/organizer" },
     { name: "Profile", href: "/dashboard/profile/account" },
     { name: "Log out", onClick: () => logout() },
   ].filter(Boolean);
