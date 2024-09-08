@@ -137,7 +137,7 @@ export async function getPendingTournaments() {
 export async function getTournament(id) {
   const { data } = await supabase
     .from("Tournament")
-    .select("*, Game (*)")
+    .select("*, Game (*), User(username, profile_picture)")
     .eq("id", id)
     .throwOnError();
   return data[0];

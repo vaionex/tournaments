@@ -31,7 +31,7 @@ export default function TournamentChat({ id }) {
   if (!isParticipant) return null;
 
   return (
-    <div className="w-96 flex-grow-0 border-l border-inherit">
+    <div className="w-80 flex-grow-0 border-l border-inherit">
       <ChatContainer>
         {isLoading && (
           <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
