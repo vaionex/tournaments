@@ -32,7 +32,7 @@ export default async function Overview({ params: { id } }) {
             <div className="flex gap-[inherit]">
               <Card className="flex-1">
                 <div className="mb-2">Participants</div>
-                <Participants participants={Array(10).fill(participants[0])} />
+                <Participants participants={participants} />
               </Card>
               <Card className="flex-1 space-y-2">
                 <StartDate start={start} />

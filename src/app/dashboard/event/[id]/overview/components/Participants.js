@@ -3,6 +3,12 @@ import Avatar from "@/components/ui/avatar";
 const MAX_PARTICIPANTS_DISPLAYED = 3;
 export default function Participants({ participants = [] }) {
   const extra = participants.length - MAX_PARTICIPANTS_DISPLAYED;
+  if (participants.length == 0)
+    return (
+      <div className="text-xl font-semibold text-neutral-500">
+        No Participants Yet
+      </div>
+    );
   return (
     <div className="-space-x-2">
       {participants
