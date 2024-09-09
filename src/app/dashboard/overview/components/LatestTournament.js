@@ -34,7 +34,7 @@ export default function LatestTournament() {
   return (
     <Card className="relative flex items-center gap-8">
       <div className="relative">
-        <img className="size-32" src={banner} />
+        <img className="size-32 object-cover" src={banner} />
         <div className="absolute bottom-2 left-1/2 flex -translate-x-1/2 items-center gap-2 rounded-lg border border-white/10 bg-black/50 px-2 py-1 text-xs font-medium">
           <GamingPad01 className="size-4 text-neutral-500" />
           {Game.name}
