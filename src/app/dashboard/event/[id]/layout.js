@@ -7,6 +7,8 @@ import { links } from "./links";
 import ShareSection from "@/components/ui/share-section";
 import { Button } from "@/components/ui/button";
 import EndTournamentButton from "./end-tournament-button";
+import Link from "next/link";
+import { HomeLine } from "untitledui-js-base";
 
 export const revalidate = 0;
 
@@ -44,7 +46,7 @@ export default async function TournamentLayout({ children, params: { id } }) {
   const participants = await getParticipants(id);
   if (!tournament) return notFound();
 
-  const { name, user_id, start, entry_fee, max_players } = tournament;
+  const { name, user_id, start } = tournament;
 
   const user = await getUser();
   const isOwner = user?.id == user_id;
@@ -54,6 +56,15 @@ export default async function TournamentLayout({ children, params: { id } }) {
 
   return (
     <div>
+      <div className="mb-6 flex items-center gap-6 text-neutral-400">
+        <Link href="/">
+          <HomeLine className="size-5" />
+        </Link>
+        <span className="text-white">/</span>
+        <Link href="/dashboard/tournaments">Tournaments</Link>
+        <span className="text-white">/</span>
+        <Link href={`/dashboard/event/${id}/overview`}>{name}</Link>
+      </div>
       <div className="mb-8 flex items-center justify-between">
         <h1 className="text-4xl font-bold">{name}</h1>
         <div className="flex items-center gap-2">
