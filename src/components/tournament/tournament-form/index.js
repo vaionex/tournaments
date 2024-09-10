@@ -15,6 +15,7 @@ import { Crown1 } from "iconsax-react";
 import Bracket from "@/components/icons/bracket";
 import DateTimePicker from "react-datetime-picker";
 import PrizesSection from "./prizes-section";
+import { useEffect, useState } from "react";
 
 const Formats = [
   {
@@ -42,6 +43,7 @@ export default function TournamentForm({
   bannerUrl,
   children,
 }) {
+  const [fileUrl, setFileUrl] = useState("");
   const {
     name,
     description,
@@ -59,18 +61,15 @@ export default function TournamentForm({
     rules = [],
   } = tournament;
 
+  useEffect(() => {
+    if (tournament.banner) setFileUrl(URL.createObjectURL(banner));
+  }, [tournament.banner]);
+
   const min_rank_index = Ranks.findIndex(({ name }) => name == min_rank);
   const max_rank_index = Ranks.findIndex(({ name }) => name == max_rank);
 
   function setValue(property, value) {
     setTournament((tournament) => ({ ...tournament, [property]: value }));
-  }
-
-  function addPrizeTier() {
-    setTournament({
-      ...tournament,
-      prizes: [...prizes, {}],
-    });
   }
 
   function addRuleSection() {
@@ -116,26 +115,22 @@ export default function TournamentForm({
       />
 
       <div className="">Banner</div>
-      <Dropzone
-        onDrop={(files) => {
-          if (files.length > 0) setValue("banner", files[0]);
-        }}
-        accept={{
-          "image/png": [".png"],
-          "image/svg": [".svg"],
-          "image/jpg": [".jpg", ".jpeg"],
-          "image/gif": [".gif"],
-        }}
-        files={[banner]}
-        icon={Image}
-      />
-
-      {bannerUrl && (
-        <>
-          <div />
-          <img src={bannerUrl} className="h-96 w-full object-cover" />
-        </>
-      )}
+      <div className="space-y-4">
+        <Dropzone
+          onDrop={(files) => {
+            if (files.length > 0) setValue("banner", files[0]);
+          }}
+          accept={{
+            "image/png": [".png"],
+            "image/svg": [".svg"],
+            "image/jpg": [".jpg", ".jpeg"],
+            "image/gif": [".gif"],
+          }}
+          files={[banner]}
+          icon={Image}
+        />
+        <img src={bannerUrl || fileUrl} className="object-cover" />
+      </div>
 
       <div>Select a game</div>
       <div>
