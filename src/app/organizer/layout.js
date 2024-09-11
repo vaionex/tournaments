@@ -51,7 +51,6 @@ export default function OrganizerLayout({ children }) {
           ))}
         </div>
         <div className="flex gap-3 p-4">
-          <button>collapse</button>
           <Avatar
             profile_picture={profile_picture}
             className="size-10 rounded"
