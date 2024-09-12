@@ -7,11 +7,12 @@ import useUser from "@/hooks/auth/useUser";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { twMerge } from "tailwind-merge";
-import { Grid01 } from "untitledui-js-base";
+import { Grid01, Wallet03 } from "untitledui-js-base";
 
 const links = [
   { name: "Overview", href: "overview", icon: Grid01 },
   { name: "Tournaments", href: "tournaments", icon: LogoMarkOutline },
+  { name: "Wallet", href: "wallet", icon: Wallet03 },
 ];
 
 export default function OrganizerLayout({ children }) {
