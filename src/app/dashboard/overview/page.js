@@ -4,7 +4,7 @@ import Tournaments from "./Tournaments";
 import RecentHistory from "./components/RecentHistory";
 import Stats from "./components/Stats";
 import XPOverTimeChart from "./components/XPOverTimeChart";
-import Rewards from "./components/Rewards";
+import Rewards from "./components/rewards";
 import LatestTournament from "./components/LatestTournament";
 
 export default function Overview() {

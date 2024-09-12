@@ -1,7 +1,6 @@
 "use client";
 
 import { ArrowCircleUp, Wallet02 } from "untitledui-js-base";
-import Stat from "./Stat";
 import { formatCurrency, formatValue } from "@/utils/format";
 import useUser from "@/hooks/auth/useUser";
 import Card from "../../components/Card";

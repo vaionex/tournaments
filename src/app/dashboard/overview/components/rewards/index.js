@@ -1,12 +1,12 @@
 "use client";
-import Card from "../../components/Card";
+import Card from "../../../components/Card";
 import useRecentRewards from "@/hooks/user/useRecentRewards";
 import RewardsEmpty from "./RewardsEmpty";
 import Reward from "./Reward";
 import { Inbox02 } from "untitledui-js-base";
 import Loader from "@/components/ui/loader";
 import { useState } from "react";
-import FilterSegment from "./FilterSegment";
+import FilterSegment from "../FilterSegment";
 import Link from "next/link";
 
 const filters = [
