@@ -42,7 +42,7 @@ export default function Rewards() {
       </div>
       <div className="space-y-2">
         {isLoading && <Loader className="mx-auto my-24" />}
-        <div className="max-h-96 overflow-y-auto">
+        <div className="max-h-96 space-y-2 overflow-y-auto">
           {rewards.map((reward) => (
             <Reward key={reward.id} {...reward} />
           ))}

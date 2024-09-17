@@ -14,10 +14,7 @@ export default function useJoinTournament() {
       refresh();
       queryClient.refetchQueries(["user"]);
       queryClient.refetchQueries(["tournament", tournament_id, "participants"]);
-      queryClient.setQueryData(["participations"], (participations = []) => [
-        ...participations,
-        { tournament_id, user_id: user.id, created_on: new Date() },
-      ]);
+      queryClient.refetchQueries(["participations"]);
     },
   });
 }
