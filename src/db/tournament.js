@@ -4,6 +4,7 @@ import { pickBy } from "lodash";
 import { v4 } from "uuid";
 import { getUserId } from "@/supabase/utils";
 import { api } from "@/utils/api";
+import { GIFT_CARD_BUCKET } from "@/supabase/buckets";
 
 export async function createTournament({
   banner: bannerFile,
@@ -178,16 +179,10 @@ export async function sendTournamentChatMessage(id, message) {
 }
 
 export async function uploadGiftCard(file, path) {
-  const GIFT_CARD_BUCKET = "gift-cards";
-
-  const { data, error } = await supabase.storage
+  const { error } = await supabase.storage
     .from(GIFT_CARD_BUCKET)
     .upload(path, file);
 
   if (error) throw error;
-  const { path: filePath } = data;
-  const {
-    data: { publicUrl },
-  } = supabase.storage.from(GIFT_CARD_BUCKET).getPublicUrl(filePath);
-  return publicUrl + `?id=${Math.random().toString()}`;
+  return path;
 }
