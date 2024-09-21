@@ -3,7 +3,7 @@ import { supabase } from "@/supabase/client";
 export async function getOrganizedTournaments(user_id) {
   const { data } = await supabase
     .from("Tournament")
-    .select("*")
+    .select("*, Game(*)")
     .eq("user_id", user_id)
     .throwOnError();
 

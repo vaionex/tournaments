@@ -28,7 +28,7 @@ export default async function OverviewPage() {
   } = await getOverview(user_id);
 
   return (
-    <div className="flex max-w-6xl gap-4">
+    <div className="flex gap-4">
       <div className="flex flex-1 flex-col gap-[inherit]">
         <div className="flex gap-[inherit]">
           <Card className="flex-1">

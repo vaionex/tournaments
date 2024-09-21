@@ -57,6 +57,11 @@ export function getRankProgressPercentage(xp) {
   return ((xp - currentRankXP) / total) * 100;
 }
 
+export function getNextRankXP(xp) {
+  const nextRank = getNextRank(xp);
+  return RankDetails[nextRank]?.xp;
+}
+
 export function isRankInRange(rank, minRank, maxRank) {
   const currentIndex = Ranks.findIndex(({ name }) => name == rank);
   const minIndex = Ranks.findIndex(({ name }) => name == minRank);

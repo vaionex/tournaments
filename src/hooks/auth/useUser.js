@@ -1,7 +1,12 @@
 import { supabase } from "@/supabase/client";
 import { useQuery } from "react-query";
 import useAuthentication from "./useAuthentication";
-import { getNextRank, getRank, getRankProgressPercentage } from "@/utils/rank";
+import {
+  getNextRank,
+  getNextRankXP,
+  getRank,
+  getRankProgressPercentage,
+} from "@/utils/rank";
 import { useMemo } from "react";
 
 export default function useUser() {
@@ -32,6 +37,7 @@ export default function useUser() {
         rank: getRank(xp),
         nextRank: getNextRank(xp),
         rankProgress: getRankProgressPercentage(xp),
+        nextRankXP: getNextRankXP(xp),
       },
     };
   }, [query.data]);

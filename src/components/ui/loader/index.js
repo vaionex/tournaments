@@ -3,6 +3,9 @@ import { twMerge } from "tailwind-merge";
 
 export default function Loader({ className = "", ...props }) {
   return (
-    <LucideLoader className={twMerge("animate-spin", className)} {...props} />
+    <LucideLoader
+      className={twMerge("mx-auto animate-spin", className)}
+      {...props}
+    />
   );
 }

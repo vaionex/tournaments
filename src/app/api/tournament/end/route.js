@@ -11,8 +11,9 @@ export async function POST(req) {
   const { tournament_id, winners } = await req.json();
 
   const tournament = await getTournament(tournament_id);
+  const { is_admin } = user;
 
-  if (tournament.user_id != user.id)
+  if (tournament.user_id != user.id && !is_admin)
     return Response.json(
       { error: "You do not own this tournament" },
       { status: 400 },
@@ -66,7 +67,7 @@ export async function POST(req) {
             .from("Inventory")
             .insert({
               user_id: participant.user_id,
-              name: giftCard.label || "",
+              name: giftCard.label || "Gift Card",
               type: "GiftCard",
               file: giftCard.file,
               participant_id,

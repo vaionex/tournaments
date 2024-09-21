@@ -17,12 +17,15 @@ async function createTo(userId) {
 
 class Notifications {
   async tournamentStarting(userId, tournamentId) {
-    const { name } = await getTournament(tournamentId);
+    const { name, id } = await getTournament(tournamentId);
 
     await novu.trigger("tournament-about-to-start", {
       to: await createTo(userId),
       payload: {
-        tournamentName: name,
+        tournament: {
+          name,
+          id,
+        },
       },
     });
   }

@@ -1,11 +1,14 @@
 import { getTournament } from "@/db/tournament";
-import { formatCurrency } from "@/utils/format";
 import { format } from "date-fns";
 import { DollarCircle } from "iconsax-react";
 import Markdown from "react-markdown";
 import { twMerge } from "tailwind-merge";
-import { File06, List, Trophy01 } from "untitledui-js-base";
+import { File06, GamingPad01, List, Trophy01 } from "untitledui-js-base";
 import rehypeRaw from "rehype-raw";
+import RewardPill from "@/app/dashboard/components/RewardPill";
+import ordinal from "ordinal";
+import PositionIcon from "@/app/dashboard/components/PositionIcon";
+import PrizeTiers from "../components/PrizeTiers";
 
 export default async function Details({ params: { id } }) {
   const {
@@ -37,68 +40,7 @@ export default async function Details({ params: { id } }) {
   return (
     <div className="grid grid-cols-2 gap-6 p-6">
       <Section title="Prizes" icon={DollarCircle}>
-        <table className="w-full">
-          <thead>
-            <tr className="text-left font-normal">
-              <th className="w-20 py-2">Position</th>
-              <th className="w-20 py-2">Cash</th>
-              <th className="w-20 py-2">XP</th>
-              <th className="w-20 py-2">Gift Card</th>
-            </tr>
-          </thead>
-          <tbody>
-            {prizes.map(({ xp, cash, giftCard }, index) => (
-              <tr key={index}>
-                <td>
-                  <div
-                    className={twMerge(
-                      "w-full py-2.5 text-center",
-                      highlighted,
-                    )}
-                  >
-                    {index + 1}
-                  </div>
-                </td>
-                <td>
-                  {cash && (
-                    <div
-                      className={twMerge(
-                        "m-1 w-full py-2.5 text-center",
-                        highlighted,
-                      )}
-                    >
-                      {formatCurrency(cash)}
-                    </div>
-                  )}
-                </td>
-                <td>
-                  {xp && (
-                    <div
-                      className={twMerge(
-                        "ml-2 w-full py-2.5 text-center",
-                        highlighted,
-                      )}
-                    >
-                      {xp}
-                    </div>
-                  )}
-                </td>
-                <td>
-                  {giftCard?.file && (
-                    <div
-                      className={twMerge(
-                        "ml-2 w-full py-2.5 text-center",
-                        highlighted,
-                      )}
-                    >
-                      {giftCard?.label}
-                    </div>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <PrizeTiers prizes={prizes} />
       </Section>
 
       <Section icon={File06} title="Rules" className="row-span-2">
