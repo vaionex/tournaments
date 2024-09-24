@@ -11,7 +11,7 @@ export default async function Tournaments() {
   const tournaments = await getOrganizedTournaments(user_id);
 
   return (
-    <div className="mt-8">
+    <div className="">
       <div className="mb-4 flex items-center justify-between">
         <div className="flex items-center justify-center gap-2 font-semibold">
           <Grid01 className="text-neutral-500" />
