@@ -5,8 +5,11 @@ const Scheduler = dynamic(() =>
 import "@bitnoi.se/react-scheduler/dist/style.css";
 import "./Timeline.css";
 import dynamic from "next/dynamic";
+import { useRouter } from "next/navigation";
 
 export default function Timeline({ tournaments }) {
+  const { push } = useRouter();
+
   return (
     <Scheduler
       config={{
@@ -40,6 +43,8 @@ export default function Timeline({ tournaments }) {
           },
         ],
       }))}
+      onItemClick={({ id }) => push(`/dashboard/event/${id}`)}
+      onTileClick={({ id }) => push(`/dashboard/event/${id}`)}
     />
   );
 }
