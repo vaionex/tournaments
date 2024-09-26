@@ -4,7 +4,7 @@ import {
   Airplay,
   Award04,
   BarChartSquare01,
-  ClockStopWatch,
+  CurrencyDollar,
   Target01,
   Users02,
 } from "untitledui-js-base";
@@ -56,8 +56,8 @@ export default async function OverviewPage() {
                 value: 0,
               },
               {
-                label: "Sponsored Gained",
-                icon: ClockStopWatch,
+                label: "Sponsorship Secured",
+                icon: CurrencyDollar,
                 iconContainerClassName: "bg-purple-500/10",
                 iconClassName: "text-purple-500",
                 value: 0,
