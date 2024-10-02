@@ -186,3 +186,17 @@ export async function uploadGiftCard(file, path) {
   if (error) throw error;
   return path;
 }
+
+export async function getFeedback(id) {
+  const { data } = await supabase
+    .from("TournamentFeedback")
+    .select("*, User (*)")
+    .eq("tournament_id", id)
+    .order("created_at")
+    .throwOnError();
+  return data;
+}
+
+export async function submitFeedback(id, { review, rating }) {
+  await api.post("tournament/feedback", { id, review, rating });
+}
