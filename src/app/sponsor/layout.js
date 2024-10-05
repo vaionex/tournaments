@@ -5,11 +5,7 @@ import { Grid01, Wallet03 } from "untitledui-js-base";
 import LogoMarkOutline from "@/components/icons/logo-mark-outline";
 import Container from "@/components/ui/container";
 
-const links = [
-  { name: "Overview", href: "overview", icon: Grid01 },
-  { name: "Tournaments", href: "tournaments", icon: LogoMarkOutline },
-  { name: "Wallet", href: "wallet", icon: Wallet03 },
-];
+const links = [{ name: "Overview", href: "overview", icon: Grid01 }];
 
 export default function SponsorLayout({ children }) {
   return (
