@@ -63,17 +63,15 @@ export async function getTournaments({
 } = {}) {
   let query = supabase
     .from("Tournament")
-    .select("*, Game (*)")
+    .select(
+      "*, Game (*), User (profile_picture), rating:TournamentFeedback(rating.avg())",
+    )
     .range(limit * (page - 1), limit * page - 1)
-    .lte("prize_pool", maximum_prize_pool)
-    .gte("prize_pool", minimum_prize_pool)
     .order("start", { ascending: false });
 
   let countQuery = supabase
     .from("Tournament")
-    .select("", { count: "exact", head: true })
-    .lte("prize_pool", maximum_prize_pool)
-    .gte("prize_pool", minimum_prize_pool);
+    .select("", { count: "exact", head: true });
 
   if (status == "Upcoming") {
     query = query.gt("start", new Date().toISOString());
@@ -105,7 +103,9 @@ export async function getTournaments({
 export async function getUpcomingTournaments() {
   const { data } = await supabase
     .from("Tournament")
-    .select("*, Game (*)")
+    .select(
+      "*, Game (*), User (profile_picture), rating:TournamentFeedback(rating.avg())",
+    )
     .eq("status", "Approved")
     .gt("start", new Date().toISOString())
     .order("start")
