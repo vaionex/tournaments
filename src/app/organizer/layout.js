@@ -25,10 +25,19 @@ export default function OrganizerLayout({ children }) {
   if (!user) push("/");
 
   return (
-    <div className="relative mx-auto flex max-w-7xl flex-col py-24">
-      <Header />
-      <DashboardMenu links={links} />
-      <div className="flex-1">{children}</div>
+    <div
+      style={{
+        backgroundImage: 'url("/images/dashboard-bg.webp")',
+        backgroundSize: "100% 1500px",
+        backgroundPosition: "top center",
+        backgroundRepeat: "no-repeat",
+      }}
+    >
+      <div className="relative mx-auto flex max-w-7xl flex-col py-24">
+        <Header />
+        <DashboardMenu links={links} />
+        <div className="flex-1">{children}</div>
+      </div>
     </div>
   );
 }

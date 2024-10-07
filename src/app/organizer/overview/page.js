@@ -1,5 +1,4 @@
 import { Cup } from "iconsax-react";
-import Card from "../components/Card";
 import {
   Airplay,
   Award04,
@@ -17,6 +16,7 @@ import IconLabel from "../components/IconLabel";
 import Timeline from "./components/Timeline";
 import RookieOrganizer from "@/components/icons/organizer-achievements/RookieOrganizer";
 import EventPieChart from "./components/EventPieChart";
+import Card from "@/app/dashboard/components/Card";
 
 export default async function OverviewPage() {
   const { id: user_id } = await getUser();
