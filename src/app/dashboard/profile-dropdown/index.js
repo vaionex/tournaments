@@ -23,6 +23,7 @@ export default function ProfileDropdown() {
     },
     { name: "Dashboard", href: "/dashboard/" },
     { name: "Organizer", href: "/organizer" },
+    { name: "Sponsor", href: "/sponsor/overview" },
     { name: "Profile", href: "/dashboard/profile/account" },
     { name: "Log out", onClick: () => logout() },
   ].filter(Boolean);
