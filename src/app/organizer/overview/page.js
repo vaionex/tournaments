@@ -1,10 +1,9 @@
 import { Cup } from "iconsax-react";
-import Card from "../components/Card";
 import {
   Airplay,
   Award04,
   BarChartSquare01,
-  ClockStopWatch,
+  CurrencyDollar,
   Target01,
   Users02,
 } from "untitledui-js-base";
@@ -17,6 +16,7 @@ import IconLabel from "../components/IconLabel";
 import Timeline from "./components/Timeline";
 import RookieOrganizer from "@/components/icons/organizer-achievements/RookieOrganizer";
 import EventPieChart from "./components/EventPieChart";
+import Card from "@/app/dashboard/components/Card";
 
 export default async function OverviewPage() {
   const { id: user_id } = await getUser();
@@ -56,8 +56,8 @@ export default async function OverviewPage() {
                 value: 0,
               },
               {
-                label: "Sponsored Gained",
-                icon: ClockStopWatch,
+                label: "Sponsorship Secured",
+                icon: CurrencyDollar,
                 iconContainerClassName: "bg-purple-500/10",
                 iconClassName: "text-purple-500",
                 value: 0,
