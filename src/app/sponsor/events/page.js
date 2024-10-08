@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import Loader from "@/components/ui/loader";
 import useUpcomingTournaments from "@/hooks/tournament/useUpcomingTournaments";
 import { format } from "date-fns";
+import Link from "next/link";
 import { useState } from "react";
 import { Star01 } from "untitledui-js-base";
 
@@ -51,7 +52,7 @@ export default function Events() {
       </div>
       <div className="mt-8 grid grid-cols-3 gap-4">
         {searchedTournaments.map(
-          ({ name, start, end, Game, banner, User, rating }) => (
+          ({ id, name, start, end, Game, banner, User, rating }) => (
             <Card className="space-y-4 p-2">
               <div
                 className="flex h-40 items-start rounded-lg bg-cover bg-center p-2.5"
@@ -80,8 +81,8 @@ export default function Events() {
                   {Game.name}
                 </div>
               </div>
-              <Button variant="green" size="sm">
-                Become Sponsor
+              <Button variant="green" size="sm" asChild>
+                <Link href={`/sponsor/events/${id}`}>Become Sponsor</Link>
               </Button>
             </Card>
           ),
