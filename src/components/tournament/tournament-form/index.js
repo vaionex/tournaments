@@ -6,7 +6,7 @@ import Dropzone from "@/components/ui/dropzone";
 import { Input } from "@/components/ui/input";
 import Select from "@/components/ui/select";
 import useGames from "@/hooks/games/useGames";
-import { Image, Swords } from "lucide-react";
+import { DollarSign, Image, Swords } from "lucide-react";
 import toast from "react-hot-toast";
 import RuleDescriptionEditor from "./rule-description-editor";
 import { Ranks } from "@/utils/rank";
@@ -59,6 +59,7 @@ export default function TournamentForm({
     max_rank = "Grandmaster",
     prizes = [],
     rules = [],
+    sponsorship_target = 0,
   } = tournament;
 
   useEffect(() => {
@@ -242,6 +243,18 @@ export default function TournamentForm({
           setValue("prizes", prizes.slice(0, players));
         }}
         min={1}
+        required
+      />
+      <div>Sponsorship Target</div>
+      <Input
+        type="number"
+        value={sponsorship_target / 100}
+        onChange={(e) => {
+          const target = Number(e.target.value) || 0;
+          setValue("sponsorship_target", target * 100);
+        }}
+        min={0}
+        leftSection={<DollarSign className="size-4 text-neutral-400" />}
         required
       />
       <div>Skill Level</div>

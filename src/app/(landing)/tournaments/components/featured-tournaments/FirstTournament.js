@@ -34,7 +34,6 @@ export default function FirstTournament({
       <div className="flex flex-1 flex-col justify-center bg-gradient-to-r from-black px-12 py-20">
         <div className="mb-1 flex items-center gap-2">
           <Pill icon={Users01}>{max_players}</Pill>
-          <Pill icon={Trophy01}>{formatCurrency(prize_pool)}</Pill>
         </div>
         <h2 className="mb-2 text-5xl font-bold leading-[60px] lg:w-1/2">
           {name}
