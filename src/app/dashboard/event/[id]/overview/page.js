@@ -8,11 +8,12 @@ import Card from "@/app/dashboard/components/Card";
 import { Calendar } from "iconsax-react";
 import { StarIcon } from "lucide-react";
 import StartDate from "./components/StartDate";
+import { Diamond01 } from "untitledui-js-base";
 
 export const revalidate = 0;
 
 export default async function Overview({ params: { id } }) {
-  const { name, banner, start, end, User, description, prizes } =
+  const { name, banner, start, end, User, description, prizes, Sponsorship } =
     await getTournament(id);
   const participants = await getParticipants(id);
 
@@ -54,6 +55,23 @@ export default async function Overview({ params: { id } }) {
             </Card>
           </div>
         </div>
+        {Sponsorship.length > 0 && (
+          <div>
+            <div className="mb-4 flex items-center gap-2 text-xl font-semibold">
+              <div className="flex size-8 items-center justify-center rounded bg-primary-950">
+                <Diamond01 className="size-4" />
+              </div>
+              Proudly sponsored by{" "}
+            </div>
+            <div className="space-y-4">
+              {Sponsorship.map(({ banner, url }) => (
+                <a className="block" href={url}>
+                  <img src={banner} />
+                </a>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
       <Chat id={id} />
     </div>
