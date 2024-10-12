@@ -1,3 +1,4 @@
+import { createTransaction } from "@/db/server/user";
 import { admin } from "@/supabase/admin";
 import { getUserDetails } from "@/supabase/server";
 
@@ -25,10 +26,9 @@ export async function POST(req) {
     })
     .throwOnError();
 
-  await admin
-    .from("User")
-    .update({ balance: balance - amount })
-    .eq("id", user_id);
+  await createTransaction(user_id, -amount, {
+    sponsored_tournament_id: tournamentId,
+  });
 
   return Response.json({ success: true });
 }

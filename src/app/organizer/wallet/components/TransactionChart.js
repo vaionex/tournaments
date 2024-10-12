@@ -1,5 +1,5 @@
 import Loader from "@/components/ui/loader";
-import usePayouts from "@/hooks/user/usePayouts";
+import useTransactions from "@/hooks/transaction/useTransactions";
 import { tailwind } from "@/utils/tailwind";
 import { format, subDays } from "date-fns";
 import { useState } from "react";
@@ -32,19 +32,24 @@ const durations = [
 ];
 
 export default function TransactionChart() {
-  const [payoutType, setPayoutType] = useState("Transfer");
+  const [transactionType, setTransactionType] = useState("Transfer");
   const [selectedDuration, setSelectedDuration] = useState(durations[0].value);
   const start =
     durations.find(({ value }) => value == selectedDuration)?.start ||
     durations[0].start;
 
-  const { data: payouts = [], isLoading } = usePayouts({
+  const { data: transactions = [], isLoading } = useTransactions({
     start,
     end: new Date(),
   });
-  const data = payouts.filter(({ amount }) =>
-    payoutType == "Deposit" ? amount > 0 : amount < 0,
-  );
+  const data = transactions
+    .filter(({ amount }) =>
+      transactionType == "Deposit" ? amount > 0 : amount < 0,
+    )
+    .map((transaction) => ({
+      ...transaction,
+      amount: Math.abs(transaction.amount),
+    }));
   const noData = data.length == 0 && !isLoading;
   return (
     <div>
@@ -62,9 +67,9 @@ export default function TransactionChart() {
           <button
             className={twMerge(
               "flex flex-1 items-center justify-center gap-2 rounded-lg bg-white/10 py-2.5 text-sm font-medium",
-              payoutType == label && "bg-primary text-white",
+              transactionType == label && "bg-primary text-white",
             )}
-            onClick={() => setPayoutType(label)}
+            onClick={() => setTransactionType(label)}
             key={label}
           >
             <Icon className="size-5" />

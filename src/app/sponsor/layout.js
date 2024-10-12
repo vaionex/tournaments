@@ -2,12 +2,12 @@
 import DashboardMenu from "@/components/ui/dashboard-menu";
 import LandingLayout from "../(landing)/layout";
 import { Compass03, Grid01, Wallet03 } from "untitledui-js-base";
-import LogoMarkOutline from "@/components/icons/logo-mark-outline";
 import Container from "@/components/ui/container";
 
 const links = [
   { name: "Overview", href: "overview", icon: Grid01 },
   { name: "Events", href: "events", icon: Compass03 },
+  { name: "Wallet", href: "wallet", icon: Wallet03 },
 ];
 
 export default function SponsorLayout({ children }) {
@@ -21,7 +21,7 @@ export default function SponsorLayout({ children }) {
       }}
     >
       <LandingLayout>
-        <Container className="py-36">
+        <Container className="py-24">
           <DashboardMenu links={links} />
           {children}
         </Container>

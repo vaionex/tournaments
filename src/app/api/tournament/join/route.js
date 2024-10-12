@@ -47,12 +47,6 @@ export async function POST(req) {
     .insert({ user_id, tournament_id })
     .throwOnError();
 
-  await admin
-    .from("User")
-    .update({ balance: balance - entry_fee })
-    .eq("id", user_id)
-    .throwOnError();
-
   try {
     await notifications.newParticipant(tournament_id, user_id);
   } catch (e) {}

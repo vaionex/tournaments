@@ -1,4 +1,4 @@
-import { giveUserXP } from "@/db/server/user";
+import { createTransaction, giveUserXP } from "@/db/server/user";
 import { getParticipants, getTournament } from "@/db/tournament";
 import { notifications } from "@/novu/notifications";
 import { admin } from "@/supabase/admin";
@@ -46,20 +46,9 @@ export async function POST(req) {
           await giveUserXP(participant.user_id, xp, { participant_id });
 
         if (cash > 0) {
-          await admin
-            .from("User")
-            .update({ balance: user.balance + cash })
-            .eq("id", participant.user_id)
-            .throwOnError();
-
-          await admin
-            .from("Payout")
-            .insert({
-              user_id: participant.user_id,
-              amount: cash,
-              participant_id,
-            })
-            .throwOnError();
+          await createTransaction(participant.user_id, cash, {
+            won_tournament_id: tournament_id,
+          });
         }
 
         if (giftCard?.file) {
