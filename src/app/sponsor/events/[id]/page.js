@@ -151,7 +151,7 @@ export default function CreateSponsorship() {
                 label={
                   <>
                     I understand the{" "}
-                    <Link className="underline" href="/privacy-policy">
+                    <Link className="underline" href="/privacy">
                       privacy policy
                     </Link>
                   </>

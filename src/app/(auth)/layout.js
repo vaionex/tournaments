@@ -8,7 +8,7 @@ import { useEffect } from "react";
 
 const links = [
   { name: "Terms", href: "" },
-  { name: "Privacy", href: "/privacy-policy" },
+  { name: "Privacy", href: "/privacy" },
   { name: "Cookies", href: "" },
 ];
 
