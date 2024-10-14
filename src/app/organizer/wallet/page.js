@@ -1,15 +1,17 @@
 "use client";
 import LogoMarkOutline from "@/components/icons/logo-mark-outline";
 import useUser from "@/hooks/auth/useUser";
-import usePayouts from "@/hooks/user/usePayouts";
 import { formatCurrency } from "@/utils/format";
 import { format } from "date-fns";
 import WalletIcon from "./components/WalletIcon";
 import TransactionChart from "./components/TransactionChart";
 import Loader from "@/components/ui/loader";
+import useTransactions from "@/hooks/transaction/useTransactions";
+import TransactionItem from "./components/TransactionItem";
 
 export default function Wallet() {
-  const { data: payouts = [], isLoading: isLoadingTransactions } = usePayouts();
+  const { data: transactions = [], isLoading: isLoadingTransactions } =
+    useTransactions();
   const { data: { balance = 0, id } = {} } = useUser();
 
   return (
@@ -36,19 +38,8 @@ export default function Wallet() {
         </div>
         <div className="mt-4 space-y-3">
           {isLoadingTransactions && <Loader className="my-24" />}
-          {payouts.map(({ created_at, amount, Participant }) => (
-            <div className="flex items-center gap-6 rounded-lg border border-white/5 bg-white/10 p-4">
-              <div className="flex size-8 items-center justify-center rounded-full border border-green-500 bg-green-800">
-                <LogoMarkOutline className="size-4" />
-              </div>
-              <div className="flex-1 text-green-500">
-                {Participant?.Tournament?.name}
-              </div>
-              <div className="w-36 text-left text-neutral-400">
-                {format(created_at, "dd MMM, yyyy")}
-              </div>
-              <div className="w-24 text-right">{formatCurrency(amount)}</div>
-            </div>
+          {transactions.map((transaction) => (
+            <TransactionItem {...transaction} />
           ))}
         </div>
       </div>

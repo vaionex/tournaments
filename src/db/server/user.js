@@ -18,3 +18,26 @@ export async function giveUserXP(
     .insert({ user_id, xp, amount: newAmount, challenge_id, participant_id })
     .throwOnError();
 }
+
+export async function createTransaction(
+  user_id,
+  amount,
+  { won_tournament_id = null, sponsored_tournament_id = null } = {},
+) {
+  const { balance } = await getUserById(user_id);
+  await admin
+    .from("User")
+    .update({ balance: balance + amount })
+    .eq("id", user_id)
+    .throwOnError();
+
+  await admin
+    .from("Transaction")
+    .insert({
+      user_id,
+      amount,
+      won_tournament_id,
+      sponsored_tournament_id,
+    })
+    .throwOnError();
+}
