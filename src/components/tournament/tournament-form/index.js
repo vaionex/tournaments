@@ -248,7 +248,7 @@ export default function TournamentForm({
       <div>Sponsorship Target</div>
       <Input
         type="number"
-        value={sponsorship_target / 100}
+        value={Number(sponsorship_target / 100).toString()}
         onChange={(e) => {
           const target = Number(e.target.value) || 0;
           setValue("sponsorship_target", target * 100);
