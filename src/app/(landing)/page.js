@@ -2,9 +2,9 @@ import Hero from "./components/hero";
 import CTA from "./components/cta";
 import FeaturedTournaments from "./components/featured-tournaments";
 import Rewards from "./components/rewards";
-import DesktopApp from "./components/desktop-app";
 import Blog from "./components/blog";
 import Features from "./components/features";
+import SponsorshipFeatures from "./components/sponsorship-features";
 
 export const revalidate = 0;
 export default function Home() {
@@ -13,8 +13,8 @@ export default function Home() {
       <Hero />
       <FeaturedTournaments />
       <Rewards />
-      <DesktopApp />
       <Features />
+      <SponsorshipFeatures />
       <Blog />
       <CTA />
     </div>

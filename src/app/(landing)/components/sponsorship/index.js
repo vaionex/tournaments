@@ -31,7 +31,7 @@ export default function Sponsorship() {
             Transform Your Sponsorship Experience with Our Advanced Dashboard
           </div>
         </div>
-        <Button>Become a Sponsor</Button>
+        <Button href="mailto:sponsor@tournaments.com">Become a Sponsor</Button>
       </div>
       <div className="mt-24 flex flex-col gap-2">
         <div className="gap-inherit flex flex-col lg:flex-row">
