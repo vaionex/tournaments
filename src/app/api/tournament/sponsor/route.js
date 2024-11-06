@@ -1,6 +1,8 @@
 import { createTransaction } from "@/db/server/user";
+import { getTournament } from "@/db/tournament";
 import { admin } from "@/supabase/admin";
 import { getUserDetails } from "@/supabase/server";
+import { SponsorshipShare } from "@/utils/constants";
 
 export async function POST(req) {
   const { tournamentId, amount, banner, url, message } = await req.json();
@@ -26,9 +28,20 @@ export async function POST(req) {
     })
     .throwOnError();
 
+  const { user_id: organizer_id } = await getTournament(tournamentId);
+
   await createTransaction(user_id, -amount, {
     sponsored_tournament_id: tournamentId,
   });
+
+  await createTransaction(
+    organizer_id,
+    Math.round(amount * SponsorshipShare.Organizer),
+    {
+      sponsored_tournament_id: tournamentId,
+      sponsor_id: user_id,
+    },
+  );
 
   return Response.json({ success: true });
 }

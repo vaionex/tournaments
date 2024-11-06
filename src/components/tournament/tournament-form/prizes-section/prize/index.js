@@ -12,11 +12,13 @@ import {
 import GiftCardModal from "../gift-card-modal";
 import { useState } from "react";
 import { twMerge } from "tailwind-merge";
+import { Percent } from "lucide-react";
 
 export default function Prize({
   xp,
   cash,
   giftCard,
+  sponsorshipPercentage,
   position,
   onChange,
   onRemove,
@@ -69,6 +71,20 @@ export default function Prize({
         <div className={twMerge("space-y-2.5", !expanded && "hidden")}>
           {[
             {
+              label: "Sponsorship Share",
+              icon: Percent,
+              onChange: (e) =>
+                onChange({
+                  sponsorshipPercentage:
+                    Math.min(Number(e.target.value), 100) || 0,
+                }),
+              value: sponsorshipPercentage.toString(),
+              type: "number",
+              enabled: true,
+              max: 100,
+              min: 0,
+            },
+            {
               label: "Cash",
               icon: CurrencyDollarCircle,
               onChange: (e) =>
@@ -76,6 +92,7 @@ export default function Prize({
               value: cash / 100,
               onRemove: () => onChange({ cash: undefined }),
               enabled: cash != undefined,
+              min: 1,
             },
             {
               label: "XP",
@@ -84,6 +101,7 @@ export default function Prize({
               value: xp,
               onRemove: () => onChange({ xp: undefined }),
               enabled: xp != undefined,
+              min: 1,
             },
             {
               label: "Gift Card",
@@ -98,28 +116,44 @@ export default function Prize({
             },
           ]
             .filter(({ enabled }) => enabled)
-            .map(({ label, icon: Icon, onChange, value, onRemove }) => (
-              <div className="flex items-center gap-2" key={label}>
-                <div className="flex flex-1 rounded-lg border">
-                  <div className="flex w-40 items-center gap-2 border-r bg-white/5 px-4 py-3">
-                    <Icon />
-                    <div>{label}</div>
+            .map(
+              ({
+                label,
+                icon: Icon,
+                onChange,
+                value,
+                onRemove,
+                type,
+                max,
+                min,
+              }) => (
+                <div className="flex items-center gap-2" key={label}>
+                  <div className="flex flex-1 rounded-lg border pr-4">
+                    <div className="flex w-40 items-center gap-2 border-r bg-white/5 px-4 py-3">
+                      <Icon />
+                      <div>{label}</div>
+                    </div>
+                    <input
+                      onChange={onChange}
+                      value={value}
+                      className="w-full bg-transparent pl-4 outline-none"
+                      type={type}
+                      min={min}
+                      max={max}
+                    />
                   </div>
-                  <input
-                    onChange={onChange}
-                    value={value}
-                    className="bg-transparent pl-4 outline-none"
-                  />
+                  {onRemove && (
+                    <button
+                      onClick={onRemove}
+                      type="button"
+                      className="text-neutral-500 transition hover:text-red-500"
+                    >
+                      <Trash03 />
+                    </button>
+                  )}
                 </div>
-                <button
-                  onClick={onRemove}
-                  type="button"
-                  className="text-neutral-500 transition hover:text-red-500"
-                >
-                  <Trash03 />
-                </button>
-              </div>
-            ))}
+              ),
+            )}
           {[
             {
               label: "Add Cash Reward",

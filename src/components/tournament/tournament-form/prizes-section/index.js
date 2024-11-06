@@ -7,6 +7,15 @@ export default function PrizesSection({
   onChange = (prizes) => {},
   disableAddPrize,
 }) {
+  const remainingSponsorship = Math.max(
+    100 -
+      prizes.reduce(
+        (total, { sponsorshipPercentage }) => total + sponsorshipPercentage,
+        0,
+      ),
+    0,
+  );
+
   function updateTier(value, index) {
     const temp = [...prizes];
     temp[index] = { ...temp[index], ...value };
@@ -25,7 +34,12 @@ export default function PrizesSection({
       ))}
       {!disableAddPrize && (
         <button
-          onClick={() => onChange([...prizes, {}])}
+          onClick={() =>
+            onChange([
+              ...prizes,
+              { sponsorshipPercentage: remainingSponsorship },
+            ])
+          }
           type="button"
           className="flex w-full items-center gap-4 p-3"
         >

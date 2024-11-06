@@ -3,6 +3,7 @@ import { getParticipants, getTournament } from "@/db/tournament";
 import { notifications } from "@/novu/notifications";
 import { admin } from "@/supabase/admin";
 import { getUserDetails } from "@/supabase/server";
+import { SponsorshipShare } from "@/utils/constants";
 import { property } from "lodash";
 import ordinal from "ordinal";
 
@@ -34,10 +35,22 @@ export async function POST(req) {
   if (!allWinnersHaveValidIds)
     return Response.json({ error: "Invalid Pariticipant(s)" }, { status: 400 });
 
+  const totalSponsorshipReward =
+    tournament.Sponsorship.reduce((total, { amount }) => total + amount, 0) *
+    SponsorshipShare.Winners;
+
   await Promise.all(
     winners.map(
       async (
-        { participant_id, prize: { xp = 0, cash = 0, giftCard } },
+        {
+          participant_id,
+          prize: {
+            xp = 0,
+            cash = 0,
+            giftCard = undefined,
+            sponsorshipPercentage = 0,
+          } = {},
+        },
         index,
       ) => {
         const participant = participants.find(({ id }) => id == participant_id);
@@ -45,8 +58,13 @@ export async function POST(req) {
         if (xp > 0)
           await giveUserXP(participant.user_id, xp, { participant_id });
 
-        if (cash > 0) {
-          await createTransaction(participant.user_id, cash, {
+        const sponsorshipCash =
+          (sponsorshipPercentage * totalSponsorshipReward) / 100;
+
+        const totalCash = cash + sponsorshipCash;
+
+        if (totalCash > 0) {
+          await createTransaction(participant.user_id, totalCash, {
             won_tournament_id: tournament_id,
           });
         }

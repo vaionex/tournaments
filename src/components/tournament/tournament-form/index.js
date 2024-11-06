@@ -57,7 +57,7 @@ export default function TournamentForm({
     max_players,
     min_rank = "Bronze",
     max_rank = "Grandmaster",
-    prizes = [],
+    prizes = [{ sponsorshipPercentage: 100 }],
     rules = [],
     sponsorship_target = 0,
   } = tournament;
@@ -94,11 +94,18 @@ export default function TournamentForm({
   const { requires_matchmaking_key = false, requires_server_ip } =
     games.find(({ id }) => id == game_id) || {};
 
+  const totalSponsorshipPercentage = prizes.reduce(
+    (total, { sponsorshipPercentage }) => total + sponsorshipPercentage,
+    0,
+  );
+
   function handleSubmit(e) {
     e.preventDefault();
     if (!bannerUrl && !banner)
       return toast.error("Tournament banner is required");
     if (!game_id) return toast.error("Game is required");
+    if (totalSponsorshipPercentage > 100)
+      return toast.error("Total sponsorship percentage cannot exceed 100%");
     onSubmit?.();
   }
 

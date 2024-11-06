@@ -102,6 +102,7 @@ export default function CreateSponsorship() {
                       className="text-sm"
                       onClick={() => setAmount(v)}
                       disabled={v > balance}
+                      type="button"
                     >
                       ${v / 100}
                     </Button>
