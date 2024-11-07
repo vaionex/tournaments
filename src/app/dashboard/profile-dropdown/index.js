@@ -3,15 +3,13 @@ import Avatar from "@/components/ui/avatar";
 import useAdmin from "@/hooks/auth/useAdmin";
 import useLogout from "@/hooks/auth/useLogout";
 import useUser from "@/hooks/auth/useUser";
-import { supabase } from "@/supabase/client";
 import { Menu, Transition } from "@headlessui/react";
 import { useRouter } from "next/navigation";
 import { Fragment } from "react/jsx-runtime";
-import { twMerge } from "tailwind-merge";
+import DropdownItem from "./DropdownItem";
 
 export default function ProfileDropdown() {
   const { data: user } = useUser();
-  const { push } = useRouter();
   const logout = useLogout();
   const { isAdmin } = useAdmin();
 
@@ -47,17 +45,14 @@ export default function ProfileDropdown() {
       >
         <Menu.Items className="absolute right-0 z-10 mt-2 w-fit origin-top-right space-y-0.5 rounded bg-neutral-900 p-2 shadow-lg ring-opacity-5 focus:outline-none">
           {items.map(({ name, href, onClick }) => (
-            <Menu.Item key={name}>
+            <Menu.Item as={"div"} key={name}>
               {({ active }) => (
-                <button
-                  className={twMerge(
-                    active ? "bg-white/10" : "",
-                    "block w-full whitespace-nowrap px-2.5 py-2 text-left text-sm",
-                  )}
-                  onClick={() => (href ? push(href) : onClick?.())}
-                >
-                  {name}
-                </button>
+                <DropdownItem
+                  active={active}
+                  name={name}
+                  href={href}
+                  onClick={onClick}
+                />
               )}
             </Menu.Item>
           ))}
