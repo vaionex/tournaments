@@ -42,3 +42,12 @@ export async function getOverview(user_id) {
     tournaments,
   };
 }
+
+export async function getOrganizerRating(user_id) {
+  const { data } = await supabase
+    .from("TournamentFeedback")
+    .select("rating.avg(), Tournament(user_id)")
+    .eq("Tournament.user_id", user_id)
+    .throwOnError();
+  return data[0]?.avg;
+}
