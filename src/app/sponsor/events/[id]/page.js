@@ -14,6 +14,13 @@ import Link from "next/link";
 import toast from "react-hot-toast";
 import { HomeLine } from "untitledui-js-base";
 import useTournament from "@/hooks/tournament/useTournament";
+import { formatCurrency } from "@/utils/format";
+import {
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+} from "@/components/ui/tooltip";
+import BudgetButton from "./components/BudgetButton";
 
 export default function CreateSponsorship() {
   const [amount, setAmount] = useState(0);
@@ -84,7 +91,10 @@ export default function CreateSponsorship() {
             label="Budget Alocation"
             description="What is your budget for sponsorship?"
           >
-            <Card>
+            <Card className="pb-2">
+              {amount >= balance && (
+                <div className="mb-1 text-sm text-red-500">Max Amount</div>
+              )}
               <Input
                 value={amount / 100}
                 onChange={(e) =>
@@ -97,16 +107,15 @@ export default function CreateSponsorship() {
                 {[10, 25, 50, 100, 200]
                   .map((v) => v * 100)
                   .map((v) => (
-                    <Button
-                      variant={v == amount ? "green" : "secondary"}
-                      className="text-sm"
-                      onClick={() => setAmount(v)}
-                      disabled={v > balance}
-                      type="button"
-                    >
-                      ${v / 100}
-                    </Button>
+                    <BudgetButton
+                      value={v}
+                      onChange={setAmount}
+                      amount={amount}
+                    />
                   ))}
+              </div>
+              <div className="mt-2 text-sm text-neutral-500">
+                Available Balance: {formatCurrency(balance)}
               </div>
             </Card>
           </Section>
