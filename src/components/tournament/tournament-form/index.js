@@ -57,7 +57,7 @@ export default function TournamentForm({
     max_players,
     min_rank = "Bronze",
     max_rank = "Grandmaster",
-    prizes = [{ sponsorshipPercentage: 100 }],
+    prizes = [],
     rules = [],
     sponsorship_target = 0,
   } = tournament;

@@ -6,6 +6,7 @@ import {
   ChevronDown,
   CurrencyDollarCircle,
   Gift01,
+  Percent01,
   Trash01,
   Trash03,
 } from "untitledui-js-base";
@@ -18,6 +19,7 @@ export default function Prize({
   xp,
   cash,
   giftCard,
+  sponsorshipPercentageOverride,
   sponsorshipPercentage,
   position,
   onChange,
@@ -51,6 +53,10 @@ export default function Prize({
                 { type: "xp", value: xp },
                 { type: "cash", value: cash },
                 { type: "gift-card", value: giftCard?.label },
+                {
+                  type: "percentage",
+                  value: sponsorshipPercentage,
+                },
               ]
                 .filter(({ value }) => value != undefined)
                 .map(({ type, value }) => (
@@ -70,20 +76,6 @@ export default function Prize({
         </div>
         <div className={twMerge("space-y-2.5", !expanded && "hidden")}>
           {[
-            {
-              label: "Sponsorship Share",
-              icon: Percent,
-              onChange: (e) =>
-                onChange({
-                  sponsorshipPercentage:
-                    Math.min(Number(e.target.value), 100) || 0,
-                }),
-              value: sponsorshipPercentage.toString(),
-              type: "number",
-              enabled: true,
-              max: 100,
-              min: 0,
-            },
             {
               label: "Cash",
               icon: CurrencyDollarCircle,
@@ -113,6 +105,22 @@ export default function Prize({
               value: giftCard?.label,
               onRemove: () => onChange({ giftCard: undefined }),
               enabled: giftCard != undefined,
+            },
+            {
+              label: "Sponsorship Share",
+              icon: Percent,
+              onChange: (e) =>
+                onChange({
+                  sponsorshipPercentageOverride:
+                    Math.min(Number(e.target.value), 100) || 0,
+                }),
+              value: sponsorshipPercentageOverride?.toString(),
+              type: "number",
+              enabled: sponsorshipPercentageOverride !== undefined,
+              onRemove: () =>
+                onChange({ sponsorshipPercentageOverride: undefined }),
+              max: 100,
+              min: 0,
             },
           ]
             .filter(({ enabled }) => enabled)
@@ -171,6 +179,12 @@ export default function Prize({
               label: "Add Gift Card",
               icon: Gift01,
               onClick: () => setOpenAddModal(true),
+              enabled: giftCard == undefined,
+            },
+            {
+              label: "Sponsorship Percentage",
+              icon: Percent01,
+              onClick: () => onChange({ sponsorshipPercentageOverride: 0 }),
               enabled: giftCard == undefined,
             },
           ]
