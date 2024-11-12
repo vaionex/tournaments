@@ -3,7 +3,6 @@ import { twMerge } from "tailwind-merge";
 
 export default function DropdownItem({ active, name, href, onClick }) {
   const Comp = href ? Link : "button";
-  if (active) console.log("wowowowo");
   return (
     <Comp
       className={twMerge(

@@ -23,7 +23,6 @@ export default function PrizesSection({
 
         const { cash = 0, xp = 0 } = prizes[index];
         const value = totalCash ? cash : xp;
-        console.log(total, value);
         const sponsorshipPercentage = Math.round((value / total) * 100);
         return {
           ...v,
