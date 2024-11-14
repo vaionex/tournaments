@@ -3,9 +3,9 @@ import useCreateTournament from "@/hooks/tournament/useCreateTournament";
 import { addDays } from "date-fns";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import toast from "react-hot-toast";
 import TournamentForm from "@/components/tournament/tournament-form";
 import { Button } from "@/components/ui/button";
+import { v4 } from "uuid";
 
 export default function CreateTournament() {
   const [tournament, setTournament] = useState({
@@ -16,7 +16,7 @@ export default function CreateTournament() {
     max_players: 10,
     min_rank: "Bronze",
     max_rank: "Grandmaster",
-    prizes: [{ sponsorshipPercentage: 100 }],
+    prizes: [{ id: v4(), sponsorshipPercentage: 100 }],
     entry_fee: 0,
   });
   const { push } = useRouter();
