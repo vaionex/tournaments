@@ -4,6 +4,7 @@ import {
   CurrencyDollarCircle,
   GamingPad01,
   Gift01,
+  Percent01,
   Upload03,
 } from "untitledui-js-base";
 
@@ -13,12 +14,14 @@ export default function RewardPill({ type, value }) {
       xp: Upload03,
       cash: CurrencyDollarCircle,
       "gift-card": Gift01,
+      percentage: Percent01,
     }[type] || (() => null);
 
   const text = {
     xp: `${value}XP`,
     cash: formatCurrency(value),
     "gift-card": value,
+    percentage: `${value}%`,
   }[type];
 
   return (

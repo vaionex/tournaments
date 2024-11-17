@@ -22,7 +22,11 @@ export async function giveUserXP(
 export async function createTransaction(
   user_id,
   amount,
-  { won_tournament_id = null, sponsored_tournament_id = null } = {},
+  {
+    won_tournament_id = null,
+    sponsored_tournament_id = null,
+    sponsor_id = null,
+  } = {},
 ) {
   const { balance } = await getUserById(user_id);
   await admin
@@ -38,6 +42,7 @@ export async function createTransaction(
       amount,
       won_tournament_id,
       sponsored_tournament_id,
+      sponsor_id,
     })
     .throwOnError();
 }

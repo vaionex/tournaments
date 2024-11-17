@@ -1,9 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Rating from "@/components/ui/rating";
-import useUser from "@/hooks/auth/useUser";
-import useFeedback from "@/hooks/tournament/useFeedback";
-import useParticipants from "@/hooks/tournament/useParticipants";
+import useCanGiveFeedback from "@/hooks/tournament/useCanGiveFeedback";
 import useSubmitFeedback from "@/hooks/tournament/useSubmitFeedback";
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -11,20 +9,9 @@ import toast from "react-hot-toast";
 export default function SubmitFeedback({ id }) {
   const [review, setReview] = useState("");
   const [rating, setRating] = useState(5);
-  const { data: participants = [] } = useParticipants(id);
-  const { data: feedback = [] } = useFeedback(id);
-  const { data: user } = useUser();
   const { mutate: submit, isLoading } = useSubmitFeedback();
 
-  const isParticipating = participants.some(
-    (participant) => participant.user_id === user.id,
-  );
-
-  const alreadySubmitted = feedback.some(
-    (feedback) => feedback.user_id === user.id,
-  );
-
-  const canSubmit = isParticipating && !alreadySubmitted;
+  const { data: canSubmit } = useCanGiveFeedback(id);
 
   if (!canSubmit) return null;
 

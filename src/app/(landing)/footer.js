@@ -4,9 +4,13 @@ import { DISCORD_URL } from "@/utils/constants";
 import Link from "next/link";
 
 const links = [
-  { name: "Tournaments", href: "/tournaments" },
-  { name: "News", href: "/news" },
-  { name: "Subscription", href: "/subscription" },
+  { name: "Terms of Service", href: "/terms" },
+  { name: "Privacy Policy", href: "/privacy" },
+  { name: "Responsible Gaming and Security", href: "/responsible-gaming" },
+  { name: "Contact", href: "/contact" },
+  { name: "About", href: "/about" },
+  { name: "FAQ", href: "/faq" },
+  { name: "Accessibility", href: "/accessibility" },
   { name: "Discord", href: DISCORD_URL },
 ];
 export default function Footer() {

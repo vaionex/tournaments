@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import EndTournamentButton from "./end-tournament-button";
 import Link from "next/link";
 import { HomeLine } from "untitledui-js-base";
+import FeedbackButton from "./components/FeedbackButton";
 
 export const revalidate = 0;
 
@@ -68,6 +69,7 @@ export default async function TournamentLayout({ children, params: { id } }) {
       <div className="mb-8 flex items-center justify-between">
         <h1 className="text-4xl font-bold">{name}</h1>
         <div className="flex items-center gap-2">
+          <FeedbackButton tournamentId={id} />
           <EndTournamentButton tournamentId={id} />
           <JoinTournamentButton {...tournament} />
         </div>

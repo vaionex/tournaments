@@ -94,11 +94,18 @@ export default function TournamentForm({
   const { requires_matchmaking_key = false, requires_server_ip } =
     games.find(({ id }) => id == game_id) || {};
 
+  const totalSponsorshipPercentage = prizes.reduce(
+    (total, { sponsorshipPercentage }) => total + sponsorshipPercentage,
+    0,
+  );
+
   function handleSubmit(e) {
     e.preventDefault();
     if (!bannerUrl && !banner)
       return toast.error("Tournament banner is required");
     if (!game_id) return toast.error("Game is required");
+    if (totalSponsorshipPercentage > 100)
+      return toast.error("Total sponsorship percentage cannot exceed 100%");
     onSubmit?.();
   }
 
@@ -248,7 +255,7 @@ export default function TournamentForm({
       <div>Sponsorship Target</div>
       <Input
         type="number"
-        value={sponsorship_target / 100}
+        value={Number(sponsorship_target / 100).toString()}
         onChange={(e) => {
           const target = Number(e.target.value) || 0;
           setValue("sponsorship_target", target * 100);

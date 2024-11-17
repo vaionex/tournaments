@@ -2,19 +2,28 @@ import { getParticipants, getTournament } from "@/db/tournament";
 import Chat from "./components/chat";
 import PrizeTiers from "../components/PrizeTiers";
 import Participants from "./components/Participants";
-import { format } from "date-fns";
 import Avatar from "@/components/ui/avatar";
 import Card from "@/app/dashboard/components/Card";
-import { Calendar } from "iconsax-react";
 import { StarIcon } from "lucide-react";
 import StartDate from "./components/StartDate";
 import { Diamond01 } from "untitledui-js-base";
+import { getOrganizerRating } from "@/db/organizer";
 
 export const revalidate = 0;
 
 export default async function Overview({ params: { id } }) {
-  const { name, banner, start, end, User, description, prizes, Sponsorship } =
-    await getTournament(id);
+  const {
+    name,
+    banner,
+    start,
+    end,
+    User,
+    description,
+    prizes,
+    Sponsorship,
+    user_id,
+  } = await getTournament(id);
+  const organizerRating = await getOrganizerRating(user_id);
   const participants = await getParticipants(id);
 
   return (
@@ -49,7 +58,9 @@ export default async function Overview({ params: { id } }) {
                 <div className="text-sm">{User.username}</div>
                 <div className="flex w-fit items-center justify-center gap-1 rounded-lg border border-white/10 bg-white/5 p-1 px-1.5 text-xs">
                   <StarIcon className="size-3 fill-yellow-500 text-yellow-500" />
-                  0 out ouf 5
+                  {typeof organizerRating == "number"
+                    ? `${organizerRating.toFixed(1)} out ouf 5`
+                    : "-"}
                 </div>
               </div>
             </Card>

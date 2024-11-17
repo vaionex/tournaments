@@ -8,6 +8,8 @@ export default function TransactionItem({
   created_at,
   amount,
   sponsored_tournament,
+  sponsor,
+  won_tournament,
 }) {
   const icon =
     amount > 0 ? (
@@ -20,7 +22,11 @@ export default function TransactionItem({
       </div>
     );
 
-  const label = sponsored_tournament?.name ? "Sponsored Tournament" : "";
+  const label = (() => {
+    if (sponsor) return "Received Sponsorship";
+    if (sponsored_tournament) return "Sponsored Tournament";
+    if (won_tournament) return "Won Tournament";
+  })();
 
   return (
     <div className="flex items-center gap-6 rounded-lg border border-white/5 bg-white/10 p-4">
