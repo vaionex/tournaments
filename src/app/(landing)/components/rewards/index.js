@@ -1,9 +1,12 @@
+"use client";
 import Container from "@/components/ui/container";
 import CornerBorder from "@/components/ui/corner-border";
 import { DollarSign } from "lucide-react";
 import { ChevronDoubleUpIcon } from "@heroicons/react/24/outline";
 import { Diamond01 } from "untitledui-js-base";
 import { twMerge } from "tailwind-merge";
+import { useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 
 const rewards = [
   {
@@ -27,12 +30,20 @@ const rewards = [
 ];
 
 export default function Rewards() {
+  const ref = useRef();
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["end start", "start end"],
+  });
+  const offset = useTransform(scrollYProgress, [0.4, 1], [0, 150]);
+
   return (
     <div
       style={{
         backgroundImage:
           "radial-gradient(at 50% 30%, rgba(0,15,89,0.8) 0%, black 80%)",
       }}
+      ref={ref}
     >
       <Container className="!py-24">
         <div className="mx-auto mb-16 max-w-3xl text-center">
@@ -46,33 +57,43 @@ export default function Rewards() {
         </div>
         <div className="flex flex-col items-stretch gap-8 md:flex-row md:items-end">
           {rewards.map(({ name, description, icon: Icon, image }, index) => (
-            <CornerBorder className="flex-1" key={name}>
-              <div className="relative overflow-hidden bg-cover bg-center">
-                <img
-                  className="absolute inset-0 h-full w-full object-cover object-center"
-                  src={`/images/landing/rewards/${image}.webp`}
-                  alt={name}
-                />
-                <div
-                  className={twMerge(
-                    "relative z-10 flex h-[30rem] flex-col justify-between bg-gradient-to-t from-black to-50% p-8",
-                    index != 1 && "md:h-96",
-                  )}
-                >
-                  <div className="w-fit">
-                    <CornerBorder>
-                      <div className="flex h-12 w-12 items-center justify-center bg-white/20">
-                        <Icon className="h-6 w-6" />
+            <motion.div
+              className="lg:relative"
+              style={{
+                [index == 0 ? "right" : "left"]: index != 1 ? offset : 0,
+              }}
+              key={name}
+            >
+              <CornerBorder className="flex-1">
+                <div className="relative overflow-hidden bg-cover bg-center">
+                  <img
+                    className="absolute inset-0 h-full w-full object-cover object-center"
+                    src={`/images/landing/rewards/${image}.webp`}
+                    alt={name}
+                  />
+                  <div
+                    className={twMerge(
+                      "relative z-10 flex h-[30rem] flex-col justify-between bg-gradient-to-t from-black to-50% p-8",
+                      index != 1 && "md:h-96",
+                    )}
+                  >
+                    <div className="w-fit">
+                      <CornerBorder>
+                        <div className="flex h-12 w-12 items-center justify-center bg-white/20">
+                          <Icon className="h-6 w-6" />
+                        </div>
+                      </CornerBorder>
+                    </div>
+                    <div>
+                      <div className="text-2xl font-bold">{name}</div>
+                      <div className="text-xl text-supporting">
+                        {description}
                       </div>
-                    </CornerBorder>
-                  </div>
-                  <div>
-                    <div className="text-2xl font-bold">{name}</div>
-                    <div className="text-xl text-supporting">{description}</div>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </CornerBorder>
+              </CornerBorder>
+            </motion.div>
           ))}
         </div>
       </Container>
