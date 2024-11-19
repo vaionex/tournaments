@@ -24,11 +24,12 @@ export default function PrizesSection({
         if (total === 0)
           return {
             ...v,
-            sponsorshipPercentage: Math.round(100 / prizes.length) * 100,
+            sponsorshipPercentage: Math.round(100 / prizes.length),
           };
 
         const { cash = 0, xp = 0 } = prizes[index];
         const value = totalCash ? cash : xp;
+
         const sponsorshipPercentage = Math.round((value / total) * 100);
         return {
           ...v,
@@ -40,14 +41,11 @@ export default function PrizesSection({
   function updateTier(value, index) {
     const temp = [...prizes];
     temp[index] = { ...temp[index], ...value };
-    onChange(
-      temp.map((v, i) => ({
-        ...v,
-        sponsorshipPercentage: calculateSponsorshipPercentage(temp, i),
-      })),
-    );
+    onChange(temp);
   }
+
   function calculateSponsorshipPercentage(prizes, index) {
+    console.log(index);
     if (prizes[index].sponsorshipPercentageOverride != undefined)
       return prizes[index].sponsorshipPercentageOverride;
     const totalCash = prizes
