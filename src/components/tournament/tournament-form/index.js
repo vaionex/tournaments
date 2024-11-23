@@ -36,6 +36,22 @@ const Formats = [
   },
 ];
 
+const CS2Maps = [
+  // { id: "de_basalt", name: "Basalt" },
+  // { id: "de_edin", name: "Edin" },
+  // { id: "de_train", name: "Train" },
+  // { id: "cs_italy", name: "Italy" },
+  // { id: "cs_office", name: "Office" },
+  { id: "de_ancient", name: "Ancient" },
+  { id: "de_anubis", name: "Anubis" },
+  { id: "de_dust2", name: "Dust II" },
+  { id: "de_inferno", name: "Inferno" },
+  { id: "de_mirage", name: "Mirage" },
+  { id: "de_nuke", name: "Nuke" },
+  { id: "de_overpass", name: "Overpass" },
+  { id: "de_vertigo", name: "Vertigo" },
+];
+
 export default function TournamentForm({
   tournament = {},
   setTournament,
@@ -60,6 +76,7 @@ export default function TournamentForm({
     prizes = [],
     rules = [],
     sponsorship_target = 0,
+    cs2_map = "",
   } = tournament;
 
   useEffect(() => {
@@ -174,15 +191,18 @@ export default function TournamentForm({
         </>
       )}
 
-      {requires_server_ip && (
+      {game_id == "cs2" && (
         <>
-          <div>Server IP</div>
-          <div>
-            <Input
-              value={server_ip}
-              onChange={(e) => setValue("server_ip", e.target.value)}
-              placeholder="129.119.108.181"
-              required
+          <div>CS2 Map</div>
+          <div className="flex items-center gap-8">
+            <Select
+              items={CS2Maps.map(({ id, name }) => ({
+                label: name,
+                value: id,
+              }))}
+              placeholder="Select a map..."
+              value={cs2_map || ""}
+              onChange={(value) => value && setValue("cs2_map", value)}
             />
           </div>
         </>
