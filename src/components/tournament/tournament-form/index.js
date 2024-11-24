@@ -16,6 +16,7 @@ import Bracket from "@/components/icons/bracket";
 import DateTimePicker from "react-datetime-picker";
 import PrizesSection from "./prizes-section";
 import { useEffect, useState } from "react";
+import { addMinutes } from "date-fns";
 
 const Formats = [
   {
@@ -123,6 +124,8 @@ export default function TournamentForm({
     if (!game_id) return toast.error("Game is required");
     if (totalSponsorshipPercentage > 100)
       return toast.error("Total sponsorship percentage cannot exceed 100%");
+    if (start < addMinutes(new Date(), 5))
+      return toast.error("Start time must be at least 5 minutes from now");
     onSubmit?.();
   }
 
@@ -238,7 +241,7 @@ export default function TournamentForm({
       <DateTimePicker
         value={new Date(start)}
         onChange={(value) => setValue("start", value)}
-        minDate={new Date()}
+        minDate={addMinutes(new Date(), 5)}
         required
       />
 
