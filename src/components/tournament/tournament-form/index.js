@@ -16,6 +16,7 @@ import Bracket from "@/components/icons/bracket";
 import DateTimePicker from "react-datetime-picker";
 import PrizesSection from "./prizes-section";
 import { useEffect, useState } from "react";
+import { addMinutes } from "date-fns";
 
 const Formats = [
   {
@@ -34,6 +35,22 @@ const Formats = [
     name: "Battle Royal",
     icon: Swords,
   },
+];
+
+const CS2Maps = [
+  // { id: "de_basalt", name: "Basalt" },
+  // { id: "de_edin", name: "Edin" },
+  // { id: "de_train", name: "Train" },
+  // { id: "cs_italy", name: "Italy" },
+  // { id: "cs_office", name: "Office" },
+  { id: "de_ancient", name: "Ancient" },
+  { id: "de_anubis", name: "Anubis" },
+  { id: "de_dust2", name: "Dust II" },
+  { id: "de_inferno", name: "Inferno" },
+  { id: "de_mirage", name: "Mirage" },
+  { id: "de_nuke", name: "Nuke" },
+  { id: "de_overpass", name: "Overpass" },
+  { id: "de_vertigo", name: "Vertigo" },
 ];
 
 export default function TournamentForm({
@@ -60,6 +77,7 @@ export default function TournamentForm({
     prizes = [],
     rules = [],
     sponsorship_target = 0,
+    cs2_map = "",
   } = tournament;
 
   useEffect(() => {
@@ -106,6 +124,8 @@ export default function TournamentForm({
     if (!game_id) return toast.error("Game is required");
     if (totalSponsorshipPercentage > 100)
       return toast.error("Total sponsorship percentage cannot exceed 100%");
+    if (start < addMinutes(new Date(), 5))
+      return toast.error("Start time must be at least 5 minutes from now");
     onSubmit?.();
   }
 
@@ -174,15 +194,18 @@ export default function TournamentForm({
         </>
       )}
 
-      {requires_server_ip && (
+      {game_id == "cs2" && (
         <>
-          <div>Server IP</div>
-          <div>
-            <Input
-              value={server_ip}
-              onChange={(e) => setValue("server_ip", e.target.value)}
-              placeholder="129.119.108.181"
-              required
+          <div>CS2 Map</div>
+          <div className="flex items-center gap-8">
+            <Select
+              items={CS2Maps.map(({ id, name }) => ({
+                label: name,
+                value: id,
+              }))}
+              placeholder="Select a map..."
+              value={cs2_map || ""}
+              onChange={(value) => value && setValue("cs2_map", value)}
             />
           </div>
         </>
@@ -218,7 +241,7 @@ export default function TournamentForm({
       <DateTimePicker
         value={new Date(start)}
         onChange={(value) => setValue("start", value)}
-        minDate={new Date()}
+        minDate={addMinutes(new Date(), 5)}
         required
       />
 

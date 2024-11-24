@@ -15,6 +15,7 @@ export async function POST(req) {
       format: z.string({ message: "Format is required" }),
       game_id: z.string({ message: "Game is required" }),
       matchmaking_key: z.string().default(""),
+      cs2_map: z.string().default(""),
       server_ip: z.string().default(""),
       start: z.string({ message: "Start date is required" }),
       end: z.string({ message: "End date is required" }),
@@ -59,8 +60,13 @@ export async function POST(req) {
       "Max players cannot be less than prizes",
     )
     .refine(
-      ({ matchmaking_key, server_ip }) => !!matchmaking_key || !!server_ip,
-      "Either matchmaking key or server ip is required",
+      ({ game_id, matchmaking_key }) =>
+        game_id != "fortnite" ? true : !!matchmaking_key,
+      "Matchmaking key is required for Fortnite",
+    )
+    .refine(
+      ({ game_id, cs2_map }) => (game_id != "cs2" ? true : !!cs2_map),
+      "CS2 requires a map",
     );
 
   const { error, data: parsedData } = schema.safeParse(tournamentData);

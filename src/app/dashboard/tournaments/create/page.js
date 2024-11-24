@@ -1,6 +1,6 @@
 "use client";
 import useCreateTournament from "@/hooks/tournament/useCreateTournament";
-import { addDays } from "date-fns";
+import { addDays, addHours } from "date-fns";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import TournamentForm from "@/components/tournament/tournament-form";
@@ -11,7 +11,7 @@ export default function CreateTournament() {
   const [tournament, setTournament] = useState({
     name: "",
     description: "",
-    start: new Date(),
+    start: addHours(new Date(), 2),
     end: addDays(new Date(), 2),
     max_players: 10,
     min_rank: "Bronze",
