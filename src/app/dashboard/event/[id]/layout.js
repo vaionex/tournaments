@@ -15,6 +15,14 @@ export const revalidate = 0;
 
 export async function generateMetadata({ params: { id } }) {
   const { name, banner } = await getTournament(id);
+  const images = [
+    {
+      url: banner, // Must be an absolute URL
+      width: 1200,
+      height: 615,
+      alt: "Tournaments.com",
+    },
+  ];
   return {
     title: name,
     description: name,
@@ -22,14 +30,7 @@ export async function generateMetadata({ params: { id } }) {
       url: `https://tournaments.com/dashboard/event/${id}`,
       title: name,
       description: name,
-      images: [
-        {
-          url: banner, // Must be an absolute URL
-          width: 1200,
-          height: 615,
-          alt: "Tournaments.com",
-        },
-      ],
+      images,
       siteName: "Tournaments.com",
     },
     twitter: {
@@ -37,7 +38,7 @@ export async function generateMetadata({ params: { id } }) {
       title: name,
       description: name,
       creator: "@Tournaments.com",
-      images: [banner],
+      images,
     },
   };
 }
