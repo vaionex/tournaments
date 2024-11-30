@@ -9,7 +9,7 @@ export async function getTransactions({
   const { data } = await supabase
     .from("Transaction")
     .select(
-      "*, sponsored_tournament:Tournament!sponsored_tournament_id(name), won_tournament:Tournament!won_tournament_id(name), sponsor:User!sponsor_id(username)",
+      "*, sponsored_tournament:Tournament!sponsored_tournament_id(name), won_tournament:Tournament!won_tournament_id(name), withdraw_request:WithdrawRequest(*), sponsor:User!sponsor_id(username)",
     )
     .eq("user_id", id)
     .gte("created_at", start.toISOString())

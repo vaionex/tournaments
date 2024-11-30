@@ -10,6 +10,7 @@ export default function TransactionItem({
   sponsored_tournament,
   sponsor,
   won_tournament,
+  withdraw_request,
 }) {
   const icon =
     amount > 0 ? (
@@ -26,6 +27,10 @@ export default function TransactionItem({
     if (sponsor) return "Received Sponsorship";
     if (sponsored_tournament) return "Sponsored Tournament";
     if (won_tournament) return "Won Tournament";
+    if (withdraw_request) return "Paypal Withdrawal";
+
+    if (amount <= 0) return "Withdrawal";
+    return "Deposit";
   })();
 
   return (

@@ -1,13 +1,12 @@
 "use client";
-import LogoMarkOutline from "@/components/icons/logo-mark-outline";
 import useUser from "@/hooks/auth/useUser";
 import { formatCurrency } from "@/utils/format";
-import { format } from "date-fns";
 import WalletIcon from "./components/WalletIcon";
 import TransactionChart from "./components/TransactionChart";
 import Loader from "@/components/ui/loader";
 import useTransactions from "@/hooks/transaction/useTransactions";
 import TransactionItem from "./components/TransactionItem";
+import WithdrawRequestButton from "./WithdrawRequestButton";
 
 export default function Wallet() {
   const { data: transactions = [], isLoading: isLoadingTransactions } =
@@ -26,6 +25,9 @@ export default function Wallet() {
             </div>
           </div>
           <WalletIcon className="absolute right-0 top-0" />
+        </div>
+        <div className="mb-4">
+          <WithdrawRequestButton />
         </div>
         <TransactionChart />
       </div>

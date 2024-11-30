@@ -3,6 +3,7 @@
 import LogoSimple from "@/components/icons/logo-simple";
 import Logo from "@/components/ui/logo";
 import useAdmin from "@/hooks/auth/useAdmin";
+import { DollarSign } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { twMerge } from "tailwind-merge";
@@ -15,6 +16,11 @@ const links = [
     name: "Pending Tournaments",
     href: "pending-tournaments",
     icon: LogoSimple,
+  },
+  {
+    name: "Pending Withdrawals",
+    href: "pending-withdraw-requests",
+    icon: DollarSign,
   },
 ];
 
