@@ -1,6 +1,10 @@
 import { admin } from "@/supabase/admin";
+import { isUserAdmin } from "@/supabase/server";
 
 export async function GET() {
+  const is_admin = await isUserAdmin();
+  if (!is_admin) return Response.json([]);
+
   const { data: transactions } = await admin
     .from("Transaction")
     .select(
