@@ -1,25 +1,46 @@
-/** @type {import('next').NextConfig} */
 import withMDX from "@next/mdx";
+
+/** @type {import('next').NextConfig} */
 const nextConfig = {
   pageExtensions: ["js", "jsx", "mdx", "ts", "tsx"],
-  async redirects() {
+  images: {
+    domains: ['tournaments.com'],
+    formats: ['image/avif', 'image/webp'],
+  },
+  async headers() {
     return [
       {
-        source: "/dashboard",
-        destination: "/dashboard/overview",
-        permanent: true,
-      },
-      {
-        source: "/admin",
-        destination: "/admin/users",
-        permanent: true,
-      },
-      {
-        source: "/organizer",
-        destination: "/organizer/overview",
-        permanent: true,
+        source: '/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
       },
     ];
+  },
+  experimental: {
+    optimizeCss: true,
+    optimizePackageImports: ['lucide-react', '@heroicons/react'],
+    turbo: {
+      rules: {
+        '*.md': ['@next/mdx/loader'],
+      },
+    },
+  },
+  webpack: (config) => {
+    config.optimization.splitChunks.chunks = 'all';
+    config.optimization.splitChunks.cacheGroups = {
+      ...config.optimization.splitChunks.cacheGroups,
+      'react-vendors': {
+        test: /[\\/]node_modules[\\/](react|react-dom)[\\/]/,
+        chunks: 'all',
+        priority: 40,
+        name: 'react-vendors',
+      },
+    };
+    return config;
   },
 };
 
