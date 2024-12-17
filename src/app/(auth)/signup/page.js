@@ -1,27 +1,36 @@
 "use client";
 
+import { Suspense } from "react";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
+import { useState } from "react";
+import LogoMark from "@/components/ui/logo-mark";
+import toast from "react-hot-toast";
 import useSignupWithEmailAndPassword from "@/hooks/auth/useSignupWithEmailAndPassword";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
-import toast from "react-hot-toast";
 import GoogleSignInButton from "../GoogleSignInButton";
-import LogoMark from "@/components/ui/logo-mark";
 
 export default function Signup({ showLogo }) {
-  const { push } = useRouter();
-  const { mutate: signup, isLoading } = useSignupWithEmailAndPassword({
-    onError: (e) => toast.error(e.message ?? "Could not signup"),
-    onSuccess: () => push("/verification-email-sent"),
-  });
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <SignupContent showLogo={showLogo} />
+    </Suspense>
+  );
+}
 
+function SignupContent({ showLogo }) {
+  const { push } = useRouter();
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [acceptedTerms, setAcceptedTerms] = useState(false);
+
+  const { mutate: signup, isLoading } = useSignupWithEmailAndPassword({
+    onError: (e) => toast.error(e.message ?? "Could not signup"),
+    onSuccess: () => push("/verification-email-sent"),
+  });
 
   async function handleSignup() {
     if (!username) return toast.error("Please provide a username");
