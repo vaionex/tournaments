@@ -1,4 +1,6 @@
 "use client";
+
+import { Suspense } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
@@ -8,6 +10,14 @@ import useSendResetPasswordLink from "@/hooks/auth/useSendResetPasswordLink";
 import Link from "next/link";
 
 export default function ForgotPassword() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ForgotPasswordContent />
+    </Suspense>
+  );
+}
+
+function ForgotPasswordContent() {
   const [email, setEmail] = useState("");
   const [sent, setSent] = useState(false);
 
