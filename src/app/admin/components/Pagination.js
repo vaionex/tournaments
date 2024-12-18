@@ -22,11 +22,12 @@ export default function Pagination({ total, page, onChange }) {
         Previous
       </Button>
       <div className="flex items-center gap-0.5">
-        {range.map((p) =>
+        {range.map((p, index) =>
           p == "dots" ? (
-            <div>...</div>
+            <div key={`dots-${index}`}>...</div>
           ) : (
             <button
+              key={p}
               className={twMerge(
                 "size-10 rounded-full",
                 page == p && "bg-neutral-800 text-white",
