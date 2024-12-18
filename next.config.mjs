@@ -23,21 +23,22 @@ const nextConfig = {
   experimental: {
     optimizeCss: true,
     optimizePackageImports: ['lucide-react', '@heroicons/react'],
-    turbo: {
-      rules: {
-        '*.md': ['@next/mdx/loader'],
-      },
-    },
+    turbo: true,
   },
   webpack: (config) => {
-    config.optimization.splitChunks.chunks = 'all';
-    config.optimization.splitChunks.cacheGroups = {
-      ...config.optimization.splitChunks.cacheGroups,
-      'react-vendors': {
-        test: /[\\/]node_modules[\\/](react|react-dom)[\\/]/,
+    config.optimization = {
+      ...config.optimization,
+      splitChunks: {
         chunks: 'all',
-        priority: 40,
-        name: 'react-vendors',
+        cacheGroups: {
+          ...config.optimization?.splitChunks?.cacheGroups,
+          'react-vendors': {
+            test: /[\\/]node_modules[\\/](react|react-dom)[\\/]/,
+            chunks: 'all',
+            priority: 40,
+            name: 'react-vendors',
+          },
+        },
       },
     };
     return config;
