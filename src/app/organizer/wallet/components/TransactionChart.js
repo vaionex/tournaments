@@ -81,6 +81,7 @@ export default function TransactionChart() {
       <div className="mb-6 flex w-fit divide-x divide-white/10 overflow-hidden rounded-lg border border-white/10">
         {durations.map(({ label, value }) => (
           <button
+            key={value}
             className={twMerge(
               "flex items-center gap-2 bg-white/5 px-4 py-2.5 text-xs font-medium first:rounded-l-lg last:rounded-r-lg",
               value == selectedDuration && "bg-white/10",

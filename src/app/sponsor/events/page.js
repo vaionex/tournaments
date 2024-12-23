@@ -53,7 +53,7 @@ export default function Events() {
       <div className="mt-8 grid grid-cols-3 gap-4">
         {searchedTournaments.map(
           ({ id, name, start, end, Game, banner, User, rating }) => (
-            <Card className="space-y-4 p-2">
+            <Card key={id} className="space-y-4 p-2">
               <div
                 className="flex h-40 items-start rounded-lg bg-cover bg-center p-2.5"
                 style={{ backgroundImage: `url('${banner}')` }}

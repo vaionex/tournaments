@@ -27,7 +27,7 @@ export default function OpenItemModal({ id, ...props }) {
         </div>
         <div className="text-xl font-semibold">Congratulations!</div>
         <div className="text-neutral-400">
-          You've unlocked exclusive in-game items! Start using them in your next
+          You&apos;ve unlocked exclusive in-game items! Start using them in your next
           match.
         </div>
         <div className="size-40">

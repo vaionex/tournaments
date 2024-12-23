@@ -41,7 +41,7 @@ export default function Wallet() {
         <div className="mt-4 space-y-3">
           {isLoadingTransactions && <Loader className="my-24" />}
           {transactions.map((transaction) => (
-            <TransactionItem {...transaction} />
+            <TransactionItem key={transaction.id} {...transaction} />
           ))}
         </div>
       </div>

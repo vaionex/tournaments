@@ -1,6 +1,7 @@
 import Container from "@/components/ui/container";
 import CTA from "./cta";
 import BadgeTitle from "../BadgeTitle";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import Brand from "./Brand";
 import Gamers from "./Gamers";
@@ -19,7 +20,7 @@ export default function Sponsor() {
       <Container className="pt-48">
         <div className="text-center">
           <div className="mx-auto mb-3 w-fit">
-            <BadgeTitle>Sponsor</BadgeTitle>
+            <BadgeTitle key="sponsor-badge">Sponsor</BadgeTitle>
           </div>
           <h1 className="mb-6 text-5xl font-semibold">
             Partner with Us
@@ -27,18 +28,20 @@ export default function Sponsor() {
           <h2 className="mb-6 text-xl text-gray-300">
             Connect With Global Gamers
           </h2>
-          <Button
-            className="mb-24"
-            variant="white"
-            href="mailto:sponsor@tournaments.com"
-          >
-            Become a Sponsor
-          </Button>
+          <Link href="mailto:sponsor@tournaments.com">
+            <Button
+              key="sponsor-button"
+              className="mb-24"
+              variant="white"
+            >
+              Become a Sponsor
+            </Button>
+          </Link>
         </div>
-        <Brand />
-        <Gamers />
-        <Community />
-        <CTA />
+        <Brand key="brand-section" />
+        <Gamers key="gamers-section" />
+        <Community key="community-section" />
+        <CTA key="cta-section" />
       </Container>
     </div>
   );
