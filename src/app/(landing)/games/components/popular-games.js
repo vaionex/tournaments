@@ -47,7 +47,7 @@ const games = [
     name: "EA FC 24",
     type: "Sports",
     image: "/images/landing/games/ea fc 24.webp",
-    description: "The world's most popular football simulation game",
+    description: "The world&apos;s most popular football simulation game",
     ratings: {
       gameplay: 88,
       graphics: 92,
@@ -61,7 +61,7 @@ const games = [
 export default function PopularGames() {
   return (
     <section>
-      <h2 className="mb-6 text-2xl font-bold">Editor's Choice</h2>
+      <h2 className="mb-6 text-2xl font-bold">Editor&apos;s Choice</h2>
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
         {games.map((game) => (
           <div
