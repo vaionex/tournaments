@@ -47,7 +47,7 @@
     "iconsax-react": "^0.0.8",
     "lodash": "^4.17.21",
     "lucide-react": "^0.366.0",
-    "next": "14.2.0",
+    "next": "14.2.22",
     "ordinal": "^1.0.3",
     "react": "^18",
     "react-datetime-picker": "^6.0.1",
