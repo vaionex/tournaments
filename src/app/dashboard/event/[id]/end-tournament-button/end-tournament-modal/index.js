@@ -75,7 +75,10 @@ export default function EndTournamentModal({ open, setOpen, tournamentId }) {
             { participant_id, prize: { cash = 0, xp = 0, giftCard } },
             index,
           ) => (
-            <div className="flex items-center gap-2 rounded-lg border border-white/20 bg-black p-4 text-xl">
+            <div
+              key={index}
+              className="flex items-center gap-2 rounded-lg border border-white/20 bg-black p-4 text-xl"
+            >
               <div className="w-10 font-medium opacity-50">
                 {ordinal(index + 1)}
               </div>

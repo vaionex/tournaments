@@ -26,6 +26,7 @@ export async function createTransaction(
     won_tournament_id = null,
     sponsored_tournament_id = null,
     sponsor_id = null,
+    withdraw_request_id = null,
   } = {},
 ) {
   const { balance } = await getUserById(user_id);
@@ -43,6 +44,7 @@ export async function createTransaction(
       won_tournament_id,
       sponsored_tournament_id,
       sponsor_id,
+      withdraw_request_id,
     })
     .throwOnError();
 }

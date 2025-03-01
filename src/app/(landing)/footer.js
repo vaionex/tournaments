@@ -13,19 +13,20 @@ const links = [
   { name: "Accessibility", href: "/accessibility" },
   { name: "Discord", href: DISCORD_URL },
 ];
+
 export default function Footer() {
   return (
-    <div>
-      <div className="to h-0.5 w-full bg-transparent bg-gradient-to-r from-transparent via-white" />
+    <div className="mt-32 pb-16">
+      <div className="mb-16 h-0.5 w-full bg-transparent bg-gradient-to-r from-transparent via-white" />
       <Container>
-        <footer className="">
-          <div className="flex flex-col items-center justify-center space-y-6 py-16">
+        <footer className="pt-8">
+          <div className="flex flex-col items-center justify-center space-y-6">
             <Logo className="h-12" />
             <div className="max-w-3xl text-center text-xl">
-              Compete against friends to claim victory on Tournaments.com today!
+              Your source for the latest gaming news, hardware reviews and esports coverage
             </div>
           </div>
-          <div className="flex flex-col items-center justify-between gap-4 border-t border-gray-800 py-14 md:flex-row">
+          <div className="mt-16 flex flex-col items-center justify-between gap-4 border-t border-gray-800 py-14 md:flex-row">
             <div>© 2024 Tournaments.com | All rights reserved.</div>
             <div className="flex flex-wrap gap-8">
               {links.map(({ name, href }, index) => (

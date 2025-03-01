@@ -65,6 +65,7 @@ export default function Reviews() {
               .reverse()
               .map((v) => (
                 <FilterButton
+                  key={v}
                   onClick={() => setRatingFilter(v)}
                   selected={v === ratingFilter}
                 >
@@ -82,7 +83,10 @@ export default function Reviews() {
               User: { username, profile_picture },
               created_at,
             }) => (
-              <div className="flex w-full gap-3 rounded-lg bg-white/10 p-5">
+              <div 
+                key={`${username}-${created_at}`}
+                className="flex w-full gap-3 rounded-lg bg-white/10 p-5"
+              >
                 <div>
                   <Avatar
                     src={profile_picture}
@@ -149,7 +153,10 @@ export default function Reviews() {
                 ? 1
                 : (count / numberOfFeebacks) * 100;
             return (
-              <div className="flex items-center gap-1.5 text-sm font-medium text-neutral-300">
+              <div 
+                key={v}
+                className="flex items-center gap-1.5 text-sm font-medium text-neutral-300"
+              >
                 <Star01 className="size-4 shrink-0 text-neutral-500" />
                 <div className="w-3 shrink-0 text-center">{v}</div>
                 <div

@@ -27,7 +27,7 @@ export default async function Results({ params: { id } }) {
         .sort(({ score: a }, { score: b }) => b - a)
         .slice(0, 3)
         .map(({ User }, index) => (
-          <Podium position={index + 1} {...User} />
+          <Podium key={User.id} position={index + 1} {...User} />
         ))}
     </div>
   );

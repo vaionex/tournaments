@@ -1,0 +1,43 @@
+{
+  "zone_id": "your_zone_id",
+  "rules": [
+    {
+      "expression": "http.request.uri.path matches \"^/images/.*\"",
+      "actions": {
+        "cache_level": "cache_everything",
+        "edge_cache_ttl": 31536000
+      }
+    },
+    {
+      "expression": "http.request.uri.path matches \"^/_next/static/.*\"",
+      "actions": {
+        "cache_level": "cache_everything",
+        "edge_cache_ttl": 31536000
+      }
+    },
+    {
+      "expression": "http.request.uri.path matches \"^/api/.*\"",
+      "actions": {
+        "cache_level": "bypass"
+      }
+    }
+  ],
+  "settings": {
+    "browser_cache_ttl": 31536000,
+    "always_use_https": true,
+    "automatic_https_rewrites": true,
+    "opportunistic_encryption": true,
+    "min_tls_version": "1.2",
+    "tls_1_3": "on",
+    "brotli": true,
+    "early_hints": true,
+    "http3": true,
+    "zero_rtt": true,
+    "rocket_loader": true,
+    "minify": {
+      "html": true,
+      "css": true,
+      "js": true
+    }
+  }
+}

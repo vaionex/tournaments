@@ -1,77 +1,135 @@
-import Container from "@/components/ui/container";
-import { getPostBySlug } from "@/server/blog";
-import { format } from "date-fns";
+import { getArticleBySlug } from "@/db/articles";
 import { notFound } from "next/navigation";
-import ShareSection from "../../../../components/ui/share-section";
-import CTA from "../../components/cta";
-import SignupSidebar from "./SignupSidebar";
+import Container from "@/components/ui/container";
+import ArticleContent from "../components/article-content";
+import ArticleSidebar from "../components/article-sidebar";
+import Script from "next/script";
 
-export async function generateMetadata({ params: { slug } }) {
-  const { title, featuredImage } = await getPostBySlug(slug);
-  const image = featuredImage?.node?.sourceUrl;
+// Generate metadata for SEO and Google News
+export async function generateMetadata({ params }) {
+  const article = await getArticleBySlug(params.slug);
+  
+  if (!article) {
+    return {
+      title: 'Article Not Found',
+      description: 'The requested article could not be found.'
+    };
+  }
+
+  const title = article.meta_title || article.title;
+  const description = article.meta_description || article.excerpt;
+  const keywords = article.meta_keywords?.join(', ');
+  const url = `https://tournaments.com/news/${article.slug}`;
+  const image = article.image_url;
 
   return {
     title,
-    description: title,
+    description,
+    keywords,
     openGraph: {
-      url: `https://tournaments.com/news/${slug}`,
       title,
-      description: title,
+      description,
+      url,
+      type: 'article',
+      publishedTime: article.published_at,
+      modifiedTime: article.updated_at,
+      authors: [article.author?.username],
       images: [
         {
           url: image,
           width: 1200,
-          height: 615,
-          alt: "Tournaments.com",
+          height: 630,
+          alt: title,
         },
       ],
-      siteName: "Tournaments.com",
+      siteName: 'Tournaments.com',
     },
     twitter: {
-      card: "summary_large_image",
+      card: 'summary_large_image',
       title,
-      description: title,
-      creator: "@Tournaments.com",
+      description,
       images: [image],
+      creator: '@Tournaments',
     },
+    alternates: {
+      canonical: article.canonical_url || url,
+    },
+    robots: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+      googleBot: {
+        index: true,
+        follow: true,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+        'max-video-preview': -1,
+      },
+    },
+    // Google News specific meta tags
+    news_keywords: keywords,
+    'article:published_time': article.published_at,
+    'article:modified_time': article.updated_at,
+    'article:author': article.author?.username,
+    'article:section': article.category?.name,
   };
 }
 
-export default async function BlogPost({ params: { slug } }) {
-  const post = await getPostBySlug(slug);
-  if (!post) return notFound();
-
-  const { title, content, featuredImage, date } = post;
-
-  function Info() {
-    return (
-      <div className="my-8 flex max-w-4xl flex-col items-start justify-between gap-2 sm:flex-row sm:items-center">
-        <div>
-          <div className="text-sm text-primary">Published on</div>
-          <div className="text-lg">{format(new Date(date), "dd MMM yyyy")}</div>
-        </div>
-        <ShareSection title={title} />
-      </div>
-    );
+export default async function ArticlePage({ params }) {
+  const article = await getArticleBySlug(params.slug);
+  
+  if (!article) {
+    notFound();
   }
 
-  return (
-    <Container className="py-36">
-      <div className="mb-24 flex flex-col gap-24 lg:flex-row">
-        <div className="flex-1">
-          <h1 className="text-6xl font-bold">{title}</h1>
-          <img src={featuredImage?.node?.sourceUrl} className="mt-8" />
-          <Info />
-          <div
-            dangerouslySetInnerHTML={{ __html: content }}
-            className="prose prose-invert max-w-7xl"
-          />
-          <Info />
-        </div>
-        <SignupSidebar />
-      </div>
+  // Format the article data for structured data
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "NewsArticle",
+    "headline": article.title,
+    "description": article.excerpt,
+    "image": [article.image_url],
+    "datePublished": article.published_at,
+    "dateModified": article.updated_at,
+    "author": [{
+      "@type": "Person",
+      "name": article.author?.username,
+      "url": `https://tournaments.com/author/${article.author?.username}`
+    }],
+    "publisher": {
+      "@type": "Organization",
+      "name": "Tournaments.com",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://tournaments.com/logo.png"
+      }
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": `https://tournaments.com/news/${article.slug}`
+    },
+    "articleSection": article.category?.name,
+    "keywords": article.meta_keywords?.join(', ')
+  };
 
-      <CTA />
-    </Container>
+  return (
+    <>
+      <Script
+        id="article-structured-data"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
+      
+      <div className="min-h-screen bg-black pt-24">
+        <Container>
+          <div className="flex gap-8">
+            <ArticleContent article={article} />
+            <ArticleSidebar currentArticle={article} />
+          </div>
+        </Container>
+      </div>
+    </>
   );
 }

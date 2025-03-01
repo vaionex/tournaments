@@ -36,6 +36,7 @@ export default function Perks() {
       <div className="grid gap-6 lg:grid-cols-3">
         {perks.map(({ name, description, highlight = false, icon: Icon }) => (
           <div
+            key={name}
             className={twMerge(
               "rounded-2xl border border-white/20 bg-black p-6",
               highlight && "bg-gradient-to-b from-black from-50% to-primary",

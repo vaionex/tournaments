@@ -1,4 +1,7 @@
 "use client";
+
+import { Suspense } from "react";
+import LogoMark from "@/components/ui/logo-mark";
 import Link from "next/link";
 import Header from "../(landing)/header";
 import Container from "@/components/ui/container";
@@ -13,7 +16,16 @@ const links = [
 ];
 
 const exemptedRoutes = ["update-password"];
+
 export default function AuthLayout({ children }) {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <AuthLayoutContent>{children}</AuthLayoutContent>
+    </Suspense>
+  );
+}
+
+function AuthLayoutContent({ children }) {
   const pathname = usePathname();
   const { isAuthenticated, isLoading } = useAuthentication();
   const { push } = useRouter();
@@ -42,12 +54,12 @@ export default function AuthLayout({ children }) {
       <div className="ml-auto flex h-full flex-1 items-center justify-center bg-black/80 px-6 pt-8 lg:px-0">
         {children}
       </div>
-      <footer className="absolute inset-x-0 bottom-0 hidden items-center justify-between  text-neutral-400 lg:flex">
+      <footer className="absolute inset-x-0 bottom-0 hidden items-center justify-between text-neutral-400 lg:flex">
         <Container className="flex w-full justify-between py-8">
           <div>© 2024 Tournaments. All rights reserved.</div>
           <div className="flex items-center gap-2">
             {links.map(({ name, href }) => (
-              <Link href={href}>{name}</Link>
+              <Link href={href} key={name}>{name}</Link>
             ))}
           </div>
         </Container>

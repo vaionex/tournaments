@@ -18,6 +18,7 @@ export default function ParticipantsList({ participants }) {
         <div className="rounded border border-white/5 bg-white/5 p-1">
           {["remaining", "all"].map((filter) => (
             <button
+              key={filter}
               className={twMerge(
                 "cursor-pointer rounded px-4",
                 selectedFilter == filter && "bg-white/10",
@@ -37,7 +38,7 @@ export default function ParticipantsList({ participants }) {
               key={id}
             >
               <div className="flex items-center gap-5">
-                <Avatar src={profile_picture} className="size-16" />
+                <Avatar profile_picture={profile_picture} xp={0} className="size-16" />
                 <div className="text-lg font-medium">{username}</div>
               </div>
               <div>

@@ -49,8 +49,8 @@ export default async function News() {
           </div>
           <div className="mt-8 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
             {otherPosts.map((post, i) => (
-              <div className="h-96">
-                <Post {...post} key={i} />
+              <div key={i} className="h-96">
+                <Post {...post} />
               </div>
             ))}
           </div>

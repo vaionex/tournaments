@@ -43,6 +43,7 @@ export default function DesktopApp() {
             .fill(0)
             .map((_, index) => (
               <img
+                key={`desktop-app-slide-${index}`}
                 src={`/images/landing/desktop-app/slide${index + 1}.webp`}
                 className="pointer-events-none !w-[80vw] object-contain px-2 focus:outline-0 md:px-10"
                 alt={`Desktop App ${index + 1}`}
