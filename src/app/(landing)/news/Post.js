@@ -19,12 +19,18 @@ export default function Post({
         row && "md:flex-row",
       )}
     >
-      <Link href={`/news/${slug}`} className={twMerge("min-h-0 flex-1")}>
-        <img
-          src={featuredImage?.node?.sourceUrl}
-          className="mb-2 h-full w-full overflow-hidden rounded-xl border border-white/20 object-cover object-center"
-          alt={title}
-        />
+      <Link 
+        href={`/news/${slug}`} 
+        className={twMerge("min-h-0 flex-1 relative group overflow-hidden rounded-xl")}
+      >
+        <div className="relative w-full h-full overflow-hidden rounded-xl">
+          <img
+            src={featuredImage?.node?.sourceUrl}
+            className="h-full w-full rounded-xl border border-white/20 object-cover object-center transition-transform duration-500 ease-out group-hover:scale-110"
+            alt={title}
+          />
+          <div className="absolute -inset-5 bg-gradient-to-t from-black via-black/70 to-black/30 rounded-xl pointer-events-none transform scale-110"></div>
+        </div>
       </Link>
       <div
         className={twMerge(

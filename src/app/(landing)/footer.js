@@ -15,6 +15,8 @@ const links = [
 ];
 
 export default function Footer() {
+  const currentYear = new Date().getFullYear();
+  
   return (
     <div className="mt-32 pb-16">
       <div className="mb-16 h-0.5 w-full bg-transparent bg-gradient-to-r from-transparent via-white" />
@@ -27,7 +29,7 @@ export default function Footer() {
             </div>
           </div>
           <div className="mt-16 flex flex-col items-center justify-between gap-4 border-t border-gray-800 py-14 md:flex-row">
-            <div>© 2024 Tournaments.com | All rights reserved.</div>
+            <div>© {currentYear} Tournaments.com | All rights reserved.</div>
             <div className="flex flex-wrap gap-8">
               {links.map(({ name, href }, index) => (
                 <Link href={href} key={index}>

@@ -43,8 +43,15 @@
   },
   "crons": [
     {
-      "path": "/api/cron/notification/tournament/starting",
-      "schedule": "*/10 * * * *"
+      "path": "/api/cron/generate-news",
+      "schedule": "0 * * * *"
     }
-  ]
+  ],
+  "env": {
+    "CRON_SECRET": {
+      "development": "@cron-secret-development",
+      "preview": "@cron-secret-preview",
+      "production": "@cron-secret-production"
+    }
+  }
 }

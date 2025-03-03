@@ -31,7 +31,7 @@ export default function TopStories() {
     console.error('TopStories error:', error);
     return (
       <div className="rounded-lg border border-red-500 bg-red-500/10 p-4 text-red-500">
-        Failed to load top stories: {error.message}
+        Failed to load top stories: {error instanceof Error ? error.message : 'Unknown error'}
       </div>
     );
   }
@@ -52,14 +52,14 @@ export default function TopStories() {
         href={`/news/${mainStory.slug}`}
         className="col-span-12 group overflow-hidden rounded-xl lg:col-span-8"
       >
-        <div className="relative h-[500px]">
+        <div className="relative h-[500px] overflow-hidden rounded-xl">
           <img
             src={mainStory.image_url}
             alt={mainStory.title}
-            className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+            className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-110"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
-          <div className="absolute bottom-0 p-8">
+          <div className="absolute -inset-5 bg-gradient-to-t from-black via-black/70 to-black/30 rounded-xl pointer-events-none transform scale-110"></div>
+          <div className="absolute bottom-0 p-8 z-10">
             <div className="mb-4 w-fit rounded-full bg-primary px-4 py-1 text-sm font-medium">
               {mainStory.category?.name}
             </div>
@@ -88,14 +88,14 @@ export default function TopStories() {
             href={`/news/${story.slug}`}
             className="group overflow-hidden rounded-xl"
           >
-            <div className="relative h-[240px]">
+            <div className="relative h-[240px] overflow-hidden rounded-xl">
               <img
                 src={story.image_url}
                 alt={story.title}
-                className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+                className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-110"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
-              <div className="absolute bottom-0 p-6">
+              <div className="absolute -inset-5 bg-gradient-to-t from-black via-black/70 to-black/30 rounded-xl pointer-events-none transform scale-110"></div>
+              <div className="absolute bottom-0 p-6 z-10">
                 <div className="mb-3 w-fit rounded-full bg-primary px-3 py-1 text-xs font-medium">
                   {story.category?.name}
                 </div>
