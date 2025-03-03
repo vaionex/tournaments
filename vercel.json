@@ -40,18 +40,5 @@
     "sizes": [640, 750, 828, 1080, 1200],
     "domains": ["tournaments.com"],
     "minimumCacheTTL": 31536000
-  },
-  "crons": [
-    {
-      "path": "/api/cron/generate-news",
-      "schedule": "0 * * * *"
-    }
-  ],
-  "env": {
-    "CRON_SECRET": {
-      "development": "@cron-secret-development",
-      "preview": "@cron-secret-preview",
-      "production": "@cron-secret-production"
-    }
   }
 }
