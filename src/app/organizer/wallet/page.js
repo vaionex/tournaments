@@ -1,49 +1,52 @@
-"use client";
-import useUser from "@/hooks/auth/useUser";
-import { formatCurrency } from "@/utils/format";
-import WalletIcon from "./components/WalletIcon";
-import TransactionChart from "./components/TransactionChart";
-import Loader from "@/components/ui/loader";
-import useTransactions from "@/hooks/transaction/useTransactions";
-import TransactionItem from "./components/TransactionItem";
-import WithdrawRequestButton from "./WithdrawRequestButton";
+import { createServerClient } from "@supabase/ssr";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
-export default function Wallet() {
-  const { data: transactions = [], isLoading: isLoadingTransactions } =
-    useTransactions();
-  const { data: { balance = 0, id } = {} } = useUser();
+export const dynamic = "force-dynamic";
+
+export default async function WalletPage() {
+  const cookieStore = cookies();
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+    {
+      cookies: {
+        get(name) {
+          return cookieStore.get(name)?.value;
+        },
+        set(name, value, options) {
+          cookieStore.set({ name, value, ...options });
+        },
+        remove(name, options) {
+          cookieStore.set({ name, value: "", ...options });
+        },
+      },
+    }
+  );
+
+  const { data: { user } } = await supabase.auth.getUser();
+  
+  if (!user) {
+    redirect("/auth/login");
+  }
+
+  const { data: userData } = await supabase
+    .from("User")
+    .select("balance")
+    .eq("id", user.id)
+    .single();
+
+  const balance = userData?.balance || 0;
 
   return (
-    <div className="flex gap-6">
-      <div className="w-96 p-4">
-        <div className="relative mb-4 flex flex-col gap-8 rounded-lg bg-gradient-to-r from-white/10 to-white/20 p-6">
-          <div className="text-lg font-semibold">Balance</div>
-          <div>
-            <div className="mb-2 text-sm text-neutral-400">Current balance</div>
-            <div className="text-2xl font-bold">
-              {!id ? <Loader className="mx-0" /> : formatCurrency(balance)}
-            </div>
-          </div>
-          <WalletIcon className="absolute right-0 top-0" />
-        </div>
+    <div className="container mx-auto px-4 py-8">
+      <h1 className="mb-6 text-2xl font-bold">Wallet</h1>
+      <div className="rounded-lg bg-white p-6 shadow">
         <div className="mb-4">
-          <WithdrawRequestButton />
+          <h2 className="text-lg font-semibold">Current Balance</h2>
+          <p className="text-3xl font-bold">${balance.toFixed(2)}</p>
         </div>
-        <TransactionChart />
-      </div>
-      <div className="flex-1">
-        <div>
-          <div className="text-lg font-semibold">Transaction history</div>
-          <div className="text-sm text-neutral-400">
-            All your transactions on Tournaments.com will be listed here.
-          </div>
-        </div>
-        <div className="mt-4 space-y-3">
-          {isLoadingTransactions && <Loader className="my-24" />}
-          {transactions.map((transaction) => (
-            <TransactionItem key={transaction.id} {...transaction} />
-          ))}
-        </div>
+        {/* Add more wallet functionality here */}
       </div>
     </div>
   );

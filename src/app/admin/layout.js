@@ -5,9 +5,11 @@ import Logo from "@/components/ui/logo";
 import useAdmin from "@/hooks/auth/useAdmin";
 import { DollarSign } from "lucide-react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, redirect } from "next/navigation";
 import { twMerge } from "tailwind-merge";
 import { Users01 } from "untitledui-js-base";
+import { createServerClient } from "@supabase/ssr";
+import { cookies } from "next/headers";
 
 const links = [
   { name: "Users", href: "users", icon: Users01 },
@@ -24,13 +26,43 @@ const links = [
   },
 ];
 
-export default function AdminLayout({ children }) {
-  const { isNotAdmin, isLoading } = useAdmin();
-  const { push } = useRouter();
-  const pathname = usePathname();
+export const dynamic = "force-dynamic";
 
-  if (isLoading) return null;
-  if (isNotAdmin) push("/");
+export default async function AdminLayout({ children }) {
+  const cookieStore = cookies();
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+    {
+      cookies: {
+        get(name) {
+          return cookieStore.get(name)?.value;
+        },
+        set(name, value, options) {
+          cookieStore.set({ name, value, ...options });
+        },
+        remove(name, options) {
+          cookieStore.set({ name, value: "", ...options });
+        },
+      },
+    }
+  );
+
+  const { data: { user } } = await supabase.auth.getUser();
+  
+  if (!user) {
+    redirect("/auth/login");
+  }
+
+  const { data: userData } = await supabase
+    .from("User")
+    .select("is_admin")
+    .eq("id", user.id)
+    .single();
+
+  if (!userData?.is_admin) {
+    redirect("/dashboard");
+  }
 
   return (
     <div className="relative flex">
@@ -41,7 +73,7 @@ export default function AdminLayout({ children }) {
             <Link
               className={twMerge(
                 "flex items-center gap-3 rounded-lg px-3 py-2 font-semibold transition hover:bg-white/10",
-                pathname.endsWith("/" + href) && "bg-white/10",
+                usePathname().endsWith("/" + href) && "bg-white/10",
               )}
               key={name}
               href={href}
