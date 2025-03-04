@@ -26,15 +26,6 @@ const nextConfig = {
   },
   // Disable static generation for protected routes
   output: 'standalone',
-  generateStaticParams: async () => {
-    return {
-      // Exclude protected routes from static generation
-      '/admin': false,
-      '/organizer': false,
-      '/sponsor': false,
-      '/dashboard': false,
-    };
-  },
   webpack: (config) => {
     config.optimization = {
       ...config.optimization,
