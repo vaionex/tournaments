@@ -23,8 +23,9 @@ const nextConfig = {
   experimental: {
     optimizeCss: true,
     optimizePackageImports: ['lucide-react', '@heroicons/react'],
-    turbo: true,
   },
+  // Disable static generation for protected routes
+  output: 'standalone',
   webpack: (config) => {
     config.optimization = {
       ...config.optimization,

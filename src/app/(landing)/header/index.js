@@ -6,6 +6,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import Logo from "@/components/ui/logo";
 import useAuthentication from "@/hooks/auth/useAuthentication";
+import useUser from "@/hooks/auth/useUser";
 import Container from "@/components/ui/container";
 import MobileMenu from "./mobile-menu";
 import * as HoverCard from "@radix-ui/react-hover-card";
@@ -26,20 +27,28 @@ const links = [
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { isAuthenticated, isLoading } = useAuthentication();
+  const { isAuthenticated, isLoading: authLoading } = useAuthentication();
+  const { data: user, isLoading: userLoading } = useUser();
+
+  const isLoading = authLoading || userLoading;
+  const showNotifications = isAuthenticated && !isLoading && user?.id;
 
   const ctaButton = isLoading ? null : isAuthenticated ? (
     <div className="flex items-center gap-6">
-      <PopoverNotificationCenter colorScheme="dark">
-        {({ unseenCount }) => <NotificationBell unseenCount={unseenCount} />}
-      </PopoverNotificationCenter>
+      {showNotifications && (
+        <PopoverNotificationCenter colorScheme="dark">
+          {({ unseenCount }) => <NotificationBell unseenCount={unseenCount} />}
+        </PopoverNotificationCenter>
+      )}
       <Link href="/dashboard">
         <HomeLine className="size-5" />
       </Link>
       <ProfileDropdown />
     </div>
   ) : (
-    <Button href="/signup">Get Started</Button>
+    <Link href="/signup">
+      <Button>Get Started</Button>
+    </Link>
   );
 
   return (

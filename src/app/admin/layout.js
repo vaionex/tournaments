@@ -2,10 +2,9 @@
 
 import LogoSimple from "@/components/icons/logo-simple";
 import Logo from "@/components/ui/logo";
-import useAdmin from "@/hooks/auth/useAdmin";
 import { DollarSign } from "lucide-react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { twMerge } from "tailwind-merge";
 import { Users01 } from "untitledui-js-base";
 
@@ -24,14 +23,7 @@ const links = [
   },
 ];
 
-export default function AdminLayout({ children }) {
-  const { isNotAdmin, isLoading } = useAdmin();
-  const { push } = useRouter();
-  const pathname = usePathname();
-
-  if (isLoading) return null;
-  if (isNotAdmin) push("/");
-
+export default function ClientLayout({ children }) {
   return (
     <div className="relative flex">
       <div className="sticky top-0 h-screen border-r border-neutral-800">
@@ -41,7 +33,7 @@ export default function AdminLayout({ children }) {
             <Link
               className={twMerge(
                 "flex items-center gap-3 rounded-lg px-3 py-2 font-semibold transition hover:bg-white/10",
-                pathname.endsWith("/" + href) && "bg-white/10",
+                usePathname().endsWith("/" + href) && "bg-white/10",
               )}
               key={name}
               href={href}

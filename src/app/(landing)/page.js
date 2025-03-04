@@ -13,25 +13,27 @@ export default function Home() {
     <div className="min-h-screen bg-black pt-24">
       <NewsProvider>
         <Container>
-          <div className="flex gap-8">
-            {/* Main Content */}
-            <div className="flex-1">
+          <div className="relative">
+            {/* Main content area - full width on mobile, partial width on desktop */}
+            <div className="lg:pr-[340px]">
               <NewsContent />
               <div className="mx-auto max-w-[1200px]">
                 <NewsletterSignup />
               </div>
             </div>
-
-            {/* Sidebar */}
-            <Suspense
-              fallback={
-                <div className="flex h-[80vh] w-80 items-center justify-center">
-                  <Loader />
-                </div>
-              }
-            >
-              <NewsSidebar />
-            </Suspense>
+            
+            {/* Sidebar - absolutely positioned on desktop, hidden on mobile */}
+            <div className="hidden lg:block lg:absolute lg:top-0 lg:right-0 lg:w-[320px]">
+              <Suspense
+                fallback={
+                  <div className="h-[80vh] flex items-center justify-center">
+                    <Loader />
+                  </div>
+                }
+              >
+                <NewsSidebar />
+              </Suspense>
+            </div>
           </div>
         </Container>
       </NewsProvider>

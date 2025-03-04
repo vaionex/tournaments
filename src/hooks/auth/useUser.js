@@ -14,7 +14,7 @@ export default function useUser() {
   const query = useQuery({
     enabled: isAuthenticated,
     queryKey: ["user"],
-    initialData: {},
+    initialData: null,
     queryFn: async () => {
       const { data, error: authError } = await supabase.auth.getUser();
       if (!data || authError) throw authError;
@@ -29,6 +29,8 @@ export default function useUser() {
   });
 
   const newQuery = useMemo(() => {
+    if (!query.data) return query;
+    
     const xp = query.data?.xp ?? 0;
     return {
       ...query,

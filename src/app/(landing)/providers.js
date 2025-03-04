@@ -7,10 +7,16 @@ import { Toaster } from "react-hot-toast";
 import { QueryClient, QueryClientProvider } from "react-query";
 
 function CustomNovuProvider({ children }) {
-  const { data: user } = useUser();
+  const { data: user, isLoading } = useUser();
+  
+  // If loading or no user, render children without NovuProvider
+  if (isLoading || !user?.id) {
+    return children;
+  }
+
   return (
     <NovuProvider
-      subscriberId={user?.id || ""}
+      subscriberId={user.id}
       applicationIdentifier={process.env.NEXT_PUBLIC_NOVU_APP_ID}
     >
       {children}

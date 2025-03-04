@@ -22,6 +22,7 @@ export default async function News() {
         backgroundRepeat: "no-repeat",
         backgroundSize: "contain",
       }}
+      className="w-full"
     >
       <Container className="pt-48">
         <div className="text-center">
@@ -36,18 +37,34 @@ export default async function News() {
             Gaming World!
           </h2>
         </div>
-        <div className="mb-24">
-          <div className="flex flex-col gap-8 lg:flex-row">
-            <div className="flex-1">
+        <div className="mb-24 w-full">
+          {/* Mobile view: Stack all posts vertically */}
+          <div className="block lg:hidden w-full">
+            <div className="mb-8">
               <Post {...firstPost} />
             </div>
-            <div className="flex flex-1 flex-col gap-8">
-              {top3Posts.slice(1).map((post, i) => (
-                <Post {...post} row key={i} />
-              ))}
+            {top3Posts.slice(1).map((post, i) => (
+              <div key={i} className="mb-8">
+                <Post {...post} />
+              </div>
+            ))}
+          </div>
+          
+          {/* Desktop view: Show the sidebar layout */}
+          <div className="hidden lg:block w-full">
+            <div className="flex flex-col gap-8 lg:flex-row">
+              <div className="flex-1">
+                <Post {...firstPost} />
+              </div>
+              <div className="flex flex-1 flex-col gap-8">
+                {top3Posts.slice(1).map((post, i) => (
+                  <Post {...post} row key={i} />
+                ))}
+              </div>
             </div>
           </div>
-          <div className="mt-8 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+          
+          <div className="mt-8 grid gap-8 md:grid-cols-2 lg:grid-cols-3 w-full">
             {otherPosts.map((post, i) => (
               <div key={i} className="h-96">
                 <Post {...post} />

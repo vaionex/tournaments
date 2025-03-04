@@ -10,6 +10,7 @@ import Community from "./Community";
 export default function Sponsor() {
   return (
     <div
+      key="sponsor-page"
       style={{
         backgroundImage: `url('/images/landing/sponsor/background.webp')`,
         backgroundPosition: "top center",
@@ -18,7 +19,7 @@ export default function Sponsor() {
       }}
     >
       <Container className="pt-48">
-        <div className="text-center">
+        <div key="sponsor-content" className="text-center">
           <div className="mx-auto mb-3 w-fit">
             <BadgeTitle key="sponsor-badge">Sponsor</BadgeTitle>
           </div>
