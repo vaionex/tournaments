@@ -7,8 +7,15 @@ import {
 import useUser from "@/hooks/auth/useUser";
 
 export default function BudgetButton({ value, onChange, amount }) {
-  const { data: { balance = 0 } = {} } = useUser();
+  const { data: userData, isLoading } = useUser();
+  
+  if (!userData) {
+    return null;
+  }
+
+  const balance = userData.balance ?? 0;
   const disabled = value > balance;
+
   return (
     <Tooltip delayDuration={0}>
       <TooltipTrigger asChild>
@@ -17,11 +24,11 @@ export default function BudgetButton({ value, onChange, amount }) {
             variant={value == amount ? "green" : "secondary"}
             className="text-sm"
             onClick={() => onChange(value)}
-            disabled={value > balance}
+            disabled={disabled}
             type="button"
-            asChild={!disabled}
+            loading={isLoading}
           >
-            <div>${value / 100}</div>
+            ${value / 100}
           </Button>
         </span>
       </TooltipTrigger>

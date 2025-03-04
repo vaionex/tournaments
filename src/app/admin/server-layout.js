@@ -23,19 +23,25 @@ export default async function ServerLayout({ children }) {
     }
   );
 
-  const { data: { user } } = await supabase.auth.getUser();
+  const { data: { user }, error: authError } = await supabase.auth.getUser();
   
-  if (!user) {
+  if (authError || !user) {
     redirect("/auth/login");
   }
 
-  const { data: userData } = await supabase
+  const { data: userData, error: userError } = await supabase
     .from("User")
     .select("is_admin")
     .eq("id", user.id)
     .single();
 
-  if (!userData?.is_admin) {
+  if (userError || !userData) {
+    // If there's an error or no user data, redirect to login
+    redirect("/auth/login");
+  }
+
+  // Check if is_admin exists and is true
+  if (!userData.is_admin) {
     redirect("/dashboard");
   }
 
