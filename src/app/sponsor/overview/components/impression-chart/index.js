@@ -38,31 +38,41 @@ const durations = [
   },
 ];
 const end = new Date();
+
 export default function ImpressionChart() {
   const [selectedDuration, setSelectedDuration] = useState("week");
-  const { data: { rank } = {} } = useUser();
+  const { data: userData, isLoading: isLoadingUser } = useUser();
   const { start, formatString } =
     durations.find(({ value }) => value === selectedDuration) || durations[0];
 
-  const { data = [], isLoading } = useXpOverTime({
+  const { data = [], isLoading: isLoadingXp } = useXpOverTime({
     start,
     end,
   });
 
-  return (
-    <Card className="relative flex h-full flex-1 flex-col gap-2">
-      {isLoading && (
+  if (isLoadingUser || isLoadingXp) {
+    return (
+      <Card className="relative flex h-full flex-1 flex-col gap-2">
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
           <Loader />
         </div>
-      )}
+      </Card>
+    );
+  }
+
+  if (!userData) {
+    return null;
+  }
+
+  return (
+    <Card className="relative flex h-full flex-1 flex-col gap-2">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <Upload03 className="text-primary" />
           <h2>XP Overtime</h2>
           <div className="flex items-center gap-1">
-            <div className="text-xs font-semibold text-neutral-300">{rank}</div>
-            <RankIcon rank={rank} className="size-5" />
+            <div className="text-xs font-semibold text-neutral-300">{userData.rank}</div>
+            <RankIcon rank={userData.rank} className="size-5" />
           </div>
         </div>
       </div>
