@@ -31,13 +31,17 @@ export default async function AdminLayout({ children }) {
     redirect("/login");
   }
 
-  const { data: users, error: userError } = await supabase
+  const { data: userData, error: userError } = await supabase
     .from("User")
     .select("*")
     .eq("id", user.id)
     .single();
 
-  if (!users?.is_admin || userError) {
+  if (userError || !userData) {
+    redirect("/login");
+  }
+
+  if (!userData.is_admin) {
     redirect("/dashboard");
   }
 
