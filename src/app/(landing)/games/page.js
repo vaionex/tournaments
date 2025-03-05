@@ -4,6 +4,8 @@ import TrendingGames from "./components/trending-games";
 import GameCategories from "./components/game-categories";
 import NewReleases from "./components/new-releases";
 
+export const dynamic = "force-dynamic";
+
 export default function GamesPage() {
   return (
     <div className="min-h-screen bg-black pt-24">
