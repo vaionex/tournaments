@@ -27,15 +27,15 @@ function CustomNovuProvider({ children }) {
 export default function Providers({ children }) {
   const [client] = useState(() => new QueryClient());
   return (
-    <Suspense>
-      <QueryClientProvider client={client}>
-        <CustomNovuProvider>
-          <TooltipProvider>
-            {children}
-            <Toaster />
-          </TooltipProvider>
-        </CustomNovuProvider>
-      </QueryClientProvider>
-    </Suspense>
+
+    <QueryClientProvider client={client}>
+    <CustomNovuProvider>
+    <TooltipProvider>
+    {children}
+    <Toaster />
+    </TooltipProvider>
+    </CustomNovuProvider>
+    </QueryClientProvider>
+
   );
 }
