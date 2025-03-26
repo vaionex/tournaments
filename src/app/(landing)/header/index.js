@@ -32,8 +32,9 @@ export default function Header() {
 
   const isLoading = authLoading || userLoading;
   const showNotifications = isAuthenticated && !isLoading && user?.id;
+  const isReady = isAuthenticated && user
 
-  const ctaButton = isLoading ? null : isAuthenticated ? (
+  const ctaButton = isLoading ? null : isReady ? (
     <div className="flex items-center gap-6">
       {showNotifications && (
         <PopoverNotificationCenter colorScheme="dark">
