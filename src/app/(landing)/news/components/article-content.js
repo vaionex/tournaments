@@ -3,9 +3,13 @@
 import { formatDistanceToNow } from "date-fns";
 import { Clock, User } from "lucide-react";
 import Markdown from "react-markdown";
+import { getSmartOptimizedImageUrl } from "@/utils/image-optimization";
 
 export default function ArticleContent({ article }) {
   if (!article) return null;
+
+  // Always apply optimization parameters if the URL exists
+  const imageUrl = getSmartOptimizedImageUrl(article.image_url, 1200, 600, 85);
 
   return (
     <div className="flex-1">
@@ -31,7 +35,7 @@ export default function ArticleContent({ article }) {
       {/* Featured Image */}
       <div className="relative mb-8 h-[300px] w-full overflow-hidden rounded-xl">
         <img
-          src={article.image_url}
+          src={imageUrl}
           alt={article.title}
           className="h-full w-full object-cover"
           itemProp="image"

@@ -3,11 +3,13 @@
 import { formatDistanceToNow } from "date-fns";
 import Link from "next/link";
 import { Clock, User } from "lucide-react";
+import { getSmartOptimizedImageUrl } from "@/utils/image-optimization";
 
 export default function ArticleCard({ 
   title, 
   excerpt,
   slug,
+  image,
   image_url,
   category,
   published_at,
@@ -17,6 +19,14 @@ export default function ArticleCard({
 }) {
   const isHorizontal = layout === "horizontal";
   
+  // Calculate dimensions based on layout
+  const width = isHorizontal ? 288 : 400; // w-72 = 288px, full width estimated at 400px
+  const height = isHorizontal ? 192 : 256; // h-48 = 192px, h-64 = 256px
+  
+  // Use image_url or image prop, preferring image_url if both are provided
+  const srcImage = image_url || image;
+  const imageUrl = getSmartOptimizedImageUrl(srcImage, width, height, 80);
+  
   return (
     <Link
       href={`/news/${slug}`}
@@ -24,7 +34,7 @@ export default function ArticleCard({
     >
       <div className={`overflow-hidden rounded-xl ${isHorizontal ? "h-48 w-72" : "h-64 w-full"}`}>
         <img
-          src={image_url}
+          src={imageUrl}
           alt={title}
           className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
         />
