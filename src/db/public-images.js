@@ -10,5 +10,12 @@ export async function uploadPublicImage(file, path) {
   const {
     data: { publicUrl },
   } = supabase.storage.from("public-images").getPublicUrl(filePath);
-  return publicUrl + `?id=${Math.random().toString()}`;
+  
+  // Add default optimization parameters for news images
+  // Check if URL already ends with a question mark
+  if (publicUrl.endsWith('?')) {
+    return publicUrl + `width=800&height=600&quality=80&id=${Math.random().toString()}`;
+  } else {
+    return publicUrl + `?width=800&height=600&quality=80&id=${Math.random().toString()}`;
+  }
 }

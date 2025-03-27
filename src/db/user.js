@@ -18,7 +18,14 @@ async function uploadProfilePicture(file) {
   const {
     data: { publicUrl },
   } = supabase.storage.from("user-public-images").getPublicUrl(filePath);
-  return publicUrl + `?id=${Math.random().toString()}`;
+  
+  // Profile pictures are typically used in smaller dimensions
+  // Check if URL already ends with a question mark
+  if (publicUrl.endsWith('?')) {
+    return publicUrl + `width=200&height=200&quality=80&id=${Math.random().toString()}`;
+  } else {
+    return publicUrl + `?width=200&height=200&quality=80&id=${Math.random().toString()}`;
+  }
 }
 
 async function uploadBanner(file) {
@@ -33,7 +40,14 @@ async function uploadBanner(file) {
   const {
     data: { publicUrl },
   } = supabase.storage.from("user-public-images").getPublicUrl(filePath);
-  return publicUrl + `?id=${Math.random().toString()}`;
+  
+  // Banners are displayed in a larger format
+  // Check if URL already ends with a question mark
+  if (publicUrl.endsWith('?')) {
+    return publicUrl + `width=1200&height=400&quality=80&id=${Math.random().toString()}`;
+  } else {
+    return publicUrl + `?width=1200&height=400&quality=80&id=${Math.random().toString()}`;
+  }
 }
 
 export async function updateUser({

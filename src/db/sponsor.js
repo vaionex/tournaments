@@ -12,5 +12,12 @@ export async function uploadAdBanner(file) {
   const {
     data: { publicUrl },
   } = supabase.storage.from("public-images").getPublicUrl(filePath);
-  return publicUrl;
+  
+  // Ad banners need to be high quality and are typically wider
+  // Check if URL already ends with a question mark
+  if (publicUrl.endsWith('?')) {
+    return publicUrl + `width=1000&height=300&quality=85`;
+  } else {
+    return publicUrl + `?width=1000&height=300&quality=85`;
+  }
 }

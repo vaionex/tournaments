@@ -6,6 +6,7 @@ import { useQuery } from "react-query";
 import { getArticles } from "@/db/articles";
 import Loader from "@/components/ui/loader";
 import FormattedTime from "@/components/ui/formatted-time";
+import { getSmartOptimizedImageUrl } from "@/utils/image-optimization";
 
 export default function TopStories() {
   const { data: articles = [], isLoading, error } = useQuery({
@@ -44,6 +45,9 @@ export default function TopStories() {
   console.log('Rendering articles:', articles);
 
   const [mainStory, ...sideStories] = articles;
+  
+  // Optimize main story image
+  const mainStoryImage = getSmartOptimizedImageUrl(mainStory.image_url, 1200, 800, 85);
 
   return (
     <section className="mb-12 grid grid-cols-12 gap-6">
@@ -54,7 +58,7 @@ export default function TopStories() {
       >
         <div className="relative h-[500px] overflow-hidden rounded-xl">
           <img
-            src={mainStory.image_url}
+            src={mainStoryImage}
             alt={mainStory.title}
             className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-110"
           />
@@ -82,35 +86,40 @@ export default function TopStories() {
 
       {/* Side Stories */}
       <div className="col-span-12 grid gap-6 lg:col-span-4">
-        {sideStories.map((story) => (
-          <Link
-            key={story.id}
-            href={`/news/${story.slug}`}
-            className="group overflow-hidden rounded-xl"
-          >
-            <div className="relative h-[240px] overflow-hidden rounded-xl">
-              <img
-                src={story.image_url}
-                alt={story.title}
-                className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-110"
-              />
-              <div className="absolute -inset-5 bg-gradient-to-t from-black via-black/70 to-black/30 rounded-xl pointer-events-none transform scale-110"></div>
-              <div className="absolute bottom-0 p-6 z-10">
-                <div className="mb-3 w-fit rounded-full bg-primary px-3 py-1 text-xs font-medium">
-                  {story.category?.name}
-                </div>
-                <h3 className="mb-2 text-xl font-bold text-white">
-                  {story.title}
-                </h3>
-                <div className="flex items-center gap-3 text-sm text-gray-400">
-                  <span>{story.author?.username}</span>
-                  <span>•</span>
-                  <FormattedTime date={story.published_at} />
+        {sideStories.map((story) => {
+          // Optimize each side story image
+          const storyImage = getSmartOptimizedImageUrl(story.image_url, 600, 480, 80);
+          
+          return (
+            <Link
+              key={story.id}
+              href={`/news/${story.slug}`}
+              className="group overflow-hidden rounded-xl"
+            >
+              <div className="relative h-[240px] overflow-hidden rounded-xl">
+                <img
+                  src={storyImage}
+                  alt={story.title}
+                  className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-110"
+                />
+                <div className="absolute -inset-5 bg-gradient-to-t from-black via-black/70 to-black/30 rounded-xl pointer-events-none transform scale-110"></div>
+                <div className="absolute bottom-0 p-6 z-10">
+                  <div className="mb-3 w-fit rounded-full bg-primary px-3 py-1 text-xs font-medium">
+                    {story.category?.name}
+                  </div>
+                  <h3 className="mb-2 text-xl font-bold text-white">
+                    {story.title}
+                  </h3>
+                  <div className="flex items-center gap-3 text-sm text-gray-400">
+                    <span>{story.author?.username}</span>
+                    <span>•</span>
+                    <FormattedTime date={story.published_at} />
+                  </div>
                 </div>
               </div>
-            </div>
-          </Link>
-        ))}
+            </Link>
+          );
+        })}
       </div>
     </section>
   );

@@ -2,6 +2,7 @@ import { format } from "date-fns";
 import Link from "next/link";
 import { twMerge } from "tailwind-merge";
 import { ArrowRight } from "untitledui-js-base";
+import { getSmartOptimizedImageUrl } from "@/utils/image-optimization";
 
 export default function Post({
   title,
@@ -12,6 +13,15 @@ export default function Post({
   author,
   row,
 }) {
+  // Always apply optimization parameters if the URL exists
+  const imageUrl = getSmartOptimizedImageUrl(
+    featuredImage?.node?.sourceUrl,
+    600,
+    400,
+    80,
+    "/images/profile-picture-placeholder.webp"
+  );
+    
   return (
     <div
       className={twMerge(
@@ -25,7 +35,7 @@ export default function Post({
       >
         <div className="relative w-full h-full overflow-hidden rounded-xl">
           <img
-            src={featuredImage?.node?.sourceUrl}
+            src={imageUrl}
             className="h-full w-full rounded-xl border border-white/20 object-cover object-center transition-transform duration-500 ease-out group-hover:scale-110"
             alt={title}
           />
