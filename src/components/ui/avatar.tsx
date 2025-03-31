@@ -37,7 +37,7 @@ const Avatar = React.forwardRef<HTMLDivElement, AvatarProps>(
     
     // Add optimization parameters to Supabase URLs
     const optimizedSrc = (profile_picture || src) && (profile_picture || src).includes('supabase.co')
-      ? `${profile_picture || src}?width=${size}&height=${size}&quality=80`
+      ? (profile_picture || src).replace('/object/public/', '/render/image/public/') + `?width=${size}&height=${size}&quality=80`
       : profile_picture || src || "/images/profile-picture-placeholder.webp";
 
     return (
