@@ -33,3 +33,45 @@ export default function FeaturedStory() {
     </div>
   );
 }
+
+export function getOptimizedImageUrl(url, width, height, quality = 80, fallbackImage = "/images/news-placeholder.webp") {
+  console.log('Input URL:', url); // Log the input URL
+  
+  if (!url) {
+    console.log('No URL provided, returning fallback');
+    return fallbackImage;
+  }
+  
+  // Check if URL contains the pattern we're looking for
+  const hasObjectPublic = url.includes('/object/public/');
+  console.log('Contains /object/public/:', hasObjectPublic);
+  
+  // Log the exact string we're trying to match
+  console.log('URL pattern check:', {
+    url,
+    pattern: '/object/public/',
+    matches: hasObjectPublic
+  });
+  
+  if (hasObjectPublic) {
+    const originalUrl = url;
+    url = url.replace('/object/public/', '/render/image/public/');
+    console.log('URL transformation:', {
+      before: originalUrl,
+      after: url,
+      changed: originalUrl !== url
+    });
+  }
+  
+  // Rest of the function...
+  if (url.includes('?')) {
+    const [baseUrl, queryString] = url.split('?');
+    const params = new URLSearchParams(queryString);
+    params.set('width', width.toString());
+    params.set('height', height.toString());
+    params.set('quality', quality.toString());
+    return `${baseUrl}?${params.toString()}`;
+  }
+  
+  return `${url}?width=${width}&height=${height}&quality=${quality}`;
+}

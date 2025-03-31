@@ -8,28 +8,25 @@
  * @returns {string} - The optimized image URL
  */
 export function getOptimizedImageUrl(url, width, height, quality = 80, fallbackImage = "/images/news-placeholder.webp") {
+  console.log('Original URL:', url);
   if (!url) return fallbackImage;
   
-  // Check if URL ends with a question mark
-  if (url.endsWith('?')) {
-    return `${url}width=${width}&height=${height}&quality=${quality}`;
-  } else if (url.includes('?')) {
-    // URL has other query parameters
-    return `${url}&width=${width}&height=${height}&quality=${quality}`;
-  } else {
-    // URL has no query parameters
-    return `${url}?width=${width}&height=${height}&quality=${quality}`;
+  // Transform Supabase URL to use /render/image/ instead of /object/public/
+  url = url.replace('/object/', '/render/image/');
+  console.log('Transformed URL:', url);
+  
+  // If URL already has query parameters, update them instead of adding new ones
+  if (url.includes('?')) {
+    const [baseUrl, queryString] = url.split('?');
+    const params = new URLSearchParams(queryString);
+    params.set('width', width.toString());
+    params.set('height', height.toString());
+    params.set('quality', quality.toString());
+    return `${baseUrl}?${params.toString()}`;
   }
-}
-
-/**
- * Determines if a URL is from Supabase Storage
- * @param {string} url - The URL to check
- * @returns {boolean} - Whether the URL is from Supabase
- */
-export function isSupabaseStorageUrl(url) {
-  if (!url) return false;
-  return url.includes('supabase.co/storage') || url.includes('.supabase.co/');
+  
+  // URL has no query parameters, add them
+  return `${url}?width=${width}&height=${height}&quality=${quality}`;
 }
 
 /**
@@ -43,11 +40,6 @@ export function isSupabaseStorageUrl(url) {
  */
 export function getSmartOptimizedImageUrl(url, width, height, quality = 80, fallbackImage = "/images/news-placeholder.webp") {
   if (!url) return fallbackImage;
-  
-  // Only optimize Supabase storage URLs
-  if (isSupabaseStorageUrl(url)) {
-    return getOptimizedImageUrl(url, width, height, quality, fallbackImage);
-  }
-  
-  return url;
+  console.log("getSmarterFunction");
+  return getOptimizedImageUrl(url, width, height, quality, fallbackImage);
 } 
