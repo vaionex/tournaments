@@ -4,21 +4,22 @@ import Container from "@/components/ui/container";
 import ArticleContent from "../components/article-content";
 import ArticleSidebar from "../components/article-sidebar";
 import Script from "next/script";
+import ArticleComments from "../components/article-comments";
 
 // Generate metadata for SEO and Google News
 export async function generateMetadata({ params }) {
   const article = await getArticleBySlug(params.slug);
-  
+
   if (!article) {
     return {
-      title: 'Article Not Found',
-      description: 'The requested article could not be found.'
+      title: "Article Not Found",
+      description: "The requested article could not be found.",
     };
   }
 
   const title = article.meta_title || article.title;
   const description = article.meta_description || article.excerpt;
-  const keywords = article.meta_keywords?.join(', ');
+  const keywords = article.meta_keywords?.join(", ");
   const url = `https://tournaments.com/news/${article.slug}`;
   const image = article.image_url;
 
@@ -30,7 +31,7 @@ export async function generateMetadata({ params }) {
       title,
       description,
       url,
-      type: 'article',
+      type: "article",
       publishedTime: article.published_at,
       modifiedTime: article.updated_at,
       authors: [article.author?.username],
@@ -42,14 +43,14 @@ export async function generateMetadata({ params }) {
           alt: title,
         },
       ],
-      siteName: 'Tournaments.com',
+      siteName: "Tournaments.com",
     },
     twitter: {
-      card: 'summary_large_image',
+      card: "summary_large_image",
       title,
       description,
       images: [image],
-      creator: '@Tournaments',
+      creator: "@Tournaments",
     },
     alternates: {
       canonical: article.canonical_url || url,
@@ -57,29 +58,29 @@ export async function generateMetadata({ params }) {
     robots: {
       index: true,
       follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
       googleBot: {
         index: true,
         follow: true,
-        'max-image-preview': 'large',
-        'max-snippet': -1,
-        'max-video-preview': -1,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+        "max-video-preview": -1,
       },
     },
     // Google News specific meta tags
     news_keywords: keywords,
-    'article:published_time': article.published_at,
-    'article:modified_time': article.updated_at,
-    'article:author': article.author?.username,
-    'article:section': article.category?.name,
+    "article:published_time": article.published_at,
+    "article:modified_time": article.updated_at,
+    "article:author": article.author?.username,
+    "article:section": article.category?.name,
   };
 }
 
 export default async function ArticlePage({ params }) {
   const article = await getArticleBySlug(params.slug);
-  
+
   if (!article) {
     notFound();
   }
@@ -88,30 +89,32 @@ export default async function ArticlePage({ params }) {
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "NewsArticle",
-    "headline": article.title,
-    "description": article.excerpt,
-    "image": [article.image_url],
-    "datePublished": article.published_at,
-    "dateModified": article.updated_at,
-    "author": [{
-      "@type": "Person",
-      "name": article.author?.username,
-      "url": `https://tournaments.com/author/${article.author?.username}`
-    }],
-    "publisher": {
+    headline: article.title,
+    description: article.excerpt,
+    image: [article.image_url],
+    datePublished: article.published_at,
+    dateModified: article.updated_at,
+    author: [
+      {
+        "@type": "Person",
+        name: article.author?.username,
+        url: `https://tournaments.com/author/${article.author?.username}`,
+      },
+    ],
+    publisher: {
       "@type": "Organization",
-      "name": "Tournaments.com",
-      "logo": {
+      name: "Tournaments.com",
+      logo: {
         "@type": "ImageObject",
-        "url": "https://tournaments.com/logo.png"
-      }
+        url: "https://tournaments.com/logo.png",
+      },
     },
-    "mainEntityOfPage": {
+    mainEntityOfPage: {
       "@type": "WebPage",
-      "@id": `https://tournaments.com/news/${article.slug}`
+      "@id": `https://tournaments.com/news/${article.slug}`,
     },
-    "articleSection": article.category?.name,
-    "keywords": article.meta_keywords?.join(', ')
+    articleSection: article.category?.name,
+    keywords: article.meta_keywords?.join(", "),
   };
 
   return (
@@ -121,11 +124,14 @@ export default async function ArticlePage({ params }) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
-      
+
       <div className="min-h-screen bg-black pt-24">
         <Container>
           <div className="flex gap-8">
-            <ArticleContent article={article} />
+            <div className="flex-1">
+              <ArticleContent article={article} />
+              <ArticleComments slug={article.slug} />
+            </div>
             <ArticleSidebar currentArticle={article} />
           </div>
         </Container>
