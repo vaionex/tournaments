@@ -1,9 +1,8 @@
 "use client";
 
-import Avatar from "@/components/ui/avatar";
 import Loader from "@/components/ui/loader";
 import useArticleComments from "@/hooks/articles/useArticleComments";
-import { format } from "date-fns";
+import ArticleComment from "./article-comment";
 
 export default function ArticleCommentsList({ slug }) {
   const { data: comments = [], isLoading: isLoadingComments } =
@@ -20,17 +19,8 @@ export default function ArticleCommentsList({ slug }) {
 
   return (
     <div className="mb-8 space-y-8">
-      {comments.map(({ content, id, User, created_at }) => (
-        <div className="" key={id}>
-          <div className="mb-4 flex items-center gap-3">
-            <Avatar {...User} />
-            <div>{User.username}</div>
-            <div className="text-sm text-neutral-500">
-              {format(created_at, "MMM dd, yyyy")}
-            </div>
-          </div>
-          <div>{content}</div>
-        </div>
+      {comments.map((comment) => (
+        <ArticleComment {...comment} slug={slug} key={comment.id} />
       ))}
     </div>
   );

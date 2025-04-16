@@ -114,6 +114,6 @@ export async function getArticleCommentsBySlug(slug) {
   }
 }
 
-export async function createArticleComment(content, slug) {
-  await api.post("/article/comment", { content, slug });
+export async function createArticleComment(content, slug, parent_id) {
+  await api.post("/article/comment", { content, slug, parent_id });
 }
