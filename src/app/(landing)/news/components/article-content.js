@@ -1,9 +1,10 @@
 "use client";
 
-import { formatDistanceToNow } from "date-fns";
+import { format, formatDistanceToNow } from "date-fns";
 import { Clock, User } from "lucide-react";
 import Markdown from "react-markdown";
 import { getSmartOptimizedImageUrl } from "@/utils/image-optimization";
+import Avatar from "@/components/ui/avatar";
 
 export default function ArticleContent({ article }) {
   if (!article) return null;
@@ -15,8 +16,12 @@ export default function ArticleContent({ article }) {
     <div className="flex-1">
       {/* Article Header */}
       <div className="mb-8">
-        <div className="mb-2 text-sm text-primary">{article.category?.name}</div>
-        <h1 className="mb-4 text-4xl font-bold" itemProp="headline">{article.title}</h1>
+        <div className="mb-2 text-sm text-primary">
+          {article.category?.name}
+        </div>
+        <h1 className="mb-4 text-4xl font-bold" itemProp="headline">
+          {article.title}
+        </h1>
         <div className="flex items-center gap-6 text-sm text-neutral-400">
           <div className="flex items-center gap-2" itemProp="author">
             <User className="size-4" />
@@ -25,7 +30,9 @@ export default function ArticleContent({ article }) {
           <div className="flex items-center gap-2">
             <Clock className="size-4" />
             <time itemProp="datePublished" dateTime={article.published_at}>
-              {formatDistanceToNow(new Date(article.published_at), { addSuffix: true })}
+              {formatDistanceToNow(new Date(article.published_at), {
+                addSuffix: true,
+              })}
             </time>
           </div>
           <div itemProp="timeRequired">{article.read_time} min read</div>
@@ -43,7 +50,7 @@ export default function ArticleContent({ article }) {
       </div>
 
       {/* Article Content */}
-      <article 
+      <article
         className="prose prose-invert max-w-none"
         itemScope
         itemType="http://schema.org/Article"
@@ -52,6 +59,15 @@ export default function ArticleContent({ article }) {
         <meta itemProp="description" content={article.excerpt} />
         <Markdown>{article.content}</Markdown>
       </article>
+      <div className="mt-5 flex items-center gap-2">
+        <Avatar src={article.author.avatar_url} />
+        <div>
+          <div>{article.author.username}</div>
+          <div className="text-sm text-neutral-400">
+            {format(article.created_at, "do MMMM, yyyy")}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
