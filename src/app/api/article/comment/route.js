@@ -2,7 +2,7 @@ import { admin } from "@/supabase/admin";
 import { getUser } from "@/supabase/server";
 
 export async function POST(req) {
-  const { content, slug } = await req.json();
+  const { content, slug, parent_id = null } = await req.json();
   const { id: user_id } = await getUser();
   const {
     data: { id },
@@ -20,6 +20,7 @@ export async function POST(req) {
       article_id: id,
       content,
       user_id,
+      parent_id,
     })
     .throwOnError();
 

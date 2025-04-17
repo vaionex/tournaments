@@ -4,17 +4,17 @@ import withMDX from "@next/mdx";
 const nextConfig = {
   pageExtensions: ["js", "jsx", "mdx", "ts", "tsx"],
   images: {
-    domains: ['tournaments.com'],
-    formats: ['image/avif', 'image/webp'],
+    domains: ["tournaments.com"],
+    formats: ["image/avif", "image/webp"],
   },
   async headers() {
     return [
       {
-        source: '/:path*',
+        source: "/:path*",
         headers: [
           {
-            key: 'Cache-Control',
-            value: 'public, max-age=31536000, immutable',
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
           },
         ],
       },
@@ -22,22 +22,22 @@ const nextConfig = {
   },
   experimental: {
     optimizeCss: true,
-    optimizePackageImports: ['lucide-react', '@heroicons/react'],
+    optimizePackageImports: ["lucide-react", "@heroicons/react"],
   },
   // Disable static generation for protected routes
-  output: 'standalone',
+  output: "standalone",
   webpack: (config) => {
     config.optimization = {
       ...config.optimization,
       splitChunks: {
-        chunks: 'all',
+        chunks: "all",
         cacheGroups: {
           ...config.optimization?.splitChunks?.cacheGroups,
-          'react-vendors': {
+          "react-vendors": {
             test: /[\\/]node_modules[\\/](react|react-dom)[\\/]/,
-            chunks: 'all',
+            chunks: "all",
             priority: 40,
-            name: 'react-vendors',
+            name: "react-vendors",
           },
         },
       },

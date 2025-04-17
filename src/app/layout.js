@@ -10,7 +10,8 @@ import Providers from "./(landing)/providers";
 const dmSans = DM_Sans({ subsets: ["latin"] });
 
 const title = "Gaming News & Reviews | Tournaments.com";
-const description = "Your source for the latest gaming news, hardware reviews and esports coverage.";
+const description =
+  "Your source for the latest gaming news, hardware reviews and esports coverage.";
 
 export const metadata = {
   title,
@@ -44,10 +45,10 @@ export default function RootLayout({ children }) {
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <script
-           defer
-           data-domain="tournaments.com"
-           src="https://plausible.ensidian.com/js/script.js"
-         ></script>
+          defer
+          data-domain="tournaments.com"
+          src="https://plausible.ensidian.com/js/script.js"
+        ></script>
       </head>
       <body className={dmSans.className}>
         <Providers>{children}</Providers>
