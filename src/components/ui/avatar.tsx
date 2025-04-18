@@ -34,20 +34,6 @@ const Avatar = React.forwardRef<HTMLDivElement, AvatarProps>(
   ) => {
     const rank = getRank(xp);
 
-    // Get the size from className (default to 32px if not specified)
-    const sizeMatch = className.match(/size-(\d+)/);
-    const size = sizeMatch ? parseInt(sizeMatch[1]) * 4 : 32; // Convert Tailwind size to px
-
-    // Add optimization parameters to Supabase URLs
-    const optimizedSrc =
-      (profile_picture || src) &&
-      (profile_picture || src).includes("supabase.co")
-        ? (profile_picture || src).replace(
-            "/object/public/",
-            "/render/image/public/",
-          ) + `?width=${size}&height=${size}&quality=80`
-        : profile_picture || src || "/images/profile-picture-placeholder.webp";
-
     return (
       <div className={cn("relative", containerClassName)}>
         <div
@@ -59,11 +45,12 @@ const Avatar = React.forwardRef<HTMLDivElement, AvatarProps>(
           {...props}
         >
           <img
-            src={optimizedSrc}
-            className="aspect-square h-full w-full object-cover object-center"
-            onError={(e) =>
-              (e.target.src = "/images/profile-picture-placeholder.webp")
+            src={
+              src ||
+              profile_picture ||
+              "/images/profile-picture-placeholder.webp"
             }
+            className="aspect-square h-full w-full object-cover object-center"
             alt="Avatar"
           />
         </div>
