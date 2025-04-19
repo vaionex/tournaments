@@ -7,9 +7,9 @@ export default function useUpdateUser() {
   return useMutation({
     mutationFn: async (data) => {
       const id = await getUserId();
-      await updateUser({ id, ...data });
+      return await updateUser({ id, ...data });
     },
-    onSuccess: (_, { id, ...data }) => {
+    onSuccess: ({ id, ...data }) => {
       queryClient.setQueryData(["user"], (user = {}) => {
         return {
           ...user,
