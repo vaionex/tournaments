@@ -1,8 +1,10 @@
 import { Star } from "lucide-react";
 
 export default function StarRating({ rating, className = "" }) {
-  const fullStars = Math.floor(rating);
-  const hasHalfStar = rating % 1 >= 0.5;
+  // Convert rating to 0-5 scale if it isn't already
+  const normalizedRating = rating > 5 ? rating / 2 : rating;
+  const fullStars = Math.floor(normalizedRating);
+  const hasHalfStar = normalizedRating % 1 >= 0.5;
   const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
 
   return (
@@ -19,7 +21,7 @@ export default function StarRating({ rating, className = "" }) {
       {[...Array(emptyStars)].map((_, i) => (
         <Star key={`empty-${i}`} className="h-4 w-4 text-yellow-500" />
       ))}
-      <span className="ml-1 text-sm font-semibold">{rating.toFixed(1)}</span>
+      <span className="ml-1 text-sm font-semibold">{normalizedRating.toFixed(1)}</span>
     </div>
   );
 }

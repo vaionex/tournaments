@@ -5,6 +5,7 @@ import ArticleContent from "../components/article-content";
 import ArticleSidebar from "../components/article-sidebar";
 import Script from "next/script";
 import ArticleComments from "../components/article-comments";
+import CommentSection from "../components/comment-section";
 
 // Generate metadata for SEO and Google News
 export async function generateMetadata({ params }) {
@@ -126,13 +127,15 @@ export default async function ArticlePage({ params }) {
       />
 
       <div className="min-h-screen bg-black pt-24">
-        <Container>
-          <div className="flex gap-8">
+        <Container className="px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col md:flex-row md:gap-8">
             <div className="flex-1">
               <ArticleContent article={article} />
-              <ArticleComments slug={article.slug} />
+              <CommentSection articleId={article.id} />
             </div>
-            <ArticleSidebar currentArticle={article} />
+            <div className="hidden md:block md:w-80">
+              <ArticleSidebar currentArticle={article} />
+            </div>
           </div>
         </Container>
       </div>

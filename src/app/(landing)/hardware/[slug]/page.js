@@ -14,9 +14,13 @@ export default async function HardwareReviewPage({ params }) {
   return (
     <div className="min-h-screen bg-black pt-24">
       <Container>
-        <div className="flex gap-8">
-          <ReviewContent review={review} />
-          <ReviewSidebar review={review} />
+        <div className="flex flex-col md:flex-row md:gap-8">
+          <div className="flex-1">
+            <ReviewContent review={review} />
+          </div>
+          <div className="hidden md:block md:w-80">
+            <ReviewSidebar review={review} />
+          </div>
         </div>
       </Container>
     </div>
