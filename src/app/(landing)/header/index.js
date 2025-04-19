@@ -22,7 +22,7 @@ const links = [
   { name: "Hardware", href: "/hardware" },
   { name: "Tournaments", href: "/tournaments" },
   { name: "Games", href: "/games" },
-  { name: "Sponsor", href: "/sponsor" },
+  // { name: "Sponsor", href: "/sponsor" },
 ];
 
 export default function Header() {
@@ -65,7 +65,7 @@ export default function Header() {
           <div className="flex lg:flex-1">
             <div className="-m-1.5 p-1.5">
               <span className="sr-only">Tournaments</span>
-              <Logo className="h-12 w-auto" />
+              <Logo />
             </div>
           </div>
           <div className="flex lg:hidden">

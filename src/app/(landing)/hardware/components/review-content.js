@@ -13,7 +13,7 @@ export default function ReviewContent({ review }) {
   
   return (
     <div className="flex-1">
-      <div className="mb-8">
+      <div className="mb-8 max-w-3xl mx-auto">
         <div className="mb-2 text-sm text-primary">{review.category}</div>
         <h1 className="mb-2 text-4xl font-bold">{review.title}</h1>
         <h2 className="mb-6 text-xl text-neutral-400">{review.subtitle}</h2>
@@ -26,13 +26,15 @@ export default function ReviewContent({ review }) {
         </div>
       </div>
 
-      <img
-        src={review.image_url}
-        alt={review.title}
-        className="mb-8 w-full rounded-xl"
-      />
+      <div className="mb-8 max-w-3xl mx-auto overflow-hidden rounded-xl">
+        <img
+          src={review.image_url}
+          alt={review.title}
+          className="h-[400px] w-full object-cover"
+        />
+      </div>
 
-      <article className="prose prose-invert max-w-none">
+      <article className="prose prose-invert max-w-3xl mx-auto">
         <Markdown>{review.content}</Markdown>
       </article>
     </div>

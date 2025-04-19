@@ -30,16 +30,24 @@ export default function ArticleCard({
   return (
     <Link
       href={`/news/${slug}`}
-      className={`group flex outline-none ${isHorizontal ? "flex-row gap-6" : "flex-col"}`}
+      className={`group flex outline-none ${
+        isHorizontal 
+          ? "flex-col md:flex-row md:gap-6" 
+          : "flex-col"
+      }`}
     >
-      <div className={`overflow-hidden rounded-xl ${isHorizontal ? "h-48 w-72" : "h-64 w-full"}`}>
+      <div className={`overflow-hidden rounded-xl ${
+        isHorizontal 
+          ? "h-48 w-full md:h-48 md:w-72" 
+          : "h-64 w-full"
+      }`}>
         <img
           src={imageUrl}
           alt={title}
           className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
         />
       </div>
-      <div className={`${isHorizontal ? "flex-1" : "mt-4"}`}>
+      <div className={`${isHorizontal ? "mt-4 md:mt-0 md:flex-1" : "mt-4"}`}>
         <div className="mb-2 text-sm font-medium text-primary">
           {category?.name}
         </div>

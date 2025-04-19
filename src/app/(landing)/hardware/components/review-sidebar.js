@@ -9,10 +9,7 @@ export default function ReviewSidebar({ review }) {
       {/* Price Section */}
       <div className="rounded-xl border border-neutral-800 bg-neutral-900 p-6">
         <h3 className="mb-4 text-lg font-semibold">Price</h3>
-        <div className="mb-4 text-3xl font-bold text-primary">{review.price}</div>
-        <Button className="w-full" href={review.purchaseUrl}>
-          Check Price
-        </Button>
+        <div className="mb-4 text-3xl font-bold text-primary">${review.price}</div>
       </div>
 
       {/* Rating Section */} 
@@ -33,7 +30,7 @@ export default function ReviewSidebar({ review }) {
               <div className="h-2 w-full rounded-full bg-neutral-800">
                 <div
                   className="h-full rounded-full bg-primary"
-                  style={{ width: `${value * 10}%` }}
+                  style={{ width: `${value * 20}%` }}
                 />
               </div>
             </div>

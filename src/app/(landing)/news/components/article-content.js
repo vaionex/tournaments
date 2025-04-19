@@ -15,7 +15,7 @@ export default function ArticleContent({ article }) {
   return (
     <div className="flex-1">
       {/* Article Header */}
-      <div className="mb-8">
+      <div className="mb-8 max-w-3xl mx-auto">
         <div className="mb-2 text-sm text-primary">
           {article.category?.name}
         </div>
@@ -40,18 +40,18 @@ export default function ArticleContent({ article }) {
       </div>
 
       {/* Featured Image */}
-      <div className="relative mb-8 h-[300px] w-full overflow-hidden rounded-xl">
+      <div className="relative mb-8 max-w-3xl mx-auto overflow-hidden rounded-xl">
         <img
           src={imageUrl}
           alt={article.title}
-          className="h-full w-full object-cover"
+          className="h-[300px] w-full object-cover"
           itemProp="image"
         />
       </div>
 
       {/* Article Content */}
       <article
-        className="prose prose-invert max-w-none"
+        className="prose prose-invert max-w-3xl mx-auto"
         itemScope
         itemType="http://schema.org/Article"
       >
@@ -59,7 +59,7 @@ export default function ArticleContent({ article }) {
         <meta itemProp="description" content={article.excerpt} />
         <Markdown>{article.content}</Markdown>
       </article>
-      <div className="mt-5 flex items-center gap-2">
+      <div className="mt-5 flex items-center gap-2 max-w-3xl mx-auto">
         <Avatar src={article.author.avatar_url} />
         <div>
           <div>{article.author.username}</div>
