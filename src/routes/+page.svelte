@@ -138,7 +138,7 @@
 />
 
 <div class="bg-white dark:bg-gray-900 min-h-screen">
-	<div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 max-w-7xl">
+	<div class="container mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 max-w-7xl">
 		<!-- Hero Featured Article -->
 		{#if !loading && heroArticle}
 			<HeroArticle article={heroArticle} />
