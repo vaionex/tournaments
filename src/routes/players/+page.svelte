@@ -489,29 +489,54 @@
 						
 						<!-- Players Display -->
 						{#if loading}
-							<div class="p-4">
-								<!-- Grid skeleton matching PlayerCard structure -->
-								<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 lg:gap-6 animate-pulse">
-									{#each Array(12) as _}
-										<div>
-											<!-- Avatar with rank badge placeholder -->
-											<div class="relative mb-3">
-												<div class="w-full aspect-square bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
-												<div class="absolute -top-2 -right-2 w-7 h-7 bg-gray-300 dark:bg-gray-600 rounded-full"></div>
-											</div>
-											<!-- Player info -->
-											<div class="text-center space-y-2">
-												<div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mx-auto"></div>
-												<div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/2 mx-auto"></div>
-												<div class="space-y-1.5 pt-1">
-													<div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-16 mx-auto"></div>
-													<div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-20 mx-auto"></div>
-													<div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-12 mx-auto"></div>
-												</div>
-											</div>
-										</div>
-									{/each}
-								</div>
+							<!-- Table skeleton matching the table view (default) -->
+							<div class="overflow-x-auto animate-pulse">
+								<table class="w-full">
+									<thead class="bg-gray-50 dark:bg-gray-900">
+										<tr>
+											<th class="px-4 py-3 text-left text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Rank</th>
+											<th class="px-4 py-3 text-left text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Player</th>
+											<th class="px-4 py-3 text-left text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Team</th>
+											<th class="px-4 py-3 text-left text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Sport</th>
+											<th class="px-4 py-3 text-right text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Wins</th>
+											<th class="px-4 py-3 text-right text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Win %</th>
+											<th class="px-4 py-3 text-right text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Earnings</th>
+										</tr>
+									</thead>
+									<tbody class="divide-y divide-gray-100 dark:divide-gray-700">
+										{#each Array(12) as _, i}
+											<tr>
+												<td class="px-4 py-3 whitespace-nowrap">
+													<div class="h-5 bg-gray-200 dark:bg-gray-700 rounded w-8"></div>
+												</td>
+												<td class="px-4 py-3 whitespace-nowrap">
+													<div class="flex items-center gap-3">
+														<div class="w-10 h-10 bg-gray-200 dark:bg-gray-700 rounded-full"></div>
+														<div>
+															<div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-32 mb-1.5"></div>
+															<div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-20"></div>
+														</div>
+													</div>
+												</td>
+												<td class="px-4 py-3 whitespace-nowrap">
+													<div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-24"></div>
+												</td>
+												<td class="px-4 py-3 whitespace-nowrap">
+													<div class="h-6 bg-gray-200 dark:bg-gray-700 rounded-full w-20"></div>
+												</td>
+												<td class="px-4 py-3 whitespace-nowrap text-right">
+													<div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-8 ml-auto"></div>
+												</td>
+												<td class="px-4 py-3 whitespace-nowrap text-right">
+													<div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-10 ml-auto"></div>
+												</td>
+												<td class="px-4 py-3 whitespace-nowrap text-right">
+													<div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-16 ml-auto"></div>
+												</td>
+											</tr>
+										{/each}
+									</tbody>
+								</table>
 							</div>
 						{:else if viewMode === 'table'}
 							<!-- Table View -->
