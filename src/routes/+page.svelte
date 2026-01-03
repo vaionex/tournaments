@@ -11,7 +11,8 @@
 	let newsArticles: NewsArticle[] = [];
 	let upcomingTournaments: Tournament[] = [];
 	let topPlayers: Player[] = [];
-	let loading = true;
+	let loading = true; // Initial page load
+	let changingCategory = false; // Category switch (doesn't hide content)
 	let loadingMore = false;
 	let hasMoreNews = true;
 	let currentPage = 1;
@@ -46,7 +47,7 @@
 		
 		observer = new IntersectionObserver(
 			(entries) => {
-				if (entries[0].isIntersecting && hasMoreNews && !loadingMore && !loading) {
+				if (entries[0].isIntersecting && hasMoreNews && !loadingMore && !loading && !changingCategory) {
 					loadMoreNews();
 				}
 			},
@@ -109,7 +110,7 @@
 	async function handleCategorySelect(event: CustomEvent<NewsCategory>) {
 		selectedCategory = event.detail;
 		currentPage = 1;
-		loading = true;
+		changingCategory = true; // Use changingCategory instead of loading
 		
 		try {
 			const result = await getNewsArticlesPaginated(selectedCategory, 1, INITIAL_ARTICLES);
@@ -118,7 +119,7 @@
 		} catch (error) {
 			console.error('Failed to load category:', error);
 		} finally {
-			loading = false;
+			changingCategory = false;
 			// Re-setup observer after category change
 			await tick();
 			if (loadMoreTrigger) {
@@ -160,11 +161,25 @@
 				/>
 				
 				<!-- News Grid -->
-				<div>
+				<div class="min-h-[600px]">
 					{#if loading}
 						<LoadingState variant="grid" count={4} columns={2} />
 					{:else}
-						<NewsGrid articles={gridArticles} />
+						<div class="relative">
+							<!-- Loading overlay during category change -->
+							{#if changingCategory}
+								<div class="absolute inset-0 bg-white/70 dark:bg-gray-900/70 z-10 flex items-center justify-center rounded-lg backdrop-blur-sm transition-opacity duration-200">
+									<div class="flex items-center gap-3 text-gray-600 dark:text-gray-400">
+										<svg class="w-6 h-6 animate-spin" fill="none" viewBox="0 0 24 24">
+											<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+											<path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+										</svg>
+										<span class="font-medium">Loading {selectedCategory}...</span>
+									</div>
+								</div>
+							{/if}
+							<NewsGrid articles={gridArticles} />
+						</div>
 						
 						<!-- Infinite Scroll Trigger & Loading Indicator -->
 						<div bind:this={loadMoreTrigger} class="mt-8">
