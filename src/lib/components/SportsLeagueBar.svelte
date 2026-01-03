@@ -195,26 +195,24 @@
 					...
 				</button>
 				
-				<!-- More Sports Dropdown -->
+				<!-- More Sports Dropdown - 3 Column Layout -->
 				{#if hoveredSport === 'MORE'}
 					<div 
-						class="hidden sm:block absolute top-full right-0 mt-1 w-52 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl z-[60] py-2 animate-fadeIn"
+						class="hidden sm:block absolute top-full right-0 mt-1 w-[420px] bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl z-[60] p-4 animate-fadeIn"
 						on:mouseenter={() => handleMouseEnter('MORE')}
 						on:mouseleave={handleDropdownLeave}
 					>
-						<div class="px-3 py-1.5 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-700 mb-1">
+						<div class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-700 pb-2 mb-3">
 							More Sports
 						</div>
-						<div class="max-h-80 overflow-y-auto">
+						<div class="grid grid-cols-3 gap-2">
 							{#each moreSports as moreSport}
 								<a
 									href="/{moreSport.code.toLowerCase()}/home"
-									class="block px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 dark:hover:text-red-400 transition-colors"
+									class="flex items-center gap-2 px-3 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 dark:hover:text-red-400 transition-colors rounded-lg"
 								>
-									<span class="inline-flex items-center gap-2">
-										<span class="text-base">{moreSport.icon}</span>
-										{moreSport.name}
-									</span>
+									<span class="text-lg">{moreSport.icon}</span>
+									<span class="truncate">{moreSport.name}</span>
 								</a>
 							{/each}
 						</div>
