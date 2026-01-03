@@ -11,12 +11,13 @@
 	});
 </script>
 
-<ResultsTicker />
-<SportsLeagueBar />
-
-<main class="min-h-screen">
-	<slot />
-</main>
-
-<Footer />
-
+<div class="min-h-screen flex flex-col">
+	<ResultsTicker />
+	<SportsLeagueBar />
+	
+	<main class="flex-1">
+		<slot />
+	</main>
+	
+	<Footer />
+</div>
