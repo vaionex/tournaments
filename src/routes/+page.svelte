@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount, onDestroy, tick } from 'svelte';
 	import type { NewsArticle, NewsCategory, Player, Tournament } from '$lib/types';
-	import { getNewsArticlesPaginated, getNewsCategories } from '$lib/services/news.service';
+	import { getNewsArticlesPaginated, getNewsArticlesPaginatedWithOffset, getNewsCategories } from '$lib/services/news.service';
 	import { getTopPlayers } from '$lib/services/players.service';
 	import { getUpcomingTournaments } from '$lib/services/tournaments.service';
 	import { HeroArticle, NewsGrid, CategoryNav } from '$lib/components/home';
@@ -88,15 +88,19 @@
 		if (loadingMore || !hasMoreNews) return;
 		
 		loadingMore = true;
-		currentPage++;
 		
 		try {
-			const result = await getNewsArticlesPaginated(selectedCategory, currentPage, ARTICLES_PER_PAGE);
-			newsArticles = [...newsArticles, ...result.articles];
+			// Calculate correct offset: first page has INITIAL_ARTICLES, subsequent pages have ARTICLES_PER_PAGE
+			const offset = INITIAL_ARTICLES + (currentPage - 1) * ARTICLES_PER_PAGE;
+			const result = await getNewsArticlesPaginatedWithOffset(selectedCategory, offset, ARTICLES_PER_PAGE);
+			
+			if (result.articles.length > 0) {
+				newsArticles = [...newsArticles, ...result.articles];
+				currentPage++;
+			}
 			hasMoreNews = result.hasMore;
 		} catch (error) {
 			console.error('Failed to load more news:', error);
-			currentPage--;
 		} finally {
 			loadingMore = false;
 		}

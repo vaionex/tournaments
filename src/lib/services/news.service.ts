@@ -670,6 +670,56 @@ export async function getNewsArticlesPaginated(
 }
 
 /**
+ * Fetch paginated news articles using direct offset for infinite scroll
+ */
+export async function getNewsArticlesPaginatedWithOffset(
+	category: NewsCategory = 'All',
+	offset: number = 0,
+	limit: number = 6
+): Promise<{ articles: NewsArticle[]; hasMore: boolean }> {
+	if (USE_MOCK_DATA) {
+		await simulateDelay(150); // Quick load for subsequent pages
+		let filtered = category === 'All' 
+			? mockFeaturedNews 
+			: mockFeaturedNews.filter(article => article.category === category);
+		
+		const end = offset + limit;
+		const articles = filtered.slice(offset, end);
+		const hasMore = end < filtered.length;
+		
+		return { articles, hasMore };
+	}
+
+	let query = supabase
+		.from('news_articles')
+		.select(`
+			*,
+			author_profile:author_id (
+				display_name
+			)
+		`, { count: 'exact' })
+		.eq('is_published', true)
+		.order('published_at', { ascending: false })
+		.range(offset, offset + limit - 1);
+
+	if (category !== 'All') {
+		query = query.eq('category', category);
+	}
+
+	const { data, error, count } = await query;
+
+	if (error) {
+		console.error('Error fetching paginated news with offset:', error);
+		return { articles: [], hasMore: false };
+	}
+
+	const articles = (data || []).map(transformNewsArticle);
+	const hasMore = count ? offset + limit < count : false;
+	
+	return { articles, hasMore };
+}
+
+/**
  * Fetch featured article (most recent featured or first article)
  */
 export async function getFeaturedArticle(): Promise<NewsArticle | null> {
