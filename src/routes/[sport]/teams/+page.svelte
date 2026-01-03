@@ -103,25 +103,25 @@
 		}
 	};
 	
-	function getFilteredTeams() {
-		let filtered = teams;
+	function getFilteredTeams(allTeams, search, conference) {
+		let filtered = allTeams;
 		
-		if (searchQuery) {
-			const query = searchQuery.toLowerCase();
+		if (search) {
+			const query = search.toLowerCase();
 			filtered = filtered.filter(t => 
 				t.name.toLowerCase().includes(query) || 
 				t.city.toLowerCase().includes(query)
 			);
 		}
 		
-		if (activeConference !== 'all') {
-			filtered = filtered.filter(t => t.conference === activeConference);
+		if (conference !== 'all') {
+			filtered = filtered.filter(t => t.conference === conference);
 		}
 		
 		return filtered;
 	}
 	
-	$: filteredTeams = getFilteredTeams();
+	$: filteredTeams = getFilteredTeams(teams, searchQuery, activeConference);
 	
 	onMount(async () => {
 		sport = $page.params.sport.toLowerCase();

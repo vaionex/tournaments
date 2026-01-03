@@ -115,10 +115,35 @@
 		<!-- Featured Sections - 3 Columns -->
 		{#if loading}
 			<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8 mb-16">
-				{#each Array(3) as _}
+				{#each Array(3) as _, sectionIndex}
 					<div class="tournament-featured-card animate-pulse">
-						<div class="h-64 bg-gray-200 dark:bg-gray-700 rounded-lg mb-4"></div>
-						<div class="h-6 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-2"></div>
+						<!-- Section Header -->
+						<div class="flex items-center justify-between mb-6 pb-4 border-b border-gray-200 dark:border-gray-700">
+							<div class="h-6 bg-gray-200 dark:bg-gray-700 rounded w-32"></div>
+							<div class="w-10 h-10 rounded-lg bg-gray-200 dark:bg-gray-700"></div>
+						</div>
+						<!-- 3 Tournament Items -->
+						<div class="space-y-5">
+							{#each Array(3) as _, itemIndex}
+								<div class="{itemIndex < 2 ? 'border-b-2 border-gray-200 dark:border-gray-700 pb-5' : ''}">
+									<!-- Title row -->
+									<div class="flex items-start justify-between gap-3 mb-2">
+										<div class="flex-1 min-w-0">
+											<div class="h-5 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-2"></div>
+											<div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/2"></div>
+										</div>
+										<div class="h-5 w-16 bg-gray-200 dark:bg-gray-700 rounded-full"></div>
+									</div>
+									<!-- Prize/stat row -->
+									<div class="h-5 bg-gray-200 dark:bg-gray-700 rounded w-24 mb-2"></div>
+									<!-- Date/location row -->
+									<div class="flex items-center gap-2">
+										<div class="h-4 w-4 bg-gray-200 dark:bg-gray-700 rounded"></div>
+										<div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-32"></div>
+									</div>
+								</div>
+							{/each}
+						</div>
 					</div>
 				{/each}
 			</div>

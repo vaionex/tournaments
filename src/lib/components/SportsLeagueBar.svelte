@@ -156,7 +156,7 @@
 			
 			<!-- Sports Links - Scrollable on mobile -->
 			<div 
-				class="flex items-center gap-0.5 sm:gap-1 flex-1 overflow-x-auto horizontal-gallery min-w-0"
+				class="flex items-center gap-0.5 sm:gap-1 overflow-x-auto horizontal-gallery min-w-0"
 				on:mouseenter={keepDropdownOpen}
 			>
 				{#each sports as sport}
@@ -180,21 +180,24 @@
 						</div>
 					{/if}
 				{/each}
+				
+				<!-- More Sports Button - Inside sports container, next to Soccer -->
+				<div 
+					class="more-dropdown relative flex-shrink-0"
+					on:mouseenter={() => handleMouseEnter('MORE')}
+					on:mouseleave={handleMouseLeave}
+				>
+					<button
+						on:click={() => setActiveSport('MORE')}
+						class="px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm font-semibold text-white dark:text-gray-200 hover:text-red-400 dark:hover:text-red-400 transition-colors whitespace-nowrap"
+					>
+						...
+					</button>
+				</div>
 			</div>
 			
-			<!-- More Sports Button - Outside overflow container -->
-			<div 
-				class="more-dropdown relative flex-shrink-0"
-				on:mouseenter={() => handleMouseEnter('MORE')}
-				on:mouseleave={handleMouseLeave}
-			>
-				<button
-					on:click={() => setActiveSport('MORE')}
-					class="px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm font-semibold text-white dark:text-gray-200 hover:text-red-400 dark:hover:text-red-400 transition-colors whitespace-nowrap"
-				>
-					...
-				</button>
-			</div>
+			<!-- Spacer to push right side actions to the right -->
+			<div class="flex-1"></div>
 			
 			<!-- Right Side Actions -->
 			<div class="flex items-center gap-1 sm:gap-2 flex-shrink-0">

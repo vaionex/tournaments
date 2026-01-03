@@ -31,7 +31,7 @@
 	let countryFilter = '';
 	let sortBy = 'rank';
 	let selectedLetter = '';
-	let viewMode: 'grid' | 'table' = 'grid';
+	let viewMode: 'grid' | 'table' = 'table';
 	let games: string[] = [];
 	let countries: string[] = [];
 	
@@ -182,14 +182,29 @@
 					{#if loading}
 						<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 							{#each Array(4) as _}
-								<div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 animate-pulse">
-									<div class="h-6 bg-gray-200 dark:bg-gray-700 rounded w-1/3 mb-4"></div>
-									{#each Array(5) as __}
-										<div class="flex items-center gap-3 py-2">
-											<div class="w-8 h-8 bg-gray-200 dark:bg-gray-700 rounded-full"></div>
-											<div class="flex-1 h-4 bg-gray-200 dark:bg-gray-700 rounded"></div>
-										</div>
-									{/each}
+								<div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm overflow-hidden animate-pulse">
+									<!-- Dark header matching actual -->
+									<div class="bg-gray-900 dark:bg-gray-950 px-4 py-3">
+										<div class="h-4 bg-gray-700 rounded w-32"></div>
+									</div>
+									<!-- 5 Player rows matching actual structure -->
+									<div class="divide-y divide-gray-100 dark:divide-gray-700">
+										{#each Array(5) as __, i}
+											<div class="flex items-center gap-3 px-4 py-3">
+												<div class="w-5 h-4 bg-gray-200 dark:bg-gray-700 rounded"></div>
+												<div class="w-8 h-8 bg-gray-200 dark:bg-gray-700 rounded-full"></div>
+												<div class="flex-1 min-w-0">
+													<div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-1.5"></div>
+													<div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/2"></div>
+												</div>
+												<div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-12"></div>
+											</div>
+										{/each}
+									</div>
+									<!-- Footer link placeholder -->
+									<div class="border-t border-gray-100 dark:border-gray-700 px-4 py-3">
+										<div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-32 mx-auto"></div>
+									</div>
 								</div>
 							{/each}
 						</div>
@@ -474,8 +489,29 @@
 						
 						<!-- Players Display -->
 						{#if loading}
-							<div class="p-6">
-								<LoadingState type="grid" count={12} />
+							<div class="p-4">
+								<!-- Grid skeleton matching PlayerCard structure -->
+								<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 lg:gap-6 animate-pulse">
+									{#each Array(12) as _}
+										<div>
+											<!-- Avatar with rank badge placeholder -->
+											<div class="relative mb-3">
+												<div class="w-full aspect-square bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
+												<div class="absolute -top-2 -right-2 w-7 h-7 bg-gray-300 dark:bg-gray-600 rounded-full"></div>
+											</div>
+											<!-- Player info -->
+											<div class="text-center space-y-2">
+												<div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mx-auto"></div>
+												<div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/2 mx-auto"></div>
+												<div class="space-y-1.5 pt-1">
+													<div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-16 mx-auto"></div>
+													<div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-20 mx-auto"></div>
+													<div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-12 mx-auto"></div>
+												</div>
+											</div>
+										</div>
+									{/each}
+								</div>
 							</div>
 						{:else if viewMode === 'table'}
 							<!-- Table View -->
@@ -569,74 +605,126 @@
 			
 			<!-- Sidebar -->
 			<aside class="lg:w-80 space-y-4">
-				<!-- Player News -->
-				<div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm overflow-hidden">
-					<div class="bg-gray-900 dark:bg-gray-950 px-4 py-3">
-						<h3 class="font-bold text-white text-sm uppercase tracking-wide">Player News</h3>
-					</div>
-					<div class="divide-y divide-gray-100 dark:divide-gray-700">
-						{#each playerNews as news (news.id)}
-							<a href="/news/{news.id}" class="block p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
-								<div class="flex gap-3">
-									<img 
-										src={news.image} 
-										alt={news.title}
-										class="w-16 h-16 rounded object-cover flex-shrink-0"
-									/>
-									<div class="flex-1 min-w-0">
-										<h4 class="font-semibold text-gray-900 dark:text-white text-sm line-clamp-2 mb-1">
-											{news.title}
-										</h4>
-										<p class="text-xs text-gray-500 dark:text-gray-400">{news.date}</p>
+				{#if loading}
+					<!-- Sidebar Skeletons -->
+					<!-- Player News Skeleton -->
+					<div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm overflow-hidden animate-pulse">
+						<div class="bg-gray-900 dark:bg-gray-950 px-4 py-3">
+							<div class="h-4 bg-gray-700 rounded w-24"></div>
+						</div>
+						<div class="divide-y divide-gray-100 dark:divide-gray-700">
+							{#each Array(5) as _}
+								<div class="p-4">
+									<div class="flex gap-3">
+										<div class="w-16 h-16 bg-gray-200 dark:bg-gray-700 rounded flex-shrink-0"></div>
+										<div class="flex-1 min-w-0">
+											<div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-full mb-2"></div>
+											<div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-2"></div>
+											<div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-16"></div>
+										</div>
 									</div>
 								</div>
-							</a>
-						{/each}
-					</div>
-					<a href="/news?category=players" class="block text-center py-3 text-sm font-semibold text-blue-600 dark:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-700/50 border-t border-gray-100 dark:border-gray-700">
-						All Player News →
-					</a>
-				</div>
-				
-				<!-- Quick Stats -->
-				<div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4">
-					<h3 class="font-bold text-gray-900 dark:text-white text-sm uppercase tracking-wide mb-4">Quick Stats</h3>
-					<div class="space-y-3">
-						<div class="flex justify-between items-center">
-							<span class="text-sm text-gray-600 dark:text-gray-400">Total Players</span>
-							<span class="font-bold text-gray-900 dark:text-white">35</span>
+							{/each}
 						</div>
-						<div class="flex justify-between items-center">
-							<span class="text-sm text-gray-600 dark:text-gray-400">Sports Categories</span>
-							<span class="font-bold text-gray-900 dark:text-white">{games.length - 1}</span>
-						</div>
-						<div class="flex justify-between items-center">
-							<span class="text-sm text-gray-600 dark:text-gray-400">Countries</span>
-							<span class="font-bold text-gray-900 dark:text-white">{countries.length - 1}</span>
-						</div>
-						<div class="flex justify-between items-center">
-							<span class="text-sm text-gray-600 dark:text-gray-400">Total Prize Pool</span>
-							<span class="font-bold text-green-600 dark:text-green-400">$4.2B+</span>
+						<div class="border-t border-gray-100 dark:border-gray-700 px-4 py-3">
+							<div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-28 mx-auto"></div>
 						</div>
 					</div>
-				</div>
-				
-				<!-- Browse by Sport -->
-				<div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm overflow-hidden">
-					<div class="bg-gray-900 dark:bg-gray-950 px-4 py-3">
-						<h3 class="font-bold text-white text-sm uppercase tracking-wide">Browse by Sport</h3>
+					
+					<!-- Quick Stats Skeleton -->
+					<div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 animate-pulse">
+						<div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-24 mb-4"></div>
+						<div class="space-y-3">
+							{#each Array(4) as _}
+								<div class="flex justify-between items-center">
+									<div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-24"></div>
+									<div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-8"></div>
+								</div>
+							{/each}
+						</div>
 					</div>
-					<div class="p-2">
-						{#each games.slice(1, 10) as game}
-							<button
-								on:click={() => { gameFilter = game; activeTab = 'all'; handleFilterChange(); }}
-								class="w-full text-left px-3 py-2 rounded text-sm hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 transition-colors"
-							>
-								{game}
-							</button>
-						{/each}
+					
+					<!-- Browse by Sport Skeleton -->
+					<div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm overflow-hidden animate-pulse">
+						<div class="bg-gray-900 dark:bg-gray-950 px-4 py-3">
+							<div class="h-4 bg-gray-700 rounded w-28"></div>
+						</div>
+						<div class="p-2 space-y-1">
+							{#each Array(9) as _}
+								<div class="h-9 bg-gray-100 dark:bg-gray-700 rounded"></div>
+							{/each}
+						</div>
 					</div>
-				</div>
+				{:else}
+					<!-- Player News -->
+					<div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm overflow-hidden">
+						<div class="bg-gray-900 dark:bg-gray-950 px-4 py-3">
+							<h3 class="font-bold text-white text-sm uppercase tracking-wide">Player News</h3>
+						</div>
+						<div class="divide-y divide-gray-100 dark:divide-gray-700">
+							{#each playerNews as news (news.id)}
+								<a href="/news/{news.id}" class="block p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+									<div class="flex gap-3">
+										<img 
+											src={news.image} 
+											alt={news.title}
+											class="w-16 h-16 rounded object-cover flex-shrink-0"
+										/>
+										<div class="flex-1 min-w-0">
+											<h4 class="font-semibold text-gray-900 dark:text-white text-sm line-clamp-2 mb-1">
+												{news.title}
+											</h4>
+											<p class="text-xs text-gray-500 dark:text-gray-400">{news.date}</p>
+										</div>
+									</div>
+								</a>
+							{/each}
+						</div>
+						<a href="/news?category=players" class="block text-center py-3 text-sm font-semibold text-blue-600 dark:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-700/50 border-t border-gray-100 dark:border-gray-700">
+							All Player News →
+						</a>
+					</div>
+					
+					<!-- Quick Stats -->
+					<div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4">
+						<h3 class="font-bold text-gray-900 dark:text-white text-sm uppercase tracking-wide mb-4">Quick Stats</h3>
+						<div class="space-y-3">
+							<div class="flex justify-between items-center">
+								<span class="text-sm text-gray-600 dark:text-gray-400">Total Players</span>
+								<span class="font-bold text-gray-900 dark:text-white">35</span>
+							</div>
+							<div class="flex justify-between items-center">
+								<span class="text-sm text-gray-600 dark:text-gray-400">Sports Categories</span>
+								<span class="font-bold text-gray-900 dark:text-white">{games.length - 1}</span>
+							</div>
+							<div class="flex justify-between items-center">
+								<span class="text-sm text-gray-600 dark:text-gray-400">Countries</span>
+								<span class="font-bold text-gray-900 dark:text-white">{countries.length - 1}</span>
+							</div>
+							<div class="flex justify-between items-center">
+								<span class="text-sm text-gray-600 dark:text-gray-400">Total Prize Pool</span>
+								<span class="font-bold text-green-600 dark:text-green-400">$4.2B+</span>
+							</div>
+						</div>
+					</div>
+					
+					<!-- Browse by Sport -->
+					<div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm overflow-hidden">
+						<div class="bg-gray-900 dark:bg-gray-950 px-4 py-3">
+							<h3 class="font-bold text-white text-sm uppercase tracking-wide">Browse by Sport</h3>
+						</div>
+						<div class="p-2">
+							{#each games.slice(1, 10) as game}
+								<button
+									on:click={() => { gameFilter = game; activeTab = 'all'; handleFilterChange(); }}
+									class="w-full text-left px-3 py-2 rounded text-sm hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 transition-colors"
+								>
+									{game}
+								</button>
+							{/each}
+						</div>
+					</div>
+				{/if}
 			</aside>
 		</div>
 	</div>
