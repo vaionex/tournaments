@@ -35,8 +35,22 @@
 <div class="bg-white dark:bg-gray-50 border-b border-gray-200 dark:border-gray-300 sticky top-0 z-50 h-10">
 	<div class="container mx-auto px-2 sm:px-4 lg:px-8 max-w-7xl h-full">
 		<div class="flex items-center gap-2 sm:gap-4 h-full">
-			<!-- Top Events Dropdown -->
-			<div class="relative flex-shrink-0 sport-dropdown">
+			<!-- Mobile Home Link -->
+			<a 
+				href="/" 
+				class="sm:hidden flex-shrink-0"
+			>
+				<div class="relative inline-block">
+					<div class="bg-red-600 px-2 py-0.5 transform -skew-x-12 shadow-sm">
+						<span class="text-xs font-black text-white inline-block transform skew-x-12 tracking-tight" style="letter-spacing: -0.02em; font-style: italic;">
+							T
+						</span>
+					</div>
+				</div>
+			</a>
+			
+			<!-- Top Events Dropdown - Hidden on mobile -->
+			<div class="relative flex-shrink-0 sport-dropdown hidden sm:block">
 				<button
 					on:click|stopPropagation={() => showSportDropdown = !showSportDropdown}
 					class="flex items-center gap-0.5 sm:gap-1 text-xs sm:text-sm font-semibold text-gray-900 dark:text-gray-900 hover:text-blue-600 dark:hover:text-blue-600 transition-colors"
