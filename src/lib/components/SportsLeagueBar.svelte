@@ -194,30 +194,6 @@
 				>
 					...
 				</button>
-				
-				<!-- More Sports Dropdown - 3 Column Layout -->
-				{#if hoveredSport === 'MORE'}
-					<div 
-						class="hidden sm:block absolute top-full right-0 mt-1 w-[420px] bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl z-[60] p-4 animate-fadeIn"
-						on:mouseenter={() => handleMouseEnter('MORE')}
-						on:mouseleave={handleDropdownLeave}
-					>
-						<div class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-700 pb-2 mb-3">
-							More Sports
-						</div>
-						<div class="grid grid-cols-3 gap-2">
-							{#each moreSports as moreSport}
-								<a
-									href="/{moreSport.code.toLowerCase()}/home"
-									class="flex items-center gap-2 px-3 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 dark:hover:text-red-400 transition-colors rounded-lg"
-								>
-									<span class="text-lg">{moreSport.icon}</span>
-									<span class="truncate">{moreSport.name}</span>
-								</a>
-							{/each}
-						</div>
-					</div>
-				{/if}
 			</div>
 			
 			<!-- Right Side Actions -->
@@ -385,6 +361,32 @@
 									</a>
 								{/each}
 							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		{/if}
+		
+		<!-- More Sports Mega Dropdown - Same style as other sports -->
+		{#if hoveredSport === 'MORE'}
+			<div 
+				class="mega-dropdown hidden md:block absolute top-full left-0 right-0 bg-white dark:bg-gray-800 border-t-2 border-red-600 dark:border-red-500 shadow-2xl z-50"
+				on:mouseenter={() => handleMouseEnter('MORE')}
+				on:mouseleave={handleDropdownLeave}
+			>
+				<div class="container mx-auto px-4 lg:px-8 max-w-7xl">
+					<div class="py-4">
+						<h3 class="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-3">More Sports</h3>
+						<div class="grid grid-cols-4 lg:grid-cols-6 gap-2">
+							{#each moreSports as sport}
+								<a
+									href="/{sport.code.toLowerCase()}/home"
+									class="flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-900 dark:text-gray-100 hover:text-red-600 dark:hover:text-red-400 hover:bg-gray-50 dark:hover:bg-gray-700 rounded transition-colors"
+								>
+									<span class="text-lg">{sport.icon}</span>
+									<span>{sport.name}</span>
+								</a>
+							{/each}
 						</div>
 					</div>
 				</div>
