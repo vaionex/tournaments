@@ -9,7 +9,6 @@
 	let closeTimeout = null;
 	let mobileMenuOpen = false;
 	let mobileSearchOpen = false;
-	let moreDropdownOpen = false;
 	
 	const sports = [
 		{ code: 'NFL', name: 'NFL' },
@@ -62,27 +61,16 @@
 	
 	function setActiveSport(code) {
 		if (code === 'MORE') {
-			// On mobile, toggle the mobile menu
+			// On mobile, toggle the mobile menu to show more sports
 			if (window.innerWidth < 640) {
 				mobileMenuOpen = !mobileMenuOpen;
-			} else {
-				// On desktop, toggle the more dropdown
-				moreDropdownOpen = !moreDropdownOpen;
 			}
+			// On desktop, hover handles the dropdown
 			return;
 		}
 		activeSport = code;
 		hoveredSport = null;
 		mobileMenuOpen = false;
-		moreDropdownOpen = false;
-	}
-	
-	function selectMoreSport(code) {
-		activeSport = code;
-		moreDropdownOpen = false;
-		mobileMenuOpen = false;
-		// Navigate to that sport's home page
-		goto(`/${code.toLowerCase()}/home`);
 	}
 	
 	function handleSearch() {
@@ -136,7 +124,6 @@
 					clearTimeout(closeTimeout);
 				}
 				hoveredSport = null;
-				moreDropdownOpen = false;
 			}
 		};
 		document.addEventListener('click', handleClickOutside);
@@ -180,35 +167,34 @@
 					>
 						<button
 							on:click={() => setActiveSport(sport.code)}
-							class="px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm font-semibold text-white dark:text-gray-200 hover:text-red-400 dark:hover:text-red-400 transition-colors whitespace-nowrap relative flex items-center gap-1 {
+							class="px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm font-semibold text-white dark:text-gray-200 hover:text-red-400 dark:hover:text-red-400 transition-colors whitespace-nowrap relative {
 								activeSport === sport.code ? 'text-red-400 dark:text-red-400' : ''
 							}"
 						>
 							{sport.name}
-							{#if sport.code === 'MORE'}
-								<svg class="w-3 h-3 transition-transform {moreDropdownOpen ? 'rotate-180' : ''}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-								</svg>
-							{/if}
 							{#if activeSport === sport.code && sport.code !== 'MORE'}
 								<span class="absolute bottom-0 left-0 right-0 h-0.5 bg-red-600 dark:bg-red-500"></span>
 							{/if}
 						</button>
 						
-						<!-- More Sports Dropdown -->
-						{#if sport.code === 'MORE' && moreDropdownOpen}
-							<div class="absolute top-full left-0 mt-1 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl z-50 py-2 animate-fadeIn">
+						<!-- More Sports Dropdown - Shows on hover like other sports -->
+						{#if sport.code === 'MORE' && hoveredSport === 'MORE'}
+							<div 
+								class="hidden sm:block absolute top-full left-0 mt-0 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl z-50 py-2 animate-fadeIn"
+								on:mouseenter={() => handleMouseEnter('MORE')}
+								on:mouseleave={handleDropdownLeave}
+							>
 								<div class="px-3 py-1.5 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-700 mb-1">
 									More Sports
 								</div>
 								{#each moreSports as moreSport}
-									<button
-										on:click={() => selectMoreSport(moreSport.code)}
+									<a
+										href="/{moreSport.code.toLowerCase()}/home"
 										class="w-full text-left px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 dark:hover:text-red-400 transition-colors flex items-center gap-2"
 									>
 										<span class="text-base">{moreSport.icon}</span>
 										{moreSport.name}
-									</button>
+									</a>
 								{/each}
 							</div>
 						{/if}
