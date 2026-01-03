@@ -1,0 +1,16 @@
+{
+	"name": "Tournaments.com",
+	"short_name": "Tournaments",
+	"description": "Sports news, scores, standings, and tournament information",
+	"icons": [
+		{
+			"src": "/favicon.svg",
+			"sizes": "any",
+			"type": "image/svg+xml"
+		}
+	],
+	"theme_color": "#dc2626",
+	"background_color": "#ffffff",
+	"display": "standalone",
+	"start_url": "/"
+}

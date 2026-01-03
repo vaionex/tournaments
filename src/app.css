@@ -1,0 +1,133 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&family=Roboto:wght@400;500;700;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+	body {
+		@apply bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100;
+		font-family: 'Roboto', 'Inter', system-ui, sans-serif;
+	}
+	
+	h1, h2, h3, h4, h5, h6 {
+		font-family: 'Roboto Condensed', 'Roboto', 'Inter', system-ui, sans-serif;
+		font-weight: 700;
+		letter-spacing: -0.02em;
+	}
+}
+
+@layer components {
+	.btn-primary {
+		@apply bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 px-5 rounded-lg transition-all duration-200 text-sm shadow-sm hover:shadow-md;
+	}
+	
+	.btn-secondary {
+		@apply bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 font-semibold py-2.5 px-5 rounded-lg transition-all duration-200 text-sm;
+	}
+	
+	.card {
+		@apply bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200/60 dark:border-gray-700/60 hover:shadow-lg hover:border-gray-300 dark:hover:border-gray-600 transition-all duration-300;
+	}
+	
+	.tournament-featured-card {
+		@apply bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 border border-gray-200/60 dark:border-gray-700/60 hover:shadow-xl hover:border-blue-200 dark:hover:border-blue-800/50 transition-all duration-300;
+	}
+	
+	.tournament-item {
+		@apply flex flex-col gap-3 p-5 rounded-xl border border-gray-200/60 dark:border-gray-700/60 bg-white dark:bg-gray-800/50 hover:bg-gradient-to-r hover:from-blue-50/50 hover:to-white dark:hover:from-blue-950/20 dark:hover:to-gray-800/50 hover:border-blue-200 dark:hover:border-blue-800/50 hover:shadow-md cursor-pointer transition-all duration-200;
+	}
+	
+	.news-card {
+		@apply bg-white dark:bg-gray-800 p-4 border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors cursor-pointer last:border-b-0;
+	}
+	
+	.sidebar-card {
+		@apply bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 border border-gray-200 dark:border-gray-700 mb-4;
+	}
+	
+	.bento-card {
+		@apply bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-200 dark:border-gray-700;
+	}
+	
+	.status-badge {
+		@apply px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wide;
+	}
+	
+	.status-live {
+		@apply bg-red-50 dark:bg-red-950/30 text-red-700 dark:text-red-400 border border-red-200 dark:border-red-900/50;
+	}
+	
+	.status-upcoming {
+		@apply bg-blue-50 dark:bg-blue-950/30 text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-blue-900/50;
+	}
+	
+	.filter-select {
+		@apply px-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg text-gray-900 dark:text-gray-100 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all duration-200 shadow-sm hover:shadow-md;
+	}
+	
+	/* ESPN-style typography */
+	.headline-hero {
+		@apply text-4xl sm:text-5xl lg:text-6xl font-black leading-tight tracking-tight;
+		font-family: 'Roboto Condensed', 'Roboto', sans-serif;
+	}
+	
+	.headline-large {
+		@apply text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight tracking-tight;
+		font-family: 'Roboto Condensed', 'Roboto', sans-serif;
+	}
+	
+	.headline-medium {
+		@apply text-2xl sm:text-3xl font-bold leading-tight;
+		font-family: 'Roboto Condensed', 'Roboto', sans-serif;
+	}
+	
+	.headline-small {
+		@apply text-xl sm:text-2xl font-bold leading-tight;
+		font-family: 'Roboto Condensed', 'Roboto', sans-serif;
+	}
+	
+	.news-headline {
+		@apply text-xl sm:text-2xl font-bold leading-snug hover:text-blue-600 dark:hover:text-blue-400 transition-colors;
+		font-family: 'Roboto Condensed', 'Roboto', sans-serif;
+	}
+	
+	/* Horizontal scroll gallery (IMDB style) */
+	.horizontal-gallery {
+		scrollbar-width: thin;
+		scrollbar-color: #cbd5e1 transparent;
+	}
+	
+	.horizontal-gallery::-webkit-scrollbar {
+		height: 8px;
+	}
+	
+	.horizontal-gallery::-webkit-scrollbar-track {
+		background: transparent;
+	}
+	
+	.horizontal-gallery::-webkit-scrollbar-thumb {
+		background-color: #cbd5e1;
+		border-radius: 4px;
+	}
+	
+	.horizontal-gallery::-webkit-scrollbar-thumb:hover {
+		background-color: #94a3b8;
+	}
+	
+	/* ESPN-style news card */
+	.news-card-featured {
+		@apply relative overflow-hidden rounded-lg bg-white dark:bg-gray-800 shadow-lg hover:shadow-xl transition-shadow duration-300;
+	}
+	
+	.news-card-featured::after {
+		content: '';
+		@apply absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent pointer-events-none;
+	}
+	
+	.category-tag {
+		@apply inline-block px-3 py-1 text-xs font-bold uppercase tracking-wider rounded-full;
+	}
+}
+
