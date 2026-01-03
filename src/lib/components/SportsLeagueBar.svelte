@@ -88,7 +88,7 @@
 	}
 	
 	function handleMouseEnter(sportCode) {
-		if (window.innerWidth < 768) return; // Disable hover on mobile
+		if (window.innerWidth < 640) return; // Disable hover on mobile (below sm breakpoint)
 		if (closeTimeout) {
 			clearTimeout(closeTimeout);
 			closeTimeout = null;
@@ -180,7 +180,7 @@
 						<!-- More Sports Dropdown - Shows on hover like other sports -->
 						{#if sport.code === 'MORE' && hoveredSport === 'MORE'}
 							<div 
-								class="hidden sm:block absolute top-full left-0 mt-0 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl z-50 py-2 animate-fadeIn"
+								class="hidden sm:block absolute top-full right-0 mt-1 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl z-[60] py-2 animate-fadeIn"
 								on:mouseenter={() => handleMouseEnter('MORE')}
 								on:mouseleave={handleDropdownLeave}
 							>
@@ -190,10 +190,12 @@
 								{#each moreSports as moreSport}
 									<a
 										href="/{moreSport.code.toLowerCase()}/home"
-										class="w-full text-left px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 dark:hover:text-red-400 transition-colors flex items-center gap-2"
+										class="block px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 dark:hover:text-red-400 transition-colors"
 									>
-										<span class="text-base">{moreSport.icon}</span>
-										{moreSport.name}
+										<span class="inline-flex items-center gap-2">
+											<span class="text-base">{moreSport.icon}</span>
+											{moreSport.name}
+										</span>
 									</a>
 								{/each}
 							</div>
