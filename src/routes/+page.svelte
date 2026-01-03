@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { onMount, onDestroy, tick } from 'svelte';
 	import type { NewsArticle, NewsCategory, Player, Tournament } from '$lib/types';
 	import { getNewsArticlesPaginated, getNewsCategories } from '$lib/services/news.service';
 	import { getTopPlayers } from '$lib/services/players.service';
@@ -17,6 +17,7 @@
 	let currentPage = 1;
 	let selectedCategory: NewsCategory = 'All';
 	let loadMoreTrigger: HTMLDivElement;
+	let observer: IntersectionObserver | null = null;
 	
 	const categories = getNewsCategories();
 	const INITIAL_ARTICLES = 7; // 1 for hero + 6 for grid (even number)
@@ -24,24 +25,37 @@
 	
 	onMount(async () => {
 		await loadData();
-		setupInfiniteScroll();
 	});
 	
+	onDestroy(() => {
+		if (observer) {
+			observer.disconnect();
+		}
+	});
+	
+	// Reactive statement to set up observer when trigger element becomes available
+	$: if (loadMoreTrigger && !loading) {
+		setupInfiniteScroll();
+	}
+	
 	function setupInfiniteScroll() {
-		const observer = new IntersectionObserver(
+		// Disconnect existing observer if any
+		if (observer) {
+			observer.disconnect();
+		}
+		
+		observer = new IntersectionObserver(
 			(entries) => {
 				if (entries[0].isIntersecting && hasMoreNews && !loadingMore && !loading) {
 					loadMoreNews();
 				}
 			},
-			{ rootMargin: '200px' }
+			{ rootMargin: '300px', threshold: 0 }
 		);
 		
 		if (loadMoreTrigger) {
 			observer.observe(loadMoreTrigger);
 		}
-		
-		return () => observer.disconnect();
 	}
 	
 	async function loadData() {
@@ -62,6 +76,11 @@
 			console.error('Failed to load data:', error);
 		} finally {
 			loading = false;
+			// Re-setup observer after loading completes
+			await tick();
+			if (loadMoreTrigger) {
+				setupInfiniteScroll();
+			}
 		}
 	}
 	
@@ -96,6 +115,11 @@
 			console.error('Failed to load category:', error);
 		} finally {
 			loading = false;
+			// Re-setup observer after category change
+			await tick();
+			if (loadMoreTrigger) {
+				setupInfiniteScroll();
+			}
 		}
 	}
 	

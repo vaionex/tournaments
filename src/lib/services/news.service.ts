@@ -624,7 +624,8 @@ export async function getNewsArticlesPaginated(
 	limit: number = 6
 ): Promise<{ articles: NewsArticle[]; hasMore: boolean }> {
 	if (USE_MOCK_DATA) {
-		await simulateDelay(400);
+		// Shorter delay for subsequent pages (loading more)
+		await simulateDelay(page === 1 ? 300 : 150);
 		let filtered = category === 'All' 
 			? mockFeaturedNews 
 			: mockFeaturedNews.filter(article => article.category === category);
