@@ -15,7 +15,7 @@
 				<img 
 					src={article.image} 
 					alt={article.title} 
-					class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+					class="w-full h-full object-cover"
 				/>
 				<!-- Stronger gradient on mobile to ensure text readability -->
 				<div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent sm:from-black/80 sm:via-black/40"></div>
