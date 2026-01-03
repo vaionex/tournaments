@@ -160,48 +160,66 @@
 				on:mouseenter={keepDropdownOpen}
 			>
 				{#each sports as sport}
-					<div 
-						class="sport-dropdown relative flex-shrink-0 {sport.code === 'MORE' ? 'more-dropdown' : ''}"
-						on:mouseenter={() => handleMouseEnter(sport.code)}
-						on:mouseleave={handleMouseLeave}
-					>
-						<button
-							on:click={() => setActiveSport(sport.code)}
-							class="px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm font-semibold text-white dark:text-gray-200 hover:text-red-400 dark:hover:text-red-400 transition-colors whitespace-nowrap relative {
-								activeSport === sport.code ? 'text-red-400 dark:text-red-400' : ''
-							}"
+					{#if sport.code !== 'MORE'}
+						<div 
+							class="sport-dropdown relative flex-shrink-0"
+							on:mouseenter={() => handleMouseEnter(sport.code)}
+							on:mouseleave={handleMouseLeave}
 						>
-							{sport.name}
-							{#if activeSport === sport.code && sport.code !== 'MORE'}
-								<span class="absolute bottom-0 left-0 right-0 h-0.5 bg-red-600 dark:bg-red-500"></span>
-							{/if}
-						</button>
-						
-						<!-- More Sports Dropdown - Shows on hover like other sports -->
-						{#if sport.code === 'MORE' && hoveredSport === 'MORE'}
-							<div 
-								class="hidden sm:block absolute top-full right-0 mt-1 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl z-[60] py-2 animate-fadeIn"
-								on:mouseenter={() => handleMouseEnter('MORE')}
-								on:mouseleave={handleDropdownLeave}
+							<button
+								on:click={() => setActiveSport(sport.code)}
+								class="px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm font-semibold text-white dark:text-gray-200 hover:text-red-400 dark:hover:text-red-400 transition-colors whitespace-nowrap relative {
+									activeSport === sport.code ? 'text-red-400 dark:text-red-400' : ''
+								}"
 							>
-								<div class="px-3 py-1.5 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-700 mb-1">
-									More Sports
-								</div>
-								{#each moreSports as moreSport}
-									<a
-										href="/{moreSport.code.toLowerCase()}/home"
-										class="block px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 dark:hover:text-red-400 transition-colors"
-									>
-										<span class="inline-flex items-center gap-2">
-											<span class="text-base">{moreSport.icon}</span>
-											{moreSport.name}
-										</span>
-									</a>
-								{/each}
-							</div>
-						{/if}
-					</div>
+								{sport.name}
+								{#if activeSport === sport.code}
+									<span class="absolute bottom-0 left-0 right-0 h-0.5 bg-red-600 dark:bg-red-500"></span>
+								{/if}
+							</button>
+						</div>
+					{/if}
 				{/each}
+			</div>
+			
+			<!-- More Sports Button - Outside overflow container -->
+			<div 
+				class="more-dropdown relative flex-shrink-0"
+				on:mouseenter={() => handleMouseEnter('MORE')}
+				on:mouseleave={handleMouseLeave}
+			>
+				<button
+					on:click={() => setActiveSport('MORE')}
+					class="px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm font-semibold text-white dark:text-gray-200 hover:text-red-400 dark:hover:text-red-400 transition-colors whitespace-nowrap"
+				>
+					...
+				</button>
+				
+				<!-- More Sports Dropdown -->
+				{#if hoveredSport === 'MORE'}
+					<div 
+						class="hidden sm:block absolute top-full right-0 mt-1 w-52 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl z-[60] py-2 animate-fadeIn"
+						on:mouseenter={() => handleMouseEnter('MORE')}
+						on:mouseleave={handleDropdownLeave}
+					>
+						<div class="px-3 py-1.5 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-700 mb-1">
+							More Sports
+						</div>
+						<div class="max-h-80 overflow-y-auto">
+							{#each moreSports as moreSport}
+								<a
+									href="/{moreSport.code.toLowerCase()}/home"
+									class="block px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 dark:hover:text-red-400 transition-colors"
+								>
+									<span class="inline-flex items-center gap-2">
+										<span class="text-base">{moreSport.icon}</span>
+										{moreSport.name}
+									</span>
+								</a>
+							{/each}
+						</div>
+					</div>
+				{/if}
 			</div>
 			
 			<!-- Right Side Actions -->
