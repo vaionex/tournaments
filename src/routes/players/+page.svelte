@@ -490,7 +490,7 @@
 						<!-- Players Display -->
 						{#if loading}
 							<!-- Table skeleton matching the table view (default) -->
-							<div class="overflow-x-auto animate-pulse">
+							<div class="overflow-x-auto">
 								<table class="w-full">
 									<thead class="bg-gray-50 dark:bg-gray-900">
 										<tr>
@@ -505,7 +505,7 @@
 									</thead>
 									<tbody class="divide-y divide-gray-100 dark:divide-gray-700">
 										{#each Array(12) as _, i}
-											<tr>
+											<tr class="animate-pulse">
 												<td class="px-4 py-3 whitespace-nowrap">
 													<div class="h-5 bg-gray-200 dark:bg-gray-700 rounded w-8"></div>
 												</td>
