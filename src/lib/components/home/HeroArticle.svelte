@@ -5,7 +5,7 @@
 	export let article: NewsArticle;
 </script>
 
-<div class="mb-6 sm:mb-10">
+<div class="mb-3 sm:mb-4">
 	<a 
 		href="/news/{article.id}"
 		class="news-card-featured block group rounded-lg sm:rounded-xl overflow-hidden"
