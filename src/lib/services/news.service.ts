@@ -15,13 +15,13 @@ const USE_MOCK_DATA = true;
 // ============================================
 
 const mockFeaturedNews: NewsArticle[] = [
-	// ========== TOURNAMENT NEWS ==========
+	// ========== TOP STORIES ==========
 	{
 		id: '1',
 		title: 'Tennis Open Championship 2025: Record Prize Pool Announced',
 		excerpt: 'The biggest tennis tournament of the year begins this weekend with over $250,000 in prizes across multiple divisions.',
 		date: '2025-01-10',
-		category: 'Tournament News',
+		category: 'Top Stories',
 		image: 'https://images.unsplash.com/photo-1554068865-24cecd4e34b8?w=1200&h=800&fit=crop',
 		author: 'Tournament Staff'
 	},
@@ -30,7 +30,7 @@ const mockFeaturedNews: NewsArticle[] = [
 		title: 'World Chess Championship 2025: Magnus Carlsen Returns',
 		excerpt: 'The former world champion announces his return to compete for the title in what promises to be a historic event.',
 		date: '2025-01-09',
-		category: 'Tournament News',
+		category: 'Top Stories',
 		image: 'https://images.unsplash.com/photo-1529699211952-734e80c4d42b?w=1200&h=800&fit=crop',
 		author: 'Tournament Staff'
 	},
@@ -39,7 +39,7 @@ const mockFeaturedNews: NewsArticle[] = [
 		title: 'FIFA Club World Cup 2025: Schedule Released',
 		excerpt: 'The expanded 32-team tournament will feature the biggest clubs from around the world competing for glory.',
 		date: '2025-01-07',
-		category: 'Tournament News',
+		category: 'Top Stories',
 		image: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=1200&h=800&fit=crop',
 		author: 'Sports Desk'
 	},
@@ -48,7 +48,7 @@ const mockFeaturedNews: NewsArticle[] = [
 		title: 'US Open Tennis: Wild Card Selections Announced',
 		excerpt: 'Tournament organizers reveal the wild card entries for this year\'s grand slam event.',
 		date: '2025-01-04',
-		category: 'Tournament News',
+		category: 'Top Stories',
 		image: 'https://images.unsplash.com/photo-1595435934249-5df7ed86e1c0?w=1200&h=800&fit=crop',
 		author: 'Tournament Staff'
 	},
@@ -57,7 +57,7 @@ const mockFeaturedNews: NewsArticle[] = [
 		title: 'PGA Championship 2025: Course Redesign Complete',
 		excerpt: 'The iconic course has undergone significant changes ahead of this year\'s major championship.',
 		date: '2024-12-30',
-		category: 'Tournament News',
+		category: 'Top Stories',
 		image: 'https://images.unsplash.com/photo-1535131749006-b7f58c99034b?w=1200&h=800&fit=crop',
 		author: 'Golf Desk'
 	},
@@ -66,74 +66,130 @@ const mockFeaturedNews: NewsArticle[] = [
 		title: 'Olympic Esports Games 2025: Full Game List Revealed',
 		excerpt: 'The IOC confirms the complete lineup of competitive titles for the inaugural Olympic Esports event.',
 		date: '2024-12-28',
-		category: 'Tournament News',
+		category: 'Top Stories',
 		image: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=1200&h=800&fit=crop',
 		author: 'Esports Desk'
 	},
 
-	// ========== ANNOUNCEMENTS ==========
+	// ========== TRANSFERS & RUMORS ==========
+	{
+		id: '60',
+		title: 'BREAKING: Lakers in Talks for Major Trade Deadline Deal',
+		excerpt: 'Multiple sources report the Lakers are pursuing a blockbuster trade to pair another star with LeBron James.',
+		date: '2025-01-10',
+		category: 'Transfers & Rumors',
+		image: 'https://images.unsplash.com/photo-1546519638-68e109498ffc?w=1200&h=800&fit=crop',
+		author: 'NBA Insider'
+	},
+	{
+		id: '61',
+		title: 'Kylian Mbappé: Real Madrid Contract Details Emerge',
+		excerpt: 'New reports reveal the astronomical figures involved in the French star\'s rumored move to the Spanish giants.',
+		date: '2025-01-09',
+		category: 'Transfers & Rumors',
+		image: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=1200&h=800&fit=crop',
+		author: 'Transfer Desk'
+	},
+	{
+		id: '62',
+		title: 'T1 Faker: Retirement Rumors Addressed',
+		excerpt: 'The legendary League of Legends player responds to speculation about his competitive future.',
+		date: '2025-01-08',
+		category: 'Transfers & Rumors',
+		image: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=1200&h=800&fit=crop',
+		author: 'Esports Insider'
+	},
+	{
+		id: '63',
+		title: 'NFL Free Agency: Top QBs Expected to Hit Market',
+		excerpt: 'Several high-profile quarterbacks could be available as teams prepare for the offseason.',
+		date: '2025-01-06',
+		category: 'Transfers & Rumors',
+		image: 'https://images.unsplash.com/photo-1566577739112-5180d4bf9390?w=1200&h=800&fit=crop',
+		author: 'NFL Insider'
+	},
+	{
+		id: '64',
+		title: 'Manchester United Targeting January Striker Signing',
+		excerpt: 'The Red Devils reportedly prepared to spend big to solve their goalscoring issues.',
+		date: '2025-01-04',
+		category: 'Transfers & Rumors',
+		image: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=1200&h=800&fit=crop',
+		author: 'Transfer Desk'
+	},
+	{
+		id: '65',
+		title: 'MLB: Shohei Ohtani\'s Dodgers Deal Sets New Standard',
+		excerpt: 'Analysis of how the record-breaking contract will impact future free agency negotiations.',
+		date: '2024-12-28',
+		category: 'Transfers & Rumors',
+		image: 'https://images.unsplash.com/photo-1566577739112-5180d4bf9390?w=1200&h=800&fit=crop',
+		author: 'Baseball Insider'
+	},
+
+	// ========== TEAM NEWS ==========
 	{
 		id: '2',
-		title: 'Golf Masters Tournament Announces Free Entry for Amateurs',
-		excerpt: 'In a historic move, the Golf Masters Tournament will allow amateur players to compete alongside professionals.',
+		title: 'Chiefs Star Out for Playoffs with Knee Injury',
+		excerpt: 'Kansas City receives devastating news as key player suffers season-ending injury in practice.',
 		date: '2025-01-08',
-		category: 'Announcements',
-		image: 'https://images.unsplash.com/photo-1587174486073-ae5e5cff23aa?w=1200&h=800&fit=crop',
-		author: 'Tournament Staff'
+		category: 'Team News',
+		image: 'https://images.unsplash.com/photo-1566577739112-5180d4bf9390?w=1200&h=800&fit=crop',
+		author: 'NFL Desk'
 	},
 	{
 		id: '14',
-		title: 'Dota 2 The International 2025 Location Revealed',
-		excerpt: 'Valve announces the host city for next year\'s biggest Dota 2 tournament.',
+		title: 'Golden State Warriors Announce Coaching Staff Changes',
+		excerpt: 'Multiple assistant coaches depart as the organization looks to shake up their approach.',
 		date: '2024-12-08',
-		category: 'Announcements',
-		image: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?w=1200&h=800&fit=crop',
-		author: 'Esports Desk'
-	},
-	{
-		id: '15',
-		title: 'Table Tennis: New Ranking System Explained',
-		excerpt: 'The ITTF introduces a revamped world ranking system for 2025.',
-		date: '2024-12-05',
-		category: 'Announcements',
-		image: 'https://images.unsplash.com/photo-1534158914592-062992fbe900?w=1200&h=800&fit=crop',
-		author: 'Tournament Staff'
-	},
-	{
-		id: '26',
-		title: 'NBA Announces New In-Season Tournament Format',
-		excerpt: 'Major changes coming to the popular mid-season competition with increased prize money.',
-		date: '2024-12-02',
-		category: 'Announcements',
+		category: 'Team News',
 		image: 'https://images.unsplash.com/photo-1546519638-68e109498ffc?w=1200&h=800&fit=crop',
 		author: 'Sports Desk'
 	},
 	{
-		id: '27',
-		title: 'Riot Games Reveals New Competitive Game Mode',
-		excerpt: 'A brand new ranked experience is coming to League of Legends in the next major update.',
-		date: '2024-11-28',
-		category: 'Announcements',
-		image: 'https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=1200&h=800&fit=crop',
+		id: '15',
+		title: 'Team Liquid Announces Complete Roster Rebuild',
+		excerpt: 'The esports organization parts ways with all five players to start fresh in 2025.',
+		date: '2024-12-05',
+		category: 'Team News',
+		image: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=1200&h=800&fit=crop',
 		author: 'Esports Desk'
 	},
 	{
+		id: '26',
+		title: 'Liverpool Manager Klopp Extends Contract Through 2027',
+		excerpt: 'The German tactician commits his future to the club amid interest from other top teams.',
+		date: '2024-12-02',
+		category: 'Team News',
+		image: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=1200&h=800&fit=crop',
+		author: 'Football Desk'
+	},
+	{
+		id: '27',
+		title: 'NBA: Injury Report Raises Concerns Before Playoffs',
+		excerpt: 'Several star players dealing with nagging injuries as the postseason approaches.',
+		date: '2024-11-28',
+		category: 'Team News',
+		image: 'https://images.unsplash.com/photo-1546519638-68e109498ffc?w=1200&h=800&fit=crop',
+		author: 'NBA Desk'
+	},
+	{
 		id: '28',
-		title: 'ATP Tennis: Rule Changes for 2025 Season',
-		excerpt: 'New regulations on coaching, time violations, and instant replay to be implemented.',
+		title: 'Rafael Nadal Provides Update on Injury Recovery',
+		excerpt: 'The Spanish tennis legend shares details on his rehabilitation and return timeline.',
 		date: '2024-11-20',
-		category: 'Announcements',
+		category: 'Team News',
 		image: 'https://images.unsplash.com/photo-1554068865-24cecd4e34b8?w=1200&h=800&fit=crop',
-		author: 'Tournament Staff'
+		author: 'Tennis Desk'
 	},
 
-	// ========== PLAYER SPOTLIGHT ==========
+	// ========== FEATURES ==========
 	{
 		id: '3',
 		title: 'Top Players to Watch in 2025: Tennis, Golf, and Esports',
 		excerpt: 'Our experts break down the rising stars and veterans who could dominate this year\'s competitive scene.',
 		date: '2025-01-05',
-		category: 'Player Spotlight',
+		category: 'Features',
 		image: 'https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=1200&h=800&fit=crop',
 		author: 'Editorial Team'
 	},
@@ -142,7 +198,7 @@ const mockFeaturedNews: NewsArticle[] = [
 		title: 'Coco Gauff: The Next Generation of Tennis Excellence',
 		excerpt: 'At just 20 years old, Gauff has already established herself as a force to be reckoned with.',
 		date: '2025-01-02',
-		category: 'Player Spotlight',
+		category: 'Features',
 		image: 'https://images.unsplash.com/photo-1595435934249-5df7ed86e1c0?w=1200&h=800&fit=crop',
 		author: 'Features Team'
 	},
@@ -151,7 +207,7 @@ const mockFeaturedNews: NewsArticle[] = [
 		title: 'Faker: The Undisputed King of Esports',
 		excerpt: 'After another world championship, we examine the legacy of League of Legends\' greatest player.',
 		date: '2024-12-25',
-		category: 'Player Spotlight',
+		category: 'Features',
 		image: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=1200&h=800&fit=crop',
 		author: 'Esports Desk'
 	},
@@ -160,7 +216,7 @@ const mockFeaturedNews: NewsArticle[] = [
 		title: 'Victor Wembanyama: The Future of Basketball',
 		excerpt: 'The rookie phenom is breaking records and changing how we think about the center position.',
 		date: '2024-12-18',
-		category: 'Player Spotlight',
+		category: 'Features',
 		image: 'https://images.unsplash.com/photo-1546519638-68e109498ffc?w=1200&h=800&fit=crop',
 		author: 'Sports Desk'
 	},
@@ -169,7 +225,7 @@ const mockFeaturedNews: NewsArticle[] = [
 		title: 'Scottie Scheffler: Golf\'s New World Number One',
 		excerpt: 'How the Texas native rose to dominate professional golf in just two seasons.',
 		date: '2024-12-10',
-		category: 'Player Spotlight',
+		category: 'Features',
 		image: 'https://images.unsplash.com/photo-1535131749006-b7f58c99034b?w=1200&h=800&fit=crop',
 		author: 'Golf Desk'
 	},
@@ -178,18 +234,18 @@ const mockFeaturedNews: NewsArticle[] = [
 		title: 'S1mple Returns: Counter-Strike Legend Comes Back',
 		excerpt: 'The Ukrainian superstar announces his return to competitive Counter-Strike 2.',
 		date: '2024-11-30',
-		category: 'Player Spotlight',
+		category: 'Features',
 		image: 'https://images.unsplash.com/photo-1542751110-97427bbecf20?w=1200&h=800&fit=crop',
 		author: 'Esports Desk'
 	},
 
-	// ========== RESULTS ==========
+	// ========== SCORES & RESULTS ==========
 	{
 		id: '4',
 		title: 'League of Legends Winter Championship Results',
 		excerpt: 'Team Alpha takes home the trophy and $50,000 in a thrilling 3-2 grand finals victory.',
 		date: '2025-01-03',
-		category: 'Results',
+		category: 'Scores & Results',
 		image: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=1200&h=800&fit=crop',
 		author: 'Esports Desk'
 	},
@@ -198,7 +254,7 @@ const mockFeaturedNews: NewsArticle[] = [
 		title: 'Counter-Strike 2 Major: Group Stage Recap',
 		excerpt: 'All the highlights and upsets from the first week of the CS2 Major.',
 		date: '2024-12-01',
-		category: 'Results',
+		category: 'Scores & Results',
 		image: 'https://images.unsplash.com/photo-1542751110-97427bbecf20?w=1200&h=800&fit=crop',
 		author: 'Esports Desk'
 	},
@@ -207,7 +263,7 @@ const mockFeaturedNews: NewsArticle[] = [
 		title: 'Badminton World Tour Finals Results',
 		excerpt: 'Denmark\'s Viktor Axelsen claims his third consecutive World Tour Finals title.',
 		date: '2024-11-25',
-		category: 'Results',
+		category: 'Scores & Results',
 		image: 'https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?w=1200&h=800&fit=crop',
 		author: 'Sports Desk'
 	},
@@ -216,7 +272,7 @@ const mockFeaturedNews: NewsArticle[] = [
 		title: 'Australian Open 2025: Sinner Defends Title',
 		excerpt: 'Jannik Sinner dominates in straight sets to win his second consecutive Australian Open.',
 		date: '2025-01-06',
-		category: 'Results',
+		category: 'Scores & Results',
 		image: 'https://images.unsplash.com/photo-1554068865-24cecd4e34b8?w=1200&h=800&fit=crop',
 		author: 'Tournament Staff'
 	},
@@ -225,7 +281,7 @@ const mockFeaturedNews: NewsArticle[] = [
 		title: 'NFL Playoffs: Wild Card Weekend Recap',
 		excerpt: 'Surprising upsets shake up the playoff bracket as underdogs dominate.',
 		date: '2025-01-05',
-		category: 'Results',
+		category: 'Scores & Results',
 		image: 'https://images.unsplash.com/photo-1566577739112-5180d4bf9390?w=1200&h=800&fit=crop',
 		author: 'Sports Desk'
 	},
@@ -234,18 +290,18 @@ const mockFeaturedNews: NewsArticle[] = [
 		title: 'World Poker Tour Championship: Record Prize Pool',
 		excerpt: 'Professional poker player claims $3.5 million in the largest WPT event ever.',
 		date: '2024-12-20',
-		category: 'Results',
+		category: 'Scores & Results',
 		image: 'https://images.unsplash.com/photo-1511193311914-0346f16efe90?w=1200&h=800&fit=crop',
 		author: 'Gaming Desk'
 	},
 
-	// ========== INTERVIEWS ==========
+	// ========== MORE FEATURES (INTERVIEWS) ==========
 	{
 		id: '5',
 		title: 'Interview: Inside the Mind of a Chess Grandmaster',
 		excerpt: 'We sit down with the reigning chess champion to discuss strategy, preparation, and the mental game.',
 		date: '2025-01-01',
-		category: 'Interviews',
+		category: 'Features',
 		image: 'https://images.unsplash.com/photo-1529699211952-734e80c4d42b?w=1200&h=800&fit=crop',
 		author: 'Features Team'
 	},
@@ -254,7 +310,7 @@ const mockFeaturedNews: NewsArticle[] = [
 		title: 'Interview: Rising Star in Women\'s Basketball',
 		excerpt: 'We talk to the WNBA\'s most promising rookie about her journey to the pros.',
 		date: '2024-12-03',
-		category: 'Interviews',
+		category: 'Features',
 		image: 'https://images.unsplash.com/photo-1518611012118-696072aa579a?w=1200&h=800&fit=crop',
 		author: 'Features Team'
 	},
@@ -263,7 +319,7 @@ const mockFeaturedNews: NewsArticle[] = [
 		title: 'Interview: Serena Williams on Life After Tennis',
 		excerpt: 'The tennis legend opens up about retirement, motherhood, and her business ventures.',
 		date: '2024-12-28',
-		category: 'Interviews',
+		category: 'Features',
 		image: 'https://images.unsplash.com/photo-1595435934249-5df7ed86e1c0?w=1200&h=800&fit=crop',
 		author: 'Features Team'
 	},
@@ -272,7 +328,7 @@ const mockFeaturedNews: NewsArticle[] = [
 		title: 'Interview: Tom Brady\'s New Career in Broadcasting',
 		excerpt: 'The NFL legend discusses his transition to the commentary booth.',
 		date: '2024-12-15',
-		category: 'Interviews',
+		category: 'Features',
 		image: 'https://images.unsplash.com/photo-1566577739112-5180d4bf9390?w=1200&h=800&fit=crop',
 		author: 'Sports Desk'
 	},
@@ -281,7 +337,7 @@ const mockFeaturedNews: NewsArticle[] = [
 		title: 'Interview: Cloud9 CEO on Building an Esports Empire',
 		excerpt: 'Jack Etienne shares insights on running one of the most successful esports organizations.',
 		date: '2024-12-05',
-		category: 'Interviews',
+		category: 'Features',
 		image: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=1200&h=800&fit=crop',
 		author: 'Esports Desk'
 	},
@@ -290,18 +346,18 @@ const mockFeaturedNews: NewsArticle[] = [
 		title: 'Interview: Olympic Gold Medalist\'s Training Secrets',
 		excerpt: 'An exclusive look at the daily routine of a world-class swimmer.',
 		date: '2024-11-22',
-		category: 'Interviews',
+		category: 'Features',
 		image: 'https://images.unsplash.com/photo-1530549387789-4c1017266635?w=1200&h=800&fit=crop',
 		author: 'Features Team'
 	},
 
-	// ========== STRATEGY ==========
+	// ========== ANALYSIS ==========
 	{
 		id: '8',
 		title: 'How to Improve Your Competitive Mindset',
 		excerpt: 'Sports psychologists share tips on building mental resilience for tournament play.',
 		date: '2024-12-22',
-		category: 'Strategy',
+		category: 'Analysis',
 		image: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=1200&h=800&fit=crop',
 		author: 'Editorial Team'
 	},
@@ -310,7 +366,7 @@ const mockFeaturedNews: NewsArticle[] = [
 		title: 'Marathon Training: Pro Tips for Your First Race',
 		excerpt: 'Elite runners share their secrets for preparing for your first competitive marathon.',
 		date: '2024-12-10',
-		category: 'Strategy',
+		category: 'Analysis',
 		image: 'https://images.unsplash.com/photo-1552674605-db6ffd4facb5?w=1200&h=800&fit=crop',
 		author: 'Fitness Team'
 	},
@@ -319,7 +375,7 @@ const mockFeaturedNews: NewsArticle[] = [
 		title: 'Chess Opening Theory: Modern Sicilian Defense',
 		excerpt: 'A comprehensive guide to one of the most popular and aggressive chess openings.',
 		date: '2025-01-08',
-		category: 'Strategy',
+		category: 'Analysis',
 		image: 'https://images.unsplash.com/photo-1586165368502-1bad197a6461?w=1200&h=800&fit=crop',
 		author: 'Chess Team'
 	},
@@ -328,7 +384,7 @@ const mockFeaturedNews: NewsArticle[] = [
 		title: 'Golf: Mastering the Mental Game on the Course',
 		excerpt: 'Tour professionals share their pre-shot routines and focus techniques.',
 		date: '2024-12-30',
-		category: 'Strategy',
+		category: 'Analysis',
 		image: 'https://images.unsplash.com/photo-1587174486073-ae5e5cff23aa?w=1200&h=800&fit=crop',
 		author: 'Golf Desk'
 	},
@@ -337,7 +393,7 @@ const mockFeaturedNews: NewsArticle[] = [
 		title: 'Valorant: Agent Composition Meta Analysis',
 		excerpt: 'Breaking down the most effective team compositions in competitive Valorant.',
 		date: '2024-12-18',
-		category: 'Strategy',
+		category: 'Analysis',
 		image: 'https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=1200&h=800&fit=crop',
 		author: 'Esports Desk'
 	},
@@ -346,18 +402,18 @@ const mockFeaturedNews: NewsArticle[] = [
 		title: 'Basketball: The Evolution of the Three-Point Shot',
 		excerpt: 'How analytics have transformed offensive strategy in modern basketball.',
 		date: '2024-12-01',
-		category: 'Strategy',
+		category: 'Analysis',
 		image: 'https://images.unsplash.com/photo-1546519638-68e109498ffc?w=1200&h=800&fit=crop',
 		author: 'Sports Desk'
 	},
 
-	// ========== COMMUNITY ==========
+	// ========== MORE FEATURES (COMMUNITY) ==========
 	{
 		id: '9',
 		title: 'Community Spotlight: Local Chess Club Goes National',
 		excerpt: 'A small-town chess club\'s journey from local meetups to national recognition.',
 		date: '2024-12-20',
-		category: 'Community',
+		category: 'Features',
 		image: 'https://images.unsplash.com/photo-1586165368502-1bad197a6461?w=1200&h=800&fit=crop',
 		author: 'Community Team'
 	},
@@ -366,7 +422,7 @@ const mockFeaturedNews: NewsArticle[] = [
 		title: 'Youth Sports: Building Tomorrow\'s Champions',
 		excerpt: 'How youth development programs are creating the next generation of competitive athletes.',
 		date: '2024-11-28',
-		category: 'Community',
+		category: 'Features',
 		image: 'https://images.unsplash.com/photo-1577223625816-7546f13df25d?w=1200&h=800&fit=crop',
 		author: 'Community Team'
 	},
@@ -375,7 +431,7 @@ const mockFeaturedNews: NewsArticle[] = [
 		title: 'Gaming for Good: Esports Charity Events Raise Millions',
 		excerpt: 'How the gaming community is coming together to support important causes worldwide.',
 		date: '2025-01-06',
-		category: 'Community',
+		category: 'Features',
 		image: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=1200&h=800&fit=crop',
 		author: 'Community Team'
 	},
@@ -384,7 +440,7 @@ const mockFeaturedNews: NewsArticle[] = [
 		title: 'Inclusive Sports: Adaptive Competitions Growing',
 		excerpt: 'Paralympic and adaptive sports programs are seeing record participation numbers.',
 		date: '2024-12-28',
-		category: 'Community',
+		category: 'Features',
 		image: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=1200&h=800&fit=crop',
 		author: 'Sports Desk'
 	},
@@ -393,7 +449,7 @@ const mockFeaturedNews: NewsArticle[] = [
 		title: 'Women in Esports: Breaking Barriers',
 		excerpt: 'Female players and organizers are changing the face of competitive gaming.',
 		date: '2024-12-15',
-		category: 'Community',
+		category: 'Features',
 		image: 'https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=1200&h=800&fit=crop',
 		author: 'Esports Desk'
 	},
@@ -402,18 +458,18 @@ const mockFeaturedNews: NewsArticle[] = [
 		title: 'Community Tournament Organizers: Unsung Heroes',
 		excerpt: 'The dedicated volunteers who keep local competitive scenes alive and thriving.',
 		date: '2024-11-20',
-		category: 'Community',
+		category: 'Features',
 		image: 'https://images.unsplash.com/photo-1511193311914-0346f16efe90?w=1200&h=800&fit=crop',
 		author: 'Community Team'
 	},
 
-	// ========== TRADITIONAL SPORTS ==========
+	// ========== MORE TOP STORIES ==========
 	{
 		id: '6',
 		title: 'NBA All-Star Weekend: Behind the Scenes',
 		excerpt: 'An exclusive look at what goes into organizing one of basketball\'s biggest events of the year.',
 		date: '2024-12-28',
-		category: 'Traditional Sports',
+		category: 'Top Stories',
 		image: 'https://images.unsplash.com/photo-1546519638-68e109498ffc?w=1200&h=800&fit=crop',
 		author: 'Sports Desk'
 	},
@@ -422,7 +478,7 @@ const mockFeaturedNews: NewsArticle[] = [
 		title: 'Swimming World Championships Preview',
 		excerpt: 'What to expect from the upcoming World Aquatics Championships in Singapore.',
 		date: '2024-12-15',
-		category: 'Traditional Sports',
+		category: 'Top Stories',
 		image: 'https://images.unsplash.com/photo-1530549387789-4c1017266635?w=1200&h=800&fit=crop',
 		author: 'Sports Desk'
 	},
@@ -431,7 +487,7 @@ const mockFeaturedNews: NewsArticle[] = [
 		title: 'Premier League: Title Race Heats Up',
 		excerpt: 'Three teams separated by just two points as the season enters its decisive phase.',
 		date: '2025-01-09',
-		category: 'Traditional Sports',
+		category: 'Top Stories',
 		image: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=1200&h=800&fit=crop',
 		author: 'Football Desk'
 	},
@@ -440,7 +496,7 @@ const mockFeaturedNews: NewsArticle[] = [
 		title: 'MLB: Spring Training Preview Guide',
 		excerpt: 'Everything you need to know about the upcoming baseball season and key storylines.',
 		date: '2025-01-04',
-		category: 'Traditional Sports',
+		category: 'Top Stories',
 		image: 'https://images.unsplash.com/photo-1566577739112-5180d4bf9390?w=1200&h=800&fit=crop',
 		author: 'Sports Desk'
 	},
@@ -449,7 +505,7 @@ const mockFeaturedNews: NewsArticle[] = [
 		title: 'UFC 300: Historic Card Announced',
 		excerpt: 'The landmark event features three title fights and the return of legendary fighters.',
 		date: '2024-12-22',
-		category: 'Traditional Sports',
+		category: 'Top Stories',
 		image: 'https://images.unsplash.com/photo-1549719386-74dfcbf7dbed?w=1200&h=800&fit=crop',
 		author: 'Combat Sports Desk'
 	},
@@ -458,18 +514,18 @@ const mockFeaturedNews: NewsArticle[] = [
 		title: 'NHL: All-Star Game Format Shakeup',
 		excerpt: 'New 3-on-3 tournament style brings excitement back to the midseason showcase.',
 		date: '2024-12-08',
-		category: 'Traditional Sports',
+		category: 'Top Stories',
 		image: 'https://images.unsplash.com/photo-1515703407324-5f753afd8be8?w=1200&h=800&fit=crop',
 		author: 'Hockey Desk'
 	},
 
-	// ========== ESPORTS ==========
+	// ========== MORE ANALYSIS (ESPORTS) ==========
 	{
 		id: '7',
 		title: 'Valorant Champions Tour 2025 Format Changes',
 		excerpt: 'Riot Games announces major changes to the competitive Valorant circuit for the upcoming season.',
 		date: '2024-12-25',
-		category: 'Esports',
+		category: 'Analysis',
 		image: 'https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=1200&h=800&fit=crop',
 		author: 'Esports Desk'
 	},
@@ -478,7 +534,7 @@ const mockFeaturedNews: NewsArticle[] = [
 		title: 'FIFA eWorld Cup: Regional Qualifiers Begin',
 		excerpt: 'The road to the FIFA eWorld Cup kicks off with regional qualifiers across six continents.',
 		date: '2024-12-18',
-		category: 'Esports',
+		category: 'Analysis',
 		image: 'https://images.unsplash.com/photo-1493711662062-fa541f7f3d24?w=1200&h=800&fit=crop',
 		author: 'Esports Desk'
 	},
@@ -487,7 +543,7 @@ const mockFeaturedNews: NewsArticle[] = [
 		title: 'The Rise of Mobile Esports in Asia',
 		excerpt: 'How mobile gaming tournaments are reshaping the competitive landscape in Asian markets.',
 		date: '2024-12-12',
-		category: 'Esports',
+		category: 'Analysis',
 		image: 'https://images.unsplash.com/photo-1612287230202-1ff1d85d1bdf?w=1200&h=800&fit=crop',
 		author: 'International Desk'
 	},
@@ -496,7 +552,7 @@ const mockFeaturedNews: NewsArticle[] = [
 		title: 'The Economics of Esports: 2024 Industry Report',
 		excerpt: 'A deep dive into the financial state of competitive gaming and what it means for 2025.',
 		date: '2024-11-22',
-		category: 'Esports',
+		category: 'Analysis',
 		image: 'https://images.unsplash.com/photo-1560253023-3ec5d502959f?w=1200&h=800&fit=crop',
 		author: 'Business Desk'
 	},
@@ -505,7 +561,7 @@ const mockFeaturedNews: NewsArticle[] = [
 		title: 'League of Legends Worlds 2025: Group Draw Analysis',
 		excerpt: 'Breaking down the group stage matchups and predictions for the biggest esports event.',
 		date: '2025-01-08',
-		category: 'Esports',
+		category: 'Analysis',
 		image: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=1200&h=800&fit=crop',
 		author: 'Esports Desk'
 	},
@@ -514,7 +570,7 @@ const mockFeaturedNews: NewsArticle[] = [
 		title: 'Overwatch League: Season 8 Preview',
 		excerpt: 'New teams, roster changes, and format updates heading into the new OWL season.',
 		date: '2025-01-02',
-		category: 'Esports',
+		category: 'Analysis',
 		image: 'https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=1200&h=800&fit=crop',
 		author: 'Esports Desk'
 	},
@@ -523,7 +579,7 @@ const mockFeaturedNews: NewsArticle[] = [
 		title: 'Fighting Game Community: EVO 2025 Games Revealed',
 		excerpt: 'The world\'s largest fighting game tournament announces its official game lineup.',
 		date: '2024-12-30',
-		category: 'Esports',
+		category: 'Analysis',
 		image: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?w=1200&h=800&fit=crop',
 		author: 'Esports Desk'
 	},
@@ -532,7 +588,7 @@ const mockFeaturedNews: NewsArticle[] = [
 		title: 'Rocket League: RLCS World Championship Format',
 		excerpt: 'Psyonix reveals the format and locations for the 2025 Rocket League Championship Series.',
 		date: '2024-12-20',
-		category: 'Esports',
+		category: 'Analysis',
 		image: 'https://images.unsplash.com/photo-1493711662062-fa541f7f3d24?w=1200&h=800&fit=crop',
 		author: 'Esports Desk'
 	}
@@ -566,15 +622,12 @@ function transformNewsArticle(row: Record<string, unknown>): NewsArticle {
 export function getNewsCategories(): NewsCategory[] {
 	return [
 		'All',
-		'Tournament News',
-		'Results',
-		'Announcements',
-		'Player Spotlight',
-		'Interviews',
-		'Strategy',
-		'Community',
-		'Traditional Sports',
-		'Esports'
+		'Top Stories',
+		'Scores & Results',
+		'Analysis',
+		'Transfers & Rumors',
+		'Team News',
+		'Features'
 	];
 }
 

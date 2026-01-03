@@ -93,15 +93,12 @@ export interface NewsArticle {
 
 export type NewsCategory = 
 	| 'All'
-	| 'Tournament News'
-	| 'Results'
-	| 'Announcements'
-	| 'Player Spotlight'
-	| 'Interviews'
-	| 'Strategy'
-	| 'Community'
-	| 'Traditional Sports'
-	| 'Esports';
+	| 'Top Stories'
+	| 'Scores & Results'
+	| 'Analysis'
+	| 'Transfers & Rumors'
+	| 'Team News'
+	| 'Features';
 
 // ============================================
 // ACCOUNT TYPES
