@@ -9,6 +9,7 @@
 	let closeTimeout = null;
 	let mobileMenuOpen = false;
 	let mobileSearchOpen = false;
+	let moreDropdownOpen = false;
 	
 	const sports = [
 		{ code: 'NFL', name: 'NFL' },
@@ -20,12 +21,17 @@
 	];
 	
 	const moreSports = [
-		{ code: 'NCAAF', name: 'NCAAF' },
-		{ code: 'WNBA', name: 'WNBA' },
-		{ code: 'TENNIS', name: 'Tennis' },
-		{ code: 'GOLF', name: 'Golf' },
-		{ code: 'MMA', name: 'MMA' },
-		{ code: 'ESPORTS', name: 'Esports' }
+		{ code: 'NCAAF', name: 'NCAAF', icon: '🏈' },
+		{ code: 'WNBA', name: 'WNBA', icon: '🏀' },
+		{ code: 'TENNIS', name: 'Tennis', icon: '🎾' },
+		{ code: 'GOLF', name: 'Golf', icon: '⛳' },
+		{ code: 'MMA', name: 'MMA/UFC', icon: '🥊' },
+		{ code: 'BOXING', name: 'Boxing', icon: '🥊' },
+		{ code: 'RACING', name: 'Racing', icon: '🏎️' },
+		{ code: 'OLYMPICS', name: 'Olympics', icon: '🏅' },
+		{ code: 'ESPORTS', name: 'Esports', icon: '🎮' },
+		{ code: 'CRICKET', name: 'Cricket', icon: '🏏' },
+		{ code: 'RUGBY', name: 'Rugby', icon: '🏉' }
 	];
 	
 	function getSportLinks(code) {
@@ -56,12 +62,27 @@
 	
 	function setActiveSport(code) {
 		if (code === 'MORE') {
-			mobileMenuOpen = !mobileMenuOpen;
+			// On mobile, toggle the mobile menu
+			if (window.innerWidth < 640) {
+				mobileMenuOpen = !mobileMenuOpen;
+			} else {
+				// On desktop, toggle the more dropdown
+				moreDropdownOpen = !moreDropdownOpen;
+			}
 			return;
 		}
 		activeSport = code;
 		hoveredSport = null;
 		mobileMenuOpen = false;
+		moreDropdownOpen = false;
+	}
+	
+	function selectMoreSport(code) {
+		activeSport = code;
+		moreDropdownOpen = false;
+		mobileMenuOpen = false;
+		// Navigate to that sport's home page
+		goto(`/${code.toLowerCase()}/home`);
 	}
 	
 	function handleSearch() {
@@ -110,11 +131,12 @@
 	
 	onMount(() => {
 		const handleClickOutside = (e) => {
-			if (!e.target.closest('.sport-dropdown') && !e.target.closest('.mega-dropdown')) {
+			if (!e.target.closest('.sport-dropdown') && !e.target.closest('.mega-dropdown') && !e.target.closest('.more-dropdown')) {
 				if (closeTimeout) {
 					clearTimeout(closeTimeout);
 				}
 				hoveredSport = null;
+				moreDropdownOpen = false;
 			}
 		};
 		document.addEventListener('click', handleClickOutside);
@@ -152,21 +174,44 @@
 			>
 				{#each sports as sport}
 					<div 
-						class="sport-dropdown relative flex-shrink-0"
+						class="sport-dropdown relative flex-shrink-0 {sport.code === 'MORE' ? 'more-dropdown' : ''}"
 						on:mouseenter={() => handleMouseEnter(sport.code)}
 						on:mouseleave={handleMouseLeave}
 					>
 						<button
 							on:click={() => setActiveSport(sport.code)}
-							class="px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm font-semibold text-white dark:text-gray-200 hover:text-red-400 dark:hover:text-red-400 transition-colors whitespace-nowrap relative {
+							class="px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm font-semibold text-white dark:text-gray-200 hover:text-red-400 dark:hover:text-red-400 transition-colors whitespace-nowrap relative flex items-center gap-1 {
 								activeSport === sport.code ? 'text-red-400 dark:text-red-400' : ''
 							}"
 						>
 							{sport.name}
-							{#if activeSport === sport.code}
+							{#if sport.code === 'MORE'}
+								<svg class="w-3 h-3 transition-transform {moreDropdownOpen ? 'rotate-180' : ''}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+								</svg>
+							{/if}
+							{#if activeSport === sport.code && sport.code !== 'MORE'}
 								<span class="absolute bottom-0 left-0 right-0 h-0.5 bg-red-600 dark:bg-red-500"></span>
 							{/if}
 						</button>
+						
+						<!-- More Sports Dropdown -->
+						{#if sport.code === 'MORE' && moreDropdownOpen}
+							<div class="absolute top-full left-0 mt-1 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl z-50 py-2 animate-fadeIn">
+								<div class="px-3 py-1.5 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-gray-700 mb-1">
+									More Sports
+								</div>
+								{#each moreSports as moreSport}
+									<button
+										on:click={() => selectMoreSport(moreSport.code)}
+										class="w-full text-left px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 dark:hover:text-red-400 transition-colors flex items-center gap-2"
+									>
+										<span class="text-base">{moreSport.icon}</span>
+										{moreSport.name}
+									</button>
+								{/each}
+							</div>
+						{/if}
 					</div>
 				{/each}
 			</div>
@@ -354,7 +399,8 @@
 		display: none;
 	}
 	
-	.mega-dropdown {
+	.mega-dropdown,
+	.animate-fadeIn {
 		animation: fadeIn 0.15s ease-out;
 	}
 	
