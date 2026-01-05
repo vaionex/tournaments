@@ -644,6 +644,13 @@ export async function getNewsArticles(category: NewsCategory = 'All'): Promise<N
 		return mockFeaturedNews.filter(article => article.category === category);
 	}
 
+	// Check if Supabase is properly configured
+	const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
+	if (!SUPABASE_URL || SUPABASE_URL.includes('placeholder')) {
+		console.error('⚠️ Supabase URL not configured. Please set VITE_SUPABASE_URL in your environment variables.');
+		return [];
+	}
+
 	let query = supabase
 		.from('news_articles')
 		.select(`
@@ -663,6 +670,12 @@ export async function getNewsArticles(category: NewsCategory = 'All'): Promise<N
 
 	if (error) {
 		console.error('Error fetching news articles:', error);
+		console.error('Error details:', JSON.stringify(error, null, 2));
+		return [];
+	}
+
+	if (!data || data.length === 0) {
+		console.warn('No news articles found. Check if articles exist in the database and are published.');
 		return [];
 	}
 
