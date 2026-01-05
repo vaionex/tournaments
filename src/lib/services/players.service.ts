@@ -10,7 +10,7 @@ import { supabase } from '$lib/supabase';
 import { simulateDelay } from './api';
 
 // Toggle this to switch between mock and real data
-const USE_MOCK_DATA = true;
+const USE_MOCK_DATA = false;
 
 // ============================================
 // REAL PROFESSIONAL PLAYERS DATA
@@ -689,22 +689,22 @@ const COUNTRIES = [...new Set(REAL_PLAYERS.map(p => p.country).filter(Boolean))]
 function transformPlayer(row: Record<string, unknown>): Player {
 	return {
 		id: row.id as string,
-		username: row.username as string,
-		displayName: row.display_name as string,
+		username: (row.player_name as string) || (row.slug as string) || '',
+		displayName: (row.display_name as string) || (row.player_name as string) || '',
 		rank: row.current_rank as number || 0,
 		wins: row.total_wins as number || 0,
 		game: row.primary_game as string || 'Unknown',
-		totalWinnings: row.total_winnings as number || 0,
-		winRate: row.win_rate as number || 0,
+		totalWinnings: Number(row.total_winnings) || 0,
+		winRate: Number(row.win_rate) || 0,
 		verified: row.is_verified as boolean || false,
 		avatar: row.avatar_url as string | null,
 		image: row.avatar_url as string | undefined,
-		followers: row.followers as number | undefined,
-		recentWins: row.recent_wins as number | undefined,
+		followers: undefined, // Not in players table
+		recentWins: undefined, // Not in players table
 		country: row.country as string | undefined,
-		countryCode: row.country_code as string | undefined,
-		team: row.team as string | undefined,
-		position: row.position as string | undefined
+		countryCode: undefined, // Not in players table
+		team: row.team_name as string | undefined,
+		position: undefined // Not in players table
 	};
 }
 
@@ -766,13 +766,14 @@ export async function getPlayers(
 		return { data: paginatedData, pagination: { currentPage: page, totalPages, totalItems, itemsPerPage } };
 	}
 
-	// Real Supabase query
+	// Real Supabase query - use players table for more complete data
 	let query = supabase
-		.from('profiles')
-		.select('*', { count: 'exact' });
+		.from('players')
+		.select('*', { count: 'exact' })
+		.eq('is_active', true);
 
 	if (filters.search) {
-		query = query.or(`display_name.ilike.%${filters.search}%,username.ilike.%${filters.search}%`);
+		query = query.or(`player_name.ilike.%${filters.search}%,display_name.ilike.%${filters.search}%`);
 	}
 	if (filters.game) {
 		query = query.eq('primary_game', filters.game);
@@ -783,7 +784,7 @@ export async function getPlayers(
 		wins: 'total_wins',
 		winnings: 'total_winnings',
 		winrate: 'win_rate',
-		name: 'display_name'
+		name: 'player_name'
 	}[filters.sortBy || 'rank'] || 'current_rank';
 
 	const ascending = filters.sortBy === 'rank' || filters.sortBy === 'name';
@@ -792,7 +793,7 @@ export async function getPlayers(
 	const to = from + itemsPerPage - 1;
 
 	const { data, error, count } = await query
-		.order(sortColumn, { ascending })
+		.order(sortColumn, { ascending, nullsFirst: false })
 		.range(from, to);
 
 	if (error) {
@@ -840,8 +841,9 @@ export async function getStatLeaders(category: 'wins' | 'winnings' | 'winrate' |
 	}
 
 	const { data, error } = await supabase
-		.from('profiles')
+		.from('players')
 		.select('*')
+		.eq('is_active', true)
 		.order(category === 'winnings' ? 'total_winnings' : category === 'wins' ? 'total_wins' : 'win_rate', { ascending: false })
 		.limit(limit);
 
@@ -864,8 +866,9 @@ export async function getHighestEarningPlayers(limit: number = 3): Promise<Playe
 	}
 
 	const { data, error } = await supabase
-		.from('profiles')
+		.from('players')
 		.select('*')
+		.eq('is_active', true)
 		.order('total_winnings', { ascending: false })
 		.limit(limit);
 
@@ -890,8 +893,9 @@ export async function getMostPopularPlayers(limit: number = 3): Promise<Player[]
 	}
 
 	const { data, error } = await supabase
-		.from('profiles')
+		.from('players')
 		.select('*')
+		.eq('is_active', true)
 		.eq('is_verified', true)
 		.order('total_tournaments', { ascending: false })
 		.limit(limit);
@@ -917,8 +921,9 @@ export async function getTrendingPlayers(limit: number = 3): Promise<Player[]> {
 	}
 
 	const { data, error } = await supabase
-		.from('profiles')
+		.from('players')
 		.select('*')
+		.eq('is_active', true)
 		.order('updated_at', { ascending: false })
 		.limit(limit);
 
@@ -941,9 +946,10 @@ export async function getTopPlayers(limit: number = 8): Promise<Player[]> {
 	}
 
 	const { data, error } = await supabase
-		.from('profiles')
+		.from('players')
 		.select('*')
-		.order('current_rank', { ascending: true })
+		.eq('is_active', true)
+		.order('current_rank', { ascending: true, nullsFirst: false })
 		.limit(limit);
 
 	if (error) {
@@ -968,9 +974,9 @@ export async function getPlayerByUsername(username: string): Promise<Player | nu
 	}
 
 	const { data, error } = await supabase
-		.from('profiles')
+		.from('players')
 		.select('*')
-		.eq('username', username)
+		.or(`player_name.eq.${username},slug.eq.${username}`)
 		.single();
 
 	if (error) {
@@ -1027,8 +1033,9 @@ export async function getPlayersByGame(game: string, limit: number = 10): Promis
 	}
 
 	const { data, error } = await supabase
-		.from('profiles')
+		.from('players')
 		.select('*')
+		.eq('is_active', true)
 		.eq('primary_game', game)
 		.order('total_winnings', { ascending: false })
 		.limit(limit);

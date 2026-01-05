@@ -65,7 +65,7 @@
 		try {
 			const [newsResult, tournaments, players] = await Promise.all([
 				getNewsArticlesPaginated(selectedCategory, 1, INITIAL_ARTICLES),
-				getUpcomingTournaments(5),
+				getUpcomingTournaments(2),
 				getTopPlayers(8)
 			]);
 			
@@ -144,8 +144,8 @@
 		{#if !loading && heroArticle}
 			<HeroArticle article={heroArticle} />
 		{:else if loading}
-			<div class="mb-10 animate-pulse">
-				<div class="h-[400px] sm:h-[500px] lg:h-[600px] bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
+			<div class="mb-3 sm:mb-4 animate-pulse">
+				<div class="h-[280px] xs:h-[320px] sm:h-[400px] md:h-[500px] lg:h-[600px] bg-gray-200 dark:bg-gray-700 rounded-lg sm:rounded-xl"></div>
 			</div>
 		{/if}
 		
@@ -153,7 +153,7 @@
 		<div class="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-10">
 			<!-- Main News Column -->
 			<div class="lg:col-span-2">
-				<!-- Category Navigation -->
+				<!-- Category Navigation - Always show, not skeleton -->
 				<CategoryNav 
 					{categories} 
 					{selectedCategory} 
@@ -253,7 +253,7 @@
 								</h2>
 							</div>
 							<div class="p-4 space-y-3">
-								{#each upcomingTournaments.slice(0, 4) as tournament}
+								{#each upcomingTournaments.slice(0, 2) as tournament}
 									<a 
 										href="/tournaments/{tournament.id}"
 										class="block p-3 border-l-4 border-blue-500 bg-gray-50 dark:bg-gray-900/50 rounded-r-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors group"
@@ -288,17 +288,40 @@
 							</div>
 						</div>
 					{:else if loading}
-						<div class="bg-white dark:bg-gray-800 rounded-xl shadow-md border border-gray-200 dark:border-gray-700 overflow-hidden animate-pulse">
-							<div class="p-5 bg-gray-200 dark:bg-gray-700">
-								<div class="h-5 bg-gray-300 dark:bg-gray-600 rounded w-2/3"></div>
+						<div class="bg-white dark:bg-gray-800 rounded-xl shadow-md border border-gray-200 dark:border-gray-700 overflow-hidden">
+							<!-- Header - static, always shown -->
+							<div class="p-5 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-blue-600 to-blue-700">
+								<h2 class="text-lg font-bold text-white flex items-center gap-2">
+									<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+									</svg>
+									Upcoming Tournaments
+								</h2>
 							</div>
+							<!-- Content Skeleton - matches actual tournament items (exactly 2) -->
 							<div class="p-4 space-y-3">
-								{#each Array(4) as _}
-									<div class="p-3 bg-gray-100 dark:bg-gray-900/50 rounded-lg">
-										<div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-2"></div>
-										<div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/2"></div>
+								{#each Array(2) as _}
+									<div class="p-3 border-l-4 border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-900/50 rounded-r-lg animate-pulse">
+										<div class="flex items-start justify-between gap-2 mb-1">
+											<div class="h-5 bg-gray-200 dark:bg-gray-700 rounded w-3/4"></div>
+											<div class="h-5 w-12 bg-gray-200 dark:bg-gray-700 rounded"></div>
+										</div>
+										<div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/2 mb-2"></div>
+										<div class="flex items-center justify-between">
+											<div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-16"></div>
+											<div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-12"></div>
+										</div>
 									</div>
 								{/each}
+							</div>
+							<!-- Footer button - static, always shown -->
+							<div class="p-4 pt-0">
+								<a 
+									href="/tournaments" 
+									class="block w-full py-2.5 text-center text-sm font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/30 rounded-lg transition-colors"
+								>
+									View All Tournaments →
+								</a>
 							</div>
 						</div>
 					{/if}
@@ -363,20 +386,42 @@
 							</div>
 						</div>
 					{:else if loading}
-						<div class="bg-white dark:bg-gray-800 rounded-xl shadow-md border border-gray-200 dark:border-gray-700 overflow-hidden animate-pulse">
-							<div class="p-5 bg-gray-200 dark:bg-gray-700">
-								<div class="h-5 bg-gray-300 dark:bg-gray-600 rounded w-1/2"></div>
+						<div class="bg-white dark:bg-gray-800 rounded-xl shadow-md border border-gray-200 dark:border-gray-700 overflow-hidden">
+							<!-- Header - static, always shown -->
+							<div class="p-5 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-red-600 to-red-700">
+								<h2 class="text-lg font-bold text-white flex items-center gap-2">
+									<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+									</svg>
+									Top Players
+								</h2>
 							</div>
+							<!-- Content Skeleton - matches actual player items with ranking badges -->
 							<div class="p-4 space-y-2">
-								{#each Array(5) as _}
-									<div class="flex items-center gap-3 p-2.5">
-										<div class="w-10 h-10 bg-gray-200 dark:bg-gray-700 rounded-full"></div>
-										<div class="flex-1">
+								{#each Array(5) as _, i}
+									<div class="flex items-center gap-3 p-2.5 animate-pulse" style="animation-delay: {i * 100}ms;">
+										<div class="relative flex-shrink-0">
+											<div class="absolute -top-1 -left-1 w-5 h-5 bg-gray-300 dark:bg-gray-600 rounded-full"></div>
+											<div class="w-10 h-10 bg-gray-200 dark:bg-gray-700 rounded-full"></div>
+										</div>
+										<div class="flex-1 min-w-0">
 											<div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-1"></div>
 											<div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/2"></div>
 										</div>
+										<div class="text-right flex-shrink-0">
+											<div class="h-3 w-12 bg-gray-200 dark:bg-gray-700 rounded"></div>
+										</div>
 									</div>
 								{/each}
+							</div>
+							<!-- Footer button - static, always shown -->
+							<div class="p-4 pt-0">
+								<a 
+									href="/players" 
+									class="block w-full py-2.5 text-center text-sm font-semibold text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 bg-red-50 dark:bg-red-900/20 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-lg transition-colors"
+								>
+									View All Players →
+								</a>
 							</div>
 						</div>
 					{/if}

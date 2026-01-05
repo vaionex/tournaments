@@ -84,11 +84,12 @@ export interface NewsArticle {
 	title: string;
 	excerpt: string;
 	content?: string;
-	date: string;
+	date: Date | string; // Can be Date object or ISO string
 	category: NewsCategory;
 	image: string;
 	author: string;
 	readTime?: number;
+	tags?: string[];
 }
 
 export type NewsCategory = 

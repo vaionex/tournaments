@@ -1,10 +1,9 @@
 <script>
-	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
 	import { format } from 'date-fns';
-	import { goto } from '$app/navigation';
 	import { CommentSection } from '$lib/components/comments';
 	import { ArticleSEO } from '$lib/components/seo';
+	import { getNewsArticleById, getRecentNews, getArticleComments } from '$lib/services/news.service';
 	
 	let article = null;
 	let relatedArticles = [];
@@ -13,8 +12,67 @@
 	let comments = [];
 	let loading = true;
 	
-	// Mock article data - in real app, fetch from API
-	const articleData = {
+	// Load article data reactively when route parameter changes
+	$: if ($page.params.id) {
+		loadArticle($page.params.id);
+	}
+	
+	async function loadArticle(id) {
+		loading = true;
+		
+		try {
+			// Fetch article from database
+			article = await getNewsArticleById(id);
+			
+			if (!article) {
+				// Fallback if article not found
+				article = {
+					id: id,
+					title: 'Article Not Found',
+					excerpt: 'The article you are looking for could not be found.',
+					content: 'Please check the URL and try again.',
+					date: new Date(),
+					category: 'News',
+					image: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=1200',
+					author: 'Staff',
+					tags: []
+				};
+			} else {
+				// Fetch comments for the article
+				comments = await getArticleComments(id);
+				
+				// Fetch related articles
+				const recent = await getRecentNews(10);
+				recentArticles = recent
+					.filter(a => a.id !== id)
+					.slice(0, 8);
+				popularArticles = recent
+					.filter(a => a.id !== id)
+					.slice(0, 8);
+				relatedArticles = recent
+					.filter(a => a.id !== id && a.category === article.category)
+					.slice(0, 3);
+			}
+		} catch (error) {
+			console.error('Error loading article:', error);
+			article = {
+				id: id,
+				title: 'Error Loading Article',
+				excerpt: 'There was an error loading this article.',
+				content: 'Please try again later.',
+				date: new Date(),
+				category: 'News',
+				image: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=1200',
+				author: 'Staff',
+				tags: []
+			};
+		}
+		
+		loading = false;
+	}
+	
+	// Mock article data - kept as fallback (now using database)
+	/* const articleData = {
 		'1': {
 			id: '1',
 			title: 'Tennis Open Championship 2025: Record Prize Pool Announced',
@@ -83,44 +141,10 @@ The integration of technology in training and competition is also creating new o
 			authorAvatar: null,
 			tags: ['Players', 'Tennis', 'Golf', 'Esports', '2025']
 		}
-	};
+	}; */
 	
-	onMount(async () => {
-		const id = $page.params.id;
-		
-		await new Promise(resolve => setTimeout(resolve, 300));
-		
-		// Get article data (in real app, fetch from API)
-		article = articleData[id] || {
-			id: id,
-			title: 'Article Title',
-			excerpt: 'Article excerpt',
-			content: 'Article content goes here...',
-			date: new Date(),
-			category: 'News',
-			image: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=1200',
-			author: 'Author Name',
-			authorAvatar: null,
-			tags: []
-		};
-		
-		// Generate related articles
-		relatedArticles = Object.values(articleData)
-			.filter(a => a.id !== id)
-			.slice(0, 3);
-		
-		// Generate popular articles
-		popularArticles = Object.values(articleData)
-			.filter(a => a.id !== id)
-			.slice(0, 8);
-		
-		// Generate recent articles
-		recentArticles = Object.values(articleData)
-			.filter(a => a.id !== id)
-			.sort((a, b) => new Date(b.date) - new Date(a.date))
-			.slice(0, 8);
-		
-		// Generate mock comments
+	// Old mock comments structure (kept for reference, but now using database)
+	/*
 		comments = [
 			{
 				id: '1',
@@ -238,9 +262,7 @@ The integration of technology in training and competition is also creating new o
 				replies: []
 			}
 		];
-		
-		loading = false;
-	});
+		*/
 	
 </script>
 
@@ -372,16 +394,19 @@ The integration of technology in training and competition is also creating new o
 			</header>
 
 					<!-- Featured Image -->
+					{#if article.image}
 					<div class="mb-8">
 				<img 
-					src={article.image} 
+					src={article.image || 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=1200'} 
 					alt={article.title}
 					class="w-full h-auto rounded-2xl shadow-2xl"
+					on:error={(e) => {
+						e.currentTarget.src = 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=1200';
+					}}
 				/>
-				{#if article.image}
 					<p class="text-xs text-gray-500 dark:text-gray-400 mt-2 italic">Photo: Tournament Staff</p>
-				{/if}
 			</div>
+			{/if}
 
 					<!-- Article Content -->
 					<div class="prose prose-lg dark:prose-invert max-w-none mb-12">
@@ -454,14 +479,18 @@ The integration of technology in training and competition is also creating new o
 						{#each popularArticles as popular}
 							<a
 								href="/news/{popular.id}"
+								data-sveltekit-preload-data="hover"
 								class="group block"
 							>
 								<div class="flex gap-3">
-									<div class="flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden">
+									<div class="flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden bg-gray-200 dark:bg-gray-700">
 										<img 
-											src={popular.image} 
+											src={popular.image || 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=1200'} 
 											alt={popular.title}
 											class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+											on:error={(e) => {
+												e.currentTarget.src = 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=1200';
+											}}
 										/>
 									</div>
 									<div class="flex-1 min-w-0">
@@ -487,6 +516,7 @@ The integration of technology in training and competition is also creating new o
 						{#each recentArticles as recent}
 							<a
 								href="/news/{recent.id}"
+								data-sveltekit-preload-data="hover"
 								class="group block"
 							>
 								<h4 class="font-semibold text-sm text-gray-900 dark:text-white mb-1 group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors line-clamp-2">
@@ -566,14 +596,18 @@ The integration of technology in training and competition is also creating new o
 							{#each relatedArticles as related}
 								<a
 									href="/news/{related.id}"
+									data-sveltekit-preload-data="hover"
 									class="group block"
 								>
 									<div class="flex gap-3">
-										<div class="flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden">
+										<div class="flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden bg-gray-200 dark:bg-gray-700">
 											<img 
-												src={related.image} 
+												src={related.image || 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=1200'} 
 												alt={related.title}
 												class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+												on:error={(e) => {
+													e.currentTarget.src = 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=1200';
+												}}
 											/>
 										</div>
 										<div class="flex-1 min-w-0">

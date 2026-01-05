@@ -45,4 +45,27 @@ npm preview
 - Tailwind CSS - Styling
 - TypeScript - Type safety
 - date-fns - Date formatting
+- Supabase - Database & Authentication
+
+## Supabase Setup
+
+1. Create a new project at [supabase.com](https://supabase.com)
+
+2. Copy your project credentials from **Settings > API**:
+   - Project URL
+   - anon/public key
+
+3. Create a `.env` file in the project root:
+   ```
+   VITE_SUPABASE_URL=https://your-project.supabase.co
+   VITE_SUPABASE_ANON_KEY=your-anon-key-here
+   ```
+
+4. Run the SQL migration to create tables:
+   - Open the **SQL Editor** in your Supabase dashboard
+   - Copy and paste the contents of `supabase/migrations/001_initial_schema.sql`
+   - Click **Run**
+
+5. (Optional) Seed the database with sample data:
+   - Run `supabase/seed.sql` in the SQL Editor
 

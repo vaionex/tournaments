@@ -13,7 +13,7 @@ import { supabase } from '$lib/supabase';
 import { simulateDelay } from './api';
 
 // Toggle this to switch between mock and real data
-const USE_MOCK_DATA = true;
+const USE_MOCK_DATA = false;
 
 // ============================================
 // MOCK DATA GENERATORS
@@ -53,7 +53,7 @@ function transformTournament(row: Record<string, unknown>): Tournament {
 		id: row.id as string,
 		name: row.name as string,
 		game: row.game as string,
-		date: row.date as string,
+		date: (row.date as string)?.split('T')[0] || (row.date as string),
 		prizePool: `$${(row.prize_pool as number || 0).toLocaleString()}`,
 		entryFee: row.entry_fee ? `$${row.entry_fee}` : 'Free',
 		platform: row.platform as string,
@@ -217,7 +217,7 @@ export async function getTrendingTournaments(limit: number = 3): Promise<Tournam
 	const { data, error } = await supabase
 		.from('tournaments')
 		.select('*')
-		.is('is_featured', true)
+		.eq('is_featured', true)
 		.order('created_at', { ascending: false })
 		.limit(limit);
 
@@ -244,13 +244,45 @@ export async function getUpcomingTournaments(limit: number = 5): Promise<Tournam
 		].slice(0, limit);
 	}
 
-	const { data, error } = await supabase
+	// Get current date for comparison
+	const today = new Date();
+	today.setHours(0, 0, 0, 0);
+	const todayStr = today.toISOString().split('T')[0];
+
+	// Fetch tournaments that are either live or upcoming
+	// For live tournaments, include them regardless of date (they're happening now)
+	// For upcoming tournaments, only include those with date >= today
+	const { data: liveData, error: liveError } = await supabase
+		.from('tournaments')
+		.select('*')
+		.eq('status', 'live')
+		.order('date', { ascending: true })
+		.limit(limit);
+
+	const { data: upcomingData, error: upcomingError } = await supabase
 		.from('tournaments')
 		.select('*')
 		.eq('status', 'upcoming')
-		.gte('date', new Date().toISOString().split('T')[0])
+		.gte('date', todayStr)
 		.order('date', { ascending: true })
 		.limit(limit);
+
+	if (liveError || upcomingError) {
+		console.error('Error fetching upcoming tournaments:', liveError || upcomingError);
+		return [];
+	}
+
+	// Combine and sort by date
+	const allTournaments = [
+		...(liveData || []),
+		...(upcomingData || [])
+	].sort((a, b) => {
+		const dateA = new Date(a.date);
+		const dateB = new Date(b.date);
+		return dateA.getTime() - dateB.getTime();
+	}).slice(0, limit);
+
+	return allTournaments.map(transformTournament);
 
 	if (error) {
 		console.error('Error fetching upcoming tournaments:', error);

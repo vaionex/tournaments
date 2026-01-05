@@ -5,11 +5,15 @@
 	export let description: string;
 	export let image: string;
 	export let author: string;
-	export let publishedDate: Date;
-	export let modifiedDate: Date | null = null;
+	export let publishedDate: Date | string;
+	export let modifiedDate: Date | string | null = null;
 	export let category: string;
 	export let tags: string[] = [];
 	export let wordCount: number = 0;
+	
+	// Convert date to Date object if it's a string
+	$: publishedDateObj = publishedDate instanceof Date ? publishedDate : new Date(publishedDate);
+	$: modifiedDateObj = modifiedDate ? (modifiedDate instanceof Date ? modifiedDate : new Date(modifiedDate)) : null;
 	
 	const SITE_NAME = 'Tournaments.com';
 	const SITE_URL = 'https://tournaments.com';
@@ -49,8 +53,8 @@
 				"height": 60
 			}
 		},
-		"datePublished": publishedDate.toISOString(),
-		"dateModified": (modifiedDate || publishedDate).toISOString(),
+		"datePublished": publishedDateObj.toISOString(),
+		"dateModified": (modifiedDateObj || publishedDateObj).toISOString(),
 		"articleSection": category,
 		"keywords": tags.join(', '),
 		"wordCount": wordCount || undefined,
@@ -106,9 +110,9 @@
 	<meta property="og:locale" content="en_US" />
 	
 	<!-- Article-specific Open Graph -->
-	<meta property="article:published_time" content={publishedDate.toISOString()} />
-	{#if modifiedDate}
-		<meta property="article:modified_time" content={modifiedDate.toISOString()} />
+	<meta property="article:published_time" content={publishedDateObj.toISOString()} />
+	{#if modifiedDateObj}
+		<meta property="article:modified_time" content={modifiedDateObj.toISOString()} />
 	{/if}
 	<meta property="article:author" content={author} />
 	<meta property="article:section" content={category} />

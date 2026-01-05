@@ -326,13 +326,165 @@ export interface Database {
 					social_links?: Json | null;
 					settings?: Json | null;
 				};
-				Relationships: [];
-			};
+			Relationships: [];
+		};
 
-			// ============================================
-			// LINKED ACCOUNTS TABLE
-			// ============================================
-			linked_accounts: {
+		// ============================================
+		// PLAYERS TABLE
+		// ============================================
+		players: {
+			Row: {
+				id: string;
+				profile_id: string | null;
+				created_at: string;
+				updated_at: string;
+				player_name: string;
+				slug: string;
+				display_name: string | null;
+				bio: string | null;
+				avatar_url: string | null;
+				banner_url: string | null;
+				country: string | null;
+				city: string | null;
+				timezone: string | null;
+				date_of_birth: string | null;
+				total_winnings: number;
+				total_tournaments: number;
+				total_wins: number;
+				total_losses: number;
+				win_rate: number;
+				current_rank: number | null;
+				peak_rank: number | null;
+				rank_history: Json | null;
+				primary_game: string | null;
+				games_played: string[] | null;
+				game_stats: Json | null;
+				is_verified: boolean;
+				is_pro: boolean;
+				is_active: boolean;
+				status: string;
+				social_links: Json | null;
+				website_url: string | null;
+				twitch_url: string | null;
+				youtube_url: string | null;
+				twitter_url: string | null;
+				discord_username: string | null;
+				team_name: string | null;
+				team_id: string | null;
+				agent_name: string | null;
+				agent_contact: string | null;
+				preferred_languages: string[] | null;
+				tags: string[] | null;
+				achievements: Json | null;
+				badges: string[] | null;
+				metadata: Json | null;
+			};
+			Insert: {
+				id?: string;
+				profile_id?: string | null;
+				created_at?: string;
+				updated_at?: string;
+				player_name: string;
+				slug?: string;
+				display_name?: string | null;
+				bio?: string | null;
+				avatar_url?: string | null;
+				banner_url?: string | null;
+				country?: string | null;
+				city?: string | null;
+				timezone?: string | null;
+				date_of_birth?: string | null;
+				total_winnings?: number;
+				total_tournaments?: number;
+				total_wins?: number;
+				total_losses?: number;
+				win_rate?: number;
+				current_rank?: number | null;
+				peak_rank?: number | null;
+				rank_history?: Json | null;
+				primary_game?: string | null;
+				games_played?: string[] | null;
+				game_stats?: Json | null;
+				is_verified?: boolean;
+				is_pro?: boolean;
+				is_active?: boolean;
+				status?: string;
+				social_links?: Json | null;
+				website_url?: string | null;
+				twitch_url?: string | null;
+				youtube_url?: string | null;
+				twitter_url?: string | null;
+				discord_username?: string | null;
+				team_name?: string | null;
+				team_id?: string | null;
+				agent_name?: string | null;
+				agent_contact?: string | null;
+				preferred_languages?: string[] | null;
+				tags?: string[] | null;
+				achievements?: Json | null;
+				badges?: string[] | null;
+				metadata?: Json | null;
+			};
+			Update: {
+				id?: string;
+				profile_id?: string | null;
+				created_at?: string;
+				updated_at?: string;
+				player_name?: string;
+				slug?: string;
+				display_name?: string | null;
+				bio?: string | null;
+				avatar_url?: string | null;
+				banner_url?: string | null;
+				country?: string | null;
+				city?: string | null;
+				timezone?: string | null;
+				date_of_birth?: string | null;
+				total_winnings?: number;
+				total_tournaments?: number;
+				total_wins?: number;
+				total_losses?: number;
+				win_rate?: number;
+				current_rank?: number | null;
+				peak_rank?: number | null;
+				rank_history?: Json | null;
+				primary_game?: string | null;
+				games_played?: string[] | null;
+				game_stats?: Json | null;
+				is_verified?: boolean;
+				is_pro?: boolean;
+				is_active?: boolean;
+				status?: string;
+				social_links?: Json | null;
+				website_url?: string | null;
+				twitch_url?: string | null;
+				youtube_url?: string | null;
+				twitter_url?: string | null;
+				discord_username?: string | null;
+				team_name?: string | null;
+				team_id?: string | null;
+				agent_name?: string | null;
+				agent_contact?: string | null;
+				preferred_languages?: string[] | null;
+				tags?: string[] | null;
+				achievements?: Json | null;
+				badges?: string[] | null;
+				metadata?: Json | null;
+			};
+			Relationships: [
+				{
+					foreignKeyName: 'players_profile_id_fkey';
+					columns: ['profile_id'];
+					referencedRelation: 'profiles';
+					referencedColumns: ['id'];
+				}
+			];
+		};
+
+		// ============================================
+		// LINKED ACCOUNTS TABLE
+		// ============================================
+		linked_accounts: {
 				Row: {
 					id: string;
 					created_at: string;
@@ -642,4 +794,7 @@ export type LinkedAccount = Tables<'linked_accounts'>;
 export type Game = Tables<'games'>;
 export type NewsArticle = Tables<'news_articles'>;
 export type Claim = Tables<'claims'>;
+export type Player = Tables<'players'>;
+export type PlayerInsert = TablesInsert<'players'>;
+export type PlayerUpdate = TablesUpdate<'players'>;
 

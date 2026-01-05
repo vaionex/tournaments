@@ -8,7 +8,7 @@ import { supabase } from '$lib/supabase';
 import { simulateDelay } from './api';
 
 // Toggle this to switch between mock and real data
-const USE_MOCK_DATA = true;
+const USE_MOCK_DATA = false;
 
 // ============================================
 // MOCK DATA
@@ -599,15 +599,16 @@ const mockFeaturedNews: NewsArticle[] = [
 // ============================================
 
 function transformNewsArticle(row: Record<string, unknown>): NewsArticle {
+	const dateString = row.published_at as string || row.created_at as string;
 	return {
 		id: row.id as string,
 		title: row.title as string,
 		excerpt: row.excerpt as string,
 		content: row.content as string | undefined,
-		date: row.published_at as string || row.created_at as string,
+		date: dateString ? new Date(dateString) : new Date(),
 		category: row.category as NewsCategory,
 		image: row.image_url as string || 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=1200',
-		author: (row.author_profile as Record<string, unknown>)?.display_name as string || 'Staff',
+		author: (row.profiles as Record<string, unknown>)?.display_name as string || 'Staff',
 		readTime: row.read_time as number | undefined
 	};
 }
@@ -647,7 +648,7 @@ export async function getNewsArticles(category: NewsCategory = 'All'): Promise<N
 		.from('news_articles')
 		.select(`
 			*,
-			author_profile:author_id (
+			profiles!author_id (
 				display_name
 			)
 		`)
@@ -697,7 +698,7 @@ export async function getNewsArticlesPaginated(
 		.from('news_articles')
 		.select(`
 			*,
-			author_profile:author_id (
+			profiles!author_id (
 				display_name
 			)
 		`, { count: 'exact' })
@@ -747,7 +748,7 @@ export async function getNewsArticlesPaginatedWithOffset(
 		.from('news_articles')
 		.select(`
 			*,
-			author_profile:author_id (
+			profiles!author_id (
 				display_name
 			)
 		`, { count: 'exact' })
@@ -785,7 +786,7 @@ export async function getFeaturedArticle(): Promise<NewsArticle | null> {
 		.from('news_articles')
 		.select(`
 			*,
-			author_profile:author_id (
+			profiles!author_id (
 				display_name
 			)
 		`)
@@ -867,15 +868,18 @@ export async function getRecentNews(limit: number = 5): Promise<NewsArticle[]> {
 		return [];
 	}
 
-	return (data || []).map((row: Record<string, unknown>) => ({
-		id: row.id as string,
-		title: row.title as string,
-		excerpt: row.excerpt as string,
-		date: row.published_at as string,
-		category: row.category as NewsCategory,
-		image: row.image_url as string || '',
-		author: 'Staff'
-	}));
+	return (data || []).map((row: Record<string, unknown>) => {
+		const dateString = row.published_at as string;
+		return {
+			id: row.id as string,
+			title: row.title as string,
+			excerpt: row.excerpt as string,
+			date: dateString ? new Date(dateString) : new Date(),
+			category: row.category as NewsCategory,
+			image: row.image_url as string || 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=1200',
+			author: 'Staff'
+		};
+	});
 }
 
 /**
@@ -896,7 +900,7 @@ export async function searchNews(query: string): Promise<NewsArticle[]> {
 		.from('news_articles')
 		.select(`
 			*,
-			author_profile:author_id (
+			profiles!author_id (
 				display_name
 			)
 		`)
@@ -911,4 +915,88 @@ export async function searchNews(query: string): Promise<NewsArticle[]> {
 	}
 
 	return (data || []).map(transformNewsArticle);
+}
+
+/**
+ * Fetch comments for a news article
+ */
+export async function getArticleComments(articleId: string): Promise<Array<{
+	id: string;
+	author: string;
+	avatar: string | null;
+	content: string;
+	date: Date;
+	likes: number;
+	dislikes: number;
+	isVerified?: boolean;
+	isPinned?: boolean;
+	replies: Array<{
+		id: string;
+		author: string;
+		avatar: string | null;
+		content: string;
+		date: Date;
+		likes: number;
+		dislikes: number;
+		isVerified?: boolean;
+	}>;
+}>> {
+	const { data: topLevelComments, error: commentsError } = await supabase
+		.from('article_comments')
+		.select('*')
+		.eq('article_id', articleId)
+		.is('parent_id', null)
+		.eq('is_deleted', false)
+		.order('is_pinned', { ascending: false })
+		.order('created_at', { ascending: false });
+
+	if (commentsError) {
+		console.error('Error fetching comments:', commentsError);
+		return [];
+	}
+
+	if (!topLevelComments || topLevelComments.length === 0) {
+		return [];
+	}
+
+	// Get all comment IDs to fetch replies
+	const commentIds = topLevelComments.map(c => c.id);
+
+	const { data: replies, error: repliesError } = await supabase
+		.from('article_comments')
+		.select('*')
+		.in('parent_id', commentIds)
+		.eq('is_deleted', false)
+		.order('created_at', { ascending: true });
+
+	if (repliesError) {
+		console.error('Error fetching replies:', repliesError);
+	}
+
+	// Transform and group comments with replies
+	return topLevelComments.map(comment => {
+		const commentReplies = (replies || []).filter(r => r.parent_id === comment.id);
+		
+		return {
+			id: comment.id,
+			author: comment.author_name,
+			avatar: null, // Could link to profile avatar if user_id exists
+			content: comment.content,
+			date: new Date(comment.created_at),
+			likes: comment.likes || 0,
+			dislikes: comment.dislikes || 0,
+			isVerified: comment.is_verified || false,
+			isPinned: comment.is_pinned || false,
+			replies: commentReplies.map(reply => ({
+				id: reply.id,
+				author: reply.author_name,
+				avatar: null,
+				content: reply.content,
+				date: new Date(reply.created_at),
+				likes: reply.likes || 0,
+				dislikes: reply.dislikes || 0,
+				isVerified: reply.is_verified || false
+			}))
+		};
+	});
 }
