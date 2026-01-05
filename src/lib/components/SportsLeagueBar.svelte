@@ -167,7 +167,10 @@
 							on:mouseleave={handleMouseLeave}
 						>
 							<button
-								on:click={() => setActiveSport(sport.code)}
+								on:click={() => {
+									setActiveSport(sport.code);
+									goto(`/${sport.code.toLowerCase()}/home`);
+								}}
 								class="px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm font-semibold text-white dark:text-gray-200 hover:text-red-400 dark:hover:text-red-400 transition-colors whitespace-nowrap relative {
 									activeSport === sport.code ? 'text-red-400 dark:text-red-400' : ''
 								}"

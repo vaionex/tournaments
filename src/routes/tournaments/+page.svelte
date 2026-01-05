@@ -113,42 +113,46 @@
 		</div>
 		
 		<!-- Featured Sections - 3 Columns -->
-		{#if loading}
-			<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8 mb-16">
-				{#each Array(3) as _, sectionIndex}
-					<div class="tournament-featured-card animate-pulse">
-						<!-- Section Header -->
+		<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8 mb-16">
+			{#if loading}
+				{#each ['Top Tournaments', 'Most Popular', 'Trending'] as title, sectionIndex}
+					<div class="tournament-featured-card">
+						<!-- Section Header - static, always shown -->
 						<div class="flex items-center justify-between mb-6 pb-4 border-b border-gray-200 dark:border-gray-700">
-							<div class="h-6 bg-gray-200 dark:bg-gray-700 rounded w-32"></div>
-							<div class="w-10 h-10 rounded-lg bg-gray-200 dark:bg-gray-700"></div>
+							<h2 class="text-xl font-bold text-gray-900 dark:text-white">{title}</h2>
+							<div class="w-10 h-10 rounded-lg bg-gradient-to-br from-gray-300 to-gray-400 dark:from-gray-600 dark:to-gray-700 flex items-center justify-center shadow-md">
+								<span class="text-xl">{sectionIndex === 0 ? '🏆' : sectionIndex === 1 ? '⭐' : '🔥'}</span>
+							</div>
 						</div>
-						<!-- 3 Tournament Items -->
+						<!-- 3 Tournament Items Skeleton -->
 						<div class="space-y-5">
 							{#each Array(3) as _, itemIndex}
-								<div class="{itemIndex < 2 ? 'border-b-2 border-gray-200 dark:border-gray-700 pb-5' : ''}">
-									<!-- Title row -->
-									<div class="flex items-start justify-between gap-3 mb-2">
+								<div class="tournament-item {itemIndex < 2 ? 'border-b-2 border-gray-200 dark:border-gray-700 pb-5' : ''} animate-pulse">
+									<!-- Title row - matches TournamentListItem structure exactly (gap-3 handles spacing, no mb) -->
+									<div class="flex items-start justify-between gap-3">
 										<div class="flex-1 min-w-0">
-											<div class="h-5 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-2"></div>
-											<div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/2"></div>
+											<div class="h-6 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-1"></div>
+											<div class="h-5 bg-gray-200 dark:bg-gray-700 rounded w-1/2 mb-2"></div>
 										</div>
-										<div class="h-5 w-16 bg-gray-200 dark:bg-gray-700 rounded-full"></div>
+										<div class="h-[18px] w-16 bg-gray-200 dark:bg-gray-700 rounded-full"></div>
 									</div>
-									<!-- Prize/stat row -->
-									<div class="h-5 bg-gray-200 dark:bg-gray-700 rounded w-24 mb-2"></div>
-									<!-- Date/location row -->
+									<!-- Prize/stat row (gap-3 handles spacing, no mb) -->
 									<div class="flex items-center gap-2">
-										<div class="h-4 w-4 bg-gray-200 dark:bg-gray-700 rounded"></div>
-										<div class="h-3 bg-gray-200 dark:bg-gray-700 rounded w-32"></div>
+										<div class="h-7 bg-gray-200 dark:bg-gray-700 rounded w-24"></div>
+									</div>
+									<!-- Date/location row - matches exact structure with correct icon color -->
+									<div class="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-500">
+										<svg class="w-4 h-4 text-gray-500 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+										</svg>
+										<div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-32"></div>
 									</div>
 								</div>
 							{/each}
 						</div>
 					</div>
 				{/each}
-			</div>
-		{:else}
-			<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8 mb-16">
+			{:else}
 				<TournamentFeaturedSection 
 					title="Top Tournaments"
 					tournaments={topTournaments}
@@ -172,27 +176,58 @@
 					iconGradient="from-orange-400 to-orange-600"
 					variant="trending"
 				/>
-			</div>
-		{/if}
+			{/if}
+		</div>
 		
 		<!-- All Tournaments Section -->
 		<div class="mb-8">
+			<!-- Header - static, always shown -->
 			<div class="flex items-center justify-between mb-6">
 				<h2 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">All Tournaments</h2>
 			</div>
 			
-			<!-- Search and Filters -->
-			<TournamentFilters
-				{searchQuery}
-				{gameFilter}
-				{locationFilter}
-				{games}
-				{locations}
-				{totalCount}
-				on:search={handleSearch}
-				on:gameChange={handleGameChange}
-				on:locationChange={handleLocationChange}
-			/>
+			<!-- Search and Filters - static, always shown -->
+			{#if loading}
+				<div class="mb-8 space-y-5">
+					<!-- SearchBar skeleton -->
+					<div class="w-full">
+						<div class="flex flex-col md:flex-row gap-4">
+							<div class="flex-1 relative">
+								<div class="w-full h-12 bg-gray-200 dark:bg-gray-700 rounded-lg animate-pulse"></div>
+							</div>
+							<div class="h-12 w-40 bg-gray-200 dark:bg-gray-700 rounded-lg animate-pulse"></div>
+							<div class="h-12 w-40 bg-gray-200 dark:bg-gray-700 rounded-lg animate-pulse"></div>
+							<div class="h-12 w-24 bg-gray-200 dark:bg-gray-700 rounded-lg animate-pulse"></div>
+						</div>
+					</div>
+					
+					<!-- Filter selects skeleton -->
+					<div class="flex flex-wrap gap-3">
+						<div class="h-10 w-32 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+						<div class="h-10 w-32 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+					</div>
+					
+					<!-- Count skeleton -->
+					<div class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+						<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+						</svg>
+						<div class="h-4 w-32 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+					</div>
+				</div>
+			{:else}
+				<TournamentFilters
+					{searchQuery}
+					{gameFilter}
+					{locationFilter}
+					{games}
+					{locations}
+					{totalCount}
+					on:search={handleSearch}
+					on:gameChange={handleGameChange}
+					on:locationChange={handleLocationChange}
+				/>
+			{/if}
 		</div>
 	
 		<!-- Tournament Grid -->
