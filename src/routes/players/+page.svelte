@@ -7,10 +7,12 @@
 		getStatLeaders,
 		getUniquePlayerGames,
 		getUniqueCountries,
-		getPlayerNews
+		getPlayerNews,
+		getTotalPlayerCount,
+		getTotalPrizePool
 	} from '$lib/services/players.service';
 	import { PlayerGrid } from '$lib/components/players';
-	import { LoadingState, VerifiedBadge } from '$lib/components/ui';
+	import { LoadingState, VerifiedBadge, CountryFlag } from '$lib/components/ui';
 	import { PageSEO } from '$lib/components/seo';
 	
 	// Data
@@ -34,6 +36,8 @@
 	let viewMode: 'grid' | 'table' = 'table';
 	let games: string[] = [];
 	let countries: string[] = [];
+	let totalPlayers = 0;
+	let totalPrizePool = 0;
 	
 	// Tabs
 	let activeTab: 'all' | 'leaderboards' = 'all';
@@ -56,14 +60,16 @@
 	async function loadInitialData() {
 		loading = true;
 		try {
-			const [wins, earnings, winrate, trending, gamesData, countriesData, news] = await Promise.all([
+			const [wins, earnings, winrate, trending, gamesData, countriesData, news, playerCount, prizePool] = await Promise.all([
 				getStatLeaders('wins', 5),
 				getStatLeaders('winnings', 5),
 				getStatLeaders('winrate', 5),
 				getStatLeaders('trending', 5),
 				getUniquePlayerGames(),
 				getUniqueCountries(),
-				getPlayerNews(5)
+				getPlayerNews(5),
+				getTotalPlayerCount(),
+				getTotalPrizePool()
 			]);
 			
 			winsLeaders = wins;
@@ -73,6 +79,8 @@
 			games = gamesData;
 			countries = countriesData;
 			playerNews = news;
+			totalPlayers = playerCount;
+			totalPrizePool = prizePool;
 			
 			await loadPlayers();
 		} catch (error) {
@@ -128,14 +136,6 @@
 		return `$${amount}`;
 	}
 	
-	function getCountryFlag(countryCode?: string): string {
-		if (!countryCode) return '🌍';
-		const codePoints = countryCode
-			.toUpperCase()
-			.split('')
-			.map(char => 127397 + char.charCodeAt(0));
-		return String.fromCodePoint(...codePoints);
-	}
 </script>
 
 <PageSEO
@@ -240,7 +240,7 @@
 													{#if player.verified}<VerifiedBadge size="xs" />{/if}
 												</div>
 												<div class="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-1">
-													<span>{getCountryFlag(player.countryCode)}</span>
+													<CountryFlag country={player.country} size="sm" />
 													<span class="truncate">{player.team || player.game}</span>
 												</div>
 											</div>
@@ -283,7 +283,7 @@
 													{#if player.verified}<VerifiedBadge size="xs" />{/if}
 												</div>
 												<div class="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-1">
-													<span>{getCountryFlag(player.countryCode)}</span>
+													<CountryFlag country={player.country} size="sm" />
 													<span class="truncate">{player.team || player.game}</span>
 												</div>
 											</div>
@@ -326,7 +326,7 @@
 													{#if player.verified}<VerifiedBadge size="xs" />{/if}
 												</div>
 												<div class="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-1">
-													<span>{getCountryFlag(player.countryCode)}</span>
+													<CountryFlag country={player.country} size="sm" />
 													<span class="truncate">{player.team || player.game}</span>
 												</div>
 											</div>
@@ -369,7 +369,7 @@
 													{#if player.verified}<VerifiedBadge size="xs" />{/if}
 												</div>
 												<div class="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-1">
-													<span>{getCountryFlag(player.countryCode)}</span>
+													<CountryFlag country={player.country} size="sm" />
 													<span class="truncate">{player.team || player.game}</span>
 												</div>
 											</div>
@@ -421,7 +421,9 @@
 										class="px-3 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm font-medium"
 									>
 										{#each countries as country}
-											<option value={country === 'All Countries' ? '' : country}>{country}</option>
+											<option value={country === 'All Countries' ? '' : country}>
+												{country}
+											</option>
 										{/each}
 									</select>
 									
@@ -582,7 +584,7 @@
 																{#if player.verified}<VerifiedBadge size="xs" />{/if}
 															</div>
 															<div class="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-1">
-																<span>{getCountryFlag(player.countryCode)}</span>
+																<CountryFlag country={player.country} size="sm" />
 																<span>{player.country || 'Unknown'}</span>
 															</div>
 														</div>
@@ -716,7 +718,7 @@
 						<div class="space-y-3">
 							<div class="flex justify-between items-center">
 								<span class="text-sm text-gray-600 dark:text-gray-400">Total Players</span>
-								<span class="font-bold text-gray-900 dark:text-white">35</span>
+								<span class="font-bold text-gray-900 dark:text-white">{totalPlayers.toLocaleString()}</span>
 							</div>
 							<div class="flex justify-between items-center">
 								<span class="text-sm text-gray-600 dark:text-gray-400">Sports Categories</span>
@@ -728,7 +730,7 @@
 							</div>
 							<div class="flex justify-between items-center">
 								<span class="text-sm text-gray-600 dark:text-gray-400">Total Prize Pool</span>
-								<span class="font-bold text-green-600 dark:text-green-400">$4.2B+</span>
+								<span class="font-bold text-green-600 dark:text-green-400">{formatCurrency(totalPrizePool)}</span>
 							</div>
 						</div>
 					</div>

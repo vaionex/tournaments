@@ -1,28 +1,51 @@
-<script>
+<script lang="ts">
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
 	import { format } from 'date-fns';
 	import { goto } from '$app/navigation';
+	import { getPlayerByUsername, getPlayerKnownFor } from '$lib/services/players.service';
+	import { CountryFlag } from '$lib/components/ui';
+	import type { Player } from '$lib/types';
 	
+	let player: Player | null = null;
 	let profile = null;
 	let tournamentHistory = [];
 	let knownFor = [];
 	let stats = {};
 	let loading = true;
+	let notFound = false;
 	
-	onMount(async () => {
-		const username = $page.params.username;
-		await new Promise(resolve => setTimeout(resolve, 500));
+	async function loadPlayer() {
+		// Decode the username parameter (handles URL encoding)
+		const username = decodeURIComponent($page.params.username);
+		loading = true;
 		
-		profile = {
-			username,
-			displayName: 'TennisPro',
-			verified: true,
-			joinedDate: '2024-01-15',
-			bio: 'Professional tennis player and competitive gamer. Specializing in Tennis and League of Legends. Known for strategic gameplay and consistent top finishes. Always looking for the next challenge!',
-			location: 'New York, USA',
-			age: 28
-		};
+		// Try to load real player data
+		const playerData = await getPlayerByUsername(username);
+		if (playerData) {
+			player = playerData;
+			notFound = false;
+			profile = {
+				username: player.username,
+				displayName: player.displayName,
+				verified: player.verified,
+				joinedDate: '2024-01-15', // TODO: Get from player data
+				bio: `Professional ${player.game} player. Ranked #${player.rank} globally.`,
+				location: player.country || 'Unknown',
+				country: player.country,
+				age: 28
+			};
+			
+			// Load "Known For" data from database
+			if (player.id) {
+				const knownForData = await getPlayerKnownFor(player.id);
+				knownFor = knownForData;
+			}
+		} else {
+			notFound = true;
+			player = null;
+			profile = null;
+		}
 		
 		tournamentHistory = [
 			{
@@ -77,12 +100,6 @@
 			}
 		];
 		
-		knownFor = [
-			{ game: 'Tennis', tournaments: 15, wins: 12 },
-			{ game: 'Golf', tournaments: 10, wins: 7 },
-			{ game: 'League of Legends', tournaments: 8, wins: 5 }
-		];
-		
 		stats = {
 			totalTournaments: 26,
 			totalWins: 16,
@@ -93,6 +110,15 @@
 		};
 		
 		loading = false;
+	}
+	
+	// Reactive statement to reload when route parameter changes
+	$: if ($page.params.username) {
+		loadPlayer();
+	}
+	
+	onMount(() => {
+		loadPlayer();
 	});
 </script>
 
@@ -155,7 +181,15 @@
 						
 						<!-- Quick Info -->
 						<div class="text-sm text-gray-600 dark:text-gray-400 space-y-1">
-							<div>Location: <span class="font-semibold text-gray-900 dark:text-white">{profile.location}</span></div>
+							<div class="flex items-center gap-2">
+								<span>Location:</span>
+								<div class="flex items-center gap-1.5">
+									{#if profile.country}
+										<CountryFlag country={profile.country} size="sm" />
+									{/if}
+									<span class="font-semibold text-gray-900 dark:text-white">{profile.location}</span>
+								</div>
+							</div>
 							<div>Member since: <span class="font-semibold text-gray-900 dark:text-white">{format(new Date(profile.joinedDate), 'MMMM yyyy')}</span></div>
 							<div>Total Winnings: <span class="font-semibold text-green-600 dark:text-green-400">${stats.totalWinnings.toLocaleString()}</span></div>
 						</div>
@@ -302,12 +336,21 @@
 			</div>
 		</div>
 	</div>
-{:else}
+{:else if notFound}
 	<div class="bg-gray-50 dark:bg-gray-900 min-h-screen">
 		<div class="container mx-auto px-4 py-8 max-w-7xl">
 			<div class="card text-center">
 				<h2 class="text-2xl font-bold mb-4 text-gray-900 dark:text-white">Profile Not Found</h2>
-				<p class="text-gray-600 dark:text-gray-400">This profile doesn't exist.</p>
+				<p class="text-gray-600 dark:text-gray-400 mb-4">The player profile you're looking for doesn't exist.</p>
+				<a href="/players" class="btn-primary inline-block">Browse All Players</a>
+			</div>
+		</div>
+	</div>
+{:else}
+	<div class="bg-gray-50 dark:bg-gray-900 min-h-screen">
+		<div class="container mx-auto px-4 py-8 max-w-7xl">
+			<div class="card text-center">
+				<h2 class="text-2xl font-bold mb-4 text-gray-900 dark:text-white">Loading...</h2>
 			</div>
 		</div>
 	</div>

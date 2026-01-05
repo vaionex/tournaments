@@ -3,6 +3,7 @@
 	import { page } from '$app/stores';
 	import { format, addDays, subDays } from 'date-fns';
 	import PageSEO from '$lib/components/seo/PageSEO.svelte';
+	import { getNewsArticlesBySport, getFeaturedArticleBySport } from '$lib/services/news.service';
 	
 	let sport = null;
 	let sportData = null;
@@ -14,6 +15,7 @@
 	let topPlayers = [];
 	let standings = [];
 	let featuredContent = null;
+	let featuredArticleId = null;
 	
 	const tabs = [
 		{ id: 'news', label: 'News' },
@@ -268,6 +270,110 @@
 		}
 	};
 	
+	// Sport-specific image mappings for better visuals
+	const sportImages = {
+		'nfl': ['1574629810360-7efbbe195018', '1574629810360-7efbbe195018', '1547036967-23d11aaca629', '1547036967-23d11aaca629'],
+		'nba': ['1519861531473-9200262188bf', '1504450758481-7338eba7524a', '1519861531473-9200262188bf', '1504450758481-7338eba7524a'],
+		'mlb': ['1566577739112-5180d4f9390a', '1566577739112-5180d4f9390a', '1566577739112-5180d4f9390a', '1566577739112-5180d4f9390a'],
+		'nhl': ['1547036967-23d11aaca629', '1547036967-23d11aaca629', '1547036967-23d11aaca629', '1547036967-23d11aaca629'],
+		'soccer': ['1574629810360-7efbbe195018', '1574629810360-7efbbe195018', '1574629810360-7efbbe195018', '1574629810360-7efbbe195018'],
+		'ncaf': ['1574629810360-7efbbe195018', '1547036967-23d11aaca629', '1574629810360-7efbbe195018', '1547036967-23d11aaca629'],
+		'wnba': ['1519861531473-9200262188bf', '1504450758481-7338eba7524a', '1519861531473-9200262188bf', '1504450758481-7338eba7524a'],
+		'tennis': ['1595435934249-5df7ed86e1c0', '1622279457486-62dcc4a431d6', '1595435934249-5df7ed86e1c0', '1622279457486-62dcc4a431d6'],
+		'golf': ['1535131749006-b7f58c99034b', '1535131749006-b7f58c99034b', '1535131749006-b7f58c99034b', '1535131749006-b7f58c99034b'],
+		'mma': ['1547036967-23d11aaca629', '1547036967-23d11aaca629', '1547036967-23d11aaca629', '1547036967-23d11aaca629'],
+		'boxing': ['1547036967-23d11aaca629', '1547036967-23d11aaca629', '1547036967-23d11aaca629', '1547036967-23d11aaca629'],
+		'racing': ['1547036967-23d11aaca629', '1547036967-23d11aaca629', '1547036967-23d11aaca629', '1547036967-23d11aaca629'],
+		'olympics': ['1547036967-23d11aaca629', '1547036967-23d11aaca629', '1547036967-23d11aaca629', '1547036967-23d11aaca629'],
+		'esports': ['1542751371-adc38448a05e', '1511512578047-dfb367046420', '1542751371-adc38448a05e', '1511512578047-dfb367046420'],
+		'cricket': ['1531415074968-036ba1b575da', '1540747913346-19e32dc3e97e', '1531415074968-036ba1b575da', '1540747913346-19e32dc3e97e'],
+		'rugby': ['1544723795-3fb6469f5b39', '1571019614242-c5c5dee9f50b', '1544723795-3fb6469f5b39', '1571019614242-c5c5dee9f50b']
+	};
+	
+	// Sport-specific featured content
+	const sportFeaturedContent = {
+		'nfl': {
+			title: 'NFL 2025 Season: Super Bowl Contenders and Key Storylines',
+			excerpt: 'Breaking down the top teams, MVP candidates, and must-watch matchups as the NFL season heats up.',
+			image: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=1200&h=600&fit=crop&q=80'
+		},
+		'nba': {
+			title: 'NBA Playoffs 2025: Championship Race Intensifies',
+			excerpt: 'Top teams battle for supremacy as the regular season winds down and playoff positioning becomes critical.',
+			image: 'https://images.unsplash.com/photo-1519861531473-9200262188bf?w=1200&h=600&fit=crop&q=80'
+		},
+		'mlb': {
+			title: 'MLB Season 2025: World Series Favorites Emerge',
+			excerpt: 'Powerhouse teams and rising stars dominate as the race for October baseball heats up.',
+			image: 'https://images.unsplash.com/photo-1566577739112-5180d4f9390a?w=1200&h=600&fit=crop&q=80'
+		},
+		'nhl': {
+			title: 'NHL 2025: Stanley Cup Contenders Battle for Supremacy',
+			excerpt: 'Elite teams and star players compete for hockey\'s ultimate prize as the season reaches its climax.',
+			image: 'https://images.unsplash.com/photo-1547036967-23d11aaca629?w=1200&h=600&fit=crop&q=80'
+		},
+		'soccer': {
+			title: 'European Football 2025: Champions League and League Races',
+			excerpt: 'Top clubs compete for domestic and European glory as the season enters its decisive phase.',
+			image: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=1200&h=600&fit=crop&q=80'
+		},
+		'ncaf': {
+			title: 'College Football 2025: Playoff Picture Takes Shape',
+			excerpt: 'Top programs battle for playoff spots as conference championships and bowl season approach.',
+			image: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=1200&h=600&fit=crop&q=80'
+		},
+		'wnba': {
+			title: 'WNBA 2025: Championship Race Heats Up',
+			excerpt: 'Elite teams and superstar players compete for the WNBA title as the season reaches its peak.',
+			image: 'https://images.unsplash.com/photo-1519861531473-9200262188bf?w=1200&h=600&fit=crop&q=80'
+		},
+		'tennis': {
+			title: 'Tennis 2025: Grand Slam Season in Full Swing',
+			excerpt: 'Top players compete for major titles as the ATP and WTA tours showcase the world\'s best talent.',
+			image: 'https://images.unsplash.com/photo-1595435934249-5df7ed86e1c0?w=1200&h=600&fit=crop&q=80'
+		},
+		'golf': {
+			title: 'Golf 2025: Major Championships and Tour Highlights',
+			excerpt: 'Top golfers compete for major titles and tour championships as the season reaches its peak.',
+			image: 'https://images.unsplash.com/photo-1535131749006-b7f58c99034b?w=1200&h=600&fit=crop&q=80'
+		},
+		'mma': {
+			title: 'UFC 2025: Championship Fights and Rising Stars',
+			excerpt: 'Top fighters compete for titles and rankings as the UFC showcases the best in mixed martial arts.',
+			image: 'https://images.unsplash.com/photo-1547036967-23d11aaca629?w=1200&h=600&fit=crop&q=80'
+		},
+		'boxing': {
+			title: 'Boxing 2025: Championship Bouts and Super Fights',
+			excerpt: 'Top fighters compete for world titles and legacy-defining matchups in the ring.',
+			image: 'https://images.unsplash.com/photo-1547036967-23d11aaca629?w=1200&h=600&fit=crop&q=80'
+		},
+		'racing': {
+			title: 'Racing 2025: Formula 1 and Motorsport Highlights',
+			excerpt: 'Top drivers compete for championships as Formula 1 and other racing series showcase speed and skill.',
+			image: 'https://images.unsplash.com/photo-1547036967-23d11aaca629?w=1200&h=600&fit=crop&q=80'
+		},
+		'olympics': {
+			title: 'Olympics 2025: World\'s Best Athletes Compete',
+			excerpt: 'Elite athletes from around the world compete for Olympic glory and world records.',
+			image: 'https://images.unsplash.com/photo-1547036967-23d11aaca629?w=1200&h=600&fit=crop&q=80'
+		},
+		'esports': {
+			title: 'Esports 2025: Major Tournaments and Championship Series',
+			excerpt: 'Top teams and players compete for millions in prize money across League of Legends, CS2, and more.',
+			image: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=1200&h=600&fit=crop&q=80'
+		},
+		'cricket': {
+			title: 'Cricket 2025: International Series and Premier Leagues',
+			excerpt: 'Top teams compete in Test matches, ODIs, T20s, and premier leagues around the world.',
+			image: 'https://images.unsplash.com/photo-1531415074968-036ba1b575da?w=1200&h=600&fit=crop&q=80'
+		},
+		'rugby': {
+			title: 'Rugby 2025: International Competitions and Club Championships',
+			excerpt: 'Top teams compete in Six Nations, Rugby Championship, and club competitions worldwide.',
+			image: 'https://images.unsplash.com/photo-1544723795-3fb6469f5b39?w=1200&h=600&fit=crop&q=80'
+		}
+	};
+	
 	function generateNews(sportConfig) {
 		const newsTemplates = [
 			{ title: `${sportConfig.name} Season Preview: Top Contenders Revealed`, category: 'Preview' },
@@ -280,6 +386,9 @@
 			{ title: `${sportConfig.leagues[0]?.name || 'League'} Announces Schedule Changes`, category: 'Schedule' }
 		];
 		
+		const sportCode = sport.toLowerCase();
+		const images = sportImages[sportCode] || sportImages['nfl'];
+		
 		return newsTemplates.map((template, i) => ({
 			id: `${sport}-news-${i}`,
 			title: template.title,
@@ -287,7 +396,7 @@
 			excerpt: `Latest news and updates from the world of ${sportConfig.name}. Stay informed with comprehensive coverage.`,
 			author: 'Sports Desk',
 			date: subDays(new Date(), i * 2).toISOString(),
-			image: `https://images.unsplash.com/photo-${1550000000000 + i * 1000000}?w=400&h=250&fit=crop`,
+			image: `https://images.unsplash.com/photo-${images[i % images.length]}?w=400&h=250&fit=crop&q=80`,
 			readTime: Math.floor(Math.random() * 5) + 3
 		}));
 	}
@@ -330,8 +439,9 @@
 		}));
 	}
 	
-	onMount(async () => {
+	async function loadSportData() {
 		const sportCode = $page.params.sport.toLowerCase();
+		loading = true;
 		sportData = sportsConfig[sportCode];
 		
 		if (!sportData) {
@@ -351,22 +461,57 @@
 		
 		sport = sportCode;
 		
-		// Simulate loading
-		await new Promise(resolve => setTimeout(resolve, 400));
+		// Load real articles from database
+		const [articles, featuredArticle] = await Promise.all([
+			getNewsArticlesBySport(sportCode, 8),
+			getFeaturedArticleBySport(sportCode)
+		]);
 		
-		newsArticles = generateNews(sportData);
+		newsArticles = articles;
+		
+		// Set featured content from database or fallback
+		if (featuredArticle) {
+			featuredArticleId = featuredArticle.id;
+			featuredContent = {
+				title: featuredArticle.title,
+				image: featuredArticle.image,
+				excerpt: featuredArticle.excerpt
+			};
+		} else {
+			featuredArticleId = null;
+			// Fallback to sport-specific content if no featured article
+			const featured = sportFeaturedContent[sportCode] || {
+				title: `${sportData.name} Season 2025: Everything You Need to Know`,
+				excerpt: `Comprehensive preview of the upcoming ${sportData.name} season, featuring top storylines, predictions, and key matchups.`,
+				image: 'https://images.unsplash.com/photo-1461896836934-47e5c98aebe1?w=1200&h=600&fit=crop&q=80'
+			};
+			
+			featuredContent = {
+				title: featured.title,
+				image: featured.image,
+				excerpt: featured.excerpt
+			};
+		}
+		
+		// Generate mock data for other sections (events, results, standings)
 		upcomingEvents = generateUpcomingEvents(sportData);
 		recentResults = generateRecentResults(sportData);
 		topPlayers = sportData.topPlayers;
 		standings = generateStandings(sportData);
 		
-		featuredContent = {
-			title: `${sportData.name} Season 2025: Everything You Need to Know`,
-			image: 'https://images.unsplash.com/photo-1461896836934-47e5c98aebe1?w=1200&h=600&fit=crop',
-			excerpt: `Comprehensive preview of the upcoming ${sportData.name} season, featuring top storylines, predictions, and key matchups.`
-		};
-		
 		loading = false;
+	}
+	
+	// Reactive statement to reload when route parameter changes
+	$: if ($page.params.sport) {
+		loadSportData();
+	}
+	
+	onMount(() => {
+		// Initial load is handled by reactive statement, but we can call it here too for safety
+		if ($page.params.sport) {
+			loadSportData();
+		}
 	});
 </script>
 
@@ -460,7 +605,7 @@
 					{#if activeTab === 'news'}
 						<!-- Featured Article -->
 						{#if featuredContent}
-							<a href="/news/{sport}-featured" class="block mb-8 group">
+							<a href={featuredArticleId ? `/news/${featuredArticleId}` : `/news/${sport}-featured`} class="block mb-8 group">
 								<article class="relative h-80 rounded-2xl overflow-hidden">
 									<img 
 										src={featuredContent.image} 
@@ -485,7 +630,18 @@
 								<a href="/news/{article.id}" class="group">
 									<article class="card hover:shadow-xl transition-all duration-300">
 										<div class="relative h-40 rounded-t-xl overflow-hidden bg-gray-200 dark:bg-gray-700">
-											<div class="absolute inset-0 bg-gradient-to-br {sportData.color} opacity-60"></div>
+											{#if article.image}
+												<img 
+													src={article.image} 
+													alt={article.title}
+													class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+													on:error={(e) => {
+														// Fallback to gradient if image fails
+														e.currentTarget.style.display = 'none';
+													}}
+												/>
+											{/if}
+											<div class="absolute inset-0 bg-gradient-to-br {sportData.color} {article.image ? 'opacity-40' : 'opacity-60'}"></div>
 											<div class="absolute inset-0 flex items-center justify-center">
 												<span class="text-5xl">{sportData.icon}</span>
 											</div>

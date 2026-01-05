@@ -8,7 +8,7 @@
 	
 	function handleSearch() {
 		if (searchQuery.trim()) {
-			goto(`/tournaments?search=${encodeURIComponent(searchQuery)}`);
+			goto(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
 			mobileSearchOpen = false;
 		}
 	}

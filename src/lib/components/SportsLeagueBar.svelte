@@ -1,9 +1,18 @@
 <script>
 	import { onMount } from 'svelte';
+	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
 	import { theme } from '$lib/stores/theme';
 	
 	let activeSport = 'NFL';
+	
+	// Set active sport based on current route
+	$: {
+		const sportParam = $page.params.sport;
+		if (sportParam) {
+			activeSport = sportParam.toUpperCase();
+		}
+	}
 	let hoveredSport = null;
 	let searchQuery = '';
 	let closeTimeout = null;
@@ -75,7 +84,7 @@
 	
 	function handleSearch() {
 		if (searchQuery.trim()) {
-			goto(`/tournaments?search=${encodeURIComponent(searchQuery)}`);
+			goto(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
 			mobileSearchOpen = false;
 		}
 	}

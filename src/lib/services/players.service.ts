@@ -686,10 +686,11 @@ const COUNTRIES = [...new Set(REAL_PLAYERS.map(p => p.country).filter(Boolean))]
 // DATABASE QUERY HELPERS
 // ============================================
 
-function transformPlayer(row: Record<string, unknown>): Player {
+export function transformPlayer(row: Record<string, unknown>): Player {
 	return {
 		id: row.id as string,
 		username: (row.player_name as string) || (row.slug as string) || '',
+		slug: (row.slug as string) || undefined, // URL-friendly identifier
 		displayName: (row.display_name as string) || (row.player_name as string) || '',
 		rank: row.current_rank as number || 0,
 		wins: row.total_wins as number || 0,
@@ -767,6 +768,7 @@ export async function getPlayers(
 	}
 
 	// Real Supabase query - use players table for more complete data
+	// First, get all matching players to properly sort and rank them
 	let query = supabase
 		.from('players')
 		.select('*', { count: 'exact' })
@@ -777,6 +779,9 @@ export async function getPlayers(
 	}
 	if (filters.game) {
 		query = query.eq('primary_game', filters.game);
+	}
+	if (filters.country) {
+		query = query.eq('country', filters.country);
 	}
 
 	const sortColumn = {
@@ -789,23 +794,42 @@ export async function getPlayers(
 
 	const ascending = filters.sortBy === 'rank' || filters.sortBy === 'name';
 
-	const from = (page - 1) * itemsPerPage;
-	const to = from + itemsPerPage - 1;
-
-	const { data, error, count } = await query
-		.order(sortColumn, { ascending, nullsFirst: false })
-		.range(from, to);
+	// Get all matching players first (for proper ranking)
+	const { data: allData, error, count } = await query
+		.order(sortColumn, { ascending, nullsFirst: false });
 
 	if (error) {
 		console.error('Error fetching players:', error);
 		return { data: [], pagination: { currentPage: page, totalPages: 0, totalItems: 0, itemsPerPage } };
 	}
 
-	const totalItems = count || 0;
+	// Transform players and reassign ranks based on sorted position (1, 2, 3, etc.)
+	let transformedPlayers = (allData || []).map((row, index) => {
+		const player = transformPlayer(row);
+		// Reassign rank based on position in sorted list
+		player.rank = index + 1;
+		return player;
+	});
+
+	// Apply letter filter if specified
+	if (filters.letter) {
+		const letter = filters.letter.toUpperCase();
+		transformedPlayers = transformedPlayers.filter(p => 
+			p.displayName.toUpperCase().startsWith(letter)
+		);
+	}
+
+	// Recalculate total items and pages after filtering
+	const totalItems = transformedPlayers.length;
 	const totalPages = Math.ceil(totalItems / itemsPerPage);
 
+	// Apply pagination after sorting and ranking
+	const from = (page - 1) * itemsPerPage;
+	const to = from + itemsPerPage;
+	const paginatedData = transformedPlayers.slice(from, to);
+
 	return {
-		data: (data || []).map(transformPlayer),
+		data: paginatedData,
 		pagination: { currentPage: page, totalPages, totalItems, itemsPerPage }
 	};
 }
@@ -852,7 +876,12 @@ export async function getStatLeaders(category: 'wins' | 'winnings' | 'winrate' |
 		return [];
 	}
 
-	return (data || []).map(transformPlayer);
+	// Reassign ranks based on sorted position (1, 2, 3, etc.)
+	return (data || []).map((row, index) => {
+		const player = transformPlayer(row);
+		player.rank = index + 1;
+		return player;
+	});
 }
 
 /**
@@ -877,7 +906,12 @@ export async function getHighestEarningPlayers(limit: number = 3): Promise<Playe
 		return [];
 	}
 
-	return (data || []).map(transformPlayer);
+	// Reassign ranks based on sorted position (1, 2, 3, etc.)
+	return (data || []).map((row, index) => {
+		const player = transformPlayer(row);
+		player.rank = index + 1;
+		return player;
+	});
 }
 
 /**
@@ -899,6 +933,18 @@ export async function getMostPopularPlayers(limit: number = 3): Promise<Player[]
 		.eq('is_verified', true)
 		.order('total_tournaments', { ascending: false })
 		.limit(limit);
+
+	if (error) {
+		console.error('Error fetching most popular players:', error);
+		return [];
+	}
+
+	// Reassign ranks based on sorted position (1, 2, 3, etc.)
+	return (data || []).map((row, index) => {
+		const player = transformPlayer(row);
+		player.rank = index + 1;
+		return player;
+	});
 
 	if (error) {
 		console.error('Error fetching popular players:', error);
@@ -1017,7 +1063,19 @@ export async function getUniqueCountries(): Promise<string[]> {
 		return ['All Countries', ...COUNTRIES];
 	}
 
-	return ['All Countries', ...COUNTRIES];
+	const { data, error } = await supabase
+		.from('players')
+		.select('country')
+		.eq('is_active', true)
+		.not('country', 'is', null);
+
+	if (error) {
+		console.error('Error fetching countries:', error);
+		return ['All Countries', ...COUNTRIES];
+	}
+
+	const uniqueCountries = [...new Set((data || []).map((p: Record<string, unknown>) => p.country as string).filter(Boolean))].sort();
+	return ['All Countries', ...uniqueCountries];
 }
 
 /**
@@ -1046,6 +1104,51 @@ export async function getPlayersByGame(game: string, limit: number = 10): Promis
 	}
 
 	return (data || []).map(transformPlayer);
+}
+
+/**
+ * Get total player count
+ */
+export async function getTotalPlayerCount(): Promise<number> {
+	if (USE_MOCK_DATA) {
+		return REAL_PLAYERS.length;
+	}
+
+	const { count, error } = await supabase
+		.from('players')
+		.select('*', { count: 'exact', head: true })
+		.eq('is_active', true);
+
+	if (error) {
+		console.error('Error fetching player count:', error);
+		return 0;
+	}
+
+	return count || 0;
+}
+
+/**
+ * Get total prize pool (sum of all player winnings)
+ */
+export async function getTotalPrizePool(): Promise<number> {
+	if (USE_MOCK_DATA) {
+		return REAL_PLAYERS.reduce((sum, p) => sum + p.totalWinnings, 0);
+	}
+
+	const { data, error } = await supabase
+		.from('players')
+		.select('total_winnings')
+		.eq('is_active', true);
+
+	if (error) {
+		console.error('Error fetching total prize pool:', error);
+		return 0;
+	}
+
+	return (data || []).reduce((sum, row) => {
+		const winnings = Number(row.total_winnings) || 0;
+		return sum + winnings;
+	}, 0);
 }
 
 /**
@@ -1095,4 +1198,83 @@ export async function getPlayerNews(limit: number = 5): Promise<Array<{id: strin
 			player: 's1mple'
 		}
 	].slice(0, limit);
+}
+
+/**
+ * Get games a player is known for (tournaments and wins per game)
+ */
+export async function getPlayerKnownFor(playerId: string): Promise<Array<{game: string, tournaments: number, wins: number}>> {
+	if (USE_MOCK_DATA) {
+		await simulateDelay(200);
+		// Return mock data based on player's primary game
+		const player = REAL_PLAYERS.find(p => p.id === playerId);
+		if (!player) return [];
+		
+		return [
+			{ game: player.game, tournaments: 15, wins: 12 },
+			{ game: 'Golf', tournaments: 10, wins: 7 },
+			{ game: 'League of Legends', tournaments: 8, wins: 5 }
+		];
+	}
+
+	// First, get the player's profile_id
+	const { data: playerData, error: playerError } = await supabase
+		.from('players')
+		.select('profile_id')
+		.eq('id', playerId)
+		.single();
+
+	if (playerError || !playerData?.profile_id) {
+		console.error('Error fetching player profile_id:', playerError);
+		return [];
+	}
+
+	const profileId = playerData.profile_id;
+
+	// Query tournament_results joined with tournaments to get per-game stats
+	const { data, error } = await supabase
+		.from('tournament_results')
+		.select(`
+			rank,
+			tournaments!inner(
+				game
+			)
+		`)
+		.eq('player_id', profileId)
+		.eq('is_verified', true);
+
+	if (error) {
+		console.error('Error fetching player known for:', error);
+		return [];
+	}
+
+	// Group by game and calculate stats (using Set to count unique tournaments)
+	const gameStats = new Map<string, { tournaments: Set<string>, wins: number }>();
+	
+	(data || []).forEach((result: any) => {
+		const game = result.tournaments?.game;
+		if (!game) return;
+
+		if (!gameStats.has(game)) {
+			gameStats.set(game, { tournaments: new Set(), wins: 0 });
+		}
+
+		const stats = gameStats.get(game)!;
+		// Use Set to count unique tournaments
+		if (result.tournament_id) {
+			stats.tournaments.add(result.tournament_id);
+		}
+		if (result.rank === 1) {
+			stats.wins += 1;
+		}
+	});
+
+	// Convert to array and sort by tournaments (descending)
+	return Array.from(gameStats.entries())
+		.map(([game, stats]) => ({ 
+			game, 
+			tournaments: stats.tournaments.size, 
+			wins: stats.wins 
+		}))
+		.sort((a, b) => b.tournaments - a.tournaments);
 }

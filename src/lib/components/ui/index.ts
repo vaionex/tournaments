@@ -10,4 +10,5 @@ export { default as EmptyState } from './EmptyState.svelte';
 export { default as FilterDropdown } from './FilterDropdown.svelte';
 export { default as VerifiedBadge } from './VerifiedBadge.svelte';
 export { default as RankBadge } from './RankBadge.svelte';
+export { default as CountryFlag } from './CountryFlag.svelte';
 

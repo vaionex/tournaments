@@ -633,6 +633,89 @@ export function getNewsCategories(): NewsCategory[] {
 }
 
 /**
+ * Fetch news articles by sport
+ */
+export async function getNewsArticlesBySport(sport: string, limit: number = 10): Promise<NewsArticle[]> {
+	if (USE_MOCK_DATA) {
+		await simulateDelay(300);
+		// Filter mock data by sport keywords
+		const sportKeywords = sport.toLowerCase();
+		return mockFeaturedNews
+			.filter(article => {
+				const title = article.title.toLowerCase();
+				const excerpt = article.excerpt.toLowerCase();
+				return title.includes(sportKeywords) || excerpt.includes(sportKeywords);
+			})
+			.slice(0, limit);
+	}
+
+	const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
+	if (!SUPABASE_URL || SUPABASE_URL.includes('placeholder')) {
+		console.warn('⚠️ Supabase URL is a placeholder. News articles will not load from the database.');
+		return [];
+	}
+
+	const { data, error } = await supabase
+		.from('news_articles')
+		.select(`
+			*,
+			profiles!author_id (
+				display_name
+			)
+		`)
+		.eq('is_published', true)
+		.eq('sport', sport.toLowerCase())
+		.order('published_at', { ascending: false })
+		.limit(limit);
+
+	if (error) {
+		console.error('Error fetching news articles by sport:', error);
+		return [];
+	}
+
+	return (data || []).map(transformNewsArticle);
+}
+
+/**
+ * Get featured article for a sport
+ */
+export async function getFeaturedArticleBySport(sport: string): Promise<NewsArticle | null> {
+	if (USE_MOCK_DATA) {
+		await simulateDelay(200);
+		const articles = await getNewsArticlesBySport(sport, 1);
+		return articles[0] || null;
+	}
+
+	const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
+	if (!SUPABASE_URL || SUPABASE_URL.includes('placeholder')) {
+		return null;
+	}
+
+	const { data, error } = await supabase
+		.from('news_articles')
+		.select(`
+			*,
+			profiles!author_id (
+				display_name
+			)
+		`)
+		.eq('is_published', true)
+		.eq('sport', sport.toLowerCase())
+		.eq('is_featured', true)
+		.order('published_at', { ascending: false })
+		.limit(1)
+		.single();
+
+	if (error) {
+		// If no featured article, get the most recent one
+		const articles = await getNewsArticlesBySport(sport, 1);
+		return articles[0] || null;
+	}
+
+	return data ? transformNewsArticle(data) : null;
+}
+
+/**
  * Fetch news articles with optional category filter
  */
 export async function getNewsArticles(category: NewsCategory = 'All'): Promise<NewsArticle[]> {

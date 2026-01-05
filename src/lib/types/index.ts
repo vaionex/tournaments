@@ -50,6 +50,7 @@ export interface TournamentParticipant {
 export interface Player {
 	id: string;
 	username: string;
+	slug?: string; // URL-friendly identifier
 	displayName: string;
 	rank: number;
 	wins: number;
