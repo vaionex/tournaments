@@ -6,6 +6,7 @@
 import type { NewsArticle, NewsCategory } from '$lib/types';
 import { supabase } from '$lib/supabase';
 import { simulateDelay } from './api';
+import { filterHostileWords } from '$lib/utils/wordFilter';
 
 // Toggle this to switch between mock and real data
 const USE_MOCK_DATA = false;
@@ -609,7 +610,8 @@ function transformNewsArticle(row: Record<string, unknown>): NewsArticle {
 		category: row.category as NewsCategory,
 		image: row.image_url as string || 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=1200',
 		author: (row.profiles as Record<string, unknown>)?.display_name as string || 'Staff',
-		readTime: row.read_time as number | undefined
+		readTime: row.read_time as number | undefined,
+		sport: row.sport as string | undefined
 	};
 }
 
@@ -1014,9 +1016,9 @@ export async function searchNews(query: string): Promise<NewsArticle[]> {
 }
 
 /**
- * Fetch comments for a news article
+ * Fetch comments for a news article with pagination
  */
-export async function getArticleComments(articleId: string): Promise<Array<{
+export async function getArticleComments(articleId: string, limit: number = 10, offset: number = 0): Promise<Array<{
 	id: string;
 	author: string;
 	avatar: string | null;
@@ -1026,6 +1028,8 @@ export async function getArticleComments(articleId: string): Promise<Array<{
 	dislikes: number;
 	isVerified?: boolean;
 	isPinned?: boolean;
+	isPro?: boolean; // Tournaments+ member
+	userId?: string | null;
 	replies: Array<{
 		id: string;
 		author: string;
@@ -1035,16 +1039,33 @@ export async function getArticleComments(articleId: string): Promise<Array<{
 		likes: number;
 		dislikes: number;
 		isVerified?: boolean;
+		isPro?: boolean; // Tournaments+ member
+		userId?: string | null;
 	}>;
 }>> {
 	const { data: topLevelComments, error: commentsError } = await supabase
 		.from('article_comments')
-		.select('*')
+		.select(`
+			id,
+			article_id,
+			user_id,
+			author_name,
+			content,
+			created_at,
+			likes,
+			dislikes,
+			is_verified,
+			is_pinned,
+			profiles!user_id (
+				is_pro
+			)
+		`)
 		.eq('article_id', articleId)
 		.is('parent_id', null)
 		.eq('is_deleted', false)
 		.order('is_pinned', { ascending: false })
-		.order('created_at', { ascending: false });
+		.order('created_at', { ascending: false })
+		.range(offset, offset + limit - 1);
 
 	if (commentsError) {
 		console.error('Error fetching comments:', commentsError);
@@ -1060,7 +1081,21 @@ export async function getArticleComments(articleId: string): Promise<Array<{
 
 	const { data: replies, error: repliesError } = await supabase
 		.from('article_comments')
-		.select('*')
+		.select(`
+			id,
+			article_id,
+			user_id,
+			author_name,
+			content,
+			created_at,
+			likes,
+			dislikes,
+			is_verified,
+			parent_id,
+			profiles!user_id (
+				is_pro
+			)
+		`)
 		.in('parent_id', commentIds)
 		.eq('is_deleted', false)
 		.order('created_at', { ascending: true });
@@ -1072,6 +1107,8 @@ export async function getArticleComments(articleId: string): Promise<Array<{
 	// Transform and group comments with replies
 	return topLevelComments.map(comment => {
 		const commentReplies = (replies || []).filter(r => r.parent_id === comment.id);
+		const profile = comment.profiles as Record<string, unknown> | null;
+		const isPro = profile?.is_pro as boolean || false;
 		
 		return {
 			id: comment.id,
@@ -1083,16 +1120,271 @@ export async function getArticleComments(articleId: string): Promise<Array<{
 			dislikes: comment.dislikes || 0,
 			isVerified: comment.is_verified || false,
 			isPinned: comment.is_pinned || false,
-			replies: commentReplies.map(reply => ({
-				id: reply.id,
-				author: reply.author_name,
-				avatar: null,
-				content: reply.content,
-				date: new Date(reply.created_at),
-				likes: reply.likes || 0,
-				dislikes: reply.dislikes || 0,
-				isVerified: reply.is_verified || false
-			}))
+			isPro: isPro,
+			userId: comment.user_id || null,
+			replies: commentReplies.map(reply => {
+				const replyProfile = reply.profiles as Record<string, unknown> | null;
+				const replyIsPro = replyProfile?.is_pro as boolean || false;
+				return {
+					id: reply.id,
+					author: reply.author_name,
+					avatar: null,
+					content: reply.content,
+					date: new Date(reply.created_at),
+					likes: reply.likes || 0,
+					dislikes: reply.dislikes || 0,
+					isVerified: reply.is_verified || false,
+					isPro: replyIsPro,
+					userId: reply.user_id || null
+				};
+			})
 		};
 	});
+}
+
+/**
+ * Fetch user's recent comments with their replies
+ */
+export async function getUserComments(userId: string, limit: number = 10): Promise<Array<{
+	id: string;
+	articleId: string;
+	articleTitle: string;
+	author: string;
+	content: string;
+	date: Date;
+	likes: number;
+	dislikes: number;
+	isPro?: boolean;
+	replies: Array<{
+		id: string;
+		author: string;
+		content: string;
+		date: Date;
+		likes: number;
+		dislikes: number;
+		isPro?: boolean;
+	}>;
+}>> {
+	// Get user's comments (both top-level and replies)
+	const { data: userComments, error: commentsError } = await supabase
+		.from('article_comments')
+		.select(`
+			*,
+			profiles!user_id (
+				is_pro
+			),
+			news_articles!article_id (
+				id,
+				title
+			)
+		`)
+		.eq('user_id', userId)
+		.eq('is_deleted', false)
+		.order('created_at', { ascending: false })
+		.limit(limit * 2); // Get more to account for replies
+
+	if (commentsError) {
+		console.error('Error fetching user comments:', commentsError);
+		return [];
+	}
+
+	if (!userComments || userComments.length === 0) {
+		return [];
+	}
+
+	// Get all article IDs to fetch replies to user's comments
+	const userCommentIds = userComments.map(c => c.id);
+	
+	// Get replies to user's comments
+	const { data: repliesToUserComments, error: repliesError } = await supabase
+		.from('article_comments')
+		.select(`
+			*,
+			profiles!user_id (
+				is_pro
+			)
+		`)
+		.in('parent_id', userCommentIds)
+		.eq('is_deleted', false)
+		.order('created_at', { ascending: true });
+
+	if (repliesError) {
+		console.error('Error fetching replies to user comments:', repliesError);
+	}
+
+	// Transform comments with article info and replies
+	return userComments.map(comment => {
+		const article = comment.news_articles as Record<string, unknown> | null;
+		const articleId = article?.id as string || comment.article_id;
+		const articleTitle = article?.title as string || 'Article';
+		const profile = comment.profiles as Record<string, unknown> | null;
+		const isPro = profile?.is_pro as boolean || false;
+		
+		// Get replies to this comment
+		const commentReplies = (repliesToUserComments || []).filter(r => r.parent_id === comment.id);
+		
+		return {
+			id: comment.id,
+			articleId,
+			articleTitle,
+			author: comment.author_name,
+			content: comment.content,
+			date: new Date(comment.created_at),
+			likes: comment.likes || 0,
+			dislikes: comment.dislikes || 0,
+			isPro: isPro,
+			replies: commentReplies.map(reply => {
+				const replyProfile = reply.profiles as Record<string, unknown> | null;
+				const replyIsPro = replyProfile?.is_pro as boolean || false;
+				return {
+					id: reply.id,
+					author: reply.author_name,
+					content: reply.content,
+					date: new Date(reply.created_at),
+					likes: reply.likes || 0,
+					dislikes: reply.dislikes || 0,
+					isPro: replyIsPro
+				};
+			})
+		};
+	}).sort((a, b) => b.date.getTime() - a.date.getTime()).slice(0, limit);
+}
+
+/**
+ * Create a new comment on an article
+ */
+export async function createComment(articleId: string, content: string, userId?: string): Promise<{ success: boolean; error?: string; comment?: any }> {
+	if (!content.trim()) {
+		return { success: false, error: 'Comment content is required' };
+	}
+
+	// Filter hostile words from content
+	const filteredContent = filterHostileWords(content.trim());
+
+	// Get user profile if logged in
+	let authorName = 'Anonymous';
+	let userProfile = null;
+	
+	if (userId) {
+		const { data: profile } = await supabase
+			.from('profiles')
+			.select('display_name, username')
+			.eq('id', userId)
+			.single();
+		
+		if (profile) {
+			userProfile = profile;
+			authorName = profile.display_name || profile.username || 'User';
+		}
+	}
+
+	const { data, error } = await supabase
+		.from('article_comments')
+		.insert({
+			article_id: articleId,
+			user_id: userId || null,
+			author_name: authorName,
+			content: filteredContent,
+			likes: 0,
+			dislikes: 0,
+			is_verified: false,
+			is_pinned: false,
+			is_deleted: false
+		})
+		.select()
+		.single();
+
+	if (error) {
+		console.error('Error creating comment:', error);
+		return { success: false, error: error.message };
+	}
+
+	return { success: true, comment: data };
+}
+
+/**
+ * Create a reply to a comment
+ */
+export async function createReply(articleId: string, parentId: string, content: string, userId?: string): Promise<{ success: boolean; error?: string; reply?: any }> {
+	if (!content.trim()) {
+		return { success: false, error: 'Reply content is required' };
+	}
+
+	// Filter hostile words from content
+	const filteredContent = filterHostileWords(content.trim());
+
+	// Get user profile if logged in
+	let authorName = 'Anonymous';
+	
+	if (userId) {
+		const { data: profile } = await supabase
+			.from('profiles')
+			.select('display_name, username')
+			.eq('id', userId)
+			.single();
+		
+		if (profile) {
+			authorName = profile.display_name || profile.username || 'User';
+		}
+	}
+
+	const { data, error } = await supabase
+		.from('article_comments')
+		.insert({
+			article_id: articleId,
+			parent_id: parentId,
+			user_id: userId || null,
+			author_name: authorName,
+			content: filteredContent,
+			likes: 0,
+			dislikes: 0,
+			is_verified: false,
+			is_pinned: false,
+			is_deleted: false
+		})
+		.select()
+		.single();
+
+	if (error) {
+		console.error('Error creating reply:', error);
+		return { success: false, error: error.message };
+	}
+
+	return { success: true, reply: data };
+}
+
+/**
+ * Delete a comment (soft delete)
+ */
+export async function deleteComment(commentId: string, userId: string): Promise<{ success: boolean; error?: string }> {
+	// First verify the comment belongs to the user
+	const { data: comment, error: fetchError } = await supabase
+		.from('article_comments')
+		.select('user_id')
+		.eq('id', commentId)
+		.single();
+
+	if (fetchError) {
+		return { success: false, error: 'Comment not found' };
+	}
+
+	if (comment.user_id !== userId) {
+		return { success: false, error: 'You can only delete your own comments' };
+	}
+
+	// Soft delete the comment
+	const { error } = await supabase
+		.from('article_comments')
+		.update({
+			is_deleted: true,
+			deleted_at: new Date().toISOString()
+		})
+		.eq('id', commentId);
+
+	if (error) {
+		console.error('Error deleting comment:', error);
+		return { success: false, error: error.message };
+	}
+
+	return { success: true };
 }

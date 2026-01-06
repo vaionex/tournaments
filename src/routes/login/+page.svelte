@@ -20,7 +20,7 @@
 		
 		try {
 			if (showSignup) {
-				// Sign up
+				// Sign up - no email confirmation required
 				const { data, error: signUpError } = await supabase.auth.signUp({
 					email,
 					password,
@@ -28,18 +28,71 @@
 						data: {
 							display_name: email.split('@')[0]
 						}
+						// Removed emailRedirectTo to avoid triggering email sending
 					}
 				});
 				
-				if (signUpError) {
+				// If there's a critical error (not email-related), show it
+				if (signUpError && !signUpError.message.toLowerCase().includes('email') && !signUpError.message.toLowerCase().includes('mail')) {
 					error = signUpError.message;
 					loading = false;
 					return;
 				}
 				
-				// Check if email confirmation is required
-				if (data.user && !data.session) {
-					error = 'Please check your email to confirm your account.';
+				// If user was created, try to sign them in immediately
+				if (data?.user) {
+					// If we already have a session from signup, use it
+					if (data.session) {
+						// Verify session is valid before redirecting
+						const { data: { session: verifiedSession } } = await supabase.auth.getSession();
+						if (verifiedSession) {
+							goto('/dashboard');
+							return;
+						}
+					}
+					
+					// Otherwise, sign them in immediately after a brief delay
+					// This ensures the user account is fully created in the database
+					await new Promise(resolve => setTimeout(resolve, 500));
+					
+					const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
+						email,
+						password
+					});
+					
+					if (signInData?.session) {
+						// Successfully signed in, verify and go to dashboard
+						const { data: { session: finalSession } } = await supabase.auth.getSession();
+						if (finalSession) {
+							goto('/dashboard');
+							return;
+						}
+					}
+					
+					// If sign in fails, check if it's an email confirmation issue
+					if (signInError) {
+						console.warn('Auto sign-in after signup failed:', signInError.message);
+						// If email confirmation is required, show helpful message
+						if (signInError.message.toLowerCase().includes('email') || 
+						    signInError.message.toLowerCase().includes('confirm') ||
+						    signInError.message.toLowerCase().includes('verify')) {
+							error = 'Account created! Please sign in below (email confirmation may be required).';
+						} else {
+							error = signInError.message || 'Account created, but sign in failed. Please try signing in below.';
+						}
+						showSignup = false;
+						loading = false;
+						return;
+					}
+					
+					// If we get here without a session, something went wrong
+					error = 'Account created, but automatic sign-in failed. Please sign in below.';
+					showSignup = false;
+					loading = false;
+					return;
+				} else {
+					// No user was created
+					error = signUpError?.message || 'Failed to create account. Please try again.';
 					loading = false;
 					return;
 				}
@@ -55,10 +108,13 @@
 					loading = false;
 					return;
 				}
+				
+				// Navigate to dashboard on successful sign in
+				if (data?.session) {
+					goto('/dashboard');
+					return;
+				}
 			}
-			
-			// Navigate to dashboard on success
-			goto('/dashboard');
 		} catch (err) {
 			error = 'An unexpected error occurred. Please try again.';
 			console.error('Auth error:', err);

@@ -13,6 +13,8 @@
 	import { LoadingState } from '$lib/components/ui';
 	import { PageSEO } from '$lib/components/seo';
 	
+	import { cache } from '$lib/services/cache.service';
+	
 	let topTournaments: Tournament[] = [];
 	let mostPopular: Tournament[] = [];
 	let trending: Tournament[] = [];
@@ -26,6 +28,7 @@
 	let locationFilter = '';
 	let games: string[] = [];
 	let locations: string[] = [];
+	let hasCachedData = false;
 	
 	const itemsPerPage = 12;
 	
@@ -33,8 +36,41 @@
 		await loadInitialData();
 	});
 	
-	async function loadInitialData() {
-		loading = true;
+	async function loadInitialData(useCache: boolean = true) {
+		// Check cache first
+		if (useCache) {
+			const cacheKey = 'tournaments-initial';
+			const cached = cache.get<{
+				topTournaments: Tournament[];
+				mostPopular: Tournament[];
+				trending: Tournament[];
+				games: string[];
+				locations: string[];
+			}>(cacheKey);
+			
+			if (cached) {
+				// Use cached data immediately (no skeleton)
+				topTournaments = cached.topTournaments;
+				mostPopular = cached.mostPopular;
+				trending = cached.trending;
+				games = cached.games;
+				locations = cached.locations;
+				hasCachedData = true;
+				loading = false;
+				
+				// Load tournaments list
+				await loadTournaments();
+				
+				// Fetch fresh data in background
+				loadInitialData(false);
+				return;
+			}
+		}
+		
+		if (!hasCachedData) {
+			loading = true;
+		}
+		
 		try {
 			const [top, popular, trend, gamesData, locationsData] = await Promise.all([
 				getTopTournaments(3),
@@ -50,11 +86,22 @@
 			games = gamesData;
 			locations = locationsData;
 			
+			// Cache the results
+			const cacheKey = 'tournaments-initial';
+			cache.set(cacheKey, {
+				topTournaments: top,
+				mostPopular: popular,
+				trending: trend,
+				games: gamesData,
+				locations: locationsData
+			}, 5 * 60 * 1000); // 5 minutes TTL
+			
 			await loadTournaments();
 		} catch (error) {
 			console.error('Failed to load data:', error);
 		} finally {
 			loading = false;
+			hasCachedData = false;
 		}
 	}
 	

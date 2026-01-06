@@ -1,6 +1,8 @@
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte';
+	import { createEventDispatcher, onMount } from 'svelte';
 	import { formatDistanceToNow, format } from 'date-fns';
+	import { getCurrentUser, getUserProfile } from '$lib/services/user.service';
+	import { deleteComment } from '$lib/services/news.service';
 	
 	interface Reply {
 		id: string;
@@ -11,7 +13,9 @@
 		likes: number;
 		dislikes: number;
 		isVerified?: boolean;
+		isPro?: boolean; // Tournaments+ member
 		replyTo?: string;
+		userId?: string | null;
 	}
 	
 	interface Comment {
@@ -24,7 +28,9 @@
 		dislikes: number;
 		isVerified?: boolean;
 		isPinned?: boolean;
+		isPro?: boolean; // Tournaments+ member
 		replies: Reply[];
+		userId?: string | null;
 	}
 	
 	export let comment: Comment;
@@ -37,7 +43,25 @@
 	let showAllReplies = false;
 	let showActionsMenu = false;
 	
+	// Authentication state
+	let user = null;
+	let userProfile = null;
+	let submittingReply = false;
+	let deletingComment = false;
+	
 	const dispatch = createEventDispatcher();
+	
+	$: isOwnComment = user && comment.userId && comment.userId === user.id;
+	
+	onMount(async () => {
+		user = await getCurrentUser();
+		if (user) {
+			userProfile = await getUserProfile(user.id);
+			if (userProfile) {
+				replyAuthor = userProfile.display_name || userProfile.username || '';
+			}
+		}
+	});
 	
 	const VISIBLE_REPLIES_COUNT = 2;
 	
@@ -87,18 +111,58 @@
 		showActionsMenu = false;
 	}
 	
+	async function handleDelete() {
+		if (!user || !isOwnComment) {
+			return;
+		}
+		
+		if (!confirm('Are you sure you want to delete this comment? This action cannot be undone.')) {
+			showActionsMenu = false;
+			return;
+		}
+		
+		deletingComment = true;
+		showActionsMenu = false;
+		
+		try {
+			const result = await deleteComment(comment.id, user.id);
+			
+			if (result.success) {
+				dispatch('deleted', { 
+					id: comment.id,
+					isReply,
+					parentId 
+				});
+			} else {
+				alert(result.error || 'Failed to delete comment');
+			}
+		} catch (error: any) {
+			console.error('Error deleting comment:', error);
+			alert(error.message || 'Failed to delete comment');
+		} finally {
+			deletingComment = false;
+		}
+	}
+	
 	function handleSubmitReply() {
-		if (!replyContent.trim() || !replyAuthor.trim()) return;
+		if (!replyContent.trim()) return;
+		
+		if (!user) {
+			// This shouldn't happen if UI is correct, but handle it anyway
+			return;
+		}
+		
+		submittingReply = true;
 		
 		dispatch('reply', {
 			parentId: comment.id,
 			content: replyContent,
-			author: replyAuthor
+			author: replyAuthor || userProfile?.display_name || 'User'
 		});
 		
 		replyContent = '';
-		replyAuthor = '';
 		showReplyForm = false;
+		submittingReply = false;
 	}
 	
 	function handleReplyVote(event: CustomEvent) {
@@ -107,6 +171,11 @@
 	
 	function handleReplyReport(event: CustomEvent) {
 		dispatch('report', event.detail);
+	}
+	
+	function handleReplyDelete(event: CustomEvent) {
+		// Forward the delete event to parent
+		dispatch('deleted', event.detail);
 	}
 	
 	function formatDate(date: Date): string {
@@ -130,7 +199,7 @@
 		</div>
 	{/if}
 	
-	<div class="bg-white dark:bg-gray-800 {comment.isPinned ? 'border-2 border-amber-300 dark:border-amber-600' : 'border border-gray-200 dark:border-gray-700'} rounded-2xl p-4 sm:p-6 transition-all hover:shadow-lg">
+	<div class="bg-white dark:bg-gray-800 {comment.isPinned ? 'border-2 border-amber-300 dark:border-amber-600' : comment.isPro ? 'border-2 border-red-400 dark:border-red-500 bg-gradient-to-br from-red-50/50 to-orange-50/50 dark:from-red-900/10 dark:to-orange-900/10' : 'border border-gray-200 dark:border-gray-700'} rounded-2xl p-4 sm:p-6 transition-all hover:shadow-lg">
 		<div class="flex gap-3 sm:gap-4">
 			<!-- Avatar -->
 			<div class="flex-shrink-0">
@@ -153,6 +222,14 @@
 				<div class="flex items-start justify-between mb-2">
 					<div class="flex items-center flex-wrap gap-2">
 						<span class="font-bold text-gray-900 dark:text-white">{comment.author}</span>
+						{#if comment.isPro}
+							<span class="inline-flex items-center gap-1 px-2 py-0.5 bg-gradient-to-r from-red-500 to-orange-500 text-white rounded-full text-xs font-bold shadow-sm">
+								<svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+									<path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+								</svg>
+								Tournaments+
+							</span>
+						{/if}
 						{#if comment.isVerified}
 							<span class="inline-flex items-center gap-1 px-2 py-0.5 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 rounded-full text-xs font-semibold">
 								<svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
@@ -182,15 +259,36 @@
 								class="absolute right-0 top-full mt-1 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-xl z-10 py-1 overflow-hidden"
 								on:mouseleave={() => showActionsMenu = false}
 							>
-								<button
-									on:click={handleReport}
-									class="w-full px-4 py-2.5 text-left text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 flex items-center gap-2 transition-colors"
-								>
-									<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9" />
-									</svg>
-									Report Comment
-								</button>
+								{#if isOwnComment}
+									<button
+										on:click={handleDelete}
+										disabled={deletingComment}
+										class="w-full px-4 py-2.5 text-left text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 flex items-center gap-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+									>
+										{#if deletingComment}
+											<svg class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+												<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+												<path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+											</svg>
+											Deleting...
+										{:else}
+											<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+												<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+											</svg>
+											Delete Comment
+										{/if}
+									</button>
+								{:else}
+									<button
+										on:click={handleReport}
+										class="w-full px-4 py-2.5 text-left text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 flex items-center gap-2 transition-colors"
+									>
+										<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9" />
+										</svg>
+										Report Comment
+									</button>
+								{/if}
 								<button
 									class="w-full px-4 py-2.5 text-left text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center gap-2 transition-colors"
 								>
@@ -246,15 +344,27 @@
 					
 					<!-- Reply Button -->
 					{#if !isReply}
-						<button
-							on:click={() => showReplyForm = !showReplyForm}
-							class="flex items-center gap-1.5 text-sm font-semibold text-gray-600 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 transition-colors"
-						>
-							<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" />
-							</svg>
-							Reply
-						</button>
+						{#if user}
+							<button
+								on:click={() => showReplyForm = !showReplyForm}
+								class="flex items-center gap-1.5 text-sm font-semibold text-gray-600 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 transition-colors"
+							>
+								<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" />
+								</svg>
+								Reply
+							</button>
+						{:else}
+							<a
+								href="/login"
+								class="flex items-center gap-1.5 text-sm font-semibold text-gray-600 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 transition-colors"
+							>
+								<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" />
+								</svg>
+								Reply
+							</a>
+						{/if}
 					{/if}
 					
 					<!-- Share Button -->
@@ -269,7 +379,7 @@
 				</div>
 				
 				<!-- Reply Form -->
-				{#if showReplyForm && !isReply}
+				{#if showReplyForm && !isReply && user}
 					<div class="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
 						<form on:submit|preventDefault={handleSubmitReply} class="space-y-3">
 							<div class="flex gap-3">
@@ -277,34 +387,39 @@
 									{replyAuthor ? replyAuthor.charAt(0).toUpperCase() : '?'}
 								</div>
 								<div class="flex-1 space-y-3">
-									<input
-										type="text"
-										bind:value={replyAuthor}
-										required
-										placeholder="Your name"
-										class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-red-500"
-									/>
 									<textarea
 										bind:value={replyContent}
 										required
 										rows="2"
 										placeholder="Write a reply..."
 										class="w-full px-3 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-red-500 resize-none"
+										disabled={submittingReply}
 									></textarea>
 									<div class="flex justify-end gap-2">
 										<button
 											type="button"
-											on:click={() => { showReplyForm = false; replyContent = ''; replyAuthor = ''; }}
+											on:click={() => { showReplyForm = false; replyContent = ''; }}
 											class="px-4 py-2 text-sm font-semibold text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+											disabled={submittingReply}
 										>
 											Cancel
 										</button>
 										<button
 											type="submit"
-											disabled={!replyContent.trim() || !replyAuthor.trim()}
+											disabled={!replyContent.trim() || submittingReply}
 											class="px-4 py-2 bg-red-600 hover:bg-red-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white text-sm font-semibold rounded-lg transition-colors"
 										>
-											Reply
+											{#if submittingReply}
+												<span class="flex items-center gap-2">
+													<svg class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+														<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+														<path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+													</svg>
+													Posting...
+												</span>
+											{:else}
+												Reply
+											{/if}
 										</button>
 									</div>
 								</div>
@@ -335,6 +450,7 @@
 										parentId={comment.id}
 										on:vote={handleReplyVote}
 										on:report={handleReplyReport}
+										on:deleted={handleReplyDelete}
 									/>
 								{/each}
 							</div>

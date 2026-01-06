@@ -4,6 +4,8 @@
 	import { getNewsArticlesPaginated, getNewsArticlesPaginatedWithOffset, getNewsCategories } from '$lib/services/news.service';
 	import { getTopPlayers } from '$lib/services/players.service';
 	import { getUpcomingTournaments } from '$lib/services/tournaments.service';
+	import { getUserPreferences } from '$lib/services/user.service';
+	import { cache } from '$lib/services/cache.service';
 	import { HeroArticle, NewsGrid, CategoryNav } from '$lib/components/home';
 	import { LoadingState } from '$lib/components/ui';
 	import { PageSEO } from '$lib/components/seo';
@@ -19,12 +21,48 @@
 	let selectedCategory: NewsCategory = 'All';
 	let loadMoreTrigger: HTMLDivElement;
 	let observer: IntersectionObserver | null = null;
+	let hasCachedData = false;
+	
+	// User preferences
+	let favoriteSports: string[] = [];
+	let hasPreferences = false;
 	
 	const categories = getNewsCategories();
 	const INITIAL_ARTICLES = 7; // 1 for hero + 6 for grid (even number)
 	const ARTICLES_PER_PAGE = 6; // Subsequent loads (all go to grid, should be even)
 	
+	// Sport code mapping for filtering
+	const sportCodeMap: Record<string, string> = {
+		'NFL': 'nfl',
+		'NBA': 'nba',
+		'MLB': 'mlb',
+		'NHL': 'nhl',
+		'SOCCER': 'soccer',
+		'NCAAF': 'ncaf',
+		'WNBA': 'wnba',
+		'TENNIS': 'tennis',
+		'GOLF': 'golf',
+		'MMA': 'mma',
+		'BOXING': 'boxing',
+		'RACING': 'racing',
+		'OLYMPICS': 'olympics',
+		'ESPORTS': 'esports',
+		'CRICKET': 'cricket',
+		'RUGBY': 'rugby'
+	};
+	
 	onMount(async () => {
+		// Load user preferences first
+		try {
+			const prefs = await getUserPreferences();
+			if (prefs.favoriteSports && prefs.favoriteSports.length > 0) {
+				favoriteSports = prefs.favoriteSports.map(s => sportCodeMap[s] || s.toLowerCase());
+				hasPreferences = true;
+			}
+		} catch (error) {
+			console.error('Failed to load preferences:', error);
+		}
+		
 		await loadData();
 	});
 	
@@ -59,9 +97,55 @@
 		}
 	}
 	
-	async function loadData() {
-		loading = true;
+	function filterByPreferences<T extends { sport?: string }>(items: T[]): T[] {
+		if (!hasPreferences || favoriteSports.length === 0) {
+			return items;
+		}
+		
+		return items.filter(item => {
+			if (!item.sport) return true; // Include items without sport if no preferences
+			const itemSport = item.sport.toLowerCase();
+			return favoriteSports.some(fav => itemSport === fav || itemSport.includes(fav) || fav.includes(itemSport));
+		});
+	}
+	
+	async function loadData(useCache: boolean = true) {
+		// Check cache first
+		if (useCache) {
+			const cacheKey = `homepage-${selectedCategory}`;
+			const cached = cache.get<{
+				newsArticles: NewsArticle[];
+				upcomingTournaments: Tournament[];
+				topPlayers: Player[];
+				hasMoreNews: boolean;
+			}>(cacheKey);
+			
+			if (cached) {
+				// Use cached data immediately (no skeleton)
+				newsArticles = cached.newsArticles;
+				upcomingTournaments = cached.upcomingTournaments;
+				topPlayers = cached.topPlayers;
+				hasMoreNews = cached.hasMoreNews;
+				hasCachedData = true;
+				loading = false;
+				
+				// Setup observer immediately
+				await tick();
+				if (loadMoreTrigger) {
+					setupInfiniteScroll();
+				}
+				
+				// Fetch fresh data in background
+				loadData(false);
+				return;
+			}
+		}
+		
+		if (!hasCachedData) {
+			loading = true;
+		}
 		currentPage = 1;
+		
 		try {
 			const [newsResult, tournaments, players] = await Promise.all([
 				getNewsArticlesPaginated(selectedCategory, 1, INITIAL_ARTICLES),
@@ -69,14 +153,35 @@
 				getTopPlayers(8)
 			]);
 			
-			newsArticles = newsResult.articles;
+			// Filter news articles by preferences
+			let filteredArticles = newsResult.articles;
+			if (hasPreferences && favoriteSports.length > 0) {
+				filteredArticles = filterByPreferences(newsResult.articles);
+				// If filtering removed all articles, show a message or fallback
+				if (filteredArticles.length === 0 && newsResult.articles.length > 0) {
+					// Show a subset or message - for now, show first few articles with a note
+					filteredArticles = newsResult.articles.slice(0, 3);
+				}
+			}
+			
+			newsArticles = filteredArticles;
 			hasMoreNews = newsResult.hasMore;
-			upcomingTournaments = tournaments;
-			topPlayers = players;
+			upcomingTournaments = filterByPreferences(tournaments);
+			topPlayers = players; // Players don't have sport filter yet
+			
+			// Cache the results
+			const cacheKey = `homepage-${selectedCategory}`;
+			cache.set(cacheKey, {
+				newsArticles: filteredArticles,
+				upcomingTournaments: filterByPreferences(tournaments),
+				topPlayers: players,
+				hasMoreNews: newsResult.hasMore
+			}, 5 * 60 * 1000); // 5 minutes TTL
 		} catch (error) {
 			console.error('Failed to load data:', error);
 		} finally {
 			loading = false;
+			hasCachedData = false;
 			// Re-setup observer after loading completes
 			await tick();
 			if (loadMoreTrigger) {
@@ -96,7 +201,12 @@
 			const result = await getNewsArticlesPaginatedWithOffset(selectedCategory, offset, ARTICLES_PER_PAGE);
 			
 			if (result.articles.length > 0) {
-				newsArticles = [...newsArticles, ...result.articles];
+				let newArticles = result.articles;
+				// Filter by preferences
+				if (hasPreferences && favoriteSports.length > 0) {
+					newArticles = filterByPreferences(result.articles);
+				}
+				newsArticles = [...newsArticles, ...newArticles];
 				currentPage++;
 			}
 			hasMoreNews = result.hasMore;
@@ -114,7 +224,12 @@
 		
 		try {
 			const result = await getNewsArticlesPaginated(selectedCategory, 1, INITIAL_ARTICLES);
-			newsArticles = result.articles;
+			let filteredArticles = result.articles;
+			// Filter by preferences
+			if (hasPreferences && favoriteSports.length > 0) {
+				filteredArticles = filterByPreferences(result.articles);
+			}
+			newsArticles = filteredArticles;
 			hasMoreNews = result.hasMore;
 		} catch (error) {
 			console.error('Failed to load category:', error);
@@ -153,6 +268,25 @@
 		<div class="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-10">
 			<!-- Main News Column -->
 			<div class="lg:col-span-2">
+				<!-- Preferences Notice -->
+				{#if hasPreferences && favoriteSports.length > 0}
+					<div class="mb-4 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl">
+						<div class="flex items-start gap-3">
+							<div class="flex-shrink-0">
+								<svg class="w-5 h-5 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+								</svg>
+							</div>
+							<div class="flex-1">
+								<p class="text-sm text-blue-800 dark:text-blue-300">
+									<strong>Personalized feed:</strong> Showing content from your selected sports ({favoriteSports.length} {favoriteSports.length === 1 ? 'sport' : 'sports'}). 
+									<a href="/dashboard" class="underline font-semibold hover:text-blue-900 dark:hover:text-blue-200">Change preferences</a>
+								</p>
+							</div>
+						</div>
+					</div>
+				{/if}
+				
 				<!-- Category Navigation - Always show, not skeleton -->
 				<CategoryNav 
 					{categories} 

@@ -4,6 +4,7 @@
 	import { CommentSection } from '$lib/components/comments';
 	import { ArticleSEO } from '$lib/components/seo';
 	import { getNewsArticleById, getRecentNews, getArticleComments } from '$lib/services/news.service';
+	import { cache } from '$lib/services/cache.service';
 	
 	let article = null;
 	let relatedArticles = [];
@@ -11,14 +12,38 @@
 	let recentArticles = [];
 	let comments = [];
 	let loading = true;
+	let hasCachedData = false;
 	
 	// Load article data reactively when route parameter changes
 	$: if ($page.params.id) {
 		loadArticle($page.params.id);
 	}
 	
-	async function loadArticle(id) {
-		loading = true;
+	async function loadArticle(id, useCache = true) {
+		// Check cache first
+		if (useCache) {
+			const cacheKey = `article-${id}`;
+			const cached = cache.get(cacheKey);
+			
+			if (cached) {
+				// Use cached data immediately (no skeleton)
+				article = cached.article;
+				relatedArticles = cached.relatedArticles;
+				popularArticles = cached.popularArticles;
+				recentArticles = cached.recentArticles;
+				comments = [];
+				hasCachedData = true;
+				loading = false;
+				
+				// Fetch fresh data in background
+				loadArticle(id, false);
+				return;
+			}
+		}
+		
+		if (!hasCachedData) {
+			loading = true;
+		}
 		
 		try {
 			// Fetch article from database
@@ -38,8 +63,8 @@
 					tags: []
 				};
 			} else {
-				// Fetch comments for the article
-				comments = await getArticleComments(id);
+				// Comments will be loaded by CommentSection component
+				comments = [];
 				
 				// Fetch related articles
 				const recent = await getRecentNews(10);
@@ -52,6 +77,15 @@
 				relatedArticles = recent
 					.filter(a => a.id !== id && a.category === article.category)
 					.slice(0, 3);
+				
+				// Cache the results
+				const cacheKey = `article-${id}`;
+				cache.set(cacheKey, {
+					article,
+					relatedArticles,
+					popularArticles,
+					recentArticles
+				}, 10 * 60 * 1000); // 10 minutes TTL for articles
 			}
 		} catch (error) {
 			console.error('Error loading article:', error);
@@ -69,6 +103,7 @@
 		}
 		
 		loading = false;
+		hasCachedData = false;
 	}
 	
 	// Mock article data - kept as fallback (now using database)
@@ -464,7 +499,18 @@ The integration of technology in training and competition is also creating new o
 
 					<!-- Comments Section -->
 					<div class="mb-12">
-						<CommentSection articleId={article.id} bind:comments />
+						<CommentSection 
+							articleId={article.id} 
+							bind:comments 
+							on:commentAdded={async () => {
+								// Reload comments after new comment is added
+								comments = await getArticleComments(article.id);
+							}}
+							on:replyAdded={async () => {
+								// Reload comments after new reply is added
+								comments = await getArticleComments(article.id);
+							}}
+						/>
 					</div>
 			</article>
 

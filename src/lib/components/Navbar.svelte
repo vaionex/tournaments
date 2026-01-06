@@ -1,10 +1,23 @@
 <script>
+	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { theme } from '$lib/stores/theme';
+	import { getCurrentUser, getUserProfile } from '$lib/services/user.service';
 	
 	let searchQuery = '';
 	let mobileMenuOpen = false;
 	let mobileSearchOpen = false;
+	let user = null;
+	let userProfile = null;
+	let loadingAuth = true;
+	
+	onMount(async () => {
+		user = await getCurrentUser();
+		if (user) {
+			userProfile = await getUserProfile(user.id);
+		}
+		loadingAuth = false;
+	});
 	
 	function handleSearch() {
 		if (searchQuery.trim()) {
@@ -102,9 +115,27 @@
 					{/key}
 				</button>
 				
-				<button class="btn-primary text-sm py-1.5 px-3 whitespace-nowrap">
-					Sign In
-				</button>
+				{#if !loadingAuth}
+					{#if user}
+						<!-- Profile Icon for Logged In Users -->
+						<a 
+							href="/dashboard"
+							class="flex items-center gap-2 p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+							title="Dashboard"
+						>
+							<div class="w-8 h-8 rounded-full bg-gradient-to-br from-red-500 to-orange-500 flex items-center justify-center text-white font-bold text-sm">
+								{userProfile?.display_name?.charAt(0) || user?.email?.charAt(0).toUpperCase() || 'U'}
+							</div>
+						</a>
+					{:else}
+						<a 
+							href="/login"
+							class="btn-primary text-sm py-1.5 px-3 whitespace-nowrap"
+						>
+							Sign In
+						</a>
+					{/if}
+				{/if}
 			</div>
 			
 			<!-- Mobile Actions -->
@@ -223,13 +254,28 @@
 						Dashboard
 					</a>
 					<div class="pt-2 mt-2 border-t border-gray-200 dark:border-gray-700">
-						<a 
-							href="/login" 
-							on:click={closeMobileMenu}
-							class="block px-3 py-2.5 text-base text-white bg-red-600 hover:bg-red-700 font-bold rounded-lg text-center transition-colors"
-						>
-							Sign In
-						</a>
+						{#if !loadingAuth}
+							{#if user}
+								<a 
+									href="/dashboard" 
+									on:click={closeMobileMenu}
+									class="flex items-center gap-3 px-3 py-2.5 text-base text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 font-medium rounded-lg transition-colors"
+								>
+									<div class="w-8 h-8 rounded-full bg-gradient-to-br from-red-500 to-orange-500 flex items-center justify-center text-white font-bold text-sm">
+										{userProfile?.display_name?.charAt(0) || user?.email?.charAt(0).toUpperCase() || 'U'}
+									</div>
+									<span>Dashboard</span>
+								</a>
+							{:else}
+								<a 
+									href="/login" 
+									on:click={closeMobileMenu}
+									class="block px-3 py-2.5 text-base text-white bg-red-600 hover:bg-red-700 font-bold rounded-lg text-center transition-colors"
+								>
+									Sign In
+								</a>
+							{/if}
+						{/if}
 					</div>
 				</div>
 			</div>

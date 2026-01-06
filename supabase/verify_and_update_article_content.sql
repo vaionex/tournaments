@@ -188,3 +188,5 @@ FROM news_articles
 WHERE is_published = true;
 
 
+
+

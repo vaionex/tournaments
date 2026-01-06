@@ -4,6 +4,7 @@
 	import { format, addDays, subDays } from 'date-fns';
 	import PageSEO from '$lib/components/seo/PageSEO.svelte';
 	import { getNewsArticlesBySport, getFeaturedArticleBySport } from '$lib/services/news.service';
+	import { cache } from '$lib/services/cache.service';
 	
 	let sport = null;
 	let sportData = null;
@@ -439,9 +440,35 @@
 		}));
 	}
 	
-	async function loadSportData() {
+	let hasCachedData = false;
+	
+	async function loadSportData(useCache = true) {
 		const sportCode = $page.params.sport.toLowerCase();
-		loading = true;
+		
+		// Check cache first
+		if (useCache) {
+			const cacheKey = `sport-home-${sportCode}`;
+			const cached = cache.get(cacheKey);
+			
+			if (cached) {
+				// Use cached data immediately (no skeleton)
+				sportData = cached.sportData;
+				articles = cached.articles;
+				featuredArticle = cached.featuredArticle;
+				sport = sportCode;
+				hasCachedData = true;
+				loading = false;
+				
+				// Fetch fresh data in background
+				loadSportData(false);
+				return;
+			}
+		}
+		
+		if (!hasCachedData) {
+			loading = true;
+		}
+		
 		sportData = sportsConfig[sportCode];
 		
 		if (!sportData) {
@@ -461,45 +488,61 @@
 		
 		sport = sportCode;
 		
-		// Load real articles from database
-		const [articles, featuredArticle] = await Promise.all([
-			getNewsArticlesBySport(sportCode, 8),
-			getFeaturedArticleBySport(sportCode)
-		]);
-		
-		newsArticles = articles;
-		
-		// Set featured content from database or fallback
-		if (featuredArticle) {
-			featuredArticleId = featuredArticle.id;
-			featuredContent = {
-				title: featuredArticle.title,
-				image: featuredArticle.image,
-				excerpt: featuredArticle.excerpt
-			};
-		} else {
-			featuredArticleId = null;
-			// Fallback to sport-specific content if no featured article
-			const featured = sportFeaturedContent[sportCode] || {
-				title: `${sportData.name} Season 2025: Everything You Need to Know`,
-				excerpt: `Comprehensive preview of the upcoming ${sportData.name} season, featuring top storylines, predictions, and key matchups.`,
-				image: 'https://images.unsplash.com/photo-1461896836934-47e5c98aebe1?w=1200&h=600&fit=crop&q=80'
-			};
+		try {
+			// Load real articles from database
+			const [articlesResult, featuredArticleResult] = await Promise.all([
+				getNewsArticlesBySport(sportCode, 8),
+				getFeaturedArticleBySport(sportCode)
+			]);
 			
-			featuredContent = {
-				title: featured.title,
-				image: featured.image,
-				excerpt: featured.excerpt
-			};
+			articles = articlesResult;
+			featuredArticle = featuredArticleResult;
+			
+			// Cache the results
+			const cacheKey = `sport-home-${sportCode}`;
+			cache.set(cacheKey, {
+				sportData,
+				articles: articlesResult,
+				featuredArticle: featuredArticleResult
+			}, 5 * 60 * 1000); // 5 minutes TTL
+			
+			newsArticles = articles;
+			
+			// Set featured content from database or fallback
+			if (featuredArticle) {
+				featuredArticleId = featuredArticle.id;
+				featuredContent = {
+					title: featuredArticle.title,
+					image: featuredArticle.image,
+					excerpt: featuredArticle.excerpt
+				};
+			} else {
+				featuredArticleId = null;
+				// Fallback to sport-specific content if no featured article
+				const featured = sportFeaturedContent[sportCode] || {
+					title: `${sportData.name} Season 2025: Everything You Need to Know`,
+					excerpt: `Comprehensive preview of the upcoming ${sportData.name} season, featuring top storylines, predictions, and key matchups.`,
+					image: 'https://images.unsplash.com/photo-1461896836934-47e5c98aebe1?w=1200&h=600&fit=crop&q=80'
+				};
+				
+				featuredContent = {
+					title: featured.title,
+					image: featured.image,
+					excerpt: featured.excerpt
+				};
+			}
+			
+			// Generate mock data for other sections (events, results, standings)
+			upcomingEvents = generateUpcomingEvents(sportData);
+			recentResults = generateRecentResults(sportData);
+			topPlayers = sportData.topPlayers;
+			standings = generateStandings(sportData);
+		} catch (error) {
+			console.error('Failed to load sport data:', error);
+		} finally {
+			loading = false;
+			hasCachedData = false;
 		}
-		
-		// Generate mock data for other sections (events, results, standings)
-		upcomingEvents = generateUpcomingEvents(sportData);
-		recentResults = generateRecentResults(sportData);
-		topPlayers = sportData.topPlayers;
-		standings = generateStandings(sportData);
-		
-		loading = false;
 	}
 	
 	// Reactive statement to reload when route parameter changes

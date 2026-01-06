@@ -3,8 +3,10 @@
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
 	import { theme } from '$lib/stores/theme';
+	import { getCurrentUser } from '$lib/services/user.service';
 	
 	let activeSport = 'NFL';
+	let user = null;
 	
 	// Set active sport based on current route
 	$: {
@@ -18,6 +20,10 @@
 	let closeTimeout = null;
 	let mobileMenuOpen = false;
 	let mobileSearchOpen = false;
+	
+	onMount(async () => {
+		user = await getCurrentUser();
+	});
 	
 	const sports = [
 		{ code: 'NFL', name: 'NFL' },
@@ -289,7 +295,7 @@
 				</button>
 				
 				<!-- Profile -->
-				<a href="/login" class="text-white dark:text-gray-200 hover:text-red-400 transition-colors p-1.5">
+				<a href={user ? "/dashboard" : "/login"} class="text-white dark:text-gray-200 hover:text-red-400 transition-colors p-1.5" title={user ? "Dashboard" : "Sign In"}>
 					<svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
 					</svg>

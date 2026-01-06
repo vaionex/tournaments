@@ -98,3 +98,5 @@ Registration for amateur divisions remains open until Friday, with organizers ex
 END $$;
 
 
+
+

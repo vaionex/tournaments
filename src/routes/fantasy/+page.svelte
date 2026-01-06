@@ -10,6 +10,7 @@
 	let featuredLeagues = [];
 	let upcomingDrafts = [];
 	let leaderboard = [];
+	let showComingSoonModal = false;
 	
 	onMount(async () => {
 		await new Promise(resolve => setTimeout(resolve, 500));
@@ -164,11 +165,11 @@
 	});
 	
 	function handleJoinLeague(leagueId) {
-		goto(`/fantasy/league/${leagueId}`);
+		showComingSoonModal = true;
 	}
 	
 	function handleCreateLeague() {
-		goto('/fantasy/create');
+		showComingSoonModal = true;
 	}
 </script>
 
@@ -197,13 +198,13 @@
 					</p>
 					<div class="flex flex-col sm:flex-row gap-4 mb-8">
 						<button
-							on:click={() => activeTab = 'public'}
+							on:click={() => showComingSoonModal = true}
 							class="px-8 py-4 bg-red-600 hover:bg-red-700 text-white font-bold rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 text-lg"
 						>
 							Join a League Now
 						</button>
 						<button
-							on:click={handleCreateLeague}
+							on:click={() => showComingSoonModal = true}
 							class="px-8 py-4 bg-white dark:bg-gray-800 border-2 border-gray-300 dark:border-gray-700 hover:border-red-600 dark:hover:border-red-500 text-gray-900 dark:text-white font-bold rounded-lg shadow-md hover:shadow-lg transition-all duration-200 text-lg"
 						>
 							Create Your League
@@ -388,7 +389,7 @@
 						<button 
 							type="button"
 							class="card group hover:shadow-xl transition-all duration-300 cursor-pointer text-left w-full"
-							on:click={() => handleJoinLeague(league.id)}
+							on:click={() => showComingSoonModal = true}
 						>
 							<div class="relative h-32 rounded-t-lg overflow-hidden mb-4">
 								<img 
@@ -432,11 +433,12 @@
 									</div>
 								</div>
 								
-								<span
-								class="block w-full px-4 py-2.5 bg-red-600 hover:bg-red-700 text-white font-bold rounded-lg shadow-md hover:shadow-lg transition-all duration-200 text-center"
-							>
-								Join Now
-							</span>
+								<button
+									on:click={() => showComingSoonModal = true}
+									class="block w-full px-4 py-2.5 bg-red-600 hover:bg-red-700 text-white font-bold rounded-lg shadow-md hover:shadow-lg transition-all duration-200 text-center"
+								>
+									Join Now
+								</button>
 							</div>
 						</button>
 					{/each}
@@ -504,7 +506,7 @@
 						</p>
 					</div>
 					<button
-						on:click={handleCreateLeague}
+						on:click={() => showComingSoonModal = true}
 						class="px-6 py-2.5 bg-red-600 hover:bg-red-700 text-white font-bold rounded-lg shadow-md hover:shadow-lg transition-all duration-200"
 					>
 						+ Create League
@@ -523,9 +525,10 @@
 				{:else if myLeagues.length > 0}
 					<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 						{#each myLeagues as league}
-							<a 
-								href="/fantasy/league/{league.id}"
-								class="card block group hover:shadow-xl transition-all duration-300"
+							<button
+								type="button"
+								on:click={() => showComingSoonModal = true}
+								class="card block group hover:shadow-xl transition-all duration-300 text-left w-full"
 							>
 								<div class="relative h-40 rounded-t-lg overflow-hidden mb-4">
 									<img 
@@ -571,7 +574,7 @@
 										</span>
 									</div>
 								</div>
-							</a>
+							</button>
 						{/each}
 					</div>
 				{:else}
@@ -582,7 +585,7 @@
 						<p class="text-gray-600 dark:text-gray-400 text-lg font-medium mb-2">No leagues yet</p>
 						<p class="text-gray-500 dark:text-gray-500 text-sm mb-6">Create or join a league to get started</p>
 						<button
-							on:click={handleCreateLeague}
+							on:click={() => showComingSoonModal = true}
 							class="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg shadow-md hover:shadow-lg transition-all duration-200"
 						>
 							Create Your First League
@@ -658,7 +661,7 @@
 									</div>
 									
 									<button
-										on:click={() => handleJoinLeague(league.id)}
+										on:click={() => showComingSoonModal = true}
 										class="w-full px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg shadow-md hover:shadow-lg transition-all duration-200"
 									>
 										Join League
@@ -734,7 +737,7 @@
 									
 									<div class="ml-6">
 										<button
-											on:click={() => handleJoinLeague(draft.id)}
+											on:click={() => showComingSoonModal = true}
 											class="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg shadow-md hover:shadow-lg transition-all duration-200 whitespace-nowrap"
 										>
 											Join Draft
@@ -1006,13 +1009,13 @@
 			</p>
 			<div class="flex flex-col sm:flex-row gap-4 justify-center">
 				<button
-					on:click={() => activeTab = 'public'}
+					on:click={() => showComingSoonModal = true}
 					class="px-8 py-4 bg-white text-red-600 hover:bg-gray-100 font-bold rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 text-lg"
 				>
 					Browse Leagues
 				</button>
 				<button
-					on:click={handleCreateLeague}
+					on:click={() => showComingSoonModal = true}
 					class="px-8 py-4 bg-transparent border-2 border-white text-white hover:bg-white/20 font-bold rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 text-lg"
 				>
 					Create League
@@ -1021,5 +1024,39 @@
 		</div>
 	</div>
 </div>
+
+<!-- Coming Soon Modal -->
+{#if showComingSoonModal}
+	<div 
+		class="fixed inset-0 bg-black/50 dark:bg-black/70 z-50 flex items-center justify-center p-4"
+		on:click={() => showComingSoonModal = false}
+		on:keydown={(e) => e.key === 'Escape' && (showComingSoonModal = false)}
+		role="dialog"
+		aria-modal="true"
+	>
+		<div 
+			class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full"
+			on:click|stopPropagation
+		>
+			<div class="p-6 text-center">
+				<div class="w-16 h-16 bg-gradient-to-br from-red-500 to-orange-500 rounded-full flex items-center justify-center mx-auto mb-4">
+					<span class="text-3xl">🏆</span>
+				</div>
+				<h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+					Fantasy Sports
+				</h2>
+				<p class="text-gray-600 dark:text-gray-400 mb-6">
+					Coming Soon! We're building an amazing fantasy sports platform where you can draft teams, compete in leagues, and climb the leaderboards. Stay tuned for updates!
+				</p>
+				<button
+					on:click={() => showComingSoonModal = false}
+					class="w-full px-6 py-3 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg transition-colors"
+				>
+					Got it
+				</button>
+			</div>
+		</div>
+	</div>
+{/if}
 
 

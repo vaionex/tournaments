@@ -23,6 +23,8 @@
 	let allPlayers: Player[] = [];
 	let playerNews: Array<{id: string, title: string, excerpt: string, image: string, date: string, player?: string}> = [];
 	
+	import { cache } from '$lib/services/cache.service';
+	
 	// UI State
 	let loading = true;
 	let currentPage = 1;
@@ -38,6 +40,7 @@
 	let countries: string[] = [];
 	let totalPlayers = 0;
 	let totalPrizePool = 0;
+	let hasCachedData = false;
 	
 	// Tabs
 	let activeTab: 'all' | 'leaderboards' = 'all';
@@ -57,8 +60,49 @@
 		await loadInitialData();
 	});
 	
-	async function loadInitialData() {
-		loading = true;
+	async function loadInitialData(useCache: boolean = true) {
+		// Check cache first
+		if (useCache) {
+			const cacheKey = 'players-initial';
+			const cached = cache.get<{
+				winsLeaders: any[];
+				earningsLeaders: any[];
+				winrateLeaders: any[];
+				trendingLeaders: any[];
+				games: string[];
+				countries: string[];
+				news: any[];
+				playerCount: number;
+				prizePool: number;
+			}>(cacheKey);
+			
+			if (cached) {
+				// Use cached data immediately (no skeleton)
+				winsLeaders = cached.winsLeaders;
+				earningsLeaders = cached.earningsLeaders;
+				winrateLeaders = cached.winrateLeaders;
+				trendingLeaders = cached.trendingLeaders;
+				games = cached.games;
+				countries = cached.countries;
+				playerNews = cached.news;
+				totalPlayers = cached.playerCount;
+				totalPrizePool = cached.prizePool;
+				hasCachedData = true;
+				loading = false;
+				
+				// Load players list
+				await loadPlayers();
+				
+				// Fetch fresh data in background
+				loadInitialData(false);
+				return;
+			}
+		}
+		
+		if (!hasCachedData) {
+			loading = true;
+		}
+		
 		try {
 			const [wins, earnings, winrate, trending, gamesData, countriesData, news, playerCount, prizePool] = await Promise.all([
 				getStatLeaders('wins', 5),
@@ -82,11 +126,26 @@
 			totalPlayers = playerCount;
 			totalPrizePool = prizePool;
 			
+			// Cache the results
+			const cacheKey = 'players-initial';
+			cache.set(cacheKey, {
+				winsLeaders: wins,
+				earningsLeaders: earnings,
+				winrateLeaders: winrate,
+				trendingLeaders: trending,
+				games: gamesData,
+				countries: countriesData,
+				news: news,
+				playerCount: playerCount,
+				prizePool: prizePool
+			}, 5 * 60 * 1000); // 5 minutes TTL
+			
 			await loadPlayers();
 		} catch (error) {
 			console.error('Failed to load data:', error);
 		} finally {
 			loading = false;
+			hasCachedData = false;
 		}
 	}
 	

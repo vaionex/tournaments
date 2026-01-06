@@ -91,6 +91,7 @@ export interface NewsArticle {
 	author: string;
 	readTime?: number;
 	tags?: string[];
+	sport?: string;
 }
 
 export type NewsCategory = 

@@ -63,3 +63,5 @@ CREATE POLICY "Users can delete own comments"
     USING (user_id = auth.uid() OR user_id IS NULL);
 
 
+
+

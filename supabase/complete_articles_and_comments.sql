@@ -301,3 +301,5 @@ SELECT
     (SELECT COUNT(*) FROM article_comments WHERE parent_id IS NOT NULL) as replies;
 
 
+
+
