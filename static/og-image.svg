@@ -1,0 +1,19 @@
+<svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a0a1a"/>
+      <stop offset="100%" style="stop-color:#1a1a3e"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#dc2626"/>
+      <stop offset="100%" style="stop-color:#ef4444"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect x="0" y="0" width="1200" height="4" fill="url(#accent)"/>
+  <text x="600" y="250" font-family="system-ui, -apple-system, sans-serif" font-size="80" font-weight="800" fill="white" text-anchor="middle" letter-spacing="-2">TOURNAMENTS</text>
+  <text x="600" y="310" font-family="system-ui, -apple-system, sans-serif" font-size="22" fill="#9ca3af" text-anchor="middle" letter-spacing="8">.COM</text>
+  <text x="600" y="400" font-family="system-ui, -apple-system, sans-serif" font-size="28" fill="#d1d5db" text-anchor="middle">Sports News • Tournaments • Player Rankings</text>
+  <text x="600" y="450" font-family="system-ui, -apple-system, sans-serif" font-size="20" fill="#6b7280" text-anchor="middle">NFL • NBA • MLB • NHL • Soccer • Tennis • Golf • MMA • Esports</text>
+  <rect x="0" y="626" width="1200" height="4" fill="url(#accent)"/>
+</svg>

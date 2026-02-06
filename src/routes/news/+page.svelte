@@ -5,8 +5,11 @@
 	import { PageSEO } from '$lib/components/seo';
 	import { getNewsArticles } from '$lib/services/news.service';
 	
-	let articles = [];
-	let loading = true;
+	// SSR data
+	export let data;
+	
+	let articles = data?.ssrArticles || [];
+	let loading = !articles.length;
 	let selectedCategory = 'All';
 	
 	const categories = [

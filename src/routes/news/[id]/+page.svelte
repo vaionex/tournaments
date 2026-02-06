@@ -6,13 +6,16 @@
 	import { getNewsArticleById, getRecentNews, getArticleComments } from '$lib/services/news.service';
 	import { cache } from '$lib/services/cache.service';
 	
-	let article = null;
-	let relatedArticles = [];
+	// SSR data from +page.server.ts
+	export let data;
+	
+	let article = data?.ssrArticle || null;
+	let relatedArticles = data?.ssrRelated || [];
 	let popularArticles = [];
 	let recentArticles = [];
 	let comments = [];
-	let loading = true;
-	let hasCachedData = false;
+	let loading = !article;
+	let hasCachedData = !!article;
 	
 	// Load article data reactively when route parameter changes
 	$: if ($page.params.id) {

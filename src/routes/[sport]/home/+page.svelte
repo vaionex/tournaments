@@ -2,6 +2,9 @@
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
 	import { format, formatDistanceToNow, addDays, subDays } from 'date-fns';
+	
+	// SSR data from +page.server.ts
+	export let data;
 
 	function timeAgo(date) {
 		const d = new Date(date);
@@ -22,15 +25,16 @@
 	
 	let sport = null;
 	let sportData = null;
-	let loading = true;
+	let loading = !(data?.ssrArticles?.length > 0);
 	let activeTab = 'news';
-	let newsArticles = [];
+	let newsArticles = data?.ssrArticles || [];
 	let upcomingEvents = [];
 	let recentResults = [];
 	let topPlayers = [];
 	let standings = [];
-	let featuredContent = null;
-	let featuredArticleId = null;
+	let featuredContent = data?.ssrFeatured || null;
+	let featuredArticleId = data?.ssrFeatured?.id || null;
+	let ssrAthletes = data?.ssrAthletes || [];
 	
 	const tabs = [
 		{ id: 'news', label: 'News' },
@@ -918,6 +922,27 @@
 				</div>
 			</div>
 		</div>
+	{/if}
+
+	<!-- Athletes Section (SEO internal linking) -->
+	{#if ssrAthletes.length > 0}
+	<div class="container mx-auto px-3 sm:px-6 lg:px-8 max-w-7xl mt-8 mb-12">
+		<div class="flex items-center justify-between mb-4">
+			<h2 class="text-xl font-bold text-gray-900 dark:text-white">Top {sportData?.name || sport?.toUpperCase()} Athletes</h2>
+			<a href="/athletes/{sport}" class="text-sm text-red-500 hover:text-red-400 font-medium">View All →</a>
+		</div>
+		<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
+			{#each ssrAthletes as athlete}
+			<a href="/athletes/{athlete.sport}/{athlete.slug}" class="bg-gray-900/50 border border-gray-800 rounded-lg p-3 hover:border-gray-600 transition-colors text-center group">
+				<div class="w-10 h-10 mx-auto mb-2 rounded-full bg-gradient-to-br from-blue-600 to-purple-700 flex items-center justify-center text-sm font-bold text-white">
+					{(athlete.display_name || '?').charAt(0)}
+				</div>
+				<div class="text-sm font-medium text-white group-hover:text-blue-400 truncate">{athlete.display_name}</div>
+				<div class="text-xs text-gray-500">{athlete.country || ''}</div>
+			</a>
+			{/each}
+		</div>
+	</div>
 	{/if}
 </div>
 
