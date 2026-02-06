@@ -16,7 +16,7 @@
 	$: modifiedDateObj = modifiedDate ? (modifiedDate instanceof Date ? modifiedDate : new Date(modifiedDate)) : null;
 	
 	const SITE_NAME = 'Tournaments.com';
-	const SITE_URL = 'https://tournaments.com';
+	const SITE_URL = 'https://www.tournaments.com';
 	const TWITTER_HANDLE = '@tournamentscom';
 	const LOGO_URL = `${SITE_URL}/logo.png`;
 	

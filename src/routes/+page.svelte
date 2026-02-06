@@ -10,8 +10,11 @@
 	import { LoadingState } from '$lib/components/ui';
 	import { PageSEO } from '$lib/components/seo';
 	
-	let newsArticles: NewsArticle[] = [];
-	let upcomingTournaments: Tournament[] = [];
+	// SSR data from +page.server.ts (visible to Google crawler)
+	export let data: any;
+	
+	let newsArticles: NewsArticle[] = data?.ssrArticles || [];
+	let upcomingTournaments: Tournament[] = data?.ssrTournaments || [];
 	let topPlayers: Player[] = [];
 	let loading = false; // Start false, will be set true if no cache found
 	let changingCategory = false; // Category switch (doesn't hide content)
@@ -254,8 +257,8 @@
 </script>
 
 <PageSEO
-	title="Sports News, Scores & Tournament Directory"
-	description="Your ultimate destination for competitive sports news, live scores, standings, and tournament information across NFL, NBA, MLB, NHL, Soccer, Esports, and more. Follow top players, discover upcoming tournaments, and stay updated with breaking sports news."
+	title="Tournaments — Sports Tournaments, News & Player Rankings"
+	description="Find sports tournaments, breaking news, scores, and player rankings across NFL, NBA, MLB, NHL, Soccer, Tennis, Golf, MMA, Esports and more. Browse 600+ athlete profiles with stats and biographies."
 	image="https://images.unsplash.com/photo-1461896836934-47e5c98aebe1?w=1200&h=630&fit=crop"
 />
 

@@ -1,16 +1,15 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
-	import { supabase } from '$lib/supabase';
 	import { PlayerSEO } from '$lib/components/seo';
 	
-	let player: any = null;
-	let related: any[] = [];
-	let loading = true;
-	let notFound = false;
+	// SSR data from +page.server.ts
+	export let data: any;
 	
-	$: sport = $page.params.sport;
-	$: slug = $page.params.slug;
+	$: player = data?.player || null;
+	$: related = data?.related || [];
+	$: sport = data?.sport || $page.params.sport;
+	$: notFound = !player;
+	$: loading = false;
 	
 	const sportNames: Record<string, string> = {
 		tennis: 'Tennis', golf: 'Golf', soccer: 'Soccer', nfl: 'Football',
@@ -28,35 +27,6 @@
 		if (amount >= 1000) return `$${(amount / 1000).toFixed(0)}K`;
 		return `$${amount}`;
 	}
-
-	onMount(async () => {
-		const { data: p, error } = await supabase
-			.from('players')
-			.select('*')
-			.eq('slug', slug)
-			.eq('is_published', true)
-			.single();
-
-		if (error || !p) {
-			notFound = true;
-			loading = false;
-			return;
-		}
-
-		player = p;
-
-		const { data: rel } = await supabase
-			.from('players')
-			.select('id, display_name, slug, sport, country, current_rank, primary_game, total_winnings')
-			.eq('sport', sport)
-			.eq('is_published', true)
-			.neq('id', player.id)
-			.order('current_rank', { ascending: true, nullsFirst: false })
-			.limit(6);
-
-		related = rel || [];
-		loading = false;
-	});
 </script>
 
 {#if player}

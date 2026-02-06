@@ -6,7 +6,7 @@ Disallow: /dashboard
 Disallow: /login
 Disallow: /profile
 
-Sitemap: https://tournaments.com/sitemap.xml`;
+Sitemap: https://www.tournaments.com/sitemap.xml`;
 
 	return new Response(body, {
 		headers: {

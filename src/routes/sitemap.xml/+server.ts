@@ -1,6 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 
-const SITE_URL = 'https://tournaments.com';
+const SITE_URL = 'https://www.tournaments.com';
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
 

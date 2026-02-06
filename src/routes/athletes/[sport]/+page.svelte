@@ -1,13 +1,13 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
-	import { supabase } from '$lib/supabase';
 	import { PageSEO } from '$lib/components/seo';
 	
-	let players: any[] = [];
-	let loading = true;
+	// SSR data from +page.server.ts
+	export let data: any;
 	
-	$: sport = $page.params.sport;
+	$: players = data?.players || [];
+	$: sport = data?.sport || $page.params.sport;
+	$: loading = false;
 	
 	const sportNames: Record<string, string> = {
 		tennis: 'Tennis', golf: 'Golf', soccer: 'Soccer', nfl: 'Football',
@@ -24,19 +24,6 @@
 		if (amount >= 1000) return `$${(amount / 1000).toFixed(0)}K`;
 		return `$${amount}`;
 	}
-
-	onMount(async () => {
-		const { data } = await supabase
-			.from('players')
-			.select('id, display_name, player_name, slug, sport, country, current_rank, primary_game, total_winnings, total_wins, total_tournaments, bio, team_name, position, win_rate')
-			.eq('sport', sport)
-			.eq('is_published', true)
-			.order('current_rank', { ascending: true, nullsFirst: false })
-			.limit(200);
-
-		players = data || [];
-		loading = false;
-	});
 </script>
 
 <PageSEO 

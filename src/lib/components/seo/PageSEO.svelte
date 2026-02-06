@@ -8,7 +8,7 @@
 	export let noindex: boolean = false;
 	
 	const SITE_NAME = 'Tournaments.com';
-	const SITE_URL = 'https://tournaments.com';
+	const SITE_URL = 'https://www.tournaments.com';
 	const TWITTER_HANDLE = '@tournamentscom';
 	
 	$: canonicalUrl = `${SITE_URL}${$page.url.pathname}`;

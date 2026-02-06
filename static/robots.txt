@@ -1,7 +1,7 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://tournaments.com/sitemap.xml
+Sitemap: https://www.tournaments.com/sitemap.xml
 
 
 
