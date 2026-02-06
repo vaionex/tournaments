@@ -3,6 +3,23 @@ import { createClient } from '@supabase/supabase-js';
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
+function transformArticle(row: Record<string, unknown>) {
+	return {
+		id: row.id as string,
+		title: row.title as string,
+		excerpt: row.excerpt as string,
+		content: row.content as string || '',
+		date: row.published_at ? new Date(row.published_at as string) : new Date(),
+		category: row.category as string || 'Top Stories',
+		image: row.image_url as string || 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=1200',
+		author: 'Staff',
+		sport: row.sport as string | undefined,
+		slug: row.slug as string | undefined,
+		readTime: row.read_time as number | undefined,
+		tags: row.tags as string[] | undefined
+	};
+}
+
 export async function load({ params }) {
 	const { id } = params;
 	const supabase = createClient(SUPABASE_URL || '', SUPABASE_ANON_KEY || '');
@@ -14,22 +31,21 @@ export async function load({ params }) {
 		.eq('is_published', true)
 		.single();
 
-	// Get related articles from same sport
 	let related: any[] = [];
 	if (article?.sport) {
 		const { data } = await supabase
 			.from('news_articles')
-			.select('id, title, excerpt, sport, image_url, published_at')
+			.select('id, title, excerpt, sport, image_url, published_at, category, slug')
 			.eq('is_published', true)
 			.eq('sport', article.sport)
 			.neq('id', id)
 			.order('published_at', { ascending: false })
 			.limit(4);
-		related = data || [];
+		related = (data || []).map(transformArticle);
 	}
 
 	return {
-		ssrArticle: article || null,
+		ssrArticle: article ? transformArticle(article) : null,
 		ssrRelated: related
 	};
 }
