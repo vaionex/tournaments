@@ -453,9 +453,18 @@
 			if (cached) {
 				// Use cached data immediately (no skeleton)
 				sportData = cached.sportData;
-				articles = cached.articles;
+				newsArticles = cached.articles;
 				featuredArticle = cached.featuredArticle;
 				sport = sportCode;
+				sportData = cached.sportData;
+				if (featuredArticle) {
+					featuredArticleId = featuredArticle.id;
+					featuredContent = {
+						title: featuredArticle.title,
+						image: featuredArticle.image,
+						excerpt: featuredArticle.excerpt
+					};
+				}
 				hasCachedData = true;
 				loading = false;
 				
@@ -495,7 +504,7 @@
 				getFeaturedArticleBySport(sportCode)
 			]);
 			
-			articles = articlesResult;
+			newsArticles = articlesResult;
 			featuredArticle = featuredArticleResult;
 			
 			// Cache the results
@@ -505,8 +514,6 @@
 				articles: articlesResult,
 				featuredArticle: featuredArticleResult
 			}, 5 * 60 * 1000); // 5 minutes TTL
-			
-			newsArticles = articles;
 			
 			// Set featured content from database or fallback
 			if (featuredArticle) {
