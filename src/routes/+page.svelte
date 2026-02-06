@@ -13,7 +13,7 @@
 	let newsArticles: NewsArticle[] = [];
 	let upcomingTournaments: Tournament[] = [];
 	let topPlayers: Player[] = [];
-	let loading = true; // Initial page load
+	let loading = false; // Start false, will be set true if no cache found
 	let changingCategory = false; // Category switch (doesn't hide content)
 	let loadingMore = false;
 	let hasMoreNews = true;
@@ -138,10 +138,16 @@
 				// Fetch fresh data in background
 				loadData(false);
 				return;
+			} else {
+				// No cache found, show loading
+				loading = true;
 			}
 		}
 		
-		if (!hasCachedData) {
+		if (!hasCachedData && !useCache) {
+			// Background refresh of cached data, don't show loading
+			loading = false;
+		} else if (!hasCachedData) {
 			loading = true;
 		}
 		currentPage = 1;
@@ -297,25 +303,28 @@
 				<!-- News Grid -->
 				<div class="min-h-[600px]">
 					{#if loading}
-						<!-- Skeleton that matches NewsGrid responsive layout: 1 column on mobile, 2 on md+ -->
-						<div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
-							{#each Array(4) as _, i}
-								<article class="group block animate-pulse" style="animation-delay: {i * 100}ms;">
-									<div class="relative h-48 sm:h-56 lg:h-64 rounded-lg overflow-hidden mb-4 shadow-md bg-gray-200 dark:bg-gray-700">
-										<div class="absolute top-4 left-4">
-											<div class="h-5 w-20 bg-gray-300 dark:bg-gray-600 rounded-full"></div>
+						<!-- Skeleton that matches NewsGrid text-only layout -->
+						<div class="space-y-4">
+							{#each Array(6) as _, i}
+								<div class="group block border-b border-gray-200 dark:border-gray-700 pb-4 last:border-b-0 last:pb-0 animate-pulse" style="animation-delay: {i * 100}ms;">
+									<article class="flex items-start gap-4">
+										<div class="flex-1 min-w-0 w-[70%]">
+											<!-- Category, date, author line -->
+											<div class="flex items-center gap-2 mb-1">
+												<div class="h-4 w-16 bg-gray-200 dark:bg-gray-700 rounded"></div>
+												<div class="h-3 w-20 bg-gray-200 dark:bg-gray-700 rounded"></div>
+												<div class="h-3 w-3 bg-gray-200 dark:bg-gray-700 rounded-full"></div>
+												<div class="h-3 w-24 bg-gray-200 dark:bg-gray-700 rounded"></div>
+											</div>
+											<!-- Title lines -->
+											<div class="h-5 w-full bg-gray-200 dark:bg-gray-700 rounded mb-1"></div>
+											<div class="h-5 w-3/4 bg-gray-200 dark:bg-gray-700 rounded mb-1"></div>
+											<!-- Excerpt lines -->
+											<div class="h-4 w-full bg-gray-200 dark:bg-gray-700 rounded mb-1"></div>
+											<div class="h-4 w-2/3 bg-gray-200 dark:bg-gray-700 rounded"></div>
 										</div>
-									</div>
-									<div class="flex items-center gap-2 mb-2">
-										<div class="h-3 w-16 bg-gray-200 dark:bg-gray-700 rounded"></div>
-										<div class="h-3 w-3 bg-gray-200 dark:bg-gray-700 rounded-full"></div>
-										<div class="h-3 w-24 bg-gray-200 dark:bg-gray-700 rounded"></div>
-									</div>
-									<div class="h-6 w-full bg-gray-200 dark:bg-gray-700 rounded mb-2"></div>
-									<div class="h-6 w-3/4 bg-gray-200 dark:bg-gray-700 rounded mb-3"></div>
-									<div class="h-4 w-full bg-gray-200 dark:bg-gray-700 rounded mb-2"></div>
-									<div class="h-4 w-2/3 bg-gray-200 dark:bg-gray-700 rounded"></div>
-								</article>
+									</article>
+								</div>
 							{/each}
 						</div>
 					{:else}
@@ -338,36 +347,28 @@
 						<!-- Infinite Scroll Trigger & Loading Indicator -->
 						<div bind:this={loadMoreTrigger} class="mt-8">
 							{#if loadingMore}
-								<!-- Skeleton Cards for Loading More -->
-								<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+								<!-- Skeleton Articles for Loading More -->
+								<div class="space-y-4">
 									{#each Array(ARTICLES_PER_PAGE) as _, i}
-										<article 
-											class="bg-white dark:bg-gray-800 rounded-2xl overflow-hidden border border-gray-200 dark:border-gray-700 shadow-sm animate-pulse"
-											style="animation-delay: {i * 100}ms;"
-										>
-											<!-- Image Skeleton -->
-											<div class="relative h-48 bg-gray-200 dark:bg-gray-700">
-												<div class="absolute top-3 left-3">
-													<div class="h-5 w-20 bg-gray-300 dark:bg-gray-600 rounded-full"></div>
+										<div class="group block border-b border-gray-200 dark:border-gray-700 pb-4 last:border-b-0 last:pb-0 animate-pulse" style="animation-delay: {i * 100}ms;">
+											<article class="flex items-start gap-4">
+												<div class="flex-1 min-w-0 w-[70%]">
+													<!-- Category, date, author line -->
+													<div class="flex items-center gap-2 mb-1">
+														<div class="h-4 w-16 bg-gray-200 dark:bg-gray-700 rounded"></div>
+														<div class="h-3 w-20 bg-gray-200 dark:bg-gray-700 rounded"></div>
+														<div class="h-3 w-3 bg-gray-200 dark:bg-gray-700 rounded-full"></div>
+														<div class="h-3 w-24 bg-gray-200 dark:bg-gray-700 rounded"></div>
+													</div>
+													<!-- Title lines -->
+													<div class="h-5 w-full bg-gray-200 dark:bg-gray-700 rounded mb-1"></div>
+													<div class="h-5 w-3/4 bg-gray-200 dark:bg-gray-700 rounded mb-1"></div>
+													<!-- Excerpt lines -->
+													<div class="h-4 w-full bg-gray-200 dark:bg-gray-700 rounded mb-1"></div>
+													<div class="h-4 w-2/3 bg-gray-200 dark:bg-gray-700 rounded"></div>
 												</div>
-											</div>
-											<!-- Content Skeleton -->
-											<div class="p-5">
-												<div class="flex items-center gap-2 mb-3">
-													<div class="h-3 w-16 bg-gray-200 dark:bg-gray-700 rounded"></div>
-													<div class="h-3 w-3 bg-gray-200 dark:bg-gray-700 rounded-full"></div>
-													<div class="h-3 w-24 bg-gray-200 dark:bg-gray-700 rounded"></div>
-												</div>
-												<div class="h-6 w-full bg-gray-200 dark:bg-gray-700 rounded mb-2"></div>
-												<div class="h-6 w-3/4 bg-gray-200 dark:bg-gray-700 rounded mb-3"></div>
-												<div class="h-4 w-full bg-gray-200 dark:bg-gray-700 rounded mb-2"></div>
-												<div class="h-4 w-2/3 bg-gray-200 dark:bg-gray-700 rounded mb-4"></div>
-												<div class="pt-4 border-t border-gray-200 dark:border-gray-700 flex justify-between">
-													<div class="h-3 w-20 bg-gray-200 dark:bg-gray-700 rounded"></div>
-													<div class="h-3 w-16 bg-gray-200 dark:bg-gray-700 rounded"></div>
-												</div>
-											</div>
-										</article>
+											</article>
+										</div>
 									{/each}
 								</div>
 							{:else if hasMoreNews}
