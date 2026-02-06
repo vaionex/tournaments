@@ -35,6 +35,16 @@
 	let featuredContent = data?.ssrFeatured || null;
 	let featuredArticleId = data?.ssrFeatured?.id || null;
 	let ssrAthletes = data?.ssrAthletes || [];
+	let featuredArticle = null;
+	
+	// React to route/data changes (client-side navigation between sports)
+	$: if (data) {
+		newsArticles = data.ssrArticles || [];
+		featuredContent = data.ssrFeatured || null;
+		featuredArticleId = data.ssrFeatured?.id || null;
+		ssrAthletes = data.ssrAthletes || [];
+		loading = !(data.ssrArticles?.length > 0);
+	}
 	
 	const tabs = [
 		{ id: 'news', label: 'News' },
