@@ -8,7 +8,7 @@ export async function load() {
 
 	const { data: articles } = await supabase
 		.from('news_articles')
-		.select('id, title, excerpt, slug, sport, image_url, author_name, published_at, category')
+		.select('id, title, excerpt, slug, sport, image_url, published_at, category')
 		.eq('is_published', true)
 		.order('published_at', { ascending: false })
 		.limit(30);

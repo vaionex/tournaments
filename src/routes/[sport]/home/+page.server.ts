@@ -10,7 +10,7 @@ export async function load({ params }) {
 	// Get news articles for this sport
 	const { data: articles } = await supabase
 		.from('news_articles')
-		.select('id, title, excerpt, content, slug, sport, image_url, author_name, published_at')
+		.select('id, title, excerpt, content, slug, sport, image_url, published_at, category')
 		.eq('is_published', true)
 		.eq('sport', sport)
 		.order('published_at', { ascending: false })

@@ -9,7 +9,7 @@ export async function load() {
 	// Pre-load articles for SSR (Google sees content)
 	const { data: articles } = await supabase
 		.from('news_articles')
-		.select('id, title, excerpt, content, slug, sport, image_url, author_name, published_at, source_url')
+		.select('id, title, excerpt, content, slug, sport, image_url, published_at, category')
 		.eq('is_published', true)
 		.order('published_at', { ascending: false })
 		.limit(7);
