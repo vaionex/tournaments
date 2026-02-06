@@ -431,20 +431,7 @@ The integration of technology in training and competition is also creating new o
 				</div>
 			</header>
 
-					<!-- Featured Image -->
-					{#if article.image}
-					<div class="mb-8">
-				<img 
-					src={article.image || 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=1200'} 
-					alt={article.title}
-					class="w-full h-auto rounded-2xl shadow-2xl"
-					on:error={(e) => {
-						e.currentTarget.src = 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=1200';
-					}}
-				/>
-					<p class="text-xs text-gray-500 dark:text-gray-400 mt-2 italic">Photo: Tournament Staff</p>
-			</div>
-			{/if}
+					<!-- Featured Image removed - repetitive stock images -->
 
 					<!-- Article Content -->
 					<div class="prose prose-lg dark:prose-invert max-w-none mb-12">
@@ -531,24 +518,12 @@ The integration of technology in training and competition is also creating new o
 								data-sveltekit-preload-data="hover"
 								class="group block"
 							>
-								<div class="flex gap-3">
-									<div class="flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden bg-gray-200 dark:bg-gray-700">
-										<img 
-											src={popular.image || 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=1200'} 
-											alt={popular.title}
-											class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-											on:error={(e) => {
-												e.currentTarget.src = 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=1200';
-											}}
-										/>
-									</div>
-									<div class="flex-1 min-w-0">
-										<h4 class="font-bold text-sm text-gray-900 dark:text-white mb-1 group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors line-clamp-2">
-											{popular.title}
-										</h4>
-										<div class="text-xs text-gray-500 dark:text-gray-400">
-											{format(popular.date, 'MMM d')}
-										</div>
+								<div>
+									<h4 class="font-bold text-sm text-gray-900 dark:text-white mb-1 group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors line-clamp-2">
+										{popular.title}
+									</h4>
+									<div class="text-xs text-gray-500 dark:text-gray-400">
+										{format(popular.date, 'MMM d')}
 									</div>
 								</div>
 							</a>
