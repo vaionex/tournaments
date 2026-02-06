@@ -3,11 +3,25 @@ import { createClient } from '@supabase/supabase-js';
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
+function transformArticle(row: Record<string, unknown>) {
+	return {
+		id: row.id as string,
+		title: row.title as string,
+		excerpt: row.excerpt as string,
+		content: row.content as string | undefined,
+		date: row.published_at ? new Date(row.published_at as string) : new Date(),
+		category: row.category as string || 'Top Stories',
+		image: row.image_url as string || 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=1200',
+		author: 'Staff',
+		sport: row.sport as string | undefined,
+		slug: row.slug as string | undefined
+	};
+}
+
 export async function load({ params }) {
 	const { sport } = params;
 	const supabase = createClient(SUPABASE_URL || '', SUPABASE_ANON_KEY || '');
 
-	// Get news articles for this sport
 	const { data: articles } = await supabase
 		.from('news_articles')
 		.select('id, title, excerpt, content, slug, sport, image_url, published_at, category')
@@ -16,11 +30,10 @@ export async function load({ params }) {
 		.order('published_at', { ascending: false })
 		.limit(10);
 
-	// Get featured article
-	const featured = articles && articles.length > 0 ? articles[0] : null;
-	const rest = articles ? articles.slice(1) : [];
+	const mapped = (articles || []).map(transformArticle);
+	const featured = mapped.length > 0 ? mapped[0] : null;
+	const rest = mapped.slice(1);
 
-	// Get athletes for this sport (for internal linking)
 	const { data: athletes } = await supabase
 		.from('players')
 		.select('display_name, slug, sport, country, total_wins')
