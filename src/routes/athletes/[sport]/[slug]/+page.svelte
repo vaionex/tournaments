@@ -46,14 +46,14 @@
 />
 {/if}
 
-{#if player?.meta_title}
 <svelte:head>
+	{#if player?.meta_title}
 	<title>{player.meta_title}</title>
-	{#if player.meta_description}
+	{/if}
+	{#if player?.meta_description}
 	<meta name="description" content={player.meta_description} />
 	{/if}
 </svelte:head>
-{/if}
 
 <div class="min-h-screen bg-gray-950 text-white">
 	{#if loading}
