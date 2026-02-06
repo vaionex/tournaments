@@ -1,7 +1,21 @@
 <script>
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
-	import { format, addDays, subDays } from 'date-fns';
+	import { format, formatDistanceToNow, addDays, subDays } from 'date-fns';
+
+	function timeAgo(date) {
+		const d = new Date(date);
+		const now = new Date();
+		const diffMs = now.getTime() - d.getTime();
+		const diffMins = Math.floor(diffMs / 60000);
+		if (diffMins < 1) return 'Just now';
+		if (diffMins < 60) return `${diffMins}m ago`;
+		const diffHours = Math.floor(diffMins / 60);
+		if (diffHours < 24) return `${diffHours}h ago`;
+		const diffDays = Math.floor(diffHours / 24);
+		if (diffDays < 7) return `${diffDays}d ago`;
+		return formatDistanceToNow(d, { addSuffix: true });
+	}
 	import PageSEO from '$lib/components/seo/PageSEO.svelte';
 	import { getNewsArticlesBySport, getFeaturedArticleBySport } from '$lib/services/news.service';
 	import { cache } from '$lib/services/cache.service';
@@ -674,37 +688,27 @@
 							</a>
 						{/if}
 						
-						<!-- News Grid -->
-						<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-							{#each newsArticles as article}
-								<a href="/news/{article.id}" class="group">
-									<article class="card hover:shadow-xl transition-all duration-300">
-										<div class="relative h-40 rounded-t-xl overflow-hidden bg-gray-200 dark:bg-gray-700">
-											{#if article.image}
-												<img 
-													src={article.image} 
-													alt={article.title}
-													class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-													on:error={(e) => {
-														// Fallback to gradient if image fails
-														e.currentTarget.style.display = 'none';
-													}}
-												/>
-											{/if}
-											<div class="absolute inset-0 bg-gradient-to-br {sportData.color} {article.image ? 'opacity-40' : 'opacity-60'}"></div>
-											<div class="absolute inset-0 flex items-center justify-center">
-												<span class="text-5xl">{sportData.icon}</span>
+						<!-- News List -->
+						<div class="space-y-4">
+							{#each newsArticles as article (article.id)}
+								<a 
+									href="/news/{article.id}"
+									class="group block border-b border-gray-200 dark:border-gray-700 pb-4 last:border-b-0 last:pb-0"
+								>
+									<article class="flex items-start gap-4">
+										<div class="flex-1 min-w-0 w-[70%]">
+											<div class="flex flex-wrap items-center gap-2 text-xs text-gray-500 dark:text-gray-400 mb-1">
+												<span class="px-2 py-0.5 text-[10px] font-bold uppercase bg-blue-600/10 text-blue-600 dark:bg-blue-400/10 dark:text-blue-400 rounded">
+													{article.category}
+												</span>
+												<span>{timeAgo(article.date)}</span>
 											</div>
-										</div>
-										<div class="p-4">
-											<div class="flex items-center gap-2 mb-2">
-												<span class="text-xs font-semibold text-red-600 dark:text-red-400">{article.category}</span>
-												<span class="text-xs text-gray-500">•</span>
-												<span class="text-xs text-gray-500">{format(new Date(article.date), 'MMM d')}</span>
-											</div>
-											<h3 class="font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-2">
+											<h3 class="text-base font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors leading-snug mb-1">
 												{article.title}
 											</h3>
+											<p class="text-sm text-gray-600 dark:text-gray-300 leading-relaxed line-clamp-2">
+												{article.excerpt}
+											</p>
 										</div>
 									</article>
 								</a>
