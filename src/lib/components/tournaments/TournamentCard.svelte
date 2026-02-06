@@ -57,6 +57,7 @@
 			</div>
 		</div>
 		<div class="space-y-1">
+			{#if tournament.prizePool && tournament.prizePool !== '$0'}
 			<div class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide font-medium">Prize Pool</div>
 			<div class="font-bold text-green-600 dark:text-green-400 text-base flex items-center gap-1">
 				<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -64,6 +65,7 @@
 				</svg>
 				{tournament.prizePool}
 			</div>
+			{/if}
 		</div>
 		<div class="space-y-1">
 			<div class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide font-medium">Entry Fee</div>

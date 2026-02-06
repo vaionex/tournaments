@@ -40,10 +40,12 @@
 	</div>
 	
 	<div class="grid grid-cols-3 gap-4 mb-4">
+		{#if tournament.prizePool && tournament.prizePool !== '$0'}
 		<div>
 			<div class="text-xs text-gray-500 mb-1">Prize Pool</div>
 			<div class="text-lg font-bold text-green-400">{tournament.prizePool}</div>
 		</div>
+		{/if}
 		<div>
 			<div class="text-xs text-gray-500 mb-1">Entry Fee</div>
 			<div class="text-lg font-bold text-white">{tournament.entryFee}</div>

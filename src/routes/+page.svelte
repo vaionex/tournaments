@@ -382,7 +382,9 @@
 											<span class="text-gray-600 dark:text-gray-400">
 												{new Date(tournament.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
 											</span>
-											<span class="font-bold text-green-600 dark:text-green-400">{tournament.prizePool}</span>
+											{#if tournament.prizePool && tournament.prizePool !== '$0'}
+												<span class="font-bold text-green-600 dark:text-green-400">{tournament.prizePool}</span>
+											{/if}
 										</div>
 									</a>
 								{/each}
