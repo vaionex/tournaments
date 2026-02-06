@@ -51,6 +51,26 @@ export async function GET() {
 		}
 	}
 
+	// Athlete profile pages
+	const { data: athletes } = await supabase
+		.from('players')
+		.select('slug, sport, updated_at')
+		.eq('is_published', true)
+		.order('updated_at', { ascending: false });
+
+	// Sport athlete listing pages
+	const athleteSports = ['tennis', 'golf', 'soccer', 'nba', 'mlb', 'racing', 'mma', 'boxing', 'esports', 'cricket', 'rugby', 'nhl', 'olympics', 'nfl'];
+	for (const s of athleteSports) {
+		urls += `<url><loc>${SITE_URL}/athletes/${s}</loc><lastmod>${today}</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>\n`;
+	}
+
+	if (athletes) {
+		for (const a of athletes) {
+			const lastmod = (a.updated_at || today).split('T')[0];
+			urls += `<url><loc>${SITE_URL}/athletes/${a.sport}/${a.slug}</loc><lastmod>${lastmod}</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>\n`;
+		}
+	}
+
 	const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${urls}
