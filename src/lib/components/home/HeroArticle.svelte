@@ -1,8 +1,26 @@
 <script lang="ts">
-	import { format } from 'date-fns';
+	import { formatDistanceToNow } from 'date-fns';
 	import type { NewsArticle } from '$lib/types';
 	
 	export let article: NewsArticle;
+	
+	function timeAgo(date: Date | string): string {
+		const d = new Date(date);
+		const now = new Date();
+		const diffMs = now.getTime() - d.getTime();
+		const diffMins = Math.floor(diffMs / 60000);
+		
+		if (diffMins < 1) return 'Just now';
+		if (diffMins < 60) return `${diffMins}m ago`;
+		
+		const diffHours = Math.floor(diffMins / 60);
+		if (diffHours < 24) return `${diffHours}h ago`;
+		
+		const diffDays = Math.floor(diffHours / 24);
+		if (diffDays < 7) return `${diffDays}d ago`;
+		
+		return formatDistanceToNow(d, { addSuffix: true });
+	}
 </script>
 
 <div class="mb-3 sm:mb-4">
@@ -28,7 +46,7 @@
 							{article.category}
 						</span>
 						<span class="text-xs sm:text-sm font-medium opacity-90">
-							{format(new Date(article.date), 'MMM d, yyyy')}
+							{timeAgo(article.date)}
 						</span>
 					</div>
 					

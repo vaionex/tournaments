@@ -262,12 +262,8 @@
 <div class="bg-white dark:bg-gray-900 min-h-screen">
 	<div class="container mx-auto px-4 sm:px-6 lg:px-8 pt-2 pb-4 sm:pt-3 sm:pb-6 max-w-7xl">
 		<!-- Hero Featured Article -->
-		{#if !loading && heroArticle}
+		{#if heroArticle}
 			<HeroArticle article={heroArticle} />
-		{:else if loading}
-			<div class="mb-3 sm:mb-4 animate-pulse">
-				<div class="h-[280px] xs:h-[320px] sm:h-[400px] md:h-[500px] lg:h-[600px] bg-gray-200 dark:bg-gray-700 rounded-lg sm:rounded-xl"></div>
-			</div>
 		{/if}
 		
 		<!-- Main Content Grid -->
@@ -302,32 +298,6 @@
 				
 				<!-- News Grid -->
 				<div class="min-h-[600px]">
-					{#if loading}
-						<!-- Skeleton that matches NewsGrid text-only layout -->
-						<div class="space-y-4">
-							{#each Array(6) as _, i}
-								<div class="group block border-b border-gray-200 dark:border-gray-700 pb-4 last:border-b-0 last:pb-0 animate-pulse" style="animation-delay: {i * 100}ms;">
-									<article class="flex items-start gap-4">
-										<div class="flex-1 min-w-0 w-[70%]">
-											<!-- Category, date, author line -->
-											<div class="flex items-center gap-2 mb-1">
-												<div class="h-4 w-16 bg-gray-200 dark:bg-gray-700 rounded"></div>
-												<div class="h-3 w-20 bg-gray-200 dark:bg-gray-700 rounded"></div>
-												<div class="h-3 w-3 bg-gray-200 dark:bg-gray-700 rounded-full"></div>
-												<div class="h-3 w-24 bg-gray-200 dark:bg-gray-700 rounded"></div>
-											</div>
-											<!-- Title lines -->
-											<div class="h-5 w-full bg-gray-200 dark:bg-gray-700 rounded mb-1"></div>
-											<div class="h-5 w-3/4 bg-gray-200 dark:bg-gray-700 rounded mb-1"></div>
-											<!-- Excerpt lines -->
-											<div class="h-4 w-full bg-gray-200 dark:bg-gray-700 rounded mb-1"></div>
-											<div class="h-4 w-2/3 bg-gray-200 dark:bg-gray-700 rounded"></div>
-										</div>
-									</article>
-								</div>
-							{/each}
-						</div>
-					{:else}
 						<div class="relative">
 							<!-- Loading overlay during category change -->
 							{#if changingCategory}
@@ -347,29 +317,14 @@
 						<!-- Infinite Scroll Trigger & Loading Indicator -->
 						<div bind:this={loadMoreTrigger} class="mt-8">
 							{#if loadingMore}
-								<!-- Skeleton Articles for Loading More -->
-								<div class="space-y-4">
-									{#each Array(ARTICLES_PER_PAGE) as _, i}
-										<div class="group block border-b border-gray-200 dark:border-gray-700 pb-4 last:border-b-0 last:pb-0 animate-pulse" style="animation-delay: {i * 100}ms;">
-											<article class="flex items-start gap-4">
-												<div class="flex-1 min-w-0 w-[70%]">
-													<!-- Category, date, author line -->
-													<div class="flex items-center gap-2 mb-1">
-														<div class="h-4 w-16 bg-gray-200 dark:bg-gray-700 rounded"></div>
-														<div class="h-3 w-20 bg-gray-200 dark:bg-gray-700 rounded"></div>
-														<div class="h-3 w-3 bg-gray-200 dark:bg-gray-700 rounded-full"></div>
-														<div class="h-3 w-24 bg-gray-200 dark:bg-gray-700 rounded"></div>
-													</div>
-													<!-- Title lines -->
-													<div class="h-5 w-full bg-gray-200 dark:bg-gray-700 rounded mb-1"></div>
-													<div class="h-5 w-3/4 bg-gray-200 dark:bg-gray-700 rounded mb-1"></div>
-													<!-- Excerpt lines -->
-													<div class="h-4 w-full bg-gray-200 dark:bg-gray-700 rounded mb-1"></div>
-													<div class="h-4 w-2/3 bg-gray-200 dark:bg-gray-700 rounded"></div>
-												</div>
-											</article>
-										</div>
-									{/each}
+								<div class="flex justify-center py-6">
+									<div class="flex items-center gap-2 text-gray-400 dark:text-gray-500">
+										<svg class="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
+											<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+											<path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+										</svg>
+										<span class="text-sm">Loading more...</span>
+									</div>
 								</div>
 							{:else if hasMoreNews}
 								<!-- Invisible trigger for infinite scroll - shows loading spinner briefly -->
@@ -397,7 +352,7 @@
 			<aside class="lg:col-span-1">
 				<div class="space-y-6">
 					<!-- Upcoming Tournaments -->
-					{#if !loading && upcomingTournaments.length > 0}
+					{#if upcomingTournaments.length > 0}
 						<div class="bg-white dark:bg-gray-800 rounded-xl shadow-md border border-gray-200 dark:border-gray-700 overflow-hidden">
 							<div class="p-5 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-blue-600 to-blue-700">
 								<h2 class="text-lg font-bold text-white flex items-center gap-2">
