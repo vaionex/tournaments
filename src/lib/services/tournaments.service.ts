@@ -58,7 +58,14 @@ function transformTournament(row: Record<string, unknown>): Tournament {
 		entryFee: row.entry_fee ? `$${row.entry_fee}` : 'Free',
 		platform: row.platform as string,
 		location: row.location as string,
-		status: row.status as Tournament['status'],
+		status: (() => {
+			const now = new Date();
+			const startDate = new Date(row.date as string);
+			const endDate = row.end_date ? new Date(row.end_date as string) : null;
+			if (endDate && now >= startDate && now <= endDate) return 'live' as const;
+			if (now > (endDate || startDate)) return 'completed' as const;
+			return 'upcoming' as const;
+		})(),
 		description: row.description as string | undefined,
 		rules: row.rules as string[] | undefined,
 		prizeBreakdown: row.prize_breakdown as Tournament['prizeBreakdown'],
@@ -161,7 +168,7 @@ export async function getTopTournaments(limit: number = 3): Promise<Tournament[]
 	const { data, error } = await supabase
 		.from('tournaments')
 		.select('*')
-		.in('status', ['upcoming', 'live'])
+		.gte('date', new Date().toISOString().split('T')[0])
 		.order('prize_pool', { ascending: false })
 		.limit(limit);
 
@@ -189,7 +196,7 @@ export async function getMostPopularTournaments(limit: number = 3): Promise<Tour
 	const { data, error } = await supabase
 		.from('tournaments')
 		.select('*')
-		.in('status', ['upcoming', 'live'])
+		.gte('date', new Date().toISOString().split('T')[0])
 		.order('registered_players', { ascending: false })
 		.limit(limit);
 
@@ -244,45 +251,17 @@ export async function getUpcomingTournaments(limit: number = 5): Promise<Tournam
 		].slice(0, limit);
 	}
 
-	// Get current date for comparison
-	const today = new Date();
-	today.setHours(0, 0, 0, 0);
-	const todayStr = today.toISOString().split('T')[0];
+	// Date-based logic: upcoming = date >= today, live = date <= today && end_date >= today
+	const now = new Date().toISOString();
+	const todayStr = new Date().toISOString().split('T')[0];
 
-	// Fetch tournaments that are either live or upcoming
-	// For live tournaments, include them regardless of date (they're happening now)
-	// For upcoming tournaments, only include those with date >= today
-	const { data: liveData, error: liveError } = await supabase
+	// Fetch all future tournaments (date >= today), regardless of status field
+	const { data, error } = await supabase
 		.from('tournaments')
 		.select('*')
-		.eq('status', 'live')
-		.order('date', { ascending: true })
-		.limit(limit);
-
-	const { data: upcomingData, error: upcomingError } = await supabase
-		.from('tournaments')
-		.select('*')
-		.eq('status', 'upcoming')
 		.gte('date', todayStr)
 		.order('date', { ascending: true })
 		.limit(limit);
-
-	if (liveError || upcomingError) {
-		console.error('Error fetching upcoming tournaments:', liveError || upcomingError);
-		return [];
-	}
-
-	// Combine and sort by date
-	const allTournaments = [
-		...(liveData || []),
-		...(upcomingData || [])
-	].sort((a, b) => {
-		const dateA = new Date(a.date);
-		const dateB = new Date(b.date);
-		return dateA.getTime() - dateB.getTime();
-	}).slice(0, limit);
-
-	return allTournaments.map(transformTournament);
 
 	if (error) {
 		console.error('Error fetching upcoming tournaments:', error);
