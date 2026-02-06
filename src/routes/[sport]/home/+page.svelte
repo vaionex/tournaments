@@ -592,7 +592,7 @@
 			<div class="h-72 bg-gradient-to-r from-gray-300 to-gray-400 dark:from-gray-700 dark:to-gray-800"></div>
 			
 			<!-- Content Skeleton -->
-			<div class="container mx-auto px-4 py-8">
+			<div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 max-w-7xl">
 				<div class="flex gap-4 mb-8">
 					{#each Array(5) as _}
 						<div class="h-10 w-24 bg-gray-300 dark:bg-gray-700 rounded-lg"></div>
@@ -617,7 +617,7 @@
 			<div class="absolute inset-0 bg-black/30"></div>
 			<div class="absolute inset-0" style="background-image: url('https://images.unsplash.com/photo-1461896836934-47e5c98aebe1?w=1920&h=400&fit=crop'); background-size: cover; background-position: center; opacity: 0.3;"></div>
 			
-			<div class="container mx-auto px-4 h-full flex items-center relative z-10">
+			<div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl h-full flex items-center relative z-10">
 				<div class="text-white">
 					<div class="flex items-center gap-4 mb-4">
 						<span class="text-6xl">{sportData.icon}</span>
@@ -643,7 +643,7 @@
 		
 		<!-- Navigation Tabs -->
 		<div class="sticky top-[88px] z-20 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 shadow-sm">
-			<div class="container mx-auto px-4">
+			<div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
 				<div class="flex gap-1 overflow-x-auto horizontal-gallery py-2">
 					{#each tabs as tab}
 						<button
@@ -662,7 +662,7 @@
 		</div>
 		
 		<!-- Main Content -->
-		<div class="container mx-auto px-4 py-8">
+		<div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 max-w-7xl">
 			<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
 				<!-- Main Column -->
 				<div class="lg:col-span-2">
