@@ -1,13 +1,17 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
+	import { page } from '$app/stores';
+	import { supabase } from '$lib/supabase';
 	import { PlayerSEO } from '$lib/components/seo';
 	
-	export let data;
+	let player: any = null;
+	let related: any[] = [];
+	let loading = true;
+	let notFound = false;
 	
-	$: player = data.player;
-	$: related = data.related;
-	$: sport = data.sport;
+	$: sport = $page.params.sport;
+	$: slug = $page.params.slug;
 	
-	// Sport slug to display name mapping
 	const sportNames: Record<string, string> = {
 		tennis: 'Tennis', golf: 'Golf', soccer: 'Soccer', nfl: 'Football',
 		nba: 'Basketball', mlb: 'Baseball', racing: 'Racing', mma: 'MMA',
@@ -15,21 +19,47 @@
 		nhl: 'Ice Hockey', olympics: 'Olympics', ncaf: 'College Football', wnba: 'WNBA'
 	};
 	
-	$: sportName = sportNames[sport] || player.primary_game || sport;
-	$: bioParagraphs = player.biography ? player.biography.split('\n\n').filter((p: string) => p.trim()) : [];
+	$: sportName = sportNames[sport] || sport;
+	$: bioParagraphs = player?.biography ? player.biography.split('\n\n').filter((p: string) => p.trim()) : [];
 	
 	function formatMoney(amount: number): string {
+		if (!amount) return '$0';
 		if (amount >= 1000000) return `$${(amount / 1000000).toFixed(1)}M`;
 		if (amount >= 1000) return `$${(amount / 1000).toFixed(0)}K`;
 		return `$${amount}`;
 	}
 
-	function formatDate(date: string): string {
-		if (!date) return 'N/A';
-		return new Date(date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-	}
+	onMount(async () => {
+		const { data: p, error } = await supabase
+			.from('players')
+			.select('*')
+			.eq('slug', slug)
+			.eq('is_published', true)
+			.single();
+
+		if (error || !p) {
+			notFound = true;
+			loading = false;
+			return;
+		}
+
+		player = p;
+
+		const { data: rel } = await supabase
+			.from('players')
+			.select('id, display_name, slug, sport, country, current_rank, primary_game, total_winnings')
+			.eq('sport', sport)
+			.eq('is_published', true)
+			.neq('id', player.id)
+			.order('current_rank', { ascending: true, nullsFirst: false })
+			.limit(6);
+
+		related = rel || [];
+		loading = false;
+	});
 </script>
 
+{#if player}
 <PlayerSEO 
 	name={player.display_name || player.player_name}
 	sport={sportName}
@@ -44,8 +74,9 @@
 	}}
 	ranking={player.current_rank}
 />
+{/if}
 
-{#if player.meta_title}
+{#if player?.meta_title}
 <svelte:head>
 	<title>{player.meta_title}</title>
 	{#if player.meta_description}
@@ -55,6 +86,17 @@
 {/if}
 
 <div class="min-h-screen bg-gray-950 text-white">
+	{#if loading}
+	<div class="container mx-auto px-3 sm:px-6 lg:px-8 max-w-7xl py-20 text-center">
+		<div class="text-gray-400">Loading athlete profile...</div>
+	</div>
+	{:else if notFound}
+	<div class="container mx-auto px-3 sm:px-6 lg:px-8 max-w-7xl py-20 text-center">
+		<h1 class="text-3xl font-bold mb-4">Athlete Not Found</h1>
+		<p class="text-gray-400">The athlete you're looking for doesn't exist or hasn't been published yet.</p>
+		<a href="/" class="mt-6 inline-block text-blue-400 hover:text-blue-300">← Back to Home</a>
+	</div>
+	{:else if player}
 	<!-- Breadcrumb -->
 	<div class="container mx-auto px-3 sm:px-6 lg:px-8 max-w-7xl pt-6">
 		<nav class="text-sm text-gray-400 mb-6" aria-label="Breadcrumb">
@@ -80,7 +122,6 @@
 	<!-- Hero Section -->
 	<div class="container mx-auto px-3 sm:px-6 lg:px-8 max-w-7xl">
 		<div class="flex flex-col md:flex-row gap-8 mb-12">
-			<!-- Player Avatar -->
 			<div class="flex-shrink-0">
 				<div class="w-48 h-48 rounded-2xl bg-gradient-to-br from-blue-600 to-purple-700 flex items-center justify-center text-6xl font-bold overflow-hidden">
 					{#if player.avatar_url}
@@ -91,7 +132,6 @@
 				</div>
 			</div>
 
-			<!-- Player Info -->
 			<div class="flex-1">
 				<div class="flex items-center gap-3 mb-2">
 					<h1 class="text-4xl md:text-5xl font-bold">{player.display_name || player.player_name}</h1>
@@ -162,9 +202,6 @@
 					<p class="text-gray-300 leading-relaxed mb-4">{paragraph}</p>
 				{/each}
 			</div>
-			{#if player.bio_word_count}
-			<div class="text-xs text-gray-600 mt-4">{player.bio_word_count} words</div>
-			{/if}
 		</article>
 		{/if}
 
@@ -250,4 +287,5 @@
 			</div>
 		</div>
 	</div>
+	{/if}
 </div>
