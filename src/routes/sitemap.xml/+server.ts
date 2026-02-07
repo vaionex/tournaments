@@ -69,6 +69,21 @@ export async function GET() {
 			const lastmod = (a.updated_at || today).split('T')[0];
 			urls += `<url><loc>${SITE_URL}/athletes/${a.sport}/${a.slug}</loc><lastmod>${lastmod}</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>\n`;
 		}
+
+		// Generate comparison pages for top athletes per sport (top 10 vs each other)
+		const sportGroups: Record<string, typeof athletes> = {};
+		for (const a of athletes) {
+			if (!sportGroups[a.sport]) sportGroups[a.sport] = [];
+			if (sportGroups[a.sport].length < 10) sportGroups[a.sport].push(a);
+		}
+		for (const sport of Object.keys(sportGroups)) {
+			const group = sportGroups[sport];
+			for (let i = 0; i < group.length; i++) {
+				for (let j = i + 1; j < group.length; j++) {
+					urls += `<url><loc>${SITE_URL}/athletes/compare/${group[i].slug}-vs-${group[j].slug}</loc><lastmod>${today}</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>\n`;
+				}
+			}
+		}
 	}
 
 	const sitemap = `<?xml version="1.0" encoding="UTF-8"?>

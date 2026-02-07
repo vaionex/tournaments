@@ -208,6 +208,23 @@
 		</div>
 		{/if}
 
+		<!-- Compare With -->
+		{#if related.length > 0 && player}
+		<div class="mb-12">
+			<h2 class="text-xl font-bold mb-6">⚡ Compare {player.display_name} With</h2>
+			<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+				{#each related as rel}
+				<a href="/athletes/compare/{player.slug}-vs-{rel.slug}"
+					class="flex items-center justify-between p-4 bg-gray-900/50 border border-gray-800 rounded-xl hover:border-blue-500 transition-colors group">
+					<span class="font-semibold text-white truncate">{player.display_name}</span>
+					<span class="text-xs text-gray-500 mx-2 flex-shrink-0 group-hover:text-blue-400">vs</span>
+					<span class="font-semibold text-white truncate text-right">{rel.display_name}</span>
+				</a>
+				{/each}
+			</div>
+		</div>
+		{/if}
+
 		<!-- Related Athletes -->
 		{#if related.length > 0}
 		<div class="mb-12">
