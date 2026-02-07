@@ -273,6 +273,7 @@
 		<div class="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-10">
 			<!-- Main News Column -->
 			<div class="lg:col-span-2">
+				<h2 class="sr-only">Latest Sports News</h2>
 				<!-- Preferences Notice -->
 				{#if hasPreferences && favoriteSports.length > 0}
 					<div class="mb-4 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl">
