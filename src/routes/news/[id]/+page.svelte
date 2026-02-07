@@ -11,6 +11,7 @@
 	
 	let article = data?.ssrArticle || null;
 	let relatedArticles = data?.ssrRelated || [];
+	let relatedAthletes = data?.ssrRelatedAthletes || [];
 	let popularArticles = [];
 	let recentArticles = [];
 	let comments = [];
@@ -609,6 +610,47 @@ The integration of technology in training and competition is also creating new o
 						</a>
 					</div>
 				</div>
+
+				<!-- Related Athletes -->
+				{#if relatedAthletes.length > 0}
+					<div class="bg-white dark:bg-gray-800 rounded-2xl border-2 border-gray-200 dark:border-gray-700 p-6">
+						<h3 class="text-xl font-black text-gray-900 dark:text-white mb-4 pb-3 border-b-2 border-gray-200 dark:border-gray-700">
+							Related Athletes
+						</h3>
+						<div class="space-y-4">
+							{#each relatedAthletes as athlete}
+								<a
+									href="/athletes/{athlete.sport}/{athlete.slug}"
+									data-sveltekit-preload-data="hover"
+									class="group block"
+								>
+									<div class="flex items-center gap-3">
+										<div class="w-12 h-12 rounded-full bg-gradient-to-br from-blue-600 to-purple-700 flex items-center justify-center text-white font-bold flex-shrink-0">
+											{(athlete.display_name || '?').charAt(0)}
+										</div>
+										<div class="flex-1 min-w-0">
+											<h4 class="font-bold text-sm text-gray-900 dark:text-white mb-1 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors truncate">
+												{athlete.display_name}
+											</h4>
+											<div class="text-xs text-gray-500 dark:text-gray-400">
+												{athlete.country || athlete.sport?.toUpperCase()}
+												{#if athlete.total_winnings}
+													• ${athlete.total_winnings.toLocaleString()}
+												{/if}
+											</div>
+										</div>
+									</div>
+								</a>
+							{/each}
+						</div>
+						<div class="mt-4 pt-3 border-t border-gray-200 dark:border-gray-700">
+							<a href="/athletes/{article?.sport}" 
+							   class="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium">
+								View All {article?.sport?.toUpperCase()} Athletes →
+							</a>
+						</div>
+					</div>
+				{/if}
 
 				<!-- Related Articles -->
 				{#if relatedArticles.length > 0}

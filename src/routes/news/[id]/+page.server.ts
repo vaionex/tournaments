@@ -44,8 +44,22 @@ export async function load({ params }) {
 		related = (data || []).map(transformArticle);
 	}
 
+	// Get related athletes if article has sport
+	let relatedAthletes: any[] = [];
+	if (article?.sport) {
+		const { data: athletes } = await supabase
+			.from('players')
+			.select('display_name, slug, sport, country, total_winnings')
+			.eq('sport', article.sport)
+			.eq('is_published', true)
+			.order('total_winnings', { ascending: false })
+			.limit(6);
+		relatedAthletes = athletes || [];
+	}
+
 	return {
 		ssrArticle: article ? transformArticle(article) : null,
-		ssrRelated: related
+		ssrRelated: related,
+		ssrRelatedAthletes: relatedAthletes
 	};
 }

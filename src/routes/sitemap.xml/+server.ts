@@ -28,6 +28,7 @@ export async function GET() {
 		<url><loc>${SITE_URL}/</loc><lastmod>${today}</lastmod><changefreq>hourly</changefreq><priority>1.0</priority></url>
 		<url><loc>${SITE_URL}/news</loc><lastmod>${today}</lastmod><changefreq>hourly</changefreq><priority>0.9</priority></url>
 		<url><loc>${SITE_URL}/tournaments</loc><lastmod>${today}</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
+		<url><loc>${SITE_URL}/whats-on</loc><lastmod>${today}</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
 	`;
 
 	// Sport pages

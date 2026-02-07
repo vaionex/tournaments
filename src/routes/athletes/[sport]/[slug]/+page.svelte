@@ -7,6 +7,7 @@
 	
 	$: player = data?.player || null;
 	$: related = data?.related || [];
+	$: latestNews = data?.latestNews || [];
 	$: sport = data?.sport || $page.params.sport;
 	$: notFound = !player;
 	$: loading = false;
@@ -173,6 +174,51 @@
 				{/each}
 			</div>
 		</article>
+		{/if}
+
+		<!-- Latest News -->
+		{#if latestNews.length > 0}
+		<div class="mb-12">
+			<h2 class="text-2xl font-bold mb-6 pb-3 border-b border-gray-800">
+				Latest {sportName} News
+			</h2>
+			<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+				{#each latestNews as article}
+				<a href="/news/{article.id}" 
+					class="bg-gray-900/50 border border-gray-800 rounded-xl overflow-hidden hover:border-gray-600 transition-all duration-300 group">
+					<div class="aspect-[16/9] overflow-hidden">
+						<img src={article.image} alt={article.title} 
+							class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+					</div>
+					<div class="p-4">
+						<div class="flex items-center gap-2 mb-2">
+							<span class="px-2 py-0.5 bg-blue-900/50 text-blue-300 text-xs font-bold rounded uppercase">
+								{article.category}
+							</span>
+							<span class="text-xs text-gray-500">
+								{new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).format(article.date)}
+							</span>
+						</div>
+						<h3 class="font-semibold text-white group-hover:text-blue-400 transition-colors line-clamp-2 mb-2">
+							{article.title}
+						</h3>
+						<p class="text-sm text-gray-400 line-clamp-2">
+							{article.excerpt}
+						</p>
+					</div>
+				</a>
+				{/each}
+			</div>
+			<div class="mt-6 text-center">
+				<a href="/news?sport={sport}" 
+					class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors">
+					View All {sportName} News
+					<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+					</svg>
+				</a>
+			</div>
+		</div>
 		{/if}
 
 		<!-- Social Links -->

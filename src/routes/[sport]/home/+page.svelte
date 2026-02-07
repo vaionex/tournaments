@@ -20,6 +20,7 @@
 		return formatDistanceToNow(d, { addSuffix: true });
 	}
 	import PageSEO from '$lib/components/seo/PageSEO.svelte';
+	import SportIntro from '$lib/components/SportIntro.svelte';
 	import { getNewsArticlesBySport, getFeaturedArticleBySport } from '$lib/services/news.service';
 	import { cache } from '$lib/services/cache.service';
 	
@@ -654,6 +655,9 @@
 				</div>
 			</div>
 		</div>
+		
+		<!-- Sport Introduction Section -->
+		<SportIntro sport={sport} />
 		
 		<!-- Navigation Tabs -->
 		<div class="sticky top-[88px] z-20 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 shadow-sm">
