@@ -24,12 +24,58 @@ export async function GET() {
 
 	const today = new Date().toISOString().split('T')[0];
 
+	// Static guide slugs
+	const howToWatchGuides = [
+		'super-bowl', 'nba-finals', 'world-series', 'stanley-cup-finals', 'nfl-playoffs', 
+		'march-madness', 'wimbledon', 'us-open-tennis', 'french-open', 'australian-open',
+		'masters-golf', 'pga-championship', 'ufc-pay-per-view', 'boxing-ppv', 'fifa-world-cup',
+		'champions-league', 'premier-league', 'la-liga', 'serie-a', 'formula-1', 'nascar',
+		'olympics', 'commonwealth-games', 'cricket-world-cup', 'rugby-world-cup'
+	];
+
+	// Sports overview slugs
+	const sportsPages = [
+		'nfl', 'nba', 'mlb', 'nhl', 'soccer', 'tennis', 'golf', 'mma', 'boxing', 
+		'racing', 'olympics', 'esports', 'cricket', 'rugby'
+	];
+
+	// Historical results slugs
+	const resultsPages = [
+		'super-bowl-2025', 'super-bowl-2024', 'nba-finals-2025', 'nba-finals-2024',
+		'world-series-2025', 'world-series-2024', 'wimbledon-2025', 'wimbledon-2024',
+		'us-open-2025', 'us-open-2024', 'masters-2025', 'masters-2024', 'ufc-300',
+		'olympics-2024', 'formula-1-2024', 'champions-league-2024', 'premier-league-2024',
+		'nfl-playoffs-2024', 'stanley-cup-2024', 'french-open-2024', 'australian-open-2024',
+		'pga-championship-2024', 'march-madness-2024', 'boxing-heavyweight-2024',
+		'cricket-world-cup-2023', 'rugby-world-cup-2023', 'commonwealth-games-2022',
+		'la-liga-2024', 'serie-a-2024', 'nascar-cup-2024'
+	];
+
 	let urls = `
 		<url><loc>${SITE_URL}/</loc><lastmod>${today}</lastmod><changefreq>hourly</changefreq><priority>1.0</priority></url>
 		<url><loc>${SITE_URL}/news</loc><lastmod>${today}</lastmod><changefreq>hourly</changefreq><priority>0.9</priority></url>
 		<url><loc>${SITE_URL}/tournaments</loc><lastmod>${today}</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
 		<url><loc>${SITE_URL}/whats-on</loc><lastmod>${today}</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
+		<url><loc>${SITE_URL}/guides</loc><lastmod>${today}</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
+		<url><loc>${SITE_URL}/guides/how-to-watch</loc><lastmod>${today}</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+		<url><loc>${SITE_URL}/sports</loc><lastmod>${today}</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
+		<url><loc>${SITE_URL}/results</loc><lastmod>${today}</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
 	`;
+
+	// Add How to Watch guide pages
+	for (const guide of howToWatchGuides) {
+		urls += `<url><loc>${SITE_URL}/guides/how-to-watch/${guide}</loc><lastmod>${today}</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>\n`;
+	}
+
+	// Add sports overview pages
+	for (const sport of sportsPages) {
+		urls += `<url><loc>${SITE_URL}/sports/${sport}</loc><lastmod>${today}</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>\n`;
+	}
+
+	// Add historical results pages
+	for (const result of resultsPages) {
+		urls += `<url><loc>${SITE_URL}/results/${result}</loc><lastmod>${today}</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>\n`;
+	}
 
 	// Sport pages
 	for (const sport of sports) {
