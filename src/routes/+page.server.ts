@@ -47,7 +47,7 @@ export async function load() {
 	try {
 		const { data: athletes } = await supabase
 			.from('players')
-			.select('id, display_name, slug, sport, image_url, country, total_winnings')
+			.select('id, display_name, slug, sport, avatar_url, country, total_winnings')
 			.eq('is_published', true)
 			.order('total_winnings', { ascending: false })
 			.limit(50);
@@ -68,7 +68,7 @@ export async function load() {
 			displayName: a.display_name,
 			slug: a.slug,
 			sport: a.sport,
-			image: a.image_url || 'https://images.unsplash.com/photo-1517649763962-0c623066013b?w=400&h=400&fit=crop',
+			image: a.avatar_url || 'https://images.unsplash.com/photo-1517649763962-0c623066013b?w=400&h=400&fit=crop',
 			country: a.country
 		}));
 	} catch (e) {
