@@ -432,7 +432,16 @@ The integration of technology in training and competition is also creating new o
 				</div>
 			</header>
 
-					<!-- Featured Image removed - repetitive stock images -->
+					<!-- Featured Image -->
+					{#if article?.image}
+					<div class="relative w-full aspect-[2/1] rounded-xl overflow-hidden mb-10 shadow-lg">
+						<img 
+							src={article.image} 
+							alt={article.title}
+							class="w-full h-full object-cover"
+						/>
+					</div>
+					{/if}
 
 					<!-- Article Content -->
 					<div class="prose prose-lg dark:prose-invert max-w-none mb-12">
