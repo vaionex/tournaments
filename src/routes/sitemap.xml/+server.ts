@@ -62,6 +62,12 @@ export async function GET() {
 		<url><loc>${SITE_URL}/results</loc><lastmod>${today}</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
 	`;
 
+	// Add Sport Pillar Guide pages
+	const sportGuides = ['nfl', 'nba', 'mlb', 'nhl', 'soccer', 'tennis', 'golf', 'mma', 'boxing', 'racing', 'olympics', 'esports', 'cricket', 'rugby'];
+	for (const sport of sportGuides) {
+		urls += `<url><loc>${SITE_URL}/${sport}/guide</loc><lastmod>${today}</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>\n`;
+	}
+
 	// Add How to Watch guide pages
 	for (const guide of howToWatchGuides) {
 		urls += `<url><loc>${SITE_URL}/guides/how-to-watch/${guide}</loc><lastmod>${today}</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>\n`;

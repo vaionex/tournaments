@@ -4,7 +4,7 @@
 
 <footer class="bg-gray-900 dark:bg-black text-gray-300 border-t border-gray-800">
 	<div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12 max-w-7xl">
-		<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
+		<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-12">
 			<!-- Brand & Description -->
 			<div class="lg:col-span-1">
 				<a href="/" class="mb-4 inline-block">
@@ -17,7 +17,7 @@
 					</div>
 				</a>
 				<p class="text-gray-400 text-sm leading-relaxed mb-4">
-					Your premier destination for competitive gaming tournaments, player rankings, and esports news. Discover, compete, and stay ahead.
+					Your premier destination for competitive sports tournaments, athlete rankings, and championship coverage across all major sports.
 				</p>
 				<!-- Social Media Links -->
 				<div class="flex gap-3">
@@ -68,6 +68,69 @@
 				</div>
 			</div>
 			
+			<!-- Sports Guides -->
+			<div>
+				<h3 class="text-white font-semibold mb-4 text-sm uppercase tracking-wider">Sports Guides</h3>
+				<ul class="space-y-3">
+					<li>
+						<a href="/guides" class="text-gray-400 hover:text-white transition-colors text-sm flex items-center gap-2 group">
+							<svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+							</svg>
+							All Sports Guides
+						</a>
+					</li>
+					<li>
+						<a href="/nfl/guide" class="text-gray-400 hover:text-white transition-colors text-sm flex items-center gap-2 group">
+							<svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+							</svg>
+							NFL Guide
+						</a>
+					</li>
+					<li>
+						<a href="/nba/guide" class="text-gray-400 hover:text-white transition-colors text-sm flex items-center gap-2 group">
+							<svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+							</svg>
+							NBA Guide
+						</a>
+					</li>
+					<li>
+						<a href="/mlb/guide" class="text-gray-400 hover:text-white transition-colors text-sm flex items-center gap-2 group">
+							<svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+							</svg>
+							MLB Guide
+						</a>
+					</li>
+					<li>
+						<a href="/soccer/guide" class="text-gray-400 hover:text-white transition-colors text-sm flex items-center gap-2 group">
+							<svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+							</svg>
+							Soccer Guide
+						</a>
+					</li>
+					<li>
+						<a href="/tennis/guide" class="text-gray-400 hover:text-white transition-colors text-sm flex items-center gap-2 group">
+							<svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+							</svg>
+							Tennis Guide
+						</a>
+					</li>
+					<li>
+						<a href="/esports/guide" class="text-gray-400 hover:text-white transition-colors text-sm flex items-center gap-2 group">
+							<svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+							</svg>
+							Esports Guide
+						</a>
+					</li>
+				</ul>
+			</div>
+			
 			<!-- Quick Links -->
 			<div>
 				<h3 class="text-white font-semibold mb-4 text-sm uppercase tracking-wider">Quick Links</h3>
@@ -89,11 +152,19 @@
 						</a>
 					</li>
 					<li>
-						<a href="/players" class="text-gray-400 hover:text-white transition-colors text-sm flex items-center gap-2 group">
+						<a href="/athletes" class="text-gray-400 hover:text-white transition-colors text-sm flex items-center gap-2 group">
 							<svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
 							</svg>
-							Players
+							Athletes
+						</a>
+					</li>
+					<li>
+						<a href="/whats-on" class="text-gray-400 hover:text-white transition-colors text-sm flex items-center gap-2 group">
+							<svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+							</svg>
+							What's On
 						</a>
 					</li>
 					<li>
