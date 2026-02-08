@@ -2,6 +2,7 @@
 	import { onMount, onDestroy, tick } from 'svelte';
 	import type { NewsArticle, NewsCategory, Player, Tournament } from '$lib/types';
 	import { getNewsArticlesPaginated, getNewsArticlesPaginatedWithOffset, getNewsCategories } from '$lib/services/news.service';
+	import { formatSportName } from '$lib/utils/sport-name';
 	// Mock services removed — using SSR data from +page.server.ts
 	import { getUserPreferences } from '$lib/services/user.service';
 	import { cache } from '$lib/services/cache.service';
@@ -456,7 +457,7 @@
 												{athlete.displayName}
 											</p>
 											<p class="text-xs text-gray-500 dark:text-gray-400 truncate">
-												{({'nfl':'NFL','nba':'NBA','mlb':'MLB','nhl':'NHL','mma':'MMA','esports':'Esports','ncaf':'NCAF','wnba':'WNBA'})[athlete.sport] || athlete.sport.charAt(0).toUpperCase() + athlete.sport.slice(1)} {athlete.country ? `• ${athlete.country}` : ''}
+												{formatSportName(athlete.sport)} {athlete.country ? `• ${athlete.country}` : ''}
 											</p>
 										</div>
 										<span class="flex-shrink-0 text-xs font-semibold text-green-600 dark:text-green-400">

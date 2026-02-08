@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { PlayerSEO } from '$lib/components/seo';
+	import { formatSportName } from '$lib/utils/sport-name';
 	
 	// SSR data from +page.server.ts
 	export let data: any;
@@ -12,14 +13,7 @@
 	$: notFound = !player;
 	$: loading = false;
 	
-	const sportNames: Record<string, string> = {
-		tennis: 'Tennis', golf: 'Golf', soccer: 'Soccer', nfl: 'Football',
-		nba: 'Basketball', mlb: 'Baseball', racing: 'Racing', mma: 'MMA',
-		boxing: 'Boxing', esports: 'Esports', cricket: 'Cricket', rugby: 'Rugby',
-		nhl: 'Ice Hockey', olympics: 'Olympics', ncaf: 'College Football', wnba: 'WNBA'
-	};
-	
-	$: sportName = sportNames[sport] || sport;
+	$: sportName = formatSportName(sport);
 	$: bioParagraphs = player?.biography ? player.biography.split('\n\n').filter((p: string) => p.trim()) : [];
 	
 	function formatMoney(amount: number): string {

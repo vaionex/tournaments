@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { PageSEO } from '$lib/components/seo';
+	import { formatSportName } from '$lib/utils/sport-name';
 	
 	// SSR data from +page.server.ts
 	export let data: any;
@@ -9,14 +10,7 @@
 	$: sport = data?.sport || $page.params.sport;
 	$: loading = false;
 	
-	const sportNames: Record<string, string> = {
-		tennis: 'Tennis', golf: 'Golf', soccer: 'Soccer', nfl: 'Football',
-		nba: 'Basketball', mlb: 'Baseball', racing: 'Racing', mma: 'MMA',
-		boxing: 'Boxing', esports: 'Esports', cricket: 'Cricket', rugby: 'Rugby',
-		nhl: 'Ice Hockey', olympics: 'Olympics', ncaf: 'College Football', wnba: 'WNBA'
-	};
-	
-	$: sportName = sportNames[sport] || sport;
+	$: sportName = formatSportName(sport);
 	
 	function formatMoney(amount: number): string {
 		if (!amount) return '$0';

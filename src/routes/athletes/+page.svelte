@@ -1,17 +1,11 @@
 <script lang="ts">
 	import { PageSEO } from '$lib/components/seo';
+	import { formatSportName } from '$lib/utils/sport-name';
 	
 	export let data: any;
 	
 	$: sportCounts = data?.sportCounts || {};
 	$: sportGroups = data?.sportGroups || {};
-	
-	const sportNames: Record<string, string> = {
-		tennis: 'Tennis', golf: 'Golf', soccer: 'Soccer', nfl: 'Football',
-		nba: 'Basketball', mlb: 'Baseball', racing: 'Racing', mma: 'MMA',
-		boxing: 'Boxing', esports: 'Esports', cricket: 'Cricket', rugby: 'Rugby',
-		nhl: 'Ice Hockey', olympics: 'Olympics', ncaf: 'College Football', wnba: 'WNBA'
-	};
 
 	const sportIcons: Record<string, string> = {
 		tennis: '🎾', golf: '⛳', soccer: '⚽', nfl: '🏈',
@@ -48,7 +42,7 @@
 				<div class="flex items-center justify-between mb-4">
 					<div class="flex items-center gap-3">
 						<span class="text-2xl">{sportIcons[sport] || '🏆'}</span>
-						<h2 class="text-xl font-bold group-hover:text-blue-400 transition-colors">{sportNames[sport] || sport}</h2>
+						<h2 class="text-xl font-bold group-hover:text-blue-400 transition-colors">{formatSportName(sport)}</h2>
 					</div>
 					<span class="text-sm text-gray-500">{count} athletes</span>
 				</div>
