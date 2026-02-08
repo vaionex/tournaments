@@ -1,6 +1,20 @@
 <script>
 	import { page } from '$app/stores';
-	import { format } from 'date-fns';
+	import { format, formatDistanceToNow } from 'date-fns';
+
+	function timeAgo(date: Date | string): string {
+		const d = date instanceof Date ? date : new Date(date);
+		const now = new Date();
+		const diffMs = now.getTime() - d.getTime();
+		const diffMin = Math.floor(diffMs / 60000);
+		if (diffMin < 1) return 'just now';
+		if (diffMin < 60) return `${diffMin}m ago`;
+		const diffHrs = Math.floor(diffMin / 60);
+		if (diffHrs < 24) return `${diffHrs}h ago`;
+		const diffDays = Math.floor(diffHrs / 24);
+		if (diffDays < 7) return `${diffDays}d ago`;
+		return format(d, 'MMM d');
+	}
 	import { CommentSection } from '$lib/components/comments';
 	import { ArticleSEO } from '$lib/components/seo';
 	import { getNewsArticleById, getRecentNews, getArticleComments } from '$lib/services/news.service';
@@ -537,7 +551,7 @@ The integration of technology in training and competition is also creating new o
 										{popular.title}
 									</h4>
 									<div class="text-xs text-gray-500 dark:text-gray-400">
-										{format(popular.date, 'MMM d')}
+										{timeAgo(popular.date)}
 									</div>
 								</div>
 							</a>
@@ -561,7 +575,7 @@ The integration of technology in training and competition is also creating new o
 									{recent.title}
 								</h4>
 								<div class="text-xs text-gray-500 dark:text-gray-400">
-									{format(recent.date, 'MMM d, yyyy')}
+									{timeAgo(recent.date)}
 								</div>
 							</a>
 						{/each}
