@@ -455,8 +455,8 @@
 											<p class="font-semibold text-sm text-gray-900 dark:text-white truncate group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors">
 												{athlete.displayName}
 											</p>
-											<p class="text-xs text-gray-500 dark:text-gray-400 truncate capitalize">
-												{athlete.sport} {athlete.country ? `• ${athlete.country}` : ''}
+											<p class="text-xs text-gray-500 dark:text-gray-400 truncate">
+												{({'nfl':'NFL','nba':'NBA','mlb':'MLB','nhl':'NHL','mma':'MMA','esports':'Esports','ncaf':'NCAF','wnba':'WNBA'})[athlete.sport] || athlete.sport.charAt(0).toUpperCase() + athlete.sport.slice(1)} {athlete.country ? `• ${athlete.country}` : ''}
 											</p>
 										</div>
 										<span class="flex-shrink-0 text-xs font-semibold text-green-600 dark:text-green-400">
