@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
+import { getUpcomingFixtures, getRecentResults, getStandings, getLeagueName, SPORT_LEAGUES } from '$lib/services/sportsdb';
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
@@ -42,7 +43,7 @@ export async function load({ params }) {
 		.order('total_winnings', { ascending: false })
 		.limit(10);
 
-	// Fetch upcoming/ongoing tournaments for this sport
+	// Fetch upcoming/ongoing tournaments from our DB
 	const today = new Date().toISOString();
 	const { data: tournaments } = await supabase
 		.from('tournaments')
@@ -51,6 +52,16 @@ export async function load({ params }) {
 		.gte('end_date', today)
 		.order('date', { ascending: true })
 		.limit(5);
+
+	// Fetch live data from TheSportsDB (scores, standings, fixtures)
+	const hasLeague = !!SPORT_LEAGUES[sport]?.length;
+	const [fixtures, results, standings] = hasLeague
+		? await Promise.all([
+			getUpcomingFixtures(sport),
+			getRecentResults(sport),
+			getStandings(sport)
+		])
+		: [[], [], []];
 
 	return {
 		ssrArticles: rest,
@@ -65,6 +76,46 @@ export async function load({ params }) {
 			prize_pool: t.prize_pool,
 			status: t.status
 		})),
+		ssrFixtures: fixtures.map(e => ({
+			id: e.idEvent,
+			event: e.strEvent,
+			homeTeam: e.strHomeTeam,
+			awayTeam: e.strAwayTeam,
+			date: e.strTimestamp || e.dateEvent,
+			time: e.strTime,
+			venue: e.strVenue,
+			league: e.strLeague,
+			homeBadge: e.strHomeTeamBadge,
+			awayBadge: e.strAwayTeamBadge,
+			status: e.strStatus
+		})),
+		ssrResults: results.map(e => ({
+			id: e.idEvent,
+			event: e.strEvent,
+			homeTeam: e.strHomeTeam,
+			awayTeam: e.strAwayTeam,
+			homeScore: e.intHomeScore,
+			awayScore: e.intAwayScore,
+			date: e.dateEvent,
+			league: e.strLeague,
+			homeBadge: e.strHomeTeamBadge,
+			awayBadge: e.strAwayTeamBadge
+		})),
+		ssrStandings: standings.map(s => ({
+			rank: parseInt(s.intRank),
+			team: s.strTeam,
+			badge: s.strBadge,
+			played: parseInt(s.intPlayed),
+			won: parseInt(s.intWin),
+			lost: parseInt(s.intLoss),
+			drawn: parseInt(s.intDraw),
+			gf: parseInt(s.intGoalsFor),
+			ga: parseInt(s.intGoalsAgainst),
+			gd: parseInt(s.intGoalDifference),
+			points: parseInt(s.intPoints),
+			form: s.strForm
+		})),
+		ssrLeagueName: getLeagueName(sport),
 		sport
 	};
 }

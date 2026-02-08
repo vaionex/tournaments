@@ -30,9 +30,11 @@
 	let activeTab = 'news';
 	let newsArticles = data?.ssrArticles || [];
 	let upcomingEvents = data?.ssrTournaments || [];
-	let recentResults = [];
+	let recentResults = data?.ssrResults || [];
 	let topPlayers = [];
-	let standings = [];
+	let standings = data?.ssrStandings || [];
+	let fixtures = data?.ssrFixtures || [];
+	let leagueName = data?.ssrLeagueName || '';
 	let featuredContent = data?.ssrFeatured || null;
 	let featuredArticleId = data?.ssrFeatured?.id || null;
 	let ssrAthletes = data?.ssrAthletes || [];
@@ -45,6 +47,10 @@
 		featuredArticleId = data.ssrFeatured?.id || null;
 		ssrAthletes = data.ssrAthletes || [];
 		upcomingEvents = data.ssrTournaments || [];
+		recentResults = data.ssrResults || [];
+		standings = data.ssrStandings || [];
+		fixtures = data.ssrFixtures || [];
+		leagueName = data.ssrLeagueName || '';
 		loading = !(data.ssrArticles?.length > 0);
 	}
 	
@@ -569,10 +575,8 @@
 				};
 			}
 			
-			// Events and athletes come from SSR data (real DB)
-			// Only mock data remaining: recentResults, standings (no DB tables for these yet)
-			recentResults = generateRecentResults(sportData);
-			standings = generateStandings(sportData);
+			// All live data comes from SSR (TheSportsDB API + Supabase)
+			// recentResults, standings, fixtures are already set from SSR data
 		} catch (error) {
 			console.error('Failed to load sport data:', error);
 		} finally {
@@ -733,81 +737,148 @@
 							{/each}
 						</div>
 					{:else if activeTab === 'scores'}
-						<!-- Recent Results -->
+						<!-- Recent Results from TheSportsDB -->
 						<div class="card p-6 mb-6">
 							<h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
 								<span class="text-2xl">{sportData.icon}</span>
-								Recent Results
+								Recent Results {leagueName ? `— ${leagueName}` : ''}
 							</h2>
+							{#if recentResults.length > 0}
 							<div class="space-y-4">
 								{#each recentResults as result}
 									<div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 rounded-xl">
-										<div class="flex-1 text-center">
-											<div class="font-bold text-lg text-gray-900 dark:text-white">{result.homeTeam}</div>
-											<div class="text-sm text-gray-500">{result.league}</div>
+										<div class="flex-1 text-right">
+											{#if result.homeBadge}
+												<img src={result.homeBadge} alt="" class="w-8 h-8 inline-block mr-2" />
+											{/if}
+											<span class="font-bold text-gray-900 dark:text-white">{result.homeTeam}</span>
 										</div>
-										<div class="px-6 text-center">
+										<div class="px-6 text-center min-w-[80px]">
 											<div class="text-2xl font-black text-gray-900 dark:text-white">
-												{result.homeScore} - {result.awayScore}
+												{result.homeScore ?? '?'} - {result.awayScore ?? '?'}
 											</div>
-											<div class="text-xs text-green-600 font-semibold">{result.status}</div>
+											<div class="text-xs text-gray-500">{format(new Date(result.date), 'MMM d')}</div>
 										</div>
-										<div class="flex-1 text-center">
-											<div class="font-bold text-lg text-gray-900 dark:text-white">{result.awayTeam}</div>
-											<div class="text-sm text-gray-500">{format(new Date(result.date), 'MMM d')}</div>
+										<div class="flex-1 text-left">
+											<span class="font-bold text-gray-900 dark:text-white">{result.awayTeam}</span>
+											{#if result.awayBadge}
+												<img src={result.awayBadge} alt="" class="w-8 h-8 inline-block ml-2" />
+											{/if}
 										</div>
 									</div>
 								{/each}
 							</div>
+							{:else}
+								<p class="text-center text-gray-500 py-6">No recent results available for this sport yet.</p>
+							{/if}
 						</div>
 					{:else if activeTab === 'standings'}
-						<!-- Standings Table -->
+						<!-- Standings Table from TheSportsDB -->
 						<div class="card overflow-hidden">
 							<div class="p-6 border-b border-gray-200 dark:border-gray-700">
 								<h2 class="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
 									<span class="text-2xl">{sportData.icon}</span>
-									{sportData.leagues[0]?.name || sportData.shortName} Standings
+									{leagueName || sportData.leagues[0]?.name || sportData.shortName} Standings
 								</h2>
 							</div>
+							{#if standings.length > 0}
 							<div class="overflow-x-auto">
 								<table class="w-full">
 									<thead class="bg-gray-50 dark:bg-gray-800">
 										<tr>
-											<th class="px-4 py-3 text-left text-xs font-bold text-gray-500 uppercase">#</th>
-											<th class="px-4 py-3 text-left text-xs font-bold text-gray-500 uppercase">Team</th>
-											<th class="px-4 py-3 text-center text-xs font-bold text-gray-500 uppercase">W</th>
-											<th class="px-4 py-3 text-center text-xs font-bold text-gray-500 uppercase">L</th>
-											<th class="px-4 py-3 text-center text-xs font-bold text-gray-500 uppercase">PCT</th>
-											<th class="px-4 py-3 text-center text-xs font-bold text-gray-500 uppercase">Streak</th>
-											<th class="px-4 py-3 text-center text-xs font-bold text-gray-500 uppercase">L10</th>
+											<th class="px-3 py-3 text-left text-xs font-bold text-gray-500 uppercase">#</th>
+											<th class="px-3 py-3 text-left text-xs font-bold text-gray-500 uppercase">Team</th>
+											<th class="px-3 py-3 text-center text-xs font-bold text-gray-500 uppercase">P</th>
+											<th class="px-3 py-3 text-center text-xs font-bold text-gray-500 uppercase">W</th>
+											<th class="px-3 py-3 text-center text-xs font-bold text-gray-500 uppercase">D</th>
+											<th class="px-3 py-3 text-center text-xs font-bold text-gray-500 uppercase">L</th>
+											<th class="px-3 py-3 text-center text-xs font-bold text-gray-500 uppercase">GD</th>
+											<th class="px-3 py-3 text-center text-xs font-bold text-gray-500 uppercase">Pts</th>
+											<th class="px-3 py-3 text-center text-xs font-bold text-gray-500 uppercase hidden sm:table-cell">Form</th>
 										</tr>
 									</thead>
 									<tbody class="divide-y divide-gray-200 dark:divide-gray-700">
 										{#each standings as team}
 											<tr class="hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
-												<td class="px-4 py-3 font-bold text-gray-900 dark:text-white">{team.rank}</td>
-												<td class="px-4 py-3 font-semibold text-gray-900 dark:text-white">{team.team}</td>
-												<td class="px-4 py-3 text-center text-gray-600 dark:text-gray-300">{team.wins}</td>
-												<td class="px-4 py-3 text-center text-gray-600 dark:text-gray-300">{team.losses}</td>
-												<td class="px-4 py-3 text-center font-semibold text-gray-900 dark:text-white">{team.pct}</td>
-												<td class="px-4 py-3 text-center">
-													<span class="px-2 py-1 text-xs font-bold rounded {team.streak.startsWith('W') ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'}">
-														{team.streak}
-													</span>
+												<td class="px-3 py-3 font-bold text-gray-900 dark:text-white">{team.rank}</td>
+												<td class="px-3 py-3">
+													<div class="flex items-center gap-2">
+														{#if team.badge}
+															<img src={team.badge} alt="" class="w-6 h-6" />
+														{/if}
+														<span class="font-semibold text-gray-900 dark:text-white text-sm">{team.team}</span>
+													</div>
 												</td>
-												<td class="px-4 py-3 text-center text-gray-600 dark:text-gray-300">{team.last10}</td>
+												<td class="px-3 py-3 text-center text-gray-600 dark:text-gray-300">{team.played}</td>
+												<td class="px-3 py-3 text-center text-gray-600 dark:text-gray-300">{team.won}</td>
+												<td class="px-3 py-3 text-center text-gray-600 dark:text-gray-300">{team.drawn}</td>
+												<td class="px-3 py-3 text-center text-gray-600 dark:text-gray-300">{team.lost}</td>
+												<td class="px-3 py-3 text-center font-semibold {team.gd > 0 ? 'text-green-600' : team.gd < 0 ? 'text-red-600' : 'text-gray-600'}">{team.gd > 0 ? '+' : ''}{team.gd}</td>
+												<td class="px-3 py-3 text-center font-bold text-gray-900 dark:text-white">{team.points}</td>
+												<td class="px-3 py-3 text-center hidden sm:table-cell">
+													{#if team.form}
+														<div class="flex gap-0.5 justify-center">
+															{#each team.form.split('') as f}
+																<span class="w-5 h-5 rounded text-[10px] font-bold flex items-center justify-center {f === 'W' ? 'bg-green-500 text-white' : f === 'L' ? 'bg-red-500 text-white' : 'bg-gray-400 text-white'}">{f}</span>
+															{/each}
+														</div>
+													{/if}
+												</td>
 											</tr>
 										{/each}
 									</tbody>
 								</table>
 							</div>
+							{:else}
+								<div class="p-8 text-center text-gray-500">
+									<p>Standings not available for this sport yet.</p>
+								</div>
+							{/if}
 						</div>
 					{:else if activeTab === 'schedule'}
-						<!-- Upcoming Schedule -->
-						<div class="card p-6">
+						<!-- Upcoming Fixtures from TheSportsDB -->
+						{#if fixtures.length > 0}
+						<div class="card p-6 mb-6">
 							<h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
 								<span class="text-2xl">{sportData.icon}</span>
-								Upcoming Schedule
+								Upcoming Fixtures {leagueName ? `— ${leagueName}` : ''}
+							</h2>
+							<div class="space-y-3">
+								{#each fixtures as fixture}
+									<div class="p-4 bg-gray-50 dark:bg-gray-800 rounded-xl">
+										<div class="flex items-center justify-between mb-1">
+											<span class="text-xs text-gray-500">{fixture.league}</span>
+											<span class="text-xs text-gray-500">{format(new Date(fixture.date), 'EEE MMM d, h:mm a')}</span>
+										</div>
+										<div class="flex items-center justify-between">
+											<div class="flex-1 flex items-center gap-2">
+												{#if fixture.homeBadge}
+													<img src={fixture.homeBadge} alt="" class="w-6 h-6" />
+												{/if}
+												<span class="font-bold text-gray-900 dark:text-white text-sm">{fixture.homeTeam}</span>
+											</div>
+											<span class="px-3 text-xs font-bold text-gray-400">vs</span>
+											<div class="flex-1 flex items-center gap-2 justify-end">
+												<span class="font-bold text-gray-900 dark:text-white text-sm">{fixture.awayTeam}</span>
+												{#if fixture.awayBadge}
+													<img src={fixture.awayBadge} alt="" class="w-6 h-6" />
+												{/if}
+											</div>
+										</div>
+										{#if fixture.venue}
+											<div class="text-xs text-gray-500 mt-1">📍 {fixture.venue}</div>
+										{/if}
+									</div>
+								{/each}
+							</div>
+						</div>
+						{/if}
+
+						<!-- Upcoming Tournaments -->
+						<div class="card p-6">
+							<h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+								<span class="text-2xl">🏆</span>
+								Upcoming Tournaments
 							</h2>
 							<div class="space-y-4">
 								{#each upcomingEvents as event}
