@@ -43,33 +43,37 @@ export async function load() {
 		.limit(5);
 
 	// Fetch top athletes for sidebar — top earners across diverse sports
-	const { data: athletes } = await supabase
-		.from('players')
-		.select('id, display_name, slug, sport, image_url, country, total_winnings')
-		.eq('is_published', true)
-		.order('total_winnings', { ascending: false })
-		.limit(50);
+	let topAthletes: Array<{id: string; displayName: string; slug: string; sport: string; image: string; country: string}> = [];
+	try {
+		const { data: athletes } = await supabase
+			.from('players')
+			.select('id, display_name, slug, sport, image_url, country, total_winnings')
+			.eq('is_published', true)
+			.order('total_winnings', { ascending: false })
+			.limit(50);
 
-	// Diversify: pick top earner per sport, then fill remaining slots
-	const seenSports = new Set<string>();
-	const diverseAthletes: typeof athletes = [];
-	for (const a of (athletes || [])) {
-		if (!seenSports.has(a.sport)) {
-			seenSports.add(a.sport);
-			diverseAthletes.push(a);
+		// Diversify: pick top earner per sport
+		const seenSports = new Set<string>();
+		const diverse: any[] = [];
+		for (const a of (athletes || [])) {
+			if (!seenSports.has(a.sport)) {
+				seenSports.add(a.sport);
+				diverse.push(a);
+			}
 		}
-	}
-	// Sort by winnings desc
-	diverseAthletes.sort((a, b) => (b.total_winnings || 0) - (a.total_winnings || 0));
+		diverse.sort((a: any, b: any) => (b.total_winnings || 0) - (a.total_winnings || 0));
 
-	const topAthletes = diverseAthletes.slice(0, 10).map(a => ({
-		id: a.id,
-		displayName: a.display_name,
-		slug: a.slug,
-		sport: a.sport,
-		image: a.image_url || 'https://images.unsplash.com/photo-1517649763962-0c623066013b?w=400&h=400&fit=crop',
-		country: a.country
-	}));
+		topAthletes = diverse.slice(0, 10).map((a: any) => ({
+			id: a.id,
+			displayName: a.display_name,
+			slug: a.slug,
+			sport: a.sport,
+			image: a.image_url || 'https://images.unsplash.com/photo-1517649763962-0c623066013b?w=400&h=400&fit=crop',
+			country: a.country
+		}));
+	} catch (e) {
+		console.error('Failed to fetch athletes:', e);
+	}
 
 	return {
 		ssrArticles: (articles || []).map(transformArticle),
