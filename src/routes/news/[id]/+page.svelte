@@ -452,11 +452,12 @@ The integration of technology in training and competition is also creating new o
 
 					<!-- Featured Image -->
 					{#if article?.image}
-					<div class="relative w-full aspect-[2/1] rounded-xl overflow-hidden mb-10 shadow-lg">
+					<div class="relative w-full aspect-[2/1] rounded-xl overflow-hidden mb-10 shadow-lg" id="article-hero-image">
 						<img 
 							src={article.image} 
 							alt={article.title}
 							class="w-full h-full object-cover"
+							on:error={(e) => { e.currentTarget.parentElement.style.display = 'none'; }}
 						/>
 					</div>
 					{/if}
@@ -699,7 +700,7 @@ The integration of technology in training and competition is also creating new o
 												alt={related.title}
 												class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
 												on:error={(e) => {
-													e.currentTarget.src = 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=1200';
+													e.currentTarget.parentElement.style.display = 'none';
 												}}
 											/>
 										</div>

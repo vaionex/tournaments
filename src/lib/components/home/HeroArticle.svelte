@@ -34,6 +34,7 @@
 					src={article.image} 
 					alt={article.title} 
 					class="w-full h-full object-cover"
+					on:error={(e) => { e.currentTarget.style.display = 'none'; }}
 				/>
 				<!-- Stronger gradient on mobile to ensure text readability -->
 				<div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent sm:from-black/80 sm:via-black/40"></div>
