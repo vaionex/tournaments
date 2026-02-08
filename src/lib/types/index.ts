@@ -89,6 +89,10 @@ export interface NewsArticle {
 	category: NewsCategory;
 	image: string;
 	author: string;
+	authorRole?: string;
+	authorInitials?: string;
+	authorAvatar?: string;
+	authorId?: string;
 	readTime?: number;
 	tags?: string[];
 	sport?: string;

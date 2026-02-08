@@ -2,6 +2,7 @@
  * News Service
  * Handles all news-related data operations using Supabase
  */
+import { getAuthorForArticle } from '$lib/data/authors';
 
 import type { NewsArticle, NewsCategory } from '$lib/types';
 import { supabase } from '$lib/supabase';
@@ -601,6 +602,7 @@ const mockFeaturedNews: NewsArticle[] = [
 
 function transformNewsArticle(row: Record<string, unknown>): NewsArticle {
 	const dateString = row.published_at as string || row.created_at as string;
+	const author = getAuthorForArticle(row.id as string, row.sport as string | undefined);
 	return {
 		id: row.id as string,
 		title: row.title as string,
@@ -609,7 +611,10 @@ function transformNewsArticle(row: Record<string, unknown>): NewsArticle {
 		date: dateString ? new Date(dateString) : new Date(),
 		category: row.category as NewsCategory,
 		image: row.image_url as string || 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=1200',
-		author: (row.profiles as Record<string, unknown>)?.display_name as string || 'Staff',
+		author: author.name,
+		authorRole: author.role,
+		authorInitials: author.initials,
+		authorAvatar: author.avatar,
 		readTime: row.read_time as number | undefined,
 		sport: row.sport as string | undefined
 	};
