@@ -1,10 +1,12 @@
 import { createClient } from '@supabase/supabase-js';
 import { getUpcomingFixtures, getRecentResults, getStandings, getLeagueName, SPORT_LEAGUES } from '$lib/services/sportsdb';
+import { getAuthorForArticle } from '$lib/data/authors';
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
 function transformArticle(row: Record<string, unknown>) {
+	const author = getAuthorForArticle(row.id as string, row.sport as string | undefined);
 	return {
 		id: row.id as string,
 		title: row.title as string,
@@ -13,7 +15,11 @@ function transformArticle(row: Record<string, unknown>) {
 		date: row.published_at ? new Date(row.published_at as string) : new Date(),
 		category: row.category as string || 'Top Stories',
 		image: row.image_url as string || 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=1200',
-		author: 'Staff',
+		author: author.name,
+		authorRole: author.role,
+		authorId: author.id,
+		authorInitials: author.initials,
+		authorAvatar: author.avatar,
 		sport: row.sport as string | undefined,
 		slug: row.slug as string | undefined
 	};

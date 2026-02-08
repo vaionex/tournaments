@@ -5,6 +5,7 @@
 	export let description: string;
 	export let image: string;
 	export let author: string;
+	export let authorId: string = '';
 	export let publishedDate: Date | string;
 	export let modifiedDate: Date | string | null = null;
 	export let category: string;
@@ -41,7 +42,7 @@
 		"author": {
 			"@type": "Person",
 			"name": author,
-			"url": `${SITE_URL}/authors/${author.toLowerCase().replace(/\s+/g, '-')}`
+			"url": authorId ? `${SITE_URL}/about/team` : `${SITE_URL}/about/team`
 		},
 		"publisher": {
 			"@type": "Organization",

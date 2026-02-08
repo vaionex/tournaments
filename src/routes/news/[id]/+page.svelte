@@ -63,7 +63,10 @@
 					date: new Date(),
 					category: 'News',
 					image: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=1200',
-					author: 'Staff',
+					author: 'Tournaments.com',
+					authorRole: 'Editorial Team',
+					authorInitials: 'TC',
+					authorAvatar: 'https://api.dicebear.com/7.x/initials/svg?seed=TC&backgroundColor=dc2626',
 					tags: []
 				};
 			} else {
@@ -101,7 +104,10 @@
 				date: new Date(),
 				category: 'News',
 				image: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=1200',
-				author: 'Staff',
+				author: 'Tournaments.com',
+					authorRole: 'Editorial Team',
+					authorInitials: 'TC',
+					authorAvatar: 'https://api.dicebear.com/7.x/initials/svg?seed=TC&backgroundColor=dc2626',
 				tags: []
 			};
 		}
@@ -407,13 +413,11 @@ The integration of technology in training and competition is also creating new o
 				</h1>
 				
 				<div class="flex flex-wrap items-center gap-4 text-sm text-gray-600 dark:text-gray-400 mb-6 pb-6 border-b-2 border-gray-200 dark:border-gray-700">
-					<div class="flex items-center gap-2">
-						<div class="w-10 h-10 rounded-full bg-gradient-to-br from-red-500 to-red-600 flex items-center justify-center text-white font-bold">
-							{article.author.charAt(0).toUpperCase()}
-						</div>
+					<div class="flex items-center gap-3">
+						<img src={article.authorAvatar || `https://api.dicebear.com/7.x/initials/svg?seed=${article.authorInitials || 'T'}&backgroundColor=1e40af`} alt={article.author} class="w-10 h-10 rounded-full" />
 						<div>
 							<div class="font-semibold text-gray-900 dark:text-white">{article.author}</div>
-							<div class="text-xs">{format(article.date, 'MMMM d, yyyy')}</div>
+							<div class="text-xs text-gray-500">{article.authorRole || format(article.date, 'MMMM d, yyyy')}</div>
 						</div>
 					</div>
 					<div class="flex items-center gap-1">
