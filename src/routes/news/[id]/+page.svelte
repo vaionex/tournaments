@@ -2,7 +2,7 @@
 	import { page } from '$app/stores';
 	import { format, formatDistanceToNow } from 'date-fns';
 
-	function timeAgo(date: Date | string): string {
+	function timeAgo(date) {
 		const d = date instanceof Date ? date : new Date(date);
 		const now = new Date();
 		const diffMs = now.getTime() - d.getTime();
