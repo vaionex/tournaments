@@ -34,8 +34,26 @@ export async function load() {
 		.order('date', { ascending: true })
 		.limit(5);
 
+	// Fetch top athletes for sidebar (real DB data)
+	const { data: athletes } = await supabase
+		.from('players')
+		.select('id, display_name, slug, sport, image_url, country')
+		.not('bio', 'is', null)
+		.order('created_at', { ascending: true })
+		.limit(10);
+
+	const topAthletes = (athletes || []).map(a => ({
+		id: a.id,
+		displayName: a.display_name,
+		slug: a.slug,
+		sport: a.sport,
+		image: a.image_url || 'https://images.unsplash.com/photo-1517649763962-0c623066013b?w=400&h=400&fit=crop',
+		country: a.country
+	}));
+
 	return {
 		ssrArticles: (articles || []).map(transformArticle),
-		ssrTournaments: tournaments || []
+		ssrTournaments: tournaments || [],
+		ssrTopAthletes: topAthletes
 	};
 }
