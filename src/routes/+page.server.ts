@@ -42,15 +42,27 @@ export async function load() {
 		.order('date', { ascending: true })
 		.limit(5);
 
-	// Fetch top athletes for sidebar (real DB data)
+	// Fetch top athletes for sidebar — top earners across diverse sports
 	const { data: athletes } = await supabase
 		.from('players')
-		.select('id, display_name, slug, sport, image_url, country')
-		.not('bio', 'is', null)
-		.order('created_at', { ascending: true })
-		.limit(10);
+		.select('id, display_name, slug, sport, image_url, country, total_winnings')
+		.eq('is_published', true)
+		.order('total_winnings', { ascending: false })
+		.limit(50);
 
-	const topAthletes = (athletes || []).map(a => ({
+	// Diversify: pick top earner per sport, then fill remaining slots
+	const seenSports = new Set<string>();
+	const diverseAthletes: typeof athletes = [];
+	for (const a of (athletes || [])) {
+		if (!seenSports.has(a.sport)) {
+			seenSports.add(a.sport);
+			diverseAthletes.push(a);
+		}
+	}
+	// Sort by winnings desc
+	diverseAthletes.sort((a, b) => (b.total_winnings || 0) - (a.total_winnings || 0));
+
+	const topAthletes = diverseAthletes.slice(0, 10).map(a => ({
 		id: a.id,
 		displayName: a.display_name,
 		slug: a.slug,
