@@ -442,23 +442,15 @@
 									Top Athletes
 								</h2>
 							</div>
-							<div class="p-4 space-y-2">
+							<div class="p-4 space-y-1">
 								{#each topAthletes.slice(0, 8) as athlete, i}
 									<a 
 										href="/athletes/{athlete.sport}/{athlete.slug}" 
-										class="flex items-center gap-3 p-2.5 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors group"
+										class="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors group"
 									>
-										<div class="relative flex-shrink-0">
-											<span class="absolute -top-1 -left-1 w-5 h-5 bg-gradient-to-br {i === 0 ? 'from-yellow-400 to-yellow-600' : i === 1 ? 'from-gray-300 to-gray-500' : i === 2 ? 'from-amber-600 to-amber-800' : 'from-gray-400 to-gray-600'} text-white text-xs font-bold rounded-full flex items-center justify-center shadow-sm z-10">
-												{i + 1}
-											</span>
-											<img 
-												src={athlete.image} 
-												alt={athlete.displayName}
-												class="w-10 h-10 rounded-full object-cover border-2 border-gray-200 dark:border-gray-600"
-												on:error={(e) => { e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(athlete.displayName)}&background=random&size=80`; }}
-											/>
-										</div>
+										<span class="flex-shrink-0 w-6 text-center font-bold text-sm {i === 0 ? 'text-yellow-500' : i === 1 ? 'text-gray-400' : i === 2 ? 'text-amber-600' : 'text-gray-400'}">
+											{i + 1}
+										</span>
 										<div class="flex-1 min-w-0">
 											<p class="font-semibold text-sm text-gray-900 dark:text-white truncate group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors">
 												{athlete.displayName}
@@ -467,6 +459,13 @@
 												{athlete.sport} {athlete.country ? `• ${athlete.country}` : ''}
 											</p>
 										</div>
+										<span class="flex-shrink-0 text-xs font-semibold text-green-600 dark:text-green-400">
+											{athlete.totalWinnings >= 1000000000
+												? `$${(athlete.totalWinnings / 1000000000).toFixed(1)}B`
+												: athlete.totalWinnings >= 1000000
+													? `$${(athlete.totalWinnings / 1000000).toFixed(0)}M`
+													: `$${(athlete.totalWinnings / 1000).toFixed(0)}K`}
+										</span>
 									</a>
 								{/each}
 							</div>

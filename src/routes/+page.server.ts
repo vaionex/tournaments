@@ -69,8 +69,8 @@ export async function load() {
 			displayName: a.display_name,
 			slug: a.slug,
 			sport: a.sport,
-			image: a.avatar_url || 'https://images.unsplash.com/photo-1517649763962-0c623066013b?w=400&h=400&fit=crop',
-			country: a.country
+			country: a.country,
+			totalWinnings: a.total_winnings || 0
 		}));
 	} catch (e) {
 		console.error('Failed to fetch athletes:', e);
