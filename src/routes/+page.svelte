@@ -249,7 +249,7 @@
 <PageSEO
 	title="Tournaments — Sports Tournaments, News & Player Rankings"
 	description="Find sports tournaments, breaking news, scores, and player rankings across NFL, NBA, MLB, NHL, Soccer, Tennis, Golf, MMA, Esports and more. Browse 600+ athlete profiles with stats and biographies."
-	image="https://images.unsplash.com/photo-1461896836934-47e5c98aebe1?w=1200&h=630&fit=crop"
+	image="https://www.tournaments.com/og-image.jpg"
 />
 
 <div class="bg-white dark:bg-gray-900 min-h-screen">
