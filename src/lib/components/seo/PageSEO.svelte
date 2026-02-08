@@ -3,7 +3,7 @@
 	
 	export let title: string;
 	export let description: string;
-	export let image: string = 'https://tournaments.com/og-image.png';
+	export let image: string = 'https://www.tournaments.com/og-image.jpg';
 	export let type: 'website' | 'profile' | 'article' = 'website';
 	export let noindex: boolean = false;
 	
