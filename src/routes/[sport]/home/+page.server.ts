@@ -42,10 +42,29 @@ export async function load({ params }) {
 		.order('total_winnings', { ascending: false })
 		.limit(10);
 
+	// Fetch upcoming/ongoing tournaments for this sport
+	const today = new Date().toISOString();
+	const { data: tournaments } = await supabase
+		.from('tournaments')
+		.select('id, name, slug, game, date, end_date, location, prize_pool, status, image_url')
+		.or(`game.ilike.%${sport}%`)
+		.gte('end_date', today)
+		.order('date', { ascending: true })
+		.limit(5);
+
 	return {
 		ssrArticles: rest,
 		ssrFeatured: featured,
 		ssrAthletes: athletes || [],
+		ssrTournaments: (tournaments || []).map(t => ({
+			id: t.id,
+			name: t.name,
+			date: t.date,
+			end_date: t.end_date,
+			location: t.location,
+			prize_pool: t.prize_pool,
+			status: t.status
+		})),
 		sport
 	};
 }

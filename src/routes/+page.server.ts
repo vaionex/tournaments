@@ -28,9 +28,11 @@ export async function load() {
 		.order('published_at', { ascending: false })
 		.limit(7);
 
+	const today = new Date().toISOString();
 	const { data: tournaments } = await supabase
 		.from('tournaments')
-		.select('id, name, slug, date, end_date, location, prize_pool, image_url, status')
+		.select('id, name, slug, date, end_date, location, prize_pool, image_url, status, game')
+		.gte('end_date', today)
 		.order('date', { ascending: true })
 		.limit(5);
 

@@ -29,7 +29,7 @@
 	let loading = !(data?.ssrArticles?.length > 0);
 	let activeTab = 'news';
 	let newsArticles = data?.ssrArticles || [];
-	let upcomingEvents = [];
+	let upcomingEvents = data?.ssrTournaments || [];
 	let recentResults = [];
 	let topPlayers = [];
 	let standings = [];
@@ -44,6 +44,7 @@
 		featuredContent = data.ssrFeatured || null;
 		featuredArticleId = data.ssrFeatured?.id || null;
 		ssrAthletes = data.ssrAthletes || [];
+		upcomingEvents = data.ssrTournaments || [];
 		loading = !(data.ssrArticles?.length > 0);
 	}
 	
@@ -568,10 +569,9 @@
 				};
 			}
 			
-			// Generate mock data for other sections (events, results, standings)
-			upcomingEvents = generateUpcomingEvents(sportData);
+			// Events and athletes come from SSR data (real DB)
+			// Only mock data remaining: recentResults, standings (no DB tables for these yet)
 			recentResults = generateRecentResults(sportData);
-			topPlayers = sportData.topPlayers;
 			standings = generateStandings(sportData);
 		} catch (error) {
 			console.error('Failed to load sport data:', error);
@@ -811,56 +811,67 @@
 							</h2>
 							<div class="space-y-4">
 								{#each upcomingEvents as event}
-									<div class="p-4 bg-gray-50 dark:bg-gray-800 rounded-xl hover:shadow-md transition-shadow">
+									<a href="/tournaments/{event.id}" class="block p-4 bg-gray-50 dark:bg-gray-800 rounded-xl hover:shadow-md transition-shadow">
 										<div class="flex items-center justify-between mb-2">
-											<span class="text-xs font-semibold text-gray-500">{event.league}</span>
-											<span class="px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 text-xs font-bold rounded">
-												{event.broadcast}
+											<span class="px-2 py-1 {event.status === 'upcoming' ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400' : 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400'} text-xs font-bold rounded capitalize">
+												{event.end_date && new Date(event.end_date) > new Date() && new Date(event.date) <= new Date() ? 'Live Now' : event.status || 'upcoming'}
 											</span>
+											{#if event.prize_pool}
+												<span class="text-xs font-semibold text-gray-500">${(event.prize_pool / 1000).toFixed(0)}K Prize</span>
+											{/if}
 										</div>
-										<div class="flex items-center justify-between">
-											<div class="flex-1">
-												<div class="font-bold text-gray-900 dark:text-white">{event.homeTeam}</div>
-												<div class="text-sm text-gray-500">vs {event.awayTeam}</div>
+										<div class="font-bold text-gray-900 dark:text-white">{event.name}</div>
+										<div class="flex items-center justify-between mt-2">
+											<div class="text-sm text-gray-500">
+												{#if event.location}📍 {event.location}{/if}
 											</div>
 											<div class="text-right">
-												<div class="font-semibold text-gray-900 dark:text-white">{format(new Date(event.date), 'MMM d')}</div>
-												<div class="text-sm text-gray-500">{event.time}</div>
+												<div class="font-semibold text-sm text-gray-900 dark:text-white">{format(new Date(event.date), 'MMM d')}</div>
+												{#if event.end_date}
+													<div class="text-xs text-gray-500">to {format(new Date(event.end_date), 'MMM d')}</div>
+												{/if}
 											</div>
 										</div>
-										<div class="mt-2 pt-2 border-t border-gray-200 dark:border-gray-700">
-											<span class="text-xs text-gray-500">📍 {event.venue}</span>
-										</div>
-									</div>
+									</a>
 								{/each}
+								{#if upcomingEvents.length === 0}
+									<div class="text-center py-6 text-gray-500">
+										<p class="mb-2">No upcoming tournaments found.</p>
+										<a href="/tournaments" class="text-red-600 hover:text-red-700 font-medium">Browse All Tournaments →</a>
+									</div>
+								{/if}
 							</div>
 						</div>
 					{:else if activeTab === 'players'}
-						<!-- Top Players Grid -->
+						<!-- Top Players Grid (real DB athletes) -->
 						<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-							{#each topPlayers as player, i}
-								<div class="card p-6 hover:shadow-xl transition-all duration-300">
+							{#each ssrAthletes as athlete, i}
+								<a href="/athletes/{athlete.sport}/{athlete.slug}" class="card p-6 hover:shadow-xl transition-all duration-300 block group">
 									<div class="flex items-start gap-4">
 										<div class="relative">
 											<span class="absolute -top-2 -left-2 w-6 h-6 bg-gradient-to-r {sportData.color} text-white text-xs font-bold rounded-full flex items-center justify-center">
 												{i + 1}
 											</span>
-											<img 
-												src={player.image} 
-												alt={player.name}
-												class="w-20 h-20 rounded-xl object-cover"
-												onerror="this.src='https://images.unsplash.com/photo-1511367461989-f85a21fda167?w=100&h=100&fit=crop'"
-											/>
+											<div class="w-20 h-20 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-2xl font-bold">
+												{(athlete.display_name || '?').charAt(0)}
+											</div>
 										</div>
 										<div class="flex-1">
-											<h3 class="font-bold text-lg text-gray-900 dark:text-white">{player.name}</h3>
-											<p class="text-sm text-gray-500">{player.team}</p>
-											<p class="text-sm font-semibold text-blue-600 dark:text-blue-400 mt-1">{player.position}</p>
-											<p class="text-xs text-gray-500 mt-2 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded inline-block">{player.stats}</p>
+											<h3 class="font-bold text-lg text-gray-900 dark:text-white group-hover:text-red-600 transition-colors">{athlete.display_name}</h3>
+											<p class="text-sm text-gray-500">{athlete.country || ''}</p>
+											{#if athlete.total_wins}
+												<p class="text-xs text-gray-500 mt-2 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded inline-block">{athlete.total_wins} wins</p>
+											{/if}
 										</div>
 									</div>
-								</div>
+								</a>
 							{/each}
+							{#if ssrAthletes.length === 0}
+								<div class="col-span-2 text-center py-8 text-gray-500">
+									<p>No athletes found for this sport yet.</p>
+									<a href="/athletes" class="text-red-600 hover:text-red-700 font-medium mt-2 inline-block">Browse All Athletes →</a>
+								</div>
+							{/if}
 						</div>
 					{/if}
 				</div>
@@ -868,29 +879,26 @@
 				<!-- Sidebar -->
 				<div class="space-y-6">
 					<!-- Top Players Widget -->
-					{#if activeTab !== 'players'}
+					{#if activeTab !== 'players' && ssrAthletes.length > 0}
 						<div class="card p-6">
 							<h3 class="font-bold text-lg text-gray-900 dark:text-white mb-4 flex items-center gap-2">
 								<span>{sportData.icon}</span>
-								Top Players
+								Top Athletes
 							</h3>
 							<div class="space-y-3">
-								{#each topPlayers.slice(0, 5) as player, i}
-									<div class="flex items-center gap-3 p-2 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors">
+								{#each ssrAthletes.slice(0, 5) as athlete, i}
+									<a href="/athletes/{athlete.sport}/{athlete.slug}" class="flex items-center gap-3 p-2 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors group">
 										<span class="w-6 h-6 {sportData.bgColor} text-white text-xs font-bold rounded-full flex items-center justify-center">
 											{i + 1}
 										</span>
-										<img 
-											src={player.image} 
-											alt={player.name}
-											class="w-10 h-10 rounded-full object-cover"
-											onerror="this.src='https://images.unsplash.com/photo-1511367461989-f85a21fda167?w=50&h=50&fit=crop'"
-										/>
-										<div class="flex-1 min-w-0">
-											<div class="font-semibold text-sm text-gray-900 dark:text-white truncate">{player.name}</div>
-											<div class="text-xs text-gray-500 truncate">{player.team}</div>
+										<div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
+											{(athlete.display_name || '?').charAt(0)}
 										</div>
-									</div>
+										<div class="flex-1 min-w-0">
+											<div class="font-semibold text-sm text-gray-900 dark:text-white truncate group-hover:text-red-600 transition-colors">{athlete.display_name}</div>
+											<div class="text-xs text-gray-500 truncate">{athlete.country || ''}</div>
+										</div>
+									</a>
 								{/each}
 							</div>
 						</div>

@@ -2,8 +2,7 @@
 	import { onMount, onDestroy, tick } from 'svelte';
 	import type { NewsArticle, NewsCategory, Player, Tournament } from '$lib/types';
 	import { getNewsArticlesPaginated, getNewsArticlesPaginatedWithOffset, getNewsCategories } from '$lib/services/news.service';
-	import { getTopPlayers } from '$lib/services/players.service';
-	import { getUpcomingTournaments } from '$lib/services/tournaments.service';
+	// Mock services removed — using SSR data from +page.server.ts
 	import { getUserPreferences } from '$lib/services/user.service';
 	import { cache } from '$lib/services/cache.service';
 	import { HeroArticle, NewsGrid, CategoryNav } from '$lib/components/home';
@@ -120,7 +119,6 @@
 			const cached = cache.get<{
 				newsArticles: NewsArticle[];
 				upcomingTournaments: Tournament[];
-				topPlayers: Player[];
 				hasMoreNews: boolean;
 			}>(cacheKey);
 			
@@ -128,7 +126,6 @@
 				// Use cached data immediately (no skeleton)
 				newsArticles = cached.newsArticles;
 				upcomingTournaments = cached.upcomingTournaments;
-				topPlayers = cached.topPlayers;
 				hasMoreNews = cached.hasMoreNews;
 				hasCachedData = true;
 				loading = false;
@@ -157,34 +154,26 @@
 		currentPage = 1;
 		
 		try {
-			const [newsResult, tournaments, players] = await Promise.all([
-				getNewsArticlesPaginated(selectedCategory, 1, INITIAL_ARTICLES),
-				getUpcomingTournaments(2),
-				getTopPlayers(8)
-			]);
+			const newsResult = await getNewsArticlesPaginated(selectedCategory, 1, INITIAL_ARTICLES);
 			
 			// Filter news articles by preferences
 			let filteredArticles = newsResult.articles;
 			if (hasPreferences && favoriteSports.length > 0) {
 				filteredArticles = filterByPreferences(newsResult.articles);
-				// If filtering removed all articles, show a message or fallback
 				if (filteredArticles.length === 0 && newsResult.articles.length > 0) {
-					// Show a subset or message - for now, show first few articles with a note
 					filteredArticles = newsResult.articles.slice(0, 3);
 				}
 			}
 			
 			newsArticles = filteredArticles;
 			hasMoreNews = newsResult.hasMore;
-			upcomingTournaments = filterByPreferences(tournaments);
-			topPlayers = players; // Players don't have sport filter yet
+			// Tournaments and athletes come from SSR data (no mock services)
 			
 			// Cache the results
 			const cacheKey = `homepage-${selectedCategory}`;
 			cache.set(cacheKey, {
 				newsArticles: filteredArticles,
-				upcomingTournaments: filterByPreferences(tournaments),
-				topPlayers: players,
+				upcomingTournaments,
 				hasMoreNews: newsResult.hasMore
 			}, 5 * 60 * 1000); // 5 minutes TTL
 		} catch (error) {
