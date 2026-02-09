@@ -1280,6 +1280,16 @@ export async function createComment(articleId: string, content: string, userId?:
 		if (profile) {
 			userProfile = profile;
 			authorName = profile.display_name || profile.username || 'User';
+		} else {
+			// Auto-create profile if missing (prevents FK constraint error)
+			const { data: currentUser } = await supabase.auth.getUser();
+			const fallbackName = currentUser?.user?.email?.split('@')[0] || 'User';
+			await supabase.from('profiles').upsert({
+				id: userId,
+				display_name: fallbackName,
+				username: fallbackName
+			}, { onConflict: 'id' });
+			authorName = fallbackName;
 		}
 	}
 
@@ -1287,7 +1297,7 @@ export async function createComment(articleId: string, content: string, userId?:
 		.from('article_comments')
 		.insert({
 			article_id: articleId,
-			user_id: userProfile ? userId : null,
+			user_id: userId || null,
 			author_name: authorName,
 			content: filteredContent,
 			likes: 0,
@@ -1320,8 +1330,6 @@ export async function createReply(articleId: string, parentId: string, content: 
 
 	// Get user profile if logged in
 	let authorName = 'Anonymous';
-	let replyUserProfile = null;
-	
 	if (userId) {
 		const { data: profile } = await supabase
 			.from('profiles')
@@ -1330,8 +1338,17 @@ export async function createReply(articleId: string, parentId: string, content: 
 			.single();
 		
 		if (profile) {
-			replyUserProfile = profile;
 			authorName = profile.display_name || profile.username || 'User';
+		} else {
+			// Auto-create profile if missing
+			const { data: currentUser } = await supabase.auth.getUser();
+			const fallbackName = currentUser?.user?.email?.split('@')[0] || 'User';
+			await supabase.from('profiles').upsert({
+				id: userId,
+				display_name: fallbackName,
+				username: fallbackName
+			}, { onConflict: 'id' });
+			authorName = fallbackName;
 		}
 	}
 
@@ -1340,7 +1357,7 @@ export async function createReply(articleId: string, parentId: string, content: 
 		.insert({
 			article_id: articleId,
 			parent_id: parentId,
-			user_id: replyUserProfile ? userId : null,
+			user_id: userId || null,
 			author_name: authorName,
 			content: filteredContent,
 			likes: 0,
