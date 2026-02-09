@@ -48,6 +48,25 @@
 				{ name: '76ers', city: 'Philadelphia', conference: 'Eastern', division: 'Atlantic', record: '47-35', stadium: 'Wells Fargo Center', founded: 1946 },
 				{ name: 'Knicks', city: 'New York', conference: 'Eastern', division: 'Atlantic', record: '50-32', stadium: 'Madison Square Garden', founded: 1946 },
 				{ name: 'Cavaliers', city: 'Cleveland', conference: 'Eastern', division: 'Central', record: '48-34', stadium: 'Rocket Mortgage FieldHouse', founded: 1970 }
+		]
+		},
+		'olympics': {
+			name: 'Olympics', icon: '🏅', color: 'bg-blue-600',
+			conferences: ['Alpine Sports', 'Nordic Sports', 'Ice Sports', 'Sliding Sports'],
+			divisions: ['Alpine', 'Nordic', 'Figure Skating', 'Ice Hockey', 'Bobsled', 'Luge', 'Skeleton', 'Biathlon', 'Cross-Country', 'Ski Jumping', 'Speed Skating', 'Short Track', 'Curling', 'Freestyle', 'Snowboard'],
+			teams: [
+				{ name: 'Team USA', city: 'United States', conference: 'All Sports', division: 'Multi-Sport', record: '8G-10S-7B', stadium: 'Various Venues', founded: 1896 },
+				{ name: 'Team Canada', city: 'Canada', conference: 'All Sports', division: 'Multi-Sport', record: '4G-8S-12B', stadium: 'Various Venues', founded: 1900 },
+				{ name: 'Team Germany', city: 'Germany', conference: 'All Sports', division: 'Multi-Sport', record: '12G-6S-4B', stadium: 'Various Venues', founded: 1896 },
+				{ name: 'Team Norway', city: 'Norway', conference: 'Nordic Sports', division: 'Multi-Sport', record: '16G-8S-3B', stadium: 'Various Venues', founded: 1900 },
+				{ name: 'Team Sweden', city: 'Sweden', conference: 'All Sports', division: 'Multi-Sport', record: '5G-7S-6B', stadium: 'Various Venues', founded: 1908 },
+				{ name: 'Team Italy', city: 'Italy', conference: 'Alpine Sports', division: 'Multi-Sport', record: '6G-4S-8B', stadium: 'Various Venues', founded: 1908 },
+				{ name: 'Team France', city: 'France', conference: 'All Sports', division: 'Multi-Sport', record: '5G-7S-2B', stadium: 'Various Venues', founded: 1896 },
+				{ name: 'Team Switzerland', city: 'Switzerland', conference: 'Alpine Sports', division: 'Multi-Sport', record: '8G-2S-5B', stadium: 'Various Venues', founded: 1896 },
+				{ name: 'Team Austria', city: 'Austria', conference: 'Alpine Sports', division: 'Multi-Sport', record: '7G-7S-4B', stadium: 'Various Venues', founded: 1896 },
+				{ name: 'Team Netherlands', city: 'Netherlands', conference: 'Speed Skating', division: 'Multi-Sport', record: '7G-5S-4B', stadium: 'Various Venues', founded: 1900 },
+				{ name: 'Team Finland', city: 'Finland', conference: 'Nordic Sports', division: 'Multi-Sport', record: '4G-4S-5B', stadium: 'Various Venues', founded: 1908 },
+				{ name: 'Team South Korea', city: 'South Korea', conference: 'Short Track', division: 'Multi-Sport', record: '2G-5S-2B', stadium: 'Various Venues', founded: 1948 }
 			]
 		},
 		'mlb': {

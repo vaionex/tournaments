@@ -22,7 +22,8 @@
 		'SOCCER': '⚽',
 		'NHL': '🏒',
 		'NCAAF': '🏈',
-		'WNBA': '🏀'
+		'WNBA': '🏀',
+		'OLYMPICS': '🏅'
 	};
 	
 	const sportNames = {
@@ -32,7 +33,8 @@
 		'soccer': 'Soccer',
 		'nhl': 'NHL',
 		'ncaaf': 'NCAAF',
-		'wnba': 'WNBA'
+		'wnba': 'WNBA',
+		'olympics': 'Olympics'
 	};
 	
 	const teamData = {

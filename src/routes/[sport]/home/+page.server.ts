@@ -45,7 +45,7 @@ export async function load({ params }) {
 		.from('players')
 		.select('display_name, slug, sport, country, total_wins')
 		.eq('sport', sport)
-		.eq('is_published', true)
+		.eq('is_active', true)
 		.order('total_winnings', { ascending: false })
 		.limit(10);
 

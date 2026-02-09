@@ -72,6 +72,18 @@
 				{ id: 'attack', label: 'Attack', stats: ['GF', 'xG', 'SOT', 'POSS', 'PASS%'] },
 				{ id: 'defense', label: 'Defense', stats: ['GA', 'xGA', 'CS', 'TCKL', 'INT'] }
 			]
+		},
+		'olympics': {
+			name: 'Olympics', icon: '🏅', color: 'bg-blue-600',
+			playerCategories: [
+				{ id: 'medals', label: 'Medals', stats: ['Gold', 'Silver', 'Bronze', 'Total', 'Events'] },
+				{ id: 'records', label: 'Records', stats: ['WR', 'OR', 'PB', 'SB', 'Rank'] },
+				{ id: 'performance', label: 'Performance', stats: ['Score', 'Time', 'Distance', 'Height', 'Points'] }
+			],
+			teamCategories: [
+				{ id: 'medal-table', label: 'Medal Table', stats: ['Gold', 'Silver', 'Bronze', 'Total', 'Rank'] },
+				{ id: 'participation', label: 'Participation', stats: ['Athletes', 'Events', 'Sports', 'Disciplines', 'Medals'] }
+			]
 		}
 	};
 	
@@ -101,6 +113,11 @@
 			'scoring': ['Erling Haaland', 'Mohamed Salah', 'Bukayo Saka', 'Ollie Watkins', 'Cole Palmer', 'Alexander Isak', 'Darwin Núñez', 'Son Heung-min', 'Bruno Fernandes', 'Jarrod Bowen'],
 			'assists': ['Kevin De Bruyne', 'Martin Ødegaard', 'James Maddison', 'Bruno Fernandes', 'Bukayo Saka', 'Cole Palmer', 'Trent Alexander-Arnold', 'Mohamed Salah', 'Bernardo Silva', 'Jack Grealish'],
 			'defending': ['Virgil van Dijk', 'William Saliba', 'Rúben Dias', 'Josko Gvardiol', 'Cristian Romero', 'Lisandro Martínez', 'Micky van de Ven', 'Gabriel Magalhães', 'Lewis Dunk', 'Ezri Konsa']
+		},
+		'olympics': {
+			'medals': ['Mikaela Shiffrin', 'Johannes Høsflot Klæbo', 'Eileen Gu', 'Marco Odermatt', 'Petra Vlhová', 'Alexander Bolshunov', 'Sofia Goggia', 'Marte Olsbu Røiseland', 'Nils van der Poel', 'Ireen Wüst'],
+			'records': ['Mikaela Shiffrin', 'Johannes Høsflot Klæbo', 'Eileen Gu', 'Marco Odermatt', 'Petra Vlhová', 'Alexander Bolshunov', 'Sofia Goggia', 'Marte Olsbu Røiseland', 'Nils van der Poel', 'Ireen Wüst'],
+			'performance': ['Mikaela Shiffrin', 'Johannes Høsflot Klæbo', 'Eileen Gu', 'Marco Odermatt', 'Petra Vlhová', 'Alexander Bolshunov', 'Sofia Goggia', 'Marte Olsbu Røiseland', 'Nils van der Poel', 'Ireen Wüst']
 		}
 	};
 	
@@ -109,7 +126,8 @@
 		'nba': ['Celtics', 'Nuggets', 'Bucks', 'Thunder', 'Timberwolves', 'Clippers', 'Mavericks', 'Cavaliers', 'Knicks', 'Suns'],
 		'mlb': ['Dodgers', 'Braves', 'Astros', 'Rangers', 'Orioles', 'Phillies', 'Yankees', 'Twins', 'Rays', 'Mariners'],
 		'nhl': ['Panthers', 'Avalanche', 'Rangers', 'Stars', 'Bruins', 'Oilers', 'Lightning', 'Hurricanes', 'Devils', 'Canucks'],
-		'soccer': ['Arsenal', 'Man City', 'Liverpool', 'Aston Villa', 'Tottenham', 'Newcastle', 'Man United', 'Brighton', 'West Ham', 'Chelsea']
+		'soccer': ['Arsenal', 'Man City', 'Liverpool', 'Aston Villa', 'Tottenham', 'Newcastle', 'Man United', 'Brighton', 'West Ham', 'Chelsea'],
+		'olympics': ['USA', 'Norway', 'Germany', 'Canada', 'Sweden', 'Austria', 'Switzerland', 'Italy', 'France', 'Netherlands']
 	};
 	
 	function generatePlayerStats(sportCode) {

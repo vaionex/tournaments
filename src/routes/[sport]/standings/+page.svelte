@@ -16,7 +16,8 @@
 		'nhl': { name: 'NHL', icon: '🏒', color: 'bg-blue-700', conferences: ['Eastern', 'Western'], divisions: true },
 		'soccer': { name: 'Premier League', icon: '⚽', color: 'bg-purple-700', conferences: [], divisions: false },
 		'ncaaf': { name: 'NCAAF', icon: '🏈', color: 'bg-orange-600', conferences: ['SEC', 'Big Ten', 'ACC', 'Big 12', 'Pac-12'], divisions: false },
-		'wnba': { name: 'WNBA', icon: '🏀', color: 'bg-orange-500', conferences: ['Eastern', 'Western'], divisions: false }
+		'wnba': { name: 'WNBA', icon: '🏀', color: 'bg-orange-500', conferences: ['Eastern', 'Western'], divisions: false },
+		'olympics': { name: 'Olympics', icon: '🏅', color: 'bg-blue-600', conferences: ['Alpine Skiing', 'Biathlon', 'Bobsled', 'Cross-Country', 'Curling', 'Figure Skating', 'Freestyle', 'Ice Hockey', 'Luge', 'Nordic Combined', 'Short Track', 'Skeleton', 'Ski Jumping', 'Snowboard', 'Speed Skating'], divisions: false }
 	};
 	
 	const teamsData = {

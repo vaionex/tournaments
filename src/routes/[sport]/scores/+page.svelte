@@ -24,7 +24,8 @@
 		'mma': { name: 'MMA/UFC', icon: '🥊', color: 'bg-red-700', textColor: 'text-red-700' },
 		'boxing': { name: 'Boxing', icon: '🥊', color: 'bg-yellow-600', textColor: 'text-yellow-600' },
 		'racing': { name: 'Racing', icon: '🏎️', color: 'bg-red-600', textColor: 'text-red-600' },
-		'esports': { name: 'Esports', icon: '🎮', color: 'bg-purple-600', textColor: 'text-purple-600' }
+		'esports': { name: 'Esports', icon: '🎮', color: 'bg-purple-600', textColor: 'text-purple-600' },
+		'olympics': { name: 'Olympics', icon: '🏅', color: 'bg-blue-600', textColor: 'text-blue-600' }
 	};
 	
 	const teamsByLeague = {

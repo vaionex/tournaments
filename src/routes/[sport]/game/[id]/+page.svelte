@@ -14,7 +14,8 @@
 		'SOCCER': '⚽',
 		'NHL': '🏒',
 		'NCAAF': '🏈',
-		'WNBA': '🏀'
+		'WNBA': '🏀',
+		'OLYMPICS': '🏅'
 	};
 	
 	const sportNames = {
@@ -24,7 +25,8 @@
 		'soccer': 'Soccer',
 		'nhl': 'NHL',
 		'ncaaf': 'NCAAF',
-		'wnba': 'WNBA'
+		'wnba': 'WNBA',
+		'olympics': 'Olympics'
 	};
 	
 	// Mock game data - in real app, this would come from an API

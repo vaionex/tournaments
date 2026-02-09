@@ -19,7 +19,8 @@
 		'nhl': { name: 'NHL', icon: '🏒', color: 'bg-blue-700', teams: ['Avalanche', 'Bruins', 'Lightning', 'Rangers', 'Oilers', 'Panthers', 'Maple Leafs', 'Stars', 'Hurricanes', 'Devils'] },
 		'soccer': { name: 'Soccer', icon: '⚽', color: 'bg-purple-700', teams: ['Arsenal', 'Man City', 'Liverpool', 'Chelsea', 'Man United', 'Tottenham', 'Newcastle', 'Brighton', 'Aston Villa', 'West Ham'] },
 		'ncaaf': { name: 'NCAAF', icon: '🏈', color: 'bg-orange-600', teams: ['Alabama', 'Georgia', 'Michigan', 'Ohio State', 'Texas', 'Oregon', 'Penn State', 'USC', 'Clemson', 'Notre Dame'] },
-		'wnba': { name: 'WNBA', icon: '🏀', color: 'bg-orange-500', teams: ['Aces', 'Liberty', 'Sun', 'Storm', 'Wings', 'Mercury', 'Lynx', 'Sky', 'Fever', 'Sparks'] }
+		'wnba': { name: 'WNBA', icon: '🏀', color: 'bg-orange-500', teams: ['Aces', 'Liberty', 'Sun', 'Storm', 'Wings', 'Mercury', 'Lynx', 'Sky', 'Fever', 'Sparks'] },
+		'olympics': { name: 'Olympics', icon: '🏅', color: 'bg-blue-600', teams: ['USA', 'Canada', 'Germany', 'Norway', 'Sweden', 'Italy', 'France', 'Switzerland', 'Austria', 'Netherlands'] }
 	};
 	
 	function generateSchedule(sportCode, weekStart) {
