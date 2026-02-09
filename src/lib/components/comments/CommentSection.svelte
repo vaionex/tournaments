@@ -180,8 +180,8 @@
 			return;
 		}
 		
-		if (!user) {
-			errorMessage = 'Please log in to comment';
+		if (!commentAuthor.trim()) {
+			errorMessage = 'Please enter your name';
 			return;
 		}
 		
@@ -189,7 +189,7 @@
 		errorMessage = '';
 		
 		try {
-			const result = await createComment(articleId, newComment, user.id);
+			const result = await createComment(articleId, newComment, userProfile ? user?.id : undefined);
 			
 			if (result.success) {
 				// Reload comments from database (reset to first page)
@@ -210,16 +210,11 @@
 	async function handleReply(event: CustomEvent<{ parentId: string; content: string; author: string }>) {
 		const { parentId, content } = event.detail;
 		
-		if (!user) {
-			errorMessage = 'Please log in to reply';
-			return;
-		}
-		
 		submittingReply = true;
 		errorMessage = '';
 		
 		try {
-			const result = await createReply(articleId, parentId, content, user.id);
+			const result = await createReply(articleId, parentId, content, userProfile ? user?.id : undefined);
 			
 			if (result.success) {
 				// Reload comments from database (reset to first page to show new reply)
