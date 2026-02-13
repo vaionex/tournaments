@@ -3,6 +3,7 @@
  * Handles all news-related data operations using Supabase
  */
 import { getAuthorForArticle } from '$lib/data/authors';
+import { getSportFallbackImage } from '$lib/data/sport-images';
 
 import type { NewsArticle, NewsCategory } from '$lib/types';
 import { supabase } from '$lib/supabase';
@@ -610,7 +611,7 @@ function transformNewsArticle(row: Record<string, unknown>): NewsArticle {
 		content: row.content as string | undefined,
 		date: dateString ? new Date(dateString) : new Date(),
 		category: row.category as NewsCategory,
-		image: row.image_url as string || 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=1200',
+		image: row.image_url as string || getSportFallbackImage(row.sport as string, row.id as string),
 		author: author.name,
 		authorRole: author.role,
 		authorInitials: author.initials,
@@ -979,7 +980,7 @@ export async function getRecentNews(limit: number = 5): Promise<NewsArticle[]> {
 			excerpt: row.excerpt as string,
 			date: dateString ? new Date(dateString) : new Date(),
 			category: row.category as NewsCategory,
-			image: row.image_url as string || 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=1200',
+			image: row.image_url as string || getSportFallbackImage(row.sport as string, row.id as string),
 			author: 'Staff'
 		};
 	});

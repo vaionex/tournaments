@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
 	import { format } from 'date-fns';
+	import { getSportFallbackImage } from '$lib/data/sport-images';
 	import LeagueNavbar from '$lib/components/league/LeagueNavbar.svelte';
 	
 	let league = null;
@@ -317,7 +318,7 @@
 				excerpt: 'A historic performance this week as a star player breaks a long-standing league record.',
 				date: new Date(Date.now() - 172800000),
 				category: 'Stats',
-				image: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=800',
+				image: getSportFallbackImage($page.params.sport, '3'),
 				author: 'Sports Writer'
 			},
 			{

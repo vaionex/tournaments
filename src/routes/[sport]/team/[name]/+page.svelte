@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
 	import { format } from 'date-fns';
+	import { getSportFallbackImage } from '$lib/data/sport-images';
 	import TeamNavbar from '$lib/components/team/TeamNavbar.svelte';
 	
 	let team = null;
@@ -231,7 +232,7 @@
 				excerpt: `The team made strategic moves before the trade deadline to strengthen their roster.`,
 				date: new Date(Date.now() - 172800000),
 				category: 'Transactions',
-				image: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=800'
+				image: getSportFallbackImage($page.params.sport, '3')
 			}
 		];
 	}

@@ -1,6 +1,7 @@
 <script>
 	import { page } from '$app/stores';
 	import { format, formatDistanceToNow } from 'date-fns';
+	import { getSportFallbackImage } from '$lib/data/sport-images';
 
 	function timeAgo(date) {
 		const d = date instanceof Date ? date : new Date(date);
@@ -76,7 +77,7 @@
 					content: 'Please check the URL and try again.',
 					date: new Date(),
 					category: 'News',
-					image: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=1200',
+					image: getSportFallbackImage(null, null),
 					author: 'Tournaments.com',
 					authorRole: 'Editorial Team',
 					authorInitials: 'TC',
@@ -117,7 +118,7 @@
 				content: 'Please try again later.',
 				date: new Date(),
 				category: 'News',
-				image: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=1200',
+				image: getSportFallbackImage(null, null),
 				author: 'Tournaments.com',
 					authorRole: 'Editorial Team',
 					authorInitials: 'TC',
@@ -328,7 +329,7 @@ The integration of technology in training and competition is also creating new o
 <ArticleSEO
 	title={article?.title || 'News Article'}
 	description={article?.excerpt || 'Read the latest sports news on Tournaments.com'}
-	image={article?.image || 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=1200&h=630&fit=crop'}
+	image={article?.image || getSportFallbackImage(article?.sport, article?.id)}
 	author={article?.author || 'Tournaments.com'}
 	publishedDate={article?.date || new Date()}
 	category={article?.category || 'News'}
@@ -696,7 +697,7 @@ The integration of technology in training and competition is also creating new o
 									<div class="flex gap-3">
 										<div class="flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden bg-gray-200 dark:bg-gray-700">
 											<img 
-												src={related.image || 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=1200'} 
+												src={related.image || getSportFallbackImage(related.sport, related.id)} 
 												alt={related.title}
 												class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
 												on:error={(e) => {

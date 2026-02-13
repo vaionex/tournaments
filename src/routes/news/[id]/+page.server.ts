@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 import { getAuthorForArticle } from '$lib/data/authors';
+import { getSportFallbackImage } from '$lib/data/sport-images';
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
@@ -13,7 +14,7 @@ function transformArticle(row: Record<string, unknown>) {
 		content: row.content as string || '',
 		date: row.published_at ? new Date(row.published_at as string) : new Date(),
 		category: row.category as string || 'Top Stories',
-		image: row.image_url as string || 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=1200',
+		image: row.image_url as string || getSportFallbackImage(row.sport as string, row.id as string),
 		author: author.name,
 		authorRole: author.role,
 		authorId: author.id,
