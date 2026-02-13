@@ -463,7 +463,7 @@ export function getGameImage(game: string): string {
 		'Fortnite': 'https://images.unsplash.com/photo-1552820728-8b83bb6b773f?w=1200',
 		'Valorant': 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=1200'
 	};
-	return gameImages[game] || 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=1200';
+	return gameImages[game] || 'https://images.unsplash.com/photo-1461896836934-bd45ba48c2a5?w=1200';
 }
 
 // ============================================
@@ -530,7 +530,7 @@ export async function getTournamentNews(tournamentId: string, game: string): Pro
 	};
 	
 	return newsTemplates[game] || [
-		{ id: '1', title: 'Tournament Preview', excerpt: 'Everything you need to know about the upcoming competition.', image: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=400', date: '2 hours ago', category: 'Preview' },
+		{ id: '1', title: 'Tournament Preview', excerpt: 'Everything you need to know about the upcoming competition.', image: 'https://images.unsplash.com/photo-1461896836934-bd45ba48c2a5?w=400', date: '2 hours ago', category: 'Preview' },
 		{ id: '2', title: 'Favorites to Watch', excerpt: 'Top contenders and dark horses in this year\'s field.', image: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?w=400', date: '1 day ago', category: 'Analysis' }
 	];
 }

@@ -196,7 +196,7 @@ What makes 2025 particularly interesting is the crossover between traditional sp
 The integration of technology in training and competition is also creating new opportunities. Virtual reality training, AI-powered performance analysis, and advanced biomechanics are becoming standard tools for top competitors across all sports.`,
 			date: new Date('2025-01-05'),
 			category: 'Player Spotlight',
-			image: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=1200',
+			image: 'https://images.unsplash.com/photo-1461896836934-bd45ba48c2a5?w=1200',
 			author: 'Editorial Team',
 			authorAvatar: null,
 			tags: ['Players', 'Tennis', 'Golf', 'Esports', '2025']
