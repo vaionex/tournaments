@@ -8,6 +8,7 @@
 import type { Player, PlayerFilters, PaginatedResponse } from '$lib/types';
 import { supabase } from '$lib/supabase';
 import { simulateDelay } from './api';
+import { cache } from './cache.service';
 
 // Toggle this to switch between mock and real data
 const USE_MOCK_DATA = false;
@@ -721,6 +722,11 @@ export async function getPlayers(
 	page: number = 1,
 	itemsPerPage: number = 24
 ): Promise<PaginatedResponse<Player>> {
+	// Create cache key from filters - PERFORMANCE OPTIMIZATION
+	const cacheKey = `players_${JSON.stringify(filters)}_${page}_${itemsPerPage}`;
+	const cached = cache.get<PaginatedResponse<Player>>(cacheKey);
+	if (cached) return cached;
+
 	if (USE_MOCK_DATA) {
 		await simulateDelay();
 		let players = [...REAL_PLAYERS];
@@ -731,13 +737,17 @@ export async function getPlayers(
 
 		if (filters.search) {
 			const query = filters.search.toLowerCase();
-			players = players.filter(p =>
-				p.displayName.toLowerCase().includes(query) ||
-				p.username.toLowerCase().includes(query) ||
-				p.game.toLowerCase().includes(query) ||
-				(p.team && p.team.toLowerCase().includes(query)) ||
-				(p.country && p.country.toLowerCase().includes(query))
-			);
+			// PERFORMANCE OPTIMIZATION: Create searchable text for each player once
+			players = players.filter(p => {
+				const searchText = [
+					p.displayName.toLowerCase(),
+					p.username.toLowerCase(),
+					p.game.toLowerCase(),
+					p.team?.toLowerCase() || '',
+					p.country?.toLowerCase() || ''
+				].join(' ');
+				return searchText.includes(query);
+			});
 		}
 		if (filters.game) players = players.filter(p => p.game === filters.game);
 		if (filters.country) players = players.filter(p => p.country === filters.country);
@@ -764,7 +774,10 @@ export async function getPlayers(
 		const startIndex = (page - 1) * itemsPerPage;
 		const paginatedData = players.slice(startIndex, startIndex + itemsPerPage);
 
-		return { data: paginatedData, pagination: { currentPage: page, totalPages, totalItems, itemsPerPage } };
+		const result = { data: paginatedData, pagination: { currentPage: page, totalPages, totalItems, itemsPerPage } };
+		// Cache mock data for 3 minutes
+		cache.set(cacheKey, result, 3 * 60 * 1000);
+		return result;
 	}
 
 	// Real Supabase query - use players table for more complete data
@@ -828,10 +841,14 @@ export async function getPlayers(
 	const to = from + itemsPerPage;
 	const paginatedData = transformedPlayers.slice(from, to);
 
-	return {
+	const result = {
 		data: paginatedData,
 		pagination: { currentPage: page, totalPages, totalItems, itemsPerPage }
 	};
+	
+	// Cache players data for 5 minutes - PERFORMANCE OPTIMIZATION
+	cache.set(cacheKey, result, 5 * 60 * 1000);
+	return result;
 }
 
 /**
