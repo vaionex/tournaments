@@ -178,7 +178,7 @@
 			</h2>
 			<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 				{#each latestNews as article}
-				<a href="/news/{article.id}" 
+				<a href="/news/{article.slug || article.id}" 
 					class="bg-gray-900/50 border border-gray-800 rounded-xl overflow-hidden hover:border-gray-600 transition-all duration-300 group">
 					<div class="aspect-[16/9] overflow-hidden">
 						<img src={article.image} alt={article.title} 

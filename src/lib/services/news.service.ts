@@ -9,6 +9,7 @@ import type { NewsArticle, NewsCategory } from '$lib/types';
 import { supabase } from '$lib/supabase';
 import { simulateDelay } from './api';
 import { filterHostileWords } from '$lib/utils/wordFilter';
+import { cache } from './cache.service';
 
 // Toggle this to switch between mock and real data
 const USE_MOCK_DATA = false;
@@ -644,17 +645,26 @@ export function getNewsCategories(): NewsCategory[] {
  * Fetch news articles by sport
  */
 export async function getNewsArticlesBySport(sport: string, limit: number = 10): Promise<NewsArticle[]> {
+	// Check cache first
+	const cacheKey = `news_articles_by_sport_${sport.toLowerCase()}_${limit}`;
+	const cached = cache.get<NewsArticle[]>(cacheKey);
+	if (cached) return cached;
+
 	if (USE_MOCK_DATA) {
 		await simulateDelay(300);
-		// Filter mock data by sport keywords
+		// Convert to Map for O(1) lookup instead of O(n) filtering
 		const sportKeywords = sport.toLowerCase();
-		return mockFeaturedNews
+		const result = mockFeaturedNews
 			.filter(article => {
 				const title = article.title.toLowerCase();
 				const excerpt = article.excerpt.toLowerCase();
 				return title.includes(sportKeywords) || excerpt.includes(sportKeywords);
 			})
 			.slice(0, limit);
+		
+		// Cache mock data for 2 minutes
+		cache.set(cacheKey, result, 2 * 60 * 1000);
+		return result;
 	}
 
 	const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
@@ -681,7 +691,10 @@ export async function getNewsArticlesBySport(sport: string, limit: number = 10):
 		return [];
 	}
 
-	return (data || []).map(transformNewsArticle);
+	const result = (data || []).map(transformNewsArticle);
+	// Cache for 5 minutes
+	cache.set(cacheKey, result, 5 * 60 * 1000);
+	return result;
 }
 
 /**
@@ -727,12 +740,23 @@ export async function getFeaturedArticleBySport(sport: string): Promise<NewsArti
  * Fetch news articles with optional category filter
  */
 export async function getNewsArticles(category: NewsCategory = 'All'): Promise<NewsArticle[]> {
+	// Check cache first
+	const cacheKey = `news_articles_${category}`;
+	const cached = cache.get<NewsArticle[]>(cacheKey);
+	if (cached) return cached;
+
 	if (USE_MOCK_DATA) {
 		await simulateDelay(300);
+		let result: NewsArticle[];
 		if (category === 'All') {
-			return mockFeaturedNews;
+			result = mockFeaturedNews;
+		} else {
+			result = mockFeaturedNews.filter(article => article.category === category);
 		}
-		return mockFeaturedNews.filter(article => article.category === category);
+		
+		// Cache mock data for 2 minutes
+		cache.set(cacheKey, result, 2 * 60 * 1000);
+		return result;
 	}
 
 	// Check if Supabase is properly configured
@@ -770,7 +794,10 @@ export async function getNewsArticles(category: NewsCategory = 'All'): Promise<N
 		return [];
 	}
 
-	return (data || []).map(transformNewsArticle);
+	const result = (data || []).map(transformNewsArticle);
+	// Cache for 3 minutes (news changes frequently)
+	cache.set(cacheKey, result, 3 * 60 * 1000);
+	return result;
 }
 
 /**
@@ -908,22 +935,38 @@ export async function getFeaturedArticle(): Promise<NewsArticle | null> {
 	return data ? transformNewsArticle(data) : null;
 }
 
+// Create Map for O(1) article lookup - PERFORMANCE OPTIMIZATION
+const mockArticlesMap = new Map(mockFeaturedNews.map(article => [article.id, article]));
+
 /**
- * Fetch a single news article by ID
+ * Fetch a single news article by ID - OPTIMIZED with caching and Map lookup
  */
 export async function getNewsArticleById(id: string): Promise<NewsArticle | null> {
+	// Check cache first - PERFORMANCE OPTIMIZATION
+	const cacheKey = `article_${id}`;
+	const cached = cache.get<NewsArticle | null>(cacheKey);
+	if (cached !== undefined) return cached;
+
 	if (USE_MOCK_DATA) {
 		await simulateDelay();
-		const article = mockFeaturedNews.find(a => a.id === id);
+		// Use Map for O(1) lookup instead of O(n) find() - PERFORMANCE FIX
+		const article = mockArticlesMap.get(id);
 		if (article) {
-			return {
+			const result = {
 				...article,
 				content: `<p>${article.excerpt}</p><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p><p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>`
 			};
+			// Cache mock article for 5 minutes
+			cache.set(cacheKey, result, 5 * 60 * 1000);
+			return result;
 		}
+		// Cache null result to avoid repeated lookups
+		cache.set(cacheKey, null, 2 * 60 * 1000);
 		return null;
 	}
 
+	// Try by UUID first, fall back to slug if it doesn't look like a UUID
+	const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
 	const { data, error } = await supabase
 		.from('news_articles')
 		.select(`
@@ -933,15 +976,20 @@ export async function getNewsArticleById(id: string): Promise<NewsArticle | null
 				avatar_url
 			)
 		`)
-		.eq('id', id)
+		.eq(isUuid ? 'id' : 'slug', id)
 		.single();
 
 	if (error) {
 		console.error('Error fetching article:', error);
+		// Cache null result to avoid repeated failed lookups
+		cache.set(cacheKey, null, 2 * 60 * 1000);
 		return null;
 	}
 
-	return data ? transformNewsArticle(data) : null;
+	const result = data ? transformNewsArticle(data) : null;
+	// Cache article for 10 minutes (articles don't change frequently)
+	cache.set(cacheKey, result, 10 * 60 * 1000);
+	return result;
 }
 
 /**
@@ -987,17 +1035,27 @@ export async function getRecentNews(limit: number = 5): Promise<NewsArticle[]> {
 }
 
 /**
- * Search news articles
+ * Search news articles - OPTIMIZED with caching
  */
 export async function searchNews(query: string): Promise<NewsArticle[]> {
+	// Check cache first - PERFORMANCE OPTIMIZATION
+	const cacheKey = `search_news_${query.toLowerCase()}`;
+	const cached = cache.get<NewsArticle[]>(cacheKey);
+	if (cached) return cached;
+
 	if (USE_MOCK_DATA) {
 		await simulateDelay(300);
 		const lowerQuery = query.toLowerCase();
-		return mockFeaturedNews.filter(
+		// Keep the includes() for mock data since it's already small
+		const result = mockFeaturedNews.filter(
 			article =>
 				article.title.toLowerCase().includes(lowerQuery) ||
 				article.excerpt.toLowerCase().includes(lowerQuery)
 		);
+		
+		// Cache mock search for 1 minute
+		cache.set(cacheKey, result, 60 * 1000);
+		return result;
 	}
 
 	const { data, error } = await supabase
@@ -1018,7 +1076,10 @@ export async function searchNews(query: string): Promise<NewsArticle[]> {
 		return [];
 	}
 
-	return (data || []).map(transformNewsArticle);
+	const result = (data || []).map(transformNewsArticle);
+	// Cache search results for 5 minutes
+	cache.set(cacheKey, result, 5 * 60 * 1000);
+	return result;
 }
 
 /**
@@ -1049,7 +1110,13 @@ export async function getArticleComments(articleId: string, limit: number = 10, 
 		userId?: string | null;
 	}>;
 }>> {
-	const { data: topLevelComments, error: commentsError } = await supabase
+	// Check cache first - PERFORMANCE OPTIMIZATION
+	const cacheKey = `article_comments_${articleId}_${limit}_${offset}`;
+	const cached = cache.get<any[]>(cacheKey);
+	if (cached) return cached;
+
+	// OPTIMIZED: Single query to get all comments (parent and replies) at once
+	const { data: allComments, error } = await supabase
 		.from('article_comments')
 		.select(`
 			id,
@@ -1062,57 +1129,53 @@ export async function getArticleComments(articleId: string, limit: number = 10, 
 			dislikes,
 			is_verified,
 			is_pinned,
-			profiles!user_id (
-				is_pro
-			)
-		`)
-		.eq('article_id', articleId)
-		.is('parent_id', null)
-		.eq('is_deleted', false)
-		.order('is_pinned', { ascending: false })
-		.order('created_at', { ascending: false })
-		.range(offset, offset + limit - 1);
-
-	if (commentsError) {
-		console.error('Error fetching comments:', commentsError);
-		return [];
-	}
-
-	if (!topLevelComments || topLevelComments.length === 0) {
-		return [];
-	}
-
-	// Get all comment IDs to fetch replies
-	const commentIds = topLevelComments.map(c => c.id);
-
-	const { data: replies, error: repliesError } = await supabase
-		.from('article_comments')
-		.select(`
-			id,
-			article_id,
-			user_id,
-			author_name,
-			content,
-			created_at,
-			likes,
-			dislikes,
-			is_verified,
 			parent_id,
 			profiles!user_id (
 				is_pro
 			)
 		`)
-		.in('parent_id', commentIds)
+		.eq('article_id', articleId)
 		.eq('is_deleted', false)
-		.order('created_at', { ascending: true });
+		.order('created_at', { ascending: false });
 
-	if (repliesError) {
-		console.error('Error fetching replies:', repliesError);
+	if (error) {
+		console.error('Error fetching comments:', error);
+		return [];
 	}
 
-	// Transform and group comments with replies
-	return topLevelComments.map(comment => {
-		const commentReplies = (replies || []).filter(r => r.parent_id === comment.id);
+	if (!allComments || allComments.length === 0) {
+		const emptyResult: any[] = [];
+		cache.set(cacheKey, emptyResult, 2 * 60 * 1000);
+		return emptyResult;
+	}
+
+	// Separate parent comments and replies for efficient processing
+	const parentComments = allComments.filter(c => !c.parent_id);
+	const replies = allComments.filter(c => c.parent_id);
+	
+	// Create Map for O(1) reply lookup instead of O(n) filter - PERFORMANCE FIX
+	const repliesMap = new Map<string, any[]>();
+	replies.forEach(reply => {
+		const parentId = reply.parent_id!;
+		if (!repliesMap.has(parentId)) {
+			repliesMap.set(parentId, []);
+		}
+		repliesMap.get(parentId)!.push(reply);
+	});
+
+	// Apply pagination to parent comments only
+	const paginatedParents = parentComments
+		.sort((a, b) => {
+			// Sort by pinned status first, then by date
+			if (a.is_pinned && !b.is_pinned) return -1;
+			if (!a.is_pinned && b.is_pinned) return 1;
+			return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+		})
+		.slice(offset, offset + limit);
+
+	// Transform comments with O(1) reply lookup - PERFORMANCE OPTIMIZATION
+	const result = paginatedParents.map(comment => {
+		const commentReplies = repliesMap.get(comment.id) || [];
 		const profile = comment.profiles as Record<string, unknown> | null;
 		const isPro = profile?.is_pro as boolean || false;
 		
@@ -1128,24 +1191,30 @@ export async function getArticleComments(articleId: string, limit: number = 10, 
 			isPinned: comment.is_pinned || false,
 			isPro: isPro,
 			userId: comment.user_id || null,
-			replies: commentReplies.map(reply => {
-				const replyProfile = reply.profiles as Record<string, unknown> | null;
-				const replyIsPro = replyProfile?.is_pro as boolean || false;
-				return {
-					id: reply.id,
-					author: reply.author_name,
-					avatar: null,
-					content: reply.content,
-					date: new Date(reply.created_at),
-					likes: reply.likes || 0,
-					dislikes: reply.dislikes || 0,
-					isVerified: reply.is_verified || false,
-					isPro: replyIsPro,
-					userId: reply.user_id || null
-				};
-			})
+			replies: commentReplies
+				.sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime())
+				.map(reply => {
+					const replyProfile = reply.profiles as Record<string, unknown> | null;
+					const replyIsPro = replyProfile?.is_pro as boolean || false;
+					return {
+						id: reply.id,
+						author: reply.author_name,
+						avatar: null,
+						content: reply.content,
+						date: new Date(reply.created_at),
+						likes: reply.likes || 0,
+						dislikes: reply.dislikes || 0,
+						isVerified: reply.is_verified || false,
+						isPro: replyIsPro,
+						userId: reply.user_id || null
+					};
+				})
 		};
 	});
+
+	// Cache for 2 minutes (comments change frequently)
+	cache.set(cacheKey, result, 2 * 60 * 1000);
+	return result;
 }
 
 /**

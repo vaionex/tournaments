@@ -1,0 +1,2 @@
+# Tournaments.com - No programmatic ads currently
+# Placeholder to prevent 404 errors

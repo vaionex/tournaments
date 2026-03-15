@@ -41,7 +41,7 @@ export const load: PageServerLoad = async ({ params }) => {
 			.from('tournaments')
 			.select('*')
 			.eq('game', sportIntro.title.split(' - ')[0] || sportIntro.sport)
-			.in('status', ['upcoming', 'live'])
+			.eq('status', 'upcoming')
 			.order('date', { ascending: true })
 			.limit(8);
 

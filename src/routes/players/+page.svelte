@@ -749,7 +749,7 @@
 						</div>
 						<div class="divide-y divide-gray-100 dark:divide-gray-700">
 							{#each playerNews as news (news.id)}
-								<a href="/news/{news.id}" class="block p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+								<a href="/news/{news.slug || news.id}" class="block p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
 									<div class="flex gap-3">
 										<img 
 											src={news.image} 

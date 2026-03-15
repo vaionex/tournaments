@@ -31,10 +31,12 @@ export async function load({ params }) {
 	const { id } = params;
 	const supabase = createClient(SUPABASE_URL || '', SUPABASE_ANON_KEY || '');
 
+	// Support both UUID and slug URLs
+	const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
 	const { data: article } = await supabase
 		.from('news_articles')
 		.select('*')
-		.eq('id', id)
+		.eq(isUuid ? 'id' : 'slug', id)
 		.eq('is_published', true)
 		.single();
 

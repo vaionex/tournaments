@@ -36,12 +36,31 @@ export async function load() {
 		.limit(7);
 
 	const today = new Date().toISOString();
-	const { data: tournaments } = await supabase
+	
+	// Currently running tournaments (started, not yet ended)
+	const { data: runningTournaments } = await supabase
 		.from('tournaments')
 		.select('id, name, slug, date, end_date, location, prize_pool, image_url, status, game')
+		.lte('date', today)
 		.gte('end_date', today)
 		.order('date', { ascending: true })
-		.limit(5);
+		.limit(4);
+
+	// Upcoming tournaments (haven't started yet)
+	const { data: upcomingTournaments } = await supabase
+		.from('tournaments')
+		.select('id, name, slug, date, end_date, location, prize_pool, image_url, status, game')
+		.gt('date', today)
+		.order('date', { ascending: true })
+		.limit(8);
+
+	// Merge: running first, then upcoming, deduplicated
+	const seenIds = new Set<string>();
+	const tournaments = [...(runningTournaments || []), ...(upcomingTournaments || [])].filter(t => {
+		if (seenIds.has(t.id)) return false;
+		seenIds.add(t.id);
+		return true;
+	}).slice(0, 8);
 
 	// Fetch top athletes for sidebar — top earners across diverse sports
 	let topAthletes: Array<{id: string; displayName: string; slug: string; sport: string; image: string; country: string}> = [];
@@ -77,9 +96,34 @@ export async function load() {
 		console.error('Failed to fetch athletes:', e);
 	}
 
+	// Fetch trending articles (most commented/viewed — approximate by recent + different category)
+	const { data: trendingArticles } = await supabase
+		.from('news_articles')
+		.select('id, title, slug, sport, published_at, image_url')
+		.eq('is_published', true)
+		.order('published_at', { ascending: false })
+		.range(7, 14); // Next batch after hero+grid — acts as "trending"
+
+	// Fetch recent results (completed tournaments)
+	const { data: recentResults } = await supabase
+		.from('tournaments')
+		.select('id, name, slug, date, game, status, location')
+		.eq('status', 'completed')
+		.order('date', { ascending: false })
+		.limit(5);
+
 	return {
 		ssrArticles: (articles || []).map(transformArticle),
 		ssrTournaments: tournaments || [],
-		ssrTopAthletes: topAthletes
+		ssrTopAthletes: topAthletes,
+		ssrTrending: (trendingArticles || []).map(a => ({
+			id: a.id,
+			title: a.title,
+			slug: a.slug,
+			sport: a.sport,
+			date: a.published_at,
+			image: a.image_url
+		})),
+		ssrRecentResults: recentResults || []
 	};
 }

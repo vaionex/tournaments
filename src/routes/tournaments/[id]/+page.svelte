@@ -53,16 +53,18 @@
 </script>
 
 {#if tournament}
+{#key tournament.id}
 <TournamentSEO 
-	name={tournament.name}
-	description={tournament.description || `${tournament.name} - ${tournament.game} tournament at ${tournament.location}`}
-	startDate={tournament.date}
-	endDate={tournament.end_date}
+	name={tournament.name || ''}
+	description={tournament.description || `${tournament.name} - ${tournament.game || 'Sports'} tournament`}
+	startDate={tournament.date || ''}
+	endDate={tournament.end_date || tournament.date || ''}
 	location={tournament.location || 'TBD'}
 	image={tournament.image_url || 'https://www.tournaments.com/og-image.jpg'}
 	prizePool={formatPrize(tournament.prize_pool)}
-	game={tournament.game}
+	game={tournament.game || ''}
 />
+{/key}
 
 <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
 	<!-- Hero Banner -->
@@ -201,7 +203,7 @@
 						<h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4">Related News</h2>
 						<div class="space-y-4">
 							{#each relatedNews as article}
-								<a href="/news/{article.id}" class="group block border-b border-gray-100 dark:border-gray-700 pb-4 last:border-0 last:pb-0">
+								<a href="/news/{article.slug || article.id}" class="group block border-b border-gray-100 dark:border-gray-700 pb-4 last:border-0 last:pb-0">
 									<div class="flex items-center gap-2 text-xs text-gray-500 mb-1">
 										<span class="px-2 py-0.5 text-[10px] font-bold uppercase bg-blue-600/10 text-blue-600 rounded">{article.category}</span>
 										<span>{timeAgo(article.published_at)}</span>

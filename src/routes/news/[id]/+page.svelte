@@ -335,6 +335,7 @@ The integration of technology in training and competition is also creating new o
 	category={article?.category || 'News'}
 	tags={article?.tags || []}
 	wordCount={article?.content?.split(/\s+/).length || 0}
+	slug={article?.slug || ''}
 />
 
 {#if loading}
@@ -544,7 +545,7 @@ The integration of technology in training and competition is also creating new o
 					<div class="space-y-4">
 						{#each popularArticles as popular}
 							<a
-								href="/news/{popular.id}"
+								href="/news/{popular.slug || popular.id}"
 								data-sveltekit-preload-data="hover"
 								class="group block"
 							>
@@ -569,7 +570,7 @@ The integration of technology in training and competition is also creating new o
 					<div class="space-y-3">
 						{#each recentArticles as recent}
 							<a
-								href="/news/{recent.id}"
+								href="/news/{recent.slug || recent.id}"
 								data-sveltekit-preload-data="hover"
 								class="group block"
 							>
@@ -690,7 +691,7 @@ The integration of technology in training and competition is also creating new o
 						<div class="space-y-4">
 							{#each relatedArticles as related}
 								<a
-									href="/news/{related.id}"
+									href="/news/{related.slug || related.id}"
 									data-sveltekit-preload-data="hover"
 									class="group block"
 								>

@@ -114,7 +114,7 @@
 		{:else}
 			<!-- Featured Article -->
 			{#if selectedCategory === 'All' && filteredArticles.length > 0}
-				<a href="/news/{filteredArticles[0].id}" class="group block mb-8">
+				<a href="/news/{filteredArticles[0].slug || filteredArticles[0].id}" class="group block mb-8">
 					<div class="relative bg-gray-900 rounded-2xl overflow-hidden">
 						<img 
 							src={filteredArticles[0].image} 
@@ -145,7 +145,7 @@
 			<!-- Articles Grid -->
 			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 				{#each (selectedCategory === 'All' ? filteredArticles.slice(1) : filteredArticles) as article}
-					<a href="/news/{article.id}" class="group">
+					<a href="/news/{article.slug || article.id}" class="group">
 						<article class="bg-white dark:bg-gray-800 rounded-2xl overflow-hidden border border-gray-200 dark:border-gray-700 hover:shadow-xl transition-all duration-300 h-full flex flex-col">
 							<div class="relative h-48 overflow-hidden">
 								<img 

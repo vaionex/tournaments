@@ -714,7 +714,7 @@
 						<div class="space-y-4">
 							{#each newsArticles as article (article.id)}
 								<a 
-									href="/news/{article.id}"
+									href="/news/{article.slug || article.id}"
 									class="group block border-b border-gray-200 dark:border-gray-700 pb-4 last:border-b-0 last:pb-0"
 								>
 									<article class="flex items-start gap-4">

@@ -17,6 +17,8 @@
 	let upcomingTournaments: Tournament[] = data?.ssrTournaments || [];
 	let topPlayers: Player[] = [];
 	let topAthletes: any[] = data?.ssrTopAthletes || [];
+	let trendingArticles: any[] = data?.ssrTrending || [];
+	let recentResults: any[] = data?.ssrRecentResults || [];
 	let loading = false; // Start false, will be set true if no cache found
 	let changingCategory = false; // Category switch (doesn't hide content)
 	let loadingMore = false;
@@ -351,40 +353,46 @@
 							<div class="p-5 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-blue-600 to-blue-700">
 								<h2 class="text-lg font-bold text-white flex items-center gap-2">
 									<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
 									</svg>
-									Upcoming Tournaments
+									Tournaments
 								</h2>
 							</div>
-							<div class="p-4 space-y-3">
-								{#each upcomingTournaments.slice(0, 2) as tournament}
+							<div class="p-4 space-y-2">
+								{#each upcomingTournaments.slice(0, 5) as tournament}
+									{@const isLive = new Date(tournament.date) <= new Date() && tournament.end_date && new Date(tournament.end_date) >= new Date()}
 									<a 
 										href="/tournaments/{tournament.id}"
-										class="block p-3 border-l-4 border-blue-500 bg-gray-50 dark:bg-gray-900/50 rounded-r-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors group"
+										class="block p-3 border-l-4 {isLive ? 'border-red-500 bg-red-50/50 dark:bg-red-900/10' : 'border-blue-500 bg-gray-50 dark:bg-gray-900/50'} rounded-r-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors group"
 									>
 										<div class="flex items-start justify-between gap-2 mb-1">
-											<h3 class="font-semibold text-sm text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-1">
+											<h3 class="font-semibold text-sm text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-2">
 												{tournament.name}
 											</h3>
-											<span class="px-2 py-0.5 text-[10px] font-bold uppercase rounded {
-												tournament.status === 'live' ? 'bg-red-500 text-white' : 'bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300'
-											}">
-												{tournament.status}
-											</span>
-										</div>
-										<p class="text-xs text-gray-500 dark:text-gray-400 mb-2">{tournament.game}</p>
-										<div class="flex items-center justify-between text-xs">
-											<span class="text-gray-600 dark:text-gray-400">
-												{new Date(tournament.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
-											</span>
-											{#if tournament.prizePool && tournament.prizePool !== '$0'}
-												<span class="font-bold text-green-600 dark:text-green-400">{tournament.prizePool}</span>
+											{#if isLive}
+												<span class="flex-shrink-0 px-1.5 py-0.5 text-[10px] font-bold uppercase rounded bg-red-500 text-white flex items-center gap-1">
+													<span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span>
+													LIVE
+												</span>
 											{/if}
+										</div>
+										<div class="flex items-center justify-between text-xs">
+											<span class="text-gray-500 dark:text-gray-400 flex items-center gap-1">
+												<svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+												{#if isLive}
+													Ends {new Date(tournament.end_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+												{:else}
+													{new Date(tournament.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+												{/if}
+											</span>
+											<span class="px-2 py-0.5 text-[10px] font-semibold uppercase rounded bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300">
+												{tournament.game}
+											</span>
 										</div>
 									</a>
 								{/each}
 							</div>
-							<div class="p-4 pt-0">
+							<div class="p-4 pt-2">
 								<a 
 									href="/tournaments" 
 									class="block w-full py-2.5 text-center text-sm font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/30 rounded-lg transition-colors"
@@ -393,41 +401,75 @@
 								</a>
 							</div>
 						</div>
-					{:else if loading}
+					{/if}
+
+					<!-- Trending Stories -->
+					{#if trendingArticles.length > 0}
 						<div class="bg-white dark:bg-gray-800 rounded-xl shadow-md border border-gray-200 dark:border-gray-700 overflow-hidden">
-							<!-- Header - static, always shown -->
-							<div class="p-5 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-blue-600 to-blue-700">
+							<div class="p-5 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-orange-500 to-red-500">
 								<h2 class="text-lg font-bold text-white flex items-center gap-2">
 									<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z" />
+										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z" />
 									</svg>
-									Upcoming Tournaments
+									Trending
 								</h2>
 							</div>
-							<!-- Content Skeleton - matches actual tournament items (exactly 2) -->
 							<div class="p-4 space-y-3">
-								{#each Array(2) as _}
-									<div class="p-3 border-l-4 border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-900/50 rounded-r-lg animate-pulse">
-										<div class="flex items-start justify-between gap-2 mb-1">
-											<div class="h-5 bg-gray-200 dark:bg-gray-700 rounded w-3/4"></div>
-											<div class="h-5 w-12 bg-gray-200 dark:bg-gray-700 rounded"></div>
+								{#each trendingArticles.slice(0, 5) as article, i}
+									<a 
+										href="/news/{article.slug || article.id}"
+										class="flex items-start gap-3 group"
+									>
+										<span class="flex-shrink-0 w-7 h-7 rounded-full bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 flex items-center justify-center text-sm font-bold">
+											{i + 1}
+										</span>
+										<div class="flex-1 min-w-0">
+											<h3 class="text-sm font-medium text-gray-900 dark:text-white group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors line-clamp-2 leading-snug">
+												{article.title}
+											</h3>
+											<p class="text-xs text-gray-500 dark:text-gray-400 mt-1 flex items-center gap-2">
+												<span class="uppercase font-semibold text-[10px] text-orange-600 dark:text-orange-400">{article.sport || 'sports'}</span>
+												<span>·</span>
+												<span>{new Date(article.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
+											</p>
 										</div>
-										<div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/2 mb-2"></div>
-										<div class="flex items-center justify-between">
-											<div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-16"></div>
-											<div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-12"></div>
-										</div>
-									</div>
+									</a>
 								{/each}
 							</div>
-							<!-- Footer button - static, always shown -->
-							<div class="p-4 pt-0">
-								<a 
-									href="/tournaments" 
-									class="block w-full py-2.5 text-center text-sm font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/30 rounded-lg transition-colors"
-								>
-									View All Tournaments →
-								</a>
+						</div>
+					{/if}
+
+					<!-- Recent Results -->
+					{#if recentResults.length > 0}
+						<div class="bg-white dark:bg-gray-800 rounded-xl shadow-md border border-gray-200 dark:border-gray-700 overflow-hidden">
+							<div class="p-5 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-green-600 to-emerald-600">
+								<h2 class="text-lg font-bold text-white flex items-center gap-2">
+									<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+									</svg>
+									Recent Results
+								</h2>
+							</div>
+							<div class="p-4 space-y-2">
+								{#each recentResults.slice(0, 5) as result}
+									<a 
+										href="/tournaments/{result.id}"
+										class="block p-3 border-l-4 border-green-500 bg-gray-50 dark:bg-gray-900/50 rounded-r-lg hover:bg-green-50 dark:hover:bg-green-900/20 transition-colors group"
+									>
+										<h3 class="font-semibold text-sm text-gray-900 dark:text-white group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors line-clamp-1 mb-1">
+											{result.name}
+										</h3>
+										<div class="flex items-center justify-between text-xs">
+											<span class="text-gray-500 dark:text-gray-400">
+												{new Date(result.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+											</span>
+											<span class="px-2 py-0.5 text-[10px] font-semibold uppercase rounded bg-green-100 dark:bg-green-900/50 text-green-700 dark:text-green-300">
+												{result.game}
+											</span>
+										</div>
+									</a>
+								{/each}
 							</div>
 						</div>
 					{/if}

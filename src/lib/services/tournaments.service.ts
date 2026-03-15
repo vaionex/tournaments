@@ -11,6 +11,7 @@
 import type { Tournament, TournamentResult, TournamentParticipant, TournamentFilters, PaginatedResponse } from '$lib/types';
 import { supabase } from '$lib/supabase';
 import { simulateDelay } from './api';
+import { cache } from './cache.service';
 
 // Toggle this to switch between mock and real data
 const USE_MOCK_DATA = false;
@@ -90,6 +91,11 @@ export async function getTournaments(
 	page: number = 1,
 	itemsPerPage: number = 12
 ): Promise<PaginatedResponse<Tournament>> {
+	// Create cache key from filters - PERFORMANCE OPTIMIZATION
+	const cacheKey = `tournaments_${JSON.stringify(filters)}_${page}_${itemsPerPage}`;
+	const cached = cache.get<PaginatedResponse<Tournament>>(cacheKey);
+	if (cached) return cached;
+
 	if (USE_MOCK_DATA) {
 		await simulateDelay();
 		let tournaments = generateMockTournaments(50);
@@ -110,7 +116,10 @@ export async function getTournaments(
 		const startIndex = (page - 1) * itemsPerPage;
 		const paginatedData = tournaments.slice(startIndex, startIndex + itemsPerPage);
 
-		return { data: paginatedData, pagination: { currentPage: page, totalPages, totalItems, itemsPerPage } };
+		const result = { data: paginatedData, pagination: { currentPage: page, totalPages, totalItems, itemsPerPage } };
+		// Cache mock data for 5 minutes
+		cache.set(cacheKey, result, 5 * 60 * 1000);
+		return result;
 	}
 
 	// Real Supabase query
@@ -146,10 +155,14 @@ export async function getTournaments(
 	const totalItems = count || 0;
 	const totalPages = Math.ceil(totalItems / itemsPerPage);
 
-	return {
+	const result = {
 		data: (data || []).map(transformTournament),
 		pagination: { currentPage: page, totalPages, totalItems, itemsPerPage }
 	};
+	
+	// Cache tournaments data for 10 minutes - PERFORMANCE OPTIMIZATION
+	cache.set(cacheKey, result, 10 * 60 * 1000);
+	return result;
 }
 
 /**
