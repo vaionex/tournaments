@@ -53,16 +53,18 @@
 </script>
 
 {#if tournament}
+{#key tournament.id}
 <TournamentSEO 
-	name={tournament.name}
-	description={tournament.description || `${tournament.name} - ${tournament.game} tournament at ${tournament.location}`}
-	startDate={tournament.date}
-	endDate={tournament.end_date}
+	name={tournament.name || ''}
+	description={tournament.description || `${tournament.name} - ${tournament.game || 'Sports'} tournament`}
+	startDate={tournament.date || ''}
+	endDate={tournament.end_date || tournament.date || ''}
 	location={tournament.location || 'TBD'}
 	image={tournament.image_url || 'https://www.tournaments.com/og-image.jpg'}
 	prizePool={formatPrize(tournament.prize_pool)}
-	game={tournament.game}
+	game={tournament.game || ''}
 />
+{/key}
 
 <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
 	<!-- Hero Banner -->

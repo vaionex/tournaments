@@ -19,8 +19,13 @@
 	// Safely convert to ISO string — handles both Date objects and strings
 	function toISO(d: Date | string | null | undefined): string {
 		if (!d) return new Date().toISOString();
-		if (typeof d === 'string') return new Date(d).toISOString();
-		return d.toISOString();
+		try {
+			const date = typeof d === 'string' ? new Date(d) : d;
+			const iso = date.toISOString();
+			return iso; // will throw if Invalid Date
+		} catch {
+			return new Date().toISOString();
+		}
 	}
 	
 	$: displaySport = sport || game || 'Sports';
