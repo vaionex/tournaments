@@ -37,6 +37,22 @@
 		return `${days} days`;
 	}
 
+	function isLive(t) {
+		if (!t?.date) return false;
+		const now = new Date();
+		return new Date(t.date) <= now && t.end_date && new Date(t.end_date) >= now;
+	}
+
+	function getDaysRemaining(endDateStr) {
+		const end = new Date(endDateStr);
+		const now = new Date();
+		const diff = end.getTime() - now.getTime();
+		const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
+		if (days <= 0) return 'Final days';
+		if (days === 1) return '1 day left';
+		return `${days} days left`;
+	}
+
 	function timeAgo(date) {
 		const d = date instanceof Date ? date : new Date(date);
 		const now = new Date();
@@ -71,9 +87,16 @@
 	<div class="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white">
 		<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
 			<div class="flex flex-wrap items-center gap-3 mb-4">
-				<span class="px-3 py-1 text-xs font-bold uppercase rounded {getStatusColor(tournament.status)}">
-					{tournament.status}
-				</span>
+				{#if isLive(tournament)}
+					<span class="px-3 py-1 text-xs font-bold uppercase rounded bg-red-500 text-white flex items-center gap-1.5">
+						<span class="w-2 h-2 rounded-full bg-white animate-pulse"></span>
+						LIVE
+					</span>
+				{:else}
+					<span class="px-3 py-1 text-xs font-bold uppercase rounded {getStatusColor(tournament.status)}">
+						{tournament.status}
+					</span>
+				{/if}
 				<span class="text-sm text-gray-400">{tournament.game}</span>
 				{#if tournament.is_featured}
 					<span class="px-2 py-0.5 text-xs font-semibold bg-yellow-500/20 text-yellow-300 rounded">⭐ Featured</span>
@@ -113,7 +136,12 @@
 				{/if}
 			</div>
 
-			{#if getDaysUntil(tournament.date) && tournament.status === 'upcoming'}
+			{#if isLive(tournament)}
+				<div class="mt-6 inline-flex items-center gap-2 px-4 py-2 bg-red-500/20 rounded-lg text-sm">
+					<span class="w-2 h-2 rounded-full bg-red-400 animate-pulse"></span>
+					<span>In progress - <strong class="text-red-300">{getDaysRemaining(tournament.end_date)}</strong></span>
+				</div>
+			{:else if getDaysUntil(tournament.date)}
 				<div class="mt-6 inline-flex items-center gap-2 px-4 py-2 bg-white/10 rounded-lg text-sm">
 					<svg class="w-4 h-4 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -222,13 +250,22 @@
 			<!-- Sidebar -->
 			<aside class="space-y-6">
 				<!-- Countdown / Status Card -->
-				{#if tournament.status === 'upcoming'}
+				{#if isLive(tournament)}
+					<div class="bg-gradient-to-br from-red-600 to-red-700 rounded-xl p-6 text-white text-center">
+						<div class="flex items-center justify-center gap-2 mb-2">
+							<span class="w-2.5 h-2.5 rounded-full bg-white animate-pulse"></span>
+							<p class="text-sm uppercase tracking-wider font-bold">Live Now</p>
+						</div>
+						<p class="text-3xl font-black mb-1">{getDaysRemaining(tournament.end_date)}</p>
+						<p class="text-sm opacity-80">Ends {format(new Date(tournament.end_date), 'MMMM d, yyyy')}</p>
+					</div>
+				{:else if getDaysUntil(tournament.date)}
 					<div class="bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl p-6 text-white text-center">
 						<p class="text-sm uppercase tracking-wider mb-2 opacity-80">Starts In</p>
-						<p class="text-4xl font-black mb-1">{getDaysUntil(tournament.date) || '—'}</p>
+						<p class="text-4xl font-black mb-1">{getDaysUntil(tournament.date)}</p>
 						<p class="text-sm opacity-80">{format(new Date(tournament.date), 'EEEE, MMMM d, yyyy')}</p>
 					</div>
-				{:else if tournament.status === 'completed'}
+				{:else if tournament.status === 'completed' || (tournament.end_date && new Date(tournament.end_date) < new Date())}
 					<div class="bg-gradient-to-br from-gray-700 to-gray-800 rounded-xl p-6 text-white text-center">
 						<p class="text-sm uppercase tracking-wider mb-2 opacity-80">Tournament</p>
 						<p class="text-2xl font-black mb-1">Completed</p>
