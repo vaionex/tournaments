@@ -25,20 +25,47 @@ export async function getCurrentUser() {
  * Get user profile with preferences
  */
 export async function getUserProfile(userId?: string) {
-	const user = userId ? { id: userId } : await getCurrentUser();
-	if (!user) {
+	const resolvedUser = userId ? { id: userId } : await getCurrentUser();
+	if (!resolvedUser) {
 		return null;
 	}
 
 	const { data, error } = await supabase
 		.from('profiles')
 		.select('*')
-		.eq('id', user.id)
-		.single();
+		.eq('id', resolvedUser.id)
+		.maybeSingle();
 
 	if (error) {
 		console.error('Error fetching user profile:', error);
 		return null;
+	}
+
+	// Auto-create profile for new OAuth users
+	if (!data) {
+		const authUser = await getCurrentUser();
+		const email = authUser?.email || '';
+		const displayName = authUser?.user_metadata?.full_name || authUser?.user_metadata?.name || email.split('@')[0];
+		const avatarUrl = authUser?.user_metadata?.avatar_url || null;
+		const username = email.split('@')[0].replace(/[^a-zA-Z0-9_]/g, '') + Math.floor(Math.random() * 1000);
+
+		const { data: newProfile, error: createError } = await supabase
+			.from('profiles')
+			.insert({
+				id: resolvedUser.id,
+				username,
+				display_name: displayName,
+				avatar_url: avatarUrl,
+				is_pro: false
+			})
+			.select()
+			.single();
+
+		if (createError) {
+			console.error('Error creating profile:', createError);
+			return null;
+		}
+		return newProfile;
 	}
 
 	return data;
