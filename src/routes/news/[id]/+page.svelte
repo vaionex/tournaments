@@ -34,7 +34,10 @@
 	let hasCachedData = !!article;
 	
 	// Load article data reactively when route parameter changes
-	$: if ($page.params.id) {
+	// Skip if SSR already provided the article data
+	let lastLoadedId = article ? $page.params.id : null;
+	$: if ($page.params.id && $page.params.id !== lastLoadedId) {
+		lastLoadedId = $page.params.id;
 		loadArticle($page.params.id);
 	}
 	
