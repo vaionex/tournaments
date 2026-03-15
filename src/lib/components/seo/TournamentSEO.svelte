@@ -2,21 +2,30 @@
 	import { page } from '$app/stores';
 	
 	export let name: string;
-	export let sport: string;
+	export let sport: string = '';
+	export let game: string = '';
 	export let description: string;
 	export let image: string;
-	export let startDate: Date;
-	export let endDate: Date;
+	export let startDate: Date | string = new Date();
+	export let endDate: Date | string = new Date();
 	export let location: string | null = null;
 	export let prizePool: string | null = null;
-	export let status: 'upcoming' | 'live' | 'completed' = 'upcoming';
+	export let status: string = 'upcoming';
 	
 	const SITE_NAME = 'Tournaments.com';
 	const SITE_URL = 'https://www.tournaments.com';
 	const TWITTER_HANDLE = '@tournamentscom';
 	
+	// Safely convert to ISO string — handles both Date objects and strings
+	function toISO(d: Date | string | null | undefined): string {
+		if (!d) return new Date().toISOString();
+		if (typeof d === 'string') return new Date(d).toISOString();
+		return d.toISOString();
+	}
+	
+	$: displaySport = sport || game || 'Sports';
 	$: canonicalUrl = `${SITE_URL}${$page.url.pathname}`;
-	$: title = `${name} - ${sport} Tournament`;
+	$: title = `${name} - ${displaySport} Tournament`;
 	$: metaDescription = `${description}${prizePool ? ` Prize pool: ${prizePool}.` : ''}${location ? ` Location: ${location}.` : ''} Follow live scores, results, and news on ${SITE_NAME}.`;
 	
 	$: eventJsonLd = {
@@ -26,8 +35,8 @@
 		"description": description,
 		"image": image,
 		"url": canonicalUrl,
-		"startDate": startDate.toISOString(),
-		"endDate": endDate.toISOString(),
+		"startDate": toISO(startDate),
+		"endDate": toISO(endDate),
 		"eventStatus": status === 'live' ? "https://schema.org/EventScheduled" : 
 		               status === 'completed' ? "https://schema.org/EventEnded" : 
 		               "https://schema.org/EventScheduled",
@@ -47,7 +56,7 @@
 			"price": prizePool.replace(/[^0-9]/g, ''),
 			"priceCurrency": "USD"
 		} : undefined,
-		"sport": sport
+		"sport": displaySport
 	};
 	
 	$: breadcrumbJsonLd = {
@@ -93,8 +102,8 @@
 	<meta property="og:locale" content="en_US" />
 	
 	<!-- Event-specific -->
-	<meta property="event:start_time" content={startDate.toISOString()} />
-	<meta property="event:end_time" content={endDate.toISOString()} />
+	<meta property="event:start_time" content={toISO(startDate)} />
+	<meta property="event:end_time" content={toISO(endDate)} />
 	
 	<!-- Twitter -->
 	<meta name="twitter:card" content="summary_large_image" />

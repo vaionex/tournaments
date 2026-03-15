@@ -965,6 +965,8 @@ export async function getNewsArticleById(id: string): Promise<NewsArticle | null
 		return null;
 	}
 
+	// Try by UUID first, fall back to slug if it doesn't look like a UUID
+	const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
 	const { data, error } = await supabase
 		.from('news_articles')
 		.select(`
@@ -974,7 +976,7 @@ export async function getNewsArticleById(id: string): Promise<NewsArticle | null
 				avatar_url
 			)
 		`)
-		.eq('id', id)
+		.eq(isUuid ? 'id' : 'slug', id)
 		.single();
 
 	if (error) {
