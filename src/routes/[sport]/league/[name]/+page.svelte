@@ -629,7 +629,7 @@
 						{@const heroArticle = featuredNews[0]}
 						<div class="mb-6">
 							<a 
-								href="/news/{heroArticle.id}"
+								href="/news/{heroArticle.slug || heroArticle.id}"
 								class="news-card-featured block group"
 							>
 								<div class="relative h-[300px] sm:h-[350px] lg:h-[400px] overflow-hidden">
@@ -681,7 +681,7 @@
 									<div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
 										{#each featuredNews.slice(1) as article}
 											<a 
-												href="/news/{article.id}"
+												href="/news/{article.slug || article.id}"
 												class="group block"
 											>
 												<div class="relative h-48 sm:h-56 lg:h-64 rounded-lg overflow-hidden mb-4 shadow-md group-hover:shadow-xl transition-shadow duration-300">
@@ -718,7 +718,7 @@
 										<div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
 											{#each newsArticles.slice(3) as article}
 												<a 
-													href="/news/{article.id}"
+													href="/news/{article.slug || article.id}"
 													class="group block"
 												>
 													<div class="relative h-48 sm:h-56 lg:h-64 rounded-lg overflow-hidden mb-4 shadow-md group-hover:shadow-xl transition-shadow duration-300">

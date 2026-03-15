@@ -272,7 +272,7 @@
           {:else}
             <div class="space-y-4">
               {#each data.recentArticles as article}
-                <a href="/news/{article.id}" class="group block">
+                <a href="/news/{article.slug || article.id}" class="group block">
                   <article class="flex gap-3">
                     <img 
                       src={article.image} 

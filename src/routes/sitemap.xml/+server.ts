@@ -88,19 +88,21 @@ export async function GET() {
 		urls += `<url><loc>${SITE_URL}/${sport}/home</loc><lastmod>${today}</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>\n`;
 	}
 
-	// Article pages
+	// Article pages — use slug for SEO-friendly URLs (fall back to id)
 	if (articles) {
 		for (const article of articles) {
 			const lastmod = (article.updated_at || article.published_at || today).split('T')[0];
-			urls += `<url><loc>${SITE_URL}/news/${article.id}</loc><lastmod>${lastmod}</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>\n`;
+			const articlePath = article.slug || article.id;
+			urls += `<url><loc>${SITE_URL}/news/${articlePath}</loc><lastmod>${lastmod}</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>\n`;
 		}
 	}
 
-	// Tournament pages
+	// Tournament pages — use slug for SEO-friendly URLs (fall back to id)
 	if (tournaments) {
 		for (const t of tournaments) {
 			const lastmod = (t.updated_at || today).split('T')[0];
-			urls += `<url><loc>${SITE_URL}/tournaments/${t.id}</loc><lastmod>${lastmod}</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>\n`;
+			const tournamentPath = t.slug || t.id;
+			urls += `<url><loc>${SITE_URL}/tournaments/${tournamentPath}</loc><lastmod>${lastmod}</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>\n`;
 		}
 	}
 

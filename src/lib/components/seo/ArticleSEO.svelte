@@ -11,6 +11,7 @@
 	export let category: string;
 	export let tags: string[] = [];
 	export let wordCount: number = 0;
+	export let slug: string = '';
 	
 	// Convert date to Date object if it's a string
 	$: publishedDateObj = publishedDate instanceof Date ? publishedDate : new Date(publishedDate);
@@ -21,7 +22,7 @@
 	const TWITTER_HANDLE = '@tournamentscom';
 	const LOGO_URL = `${SITE_URL}/logo.png`;
 	
-	$: canonicalUrl = `${SITE_URL}${$page.url.pathname}`;
+	$: canonicalUrl = slug ? `${SITE_URL}/news/${slug}` : `${SITE_URL}${$page.url.pathname}`;
 	$: readingTime = wordCount > 0 ? Math.ceil(wordCount / 200) : 5; // Assuming 200 words per minute
 	
 	$: jsonLd = {

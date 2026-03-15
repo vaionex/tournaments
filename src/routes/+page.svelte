@@ -418,7 +418,7 @@
 							<div class="p-4 space-y-3">
 								{#each trendingArticles.slice(0, 5) as article, i}
 									<a 
-										href="/news/{article.id}"
+										href="/news/{article.slug || article.id}"
 										class="flex items-start gap-3 group"
 									>
 										<span class="flex-shrink-0 w-7 h-7 rounded-full bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 flex items-center justify-center text-sm font-bold">
