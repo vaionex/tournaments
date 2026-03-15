@@ -355,24 +355,35 @@
 									<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
 									</svg>
-									Upcoming Events
+									Tournaments
 								</h2>
 							</div>
 							<div class="p-4 space-y-2">
 								{#each upcomingTournaments.slice(0, 5) as tournament}
+									{@const isLive = new Date(tournament.date) <= new Date() && tournament.end_date && new Date(tournament.end_date) >= new Date()}
 									<a 
 										href="/tournaments/{tournament.id}"
-										class="block p-3 border-l-4 border-blue-500 bg-gray-50 dark:bg-gray-900/50 rounded-r-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors group"
+										class="block p-3 border-l-4 {isLive ? 'border-red-500 bg-red-50/50 dark:bg-red-900/10' : 'border-blue-500 bg-gray-50 dark:bg-gray-900/50'} rounded-r-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors group"
 									>
 										<div class="flex items-start justify-between gap-2 mb-1">
 											<h3 class="font-semibold text-sm text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-2">
 												{tournament.name}
 											</h3>
+											{#if isLive}
+												<span class="flex-shrink-0 px-1.5 py-0.5 text-[10px] font-bold uppercase rounded bg-red-500 text-white flex items-center gap-1">
+													<span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span>
+													LIVE
+												</span>
+											{/if}
 										</div>
 										<div class="flex items-center justify-between text-xs">
 											<span class="text-gray-500 dark:text-gray-400 flex items-center gap-1">
 												<svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-												{new Date(tournament.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+												{#if isLive}
+													Ends {new Date(tournament.end_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+												{:else}
+													{new Date(tournament.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+												{/if}
 											</span>
 											<span class="px-2 py-0.5 text-[10px] font-semibold uppercase rounded bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300">
 												{tournament.game}

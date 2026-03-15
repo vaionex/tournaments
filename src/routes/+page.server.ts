@@ -36,13 +36,31 @@ export async function load() {
 		.limit(7);
 
 	const today = new Date().toISOString();
-	const { data: tournaments } = await supabase
+	
+	// Currently running tournaments (started, not yet ended)
+	const { data: runningTournaments } = await supabase
 		.from('tournaments')
 		.select('id, name, slug, date, end_date, location, prize_pool, image_url, status, game')
-		.eq('status', 'upcoming')
-		.gte('date', today)
+		.lte('date', today)
+		.gte('end_date', today)
+		.order('date', { ascending: true })
+		.limit(4);
+
+	// Upcoming tournaments (haven't started yet)
+	const { data: upcomingTournaments } = await supabase
+		.from('tournaments')
+		.select('id, name, slug, date, end_date, location, prize_pool, image_url, status, game')
+		.gt('date', today)
 		.order('date', { ascending: true })
 		.limit(8);
+
+	// Merge: running first, then upcoming, deduplicated
+	const seenIds = new Set<string>();
+	const tournaments = [...(runningTournaments || []), ...(upcomingTournaments || [])].filter(t => {
+		if (seenIds.has(t.id)) return false;
+		seenIds.add(t.id);
+		return true;
+	}).slice(0, 8);
 
 	// Fetch top athletes for sidebar — top earners across diverse sports
 	let topAthletes: Array<{id: string; displayName: string; slug: string; sport: string; image: string; country: string}> = [];
