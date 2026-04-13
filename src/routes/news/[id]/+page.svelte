@@ -467,6 +467,20 @@ The integration of technology in training and competition is also creating new o
 					</div>
 					{/if}
 
+					<!-- YouTube Video Embed -->
+					{#if article?.youtubeVideoId}
+					<div class="relative w-full aspect-video rounded-xl overflow-hidden mb-10 shadow-lg">
+						<iframe
+							src="https://www.youtube.com/embed/{article.youtubeVideoId}"
+							title="Related Video"
+							class="w-full h-full"
+							frameborder="0"
+							allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+							allowfullscreen
+						></iframe>
+					</div>
+					{/if}
+
 					<!-- Article Content -->
 					<div class="prose prose-lg dark:prose-invert max-w-none mb-12">
 				<div class="text-xl sm:text-2xl text-gray-700 dark:text-gray-300 leading-relaxed font-medium mb-8 border-l-4 border-red-600 pl-6 italic">

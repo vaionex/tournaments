@@ -23,7 +23,8 @@ function transformArticle(row: Record<string, unknown>) {
 		sport: row.sport as string | undefined,
 		slug: row.slug as string | undefined,
 		readTime: row.read_time as number | undefined,
-		tags: row.tags as string[] | undefined
+		tags: row.tags as string[] | undefined,
+		youtubeVideoId: row.youtube_video_id as string | undefined
 	};
 }
 
