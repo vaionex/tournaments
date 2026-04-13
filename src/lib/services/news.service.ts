@@ -618,7 +618,8 @@ function transformNewsArticle(row: Record<string, unknown>): NewsArticle {
 		authorInitials: author.initials,
 		authorAvatar: author.avatar,
 		readTime: row.read_time as number | undefined,
-		sport: row.sport as string | undefined
+		sport: row.sport as string | undefined,
+		youtubeVideoId: row.youtube_video_id as string | undefined
 	};
 }
 
