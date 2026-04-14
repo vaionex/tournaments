@@ -467,6 +467,35 @@ The integration of technology in training and competition is also creating new o
 					</div>
 					{/if}
 
+					<!-- YouTube Video Embed -->
+					{#if article?.youtubeVideoId}
+					<div class="mb-10">
+						<!-- Label -->
+						<div class="flex items-center gap-2 mb-3">
+							<div class="flex items-center justify-center w-8 h-8 bg-red-600 rounded-lg flex-shrink-0">
+								<svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
+									<path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0C.488 3.45.029 5.804 0 12c.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0C23.512 20.55 23.971 18.196 24 12c-.029-6.185-.484-8.549-4.385-8.816zM9 16V8l8 4 8-4v8"/>
+								</svg>
+							</div>
+							<span class="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wide">
+								Watch Highlights
+							</span>
+						</div>
+
+						<!-- Video Player -->
+						<div class="relative w-full aspect-video rounded-xl overflow-hidden shadow-lg border border-gray-200 dark:border-gray-700">
+							<iframe
+								src="https://www.youtube.com/embed/{article.youtubeVideoId}?rel=0&modestbranding=1"
+								title="Related Video"
+								class="w-full h-full"
+								frameborder="0"
+								allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+								allowfullscreen
+							></iframe>
+						</div>
+					</div>
+					{/if}
+
 					<!-- Article Content -->
 					<div class="prose prose-lg dark:prose-invert max-w-none mb-12">
 				<div class="text-xl sm:text-2xl text-gray-700 dark:text-gray-300 leading-relaxed font-medium mb-8 border-l-4 border-red-600 pl-6 italic">

@@ -618,7 +618,8 @@ function transformNewsArticle(row: Record<string, unknown>): NewsArticle {
 		authorInitials: author.initials,
 		authorAvatar: author.avatar,
 		readTime: row.read_time as number | undefined,
-		sport: row.sport as string | undefined
+		sport: row.sport as string | undefined,
+		youtubeVideoId: row.youtube_video_id as string | undefined
 	};
 }
 
@@ -1136,6 +1137,7 @@ export async function getArticleComments(articleId: string, limit: number = 10, 
 		`)
 		.eq('article_id', articleId)
 		.eq('is_deleted', false)
+		.lte('created_at', new Date().toISOString())
 		.order('created_at', { ascending: false });
 
 	if (error) {

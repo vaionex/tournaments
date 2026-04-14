@@ -96,6 +96,7 @@ export interface NewsArticle {
 	readTime?: number;
 	tags?: string[];
 	sport?: string;
+	youtubeVideoId?: string;
 }
 
 export type NewsCategory = 

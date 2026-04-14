@@ -192,8 +192,22 @@
 			const result = await createComment(articleId, newComment, user.id);
 			
 			if (result.success) {
-				// Reload comments from database (reset to first page)
-				await loadComments(true);
+				// Optimistically add the new comment to the top immediately
+				const optimisticComment: Comment = {
+					id: result.comment?.id || crypto.randomUUID(),
+					author: commentAuthor || 'You',
+					avatar: null,
+					content: newComment,
+					date: new Date(),
+					likes: 0,
+					dislikes: 0,
+					isVerified: false,
+					isPinned: false,
+					isPro: false,
+					replies: [],
+					userId: user.id,
+				};
+				comments = [optimisticComment, ...comments];
 				newComment = '';
 				dispatch('commentAdded', result.comment);
 			} else {
@@ -217,8 +231,25 @@
 			const result = await createReply(articleId, parentId, content, user.id);
 			
 			if (result.success) {
-				// Reload comments from database (reset to first page to show new reply)
-				await loadComments(true);
+				// Optimistically add the reply under its parent immediately
+				const optimisticReply: Reply = {
+					id: result.reply?.id || crypto.randomUUID(),
+					author: commentAuthor || 'You',
+					avatar: null,
+					content,
+					date: new Date(),
+					likes: 0,
+					dislikes: 0,
+					isVerified: false,
+					isPro: false,
+					userId: user.id,
+				};
+				comments = comments.map(comment => {
+					if (comment.id === parentId) {
+						return { ...comment, replies: [...comment.replies, optimisticReply] };
+					}
+					return comment;
+				});
 				dispatch('replyAdded', { parentId, reply: result.reply });
 			} else {
 				errorMessage = result.error || 'Failed to post reply';
