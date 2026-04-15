@@ -475,37 +475,30 @@ The integration of technology in training and competition is also creating new o
 							{article.excerpt}
 						</div>
 
-						<!-- YouTube embed: right after excerpt -->
-						{#if article?.youtubeVideoId}
-							<div class="my-10">
-								<div class="flex items-center gap-2 mb-3">
-									<div class="flex items-center justify-center w-8 h-8 bg-red-600 rounded-lg flex-shrink-0">
-										<svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
-											<path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0C.488 3.45.029 5.804 0 12c.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0C23.512 20.55 23.971 18.196 24 12c-.029-6.185-.484-8.549-4.385-8.816zM9 16V8l8 4 8-4v8"/>
-										</svg>
-									</div>
-									<span class="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wide">
-										Watch Highlights
-									</span>
-								</div>
-								<div class="relative w-full aspect-video rounded-xl overflow-hidden shadow-lg border border-gray-200 dark:border-gray-700">
-									<iframe
-										src="https://www.youtube.com/embed/{article.youtubeVideoId}?rel=0&modestbranding=1"
-										title="Related Video"
-										class="w-full h-full"
-										frameborder="0"
-										allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-										allowfullscreen
-									></iframe>
-								</div>
-							</div>
-						{/if}
-
-						<!-- Body Paragraphs -->
+						<!-- Body Paragraphs with inline YouTube embeds -->
 						{@const paragraphs = article.content.split('\n\n').filter(p => p.trim())}
 						<div class="space-y-6 text-gray-800 dark:text-gray-200 leading-relaxed">
 							{#each paragraphs as paragraph}
-								<p class="text-lg leading-8">{paragraph}</p>
+								{@const parts = paragraph.split(/((?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)[a-zA-Z0-9_-]{11}))/)}
+								{#each parts as part}
+									{#if /^https?:\/\/(?:www\.)?youtube\.com\/watch\?v=[a-zA-Z0-9_-]{11}$/.test(part) || /^https?:\/\/youtu\.be\/[a-zA-Z0-9_-]{11}$/.test(part)}
+										{@const vid = part.match(/(?:v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/)?.[1]}
+										{@const start = part.match(/[?&]t=(\d+)/)?.[1]}
+										{@const embedUrl = vid + (start ? `?start=${start}` : '')}
+										<div class="my-8 rounded-xl overflow-hidden shadow-lg border border-gray-200 dark:border-gray-700 aspect-video">
+											<iframe
+												src="https://www.youtube.com/embed/{embedUrl}"
+												title="YouTube video"
+												class="w-full h-full"
+												frameborder="0"
+												allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+												allowfullscreen
+											></iframe>
+										</div>
+									{:else if part.trim()}
+										<p class="text-lg leading-8">{part}</p>
+									{/if}
+								{/each}
 							{/each}
 						</div>
 					</div>
