@@ -24,7 +24,8 @@ function transformArticle(row: Record<string, unknown>) {
 		slug: row.slug as string | undefined,
 		readTime: row.read_time as number | undefined,
 		tags: row.tags as string[] | undefined,
-		youtubeVideoId: row.youtube_video_id as string | undefined
+		youtubeVideoId: row.youtube_video_id as string | undefined,
+		videoPosition: (row.video_position as string) || 'below-image'
 	};
 }
 

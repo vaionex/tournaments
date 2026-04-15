@@ -619,7 +619,8 @@ function transformNewsArticle(row: Record<string, unknown>): NewsArticle {
 		authorAvatar: author.avatar,
 		readTime: row.read_time as number | undefined,
 		sport: row.sport as string | undefined,
-		youtubeVideoId: row.youtube_video_id as string | undefined
+		youtubeVideoId: row.youtube_video_id as string | undefined,
+		videoPosition: (row.video_position as string) || 'below-image'
 	};
 }
 

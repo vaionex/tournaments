@@ -97,6 +97,7 @@ export interface NewsArticle {
 	tags?: string[];
 	sport?: string;
 	youtubeVideoId?: string;
+	videoPosition?: string;
 }
 
 export type NewsCategory = 
