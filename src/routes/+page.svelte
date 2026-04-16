@@ -159,16 +159,8 @@
 		try {
 			const newsResult = await getNewsArticlesPaginated(selectedCategory, 1, INITIAL_ARTICLES);
 			
-			// Filter news articles by preferences
-			let filteredArticles = newsResult.articles;
-			if (hasPreferences && favoriteSports.length > 0) {
-				filteredArticles = filterByPreferences(newsResult.articles);
-				if (filteredArticles.length === 0 && newsResult.articles.length > 0) {
-					filteredArticles = newsResult.articles.slice(0, 3);
-				}
-			}
-			
-			newsArticles = filteredArticles;
+			// PRIMARY FEED: always show all articles, never filter
+			newsArticles = newsResult.articles;
 			hasMoreNews = newsResult.hasMore;
 			// Tournaments and athletes come from SSR data (no mock services)
 			
@@ -203,12 +195,7 @@
 			const result = await getNewsArticlesPaginatedWithOffset(selectedCategory, offset, ARTICLES_PER_PAGE);
 			
 			if (result.articles.length > 0) {
-				let newArticles = result.articles;
-				// Filter by preferences
-				if (hasPreferences && favoriteSports.length > 0) {
-					newArticles = filterByPreferences(result.articles);
-				}
-				newsArticles = [...newsArticles, ...newArticles];
+				newsArticles = [...newsArticles, ...result.articles];
 				currentPage++;
 			}
 			hasMoreNews = result.hasMore;
@@ -226,12 +213,7 @@
 		
 		try {
 			const result = await getNewsArticlesPaginated(selectedCategory, 1, INITIAL_ARTICLES);
-			let filteredArticles = result.articles;
-			// Filter by preferences
-			if (hasPreferences && favoriteSports.length > 0) {
-				filteredArticles = filterByPreferences(result.articles);
-			}
-			newsArticles = filteredArticles;
+			newsArticles = result.articles;
 			hasMoreNews = result.hasMore;
 		} catch (error) {
 			console.error('Failed to load category:', error);
@@ -267,24 +249,6 @@
 			<!-- Main News Column -->
 			<div class="lg:col-span-2">
 				<h2 class="sr-only">Latest Sports News</h2>
-				<!-- Preferences Notice -->
-				{#if hasPreferences && favoriteSports.length > 0}
-					<div class="mb-4 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl">
-						<div class="flex items-start gap-3">
-							<div class="flex-shrink-0">
-								<svg class="w-5 h-5 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-								</svg>
-							</div>
-							<div class="flex-1">
-								<p class="text-sm text-blue-800 dark:text-blue-300">
-									<strong>Personalized feed:</strong> Showing content from your selected sports ({favoriteSports.length} {favoriteSports.length === 1 ? 'sport' : 'sports'}). 
-									<a href="/dashboard" class="underline font-semibold hover:text-blue-900 dark:hover:text-blue-200">Change preferences</a>
-								</p>
-							</div>
-						</div>
-					</div>
-				{/if}
 				
 				<!-- Category Navigation - Always show, not skeleton -->
 				<CategoryNav 
