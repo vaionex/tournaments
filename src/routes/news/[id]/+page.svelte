@@ -32,6 +32,7 @@
 	let comments = [];
 	let loading = !article;
 	let hasCachedData = !!article;
+	let paragraphs = [];
 	
 	// Load article data reactively when route parameter changes
 	// Skip if SSR already provided the article data
@@ -40,6 +41,7 @@
 		lastLoadedId = $page.params.id;
 		loadArticle($page.params.id);
 	}
+	$: paragraphs = article?.content ? article.content.split('\n\n').filter((p) => p.trim()) : [];
 	
 	async function loadArticle(id, useCache = true) {
 		// Check cache first
@@ -476,7 +478,6 @@ The integration of technology in training and competition is also creating new o
 						</div>
 
 						<!-- Body Paragraphs with inline YouTube embeds -->
-						{@const paragraphs = article.content.split('\n\n').filter(p => p.trim())}
 						<div class="space-y-6 text-gray-800 dark:text-gray-200 leading-relaxed">
 							{#each paragraphs as paragraph}
 								{@const parts = paragraph.split(/((?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)[a-zA-Z0-9_-]{11})/)}
