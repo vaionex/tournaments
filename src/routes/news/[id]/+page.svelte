@@ -479,7 +479,7 @@ The integration of technology in training and competition is also creating new o
 						{@const paragraphs = article.content.split('\n\n').filter(p => p.trim())}
 						<div class="space-y-6 text-gray-800 dark:text-gray-200 leading-relaxed">
 							{#each paragraphs as paragraph}
-								{@const parts = paragraph.split(/((?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)[a-zA-Z0-9_-]{11}))/)}
+								{@const parts = paragraph.split(/((?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)[a-zA-Z0-9_-]{11})/)}
 								{#each parts as part}
 									{#if /^https?:\/\/(?:www\.)?youtube\.com\/watch\?v=[a-zA-Z0-9_-]{11}$/.test(part) || /^https?:\/\/youtu\.be\/[a-zA-Z0-9_-]{11}$/.test(part)}
 										{@const vid = part.match(/(?:v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/)?.[1]}
