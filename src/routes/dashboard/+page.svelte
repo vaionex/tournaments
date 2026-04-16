@@ -13,6 +13,7 @@
 	// Preferences state
 	let favoriteSports: string[] = [];
 	let favoriteTeams: string[] = [];
+	let homepagePersonalizationEnabled = false;
 	let savingPreferences = false;
 	let preferencesSaved = false;
 	let isPro = false;
@@ -127,6 +128,7 @@
 			const prefs = await getUserPreferences();
 			favoriteSports = prefs.favoriteSports || [];
 			favoriteTeams = prefs.favoriteTeams || [];
+			homepagePersonalizationEnabled = prefs.homepagePersonalizationEnabled || false;
 		} catch (error) {
 			console.error('Failed to load preferences:', error);
 		}
@@ -176,7 +178,8 @@
 		try {
 			const success = await saveUserPreferences({
 				favoriteSports,
-				favoriteTeams
+				favoriteTeams,
+				homepagePersonalizationEnabled
 			});
 			
 			if (success) {
@@ -359,6 +362,9 @@
 									{favoriteSports.length > 0 
 										? `${favoriteSports.length} sport${favoriteSports.length === 1 ? '' : 's'} selected • ${favoriteTeams.length} team${favoriteTeams.length === 1 ? '' : 's'} selected`
 										: 'Customize your homepage content'}
+								</p>
+								<p class="text-xs text-gray-500 dark:text-gray-400 mt-2">
+									Homepage filtering is {homepagePersonalizationEnabled ? 'enabled' : 'disabled'}.
 								</p>
 							</div>
 							<button
@@ -898,8 +904,24 @@
 			
 			<div class="p-6">
 				<p class="text-gray-600 dark:text-gray-400 mb-6">
-					Select your favorite sports and teams to personalize your homepage. Only content from your selected sports will appear on the front page.
+					Select your favorite sports and teams here. Homepage filtering only applies if you explicitly enable it below.
 				</p>
+
+				<div class="mb-8 p-4 border border-gray-200 dark:border-gray-700 rounded-xl">
+					<label class="flex items-start gap-3 cursor-pointer">
+						<input
+							type="checkbox"
+							bind:checked={homepagePersonalizationEnabled}
+							class="mt-1 h-4 w-4 rounded border-gray-300 text-red-600 focus:ring-red-500"
+						/>
+						<div>
+							<div class="font-semibold text-gray-900 dark:text-white">Filter homepage by my favorite sports</div>
+							<p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
+								When enabled, the frontpage shows stories from your selected sports and displays a visible personalized-feed notice.
+							</p>
+						</div>
+					</label>
+				</div>
 				
 				<!-- Sports Selection -->
 				<div class="mb-8">

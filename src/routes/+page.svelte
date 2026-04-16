@@ -32,6 +32,7 @@
 	// User preferences
 	let favoriteSports: string[] = [];
 	let hasPreferences = false;
+	let homepagePersonalizationEnabled = false;
 	
 	const categories = getNewsCategories();
 	const INITIAL_ARTICLES = 7; // 1 for hero + 6 for grid (even number)
@@ -65,6 +66,7 @@
 				favoriteSports = prefs.favoriteSports.map(s => sportCodeMap[s] || s.toLowerCase());
 				hasPreferences = true;
 			}
+			homepagePersonalizationEnabled = prefs.homepagePersonalizationEnabled || false;
 		} catch (error) {
 			console.error('Failed to load preferences:', error);
 		}
@@ -104,7 +106,7 @@
 	}
 	
 	function filterByPreferences<T extends { sport?: string }>(items: T[]): T[] {
-		if (!hasPreferences || favoriteSports.length === 0) {
+		if (!homepagePersonalizationEnabled || !hasPreferences || favoriteSports.length === 0) {
 			return items;
 		}
 		
@@ -159,15 +161,14 @@
 		try {
 			const newsResult = await getNewsArticlesPaginated(selectedCategory, 1, INITIAL_ARTICLES);
 			
-			// PRIMARY FEED: always show all articles, never filter
-			newsArticles = newsResult.articles;
+			newsArticles = filterByPreferences(newsResult.articles);
 			hasMoreNews = newsResult.hasMore;
 			// Tournaments and athletes come from SSR data (no mock services)
 			
 			// Cache the results
 			const cacheKey = `homepage-${selectedCategory}`;
 			cache.set(cacheKey, {
-				newsArticles: filteredArticles,
+				newsArticles,
 				upcomingTournaments,
 				hasMoreNews: newsResult.hasMore
 			}, 5 * 60 * 1000); // 5 minutes TTL
@@ -193,11 +194,12 @@
 			// Calculate correct offset: first page has INITIAL_ARTICLES, subsequent pages have ARTICLES_PER_PAGE
 			const offset = INITIAL_ARTICLES + (currentPage - 1) * ARTICLES_PER_PAGE;
 			const result = await getNewsArticlesPaginatedWithOffset(selectedCategory, offset, ARTICLES_PER_PAGE);
+			const filteredArticles = filterByPreferences(result.articles);
 			
-			if (result.articles.length > 0) {
-				newsArticles = [...newsArticles, ...result.articles];
-				currentPage++;
+			if (filteredArticles.length > 0) {
+				newsArticles = [...newsArticles, ...filteredArticles];
 			}
+			currentPage++;
 			hasMoreNews = result.hasMore;
 		} catch (error) {
 			console.error('Failed to load more news:', error);
@@ -213,7 +215,7 @@
 		
 		try {
 			const result = await getNewsArticlesPaginated(selectedCategory, 1, INITIAL_ARTICLES);
-			newsArticles = result.articles;
+			newsArticles = filterByPreferences(result.articles);
 			hasMoreNews = result.hasMore;
 		} catch (error) {
 			console.error('Failed to load category:', error);
@@ -249,6 +251,15 @@
 			<!-- Main News Column -->
 			<div class="lg:col-span-2">
 				<h2 class="sr-only">Latest Sports News</h2>
+
+				{#if homepagePersonalizationEnabled && hasPreferences && favoriteSports.length > 0}
+					<div class="mb-4 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl">
+						<p class="text-sm text-blue-800 dark:text-blue-300">
+							<strong>Personalized feed:</strong> showing homepage stories from your selected sports.
+							<a href="/dashboard" class="underline font-semibold hover:text-blue-900 dark:hover:text-blue-200">Change this in Dashboard</a>
+						</p>
+					</div>
+				{/if}
 				
 				<!-- Category Navigation - Always show, not skeleton -->
 				<CategoryNav 

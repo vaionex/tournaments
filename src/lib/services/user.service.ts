@@ -8,6 +8,7 @@ import { supabase } from '$lib/supabase';
 export interface UserPreferences {
 	favoriteSports?: string[];
 	favoriteTeams?: string[];
+	homepagePersonalizationEnabled?: boolean;
 }
 
 /**
@@ -88,7 +89,8 @@ export async function getUserPreferences(): Promise<UserPreferences> {
 	const settings = profile.settings as Record<string, unknown>;
 	return {
 		favoriteSports: (settings.favoriteSports as string[]) || [],
-		favoriteTeams: (settings.favoriteTeams as string[]) || []
+		favoriteTeams: (settings.favoriteTeams as string[]) || [],
+		homepagePersonalizationEnabled: (settings.homepagePersonalizationEnabled as boolean) || false
 	};
 }
 
@@ -110,7 +112,8 @@ export async function saveUserPreferences(preferences: UserPreferences): Promise
 	const updatedSettings = {
 		...currentSettings,
 		favoriteSports: preferences.favoriteSports || [],
-		favoriteTeams: preferences.favoriteTeams || []
+		favoriteTeams: preferences.favoriteTeams || [],
+		homepagePersonalizationEnabled: preferences.homepagePersonalizationEnabled || false
 	};
 
 	const { error } = await supabase
