@@ -1,6 +1,7 @@
 <script>
 	import { goto } from '$app/navigation';
 	import { supabase } from '$lib/supabase';
+	import { trackConversion } from '$lib/analytics';
 	
 	let email = '';
 	let password = '';
@@ -41,6 +42,7 @@
 				
 				// If user was created, try to sign them in immediately
 				if (data?.user) {
+					trackConversion('Account Created', { method: 'email' });
 					// If we already have a session from signup, use it
 					if (data.session) {
 						// Verify session is valid before redirecting
