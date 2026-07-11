@@ -12,7 +12,7 @@
 	$: sportName = sport.title.split(' - ')[0];
 	
 	// Generate FAQ content for each sport
-	const faqs = [
+	$: faqs = [
 		{
 			question: `What are the major ${sportName.toLowerCase()} tournaments?`,
 			answer: `The major ${sportName.toLowerCase()} tournaments include world championships, national competitions, and professional league events that attract the best athletes from around the globe. These tournaments offer significant prize pools and prestige for winners.`
